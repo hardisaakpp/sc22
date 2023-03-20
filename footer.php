@@ -5,21 +5,17 @@
         <footer class="site-footer">
             <div class="footer-inner bg-white">
                 <div class="row">
-                <div class="col-sm-6">
-                Copyright &copy; Departamento TI 2022 
-                </div>
-                <div class="col-sm-6 text-right">
-                    Designed by <a href="mailto:sistemas@sunsetcorpholding.com">SIS-SUN</a>
-                </div>
+                    <div class="col-sm-6">
+                    Copyright &copy; Departamento TI 2022 
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        Designed by <a href="mailto:sistemas@sunsetcorpholding.com">SIS-SUN</a>
+                    </div>
                 </div>
             </div>
         </footer>
         <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    <div class="col-xs-6 col-sm-6">
-
+    
     
 
 
@@ -79,8 +75,12 @@ $(document).ready(function() {
         ordering: false,
         info: false,
     });
-
+    $('.js-example-basic-single').select2();
 } );
+
+
+
+
 
 $('input[type="checkbox"]').on('change', function(){
     this.value ^= 1;

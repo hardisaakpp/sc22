@@ -135,7 +135,7 @@
                     </div>
                     <div class="form-group">
                     <label for="whsHorario" class=" form-control-label" class="standardSelect">Almacen para Horarios de Personal</label>
-                            <select name='whsHorario'  data-placeholder='Selecciona el almacen' class='js-example-basic-single js-states form-control' id='whsHorario'  Size='Number_of_options'>
+                            <select name='whsHorario'  data-placeholder='Selecciona el almacen' class='js-example-basic-single form-control' id='whsHorario'  Size='Number_of_options'>
                             <option value="0">Ninguno</option>
                                 <?php   foreach($whs as $wh){ ?>
                                     <option value="<?php echo $wh->id ?>"><?php echo $wh->cod_almacen . ' '.$wh->nombre  ?></option>

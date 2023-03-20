@@ -75,11 +75,7 @@
     
     $rows = $sentencia->fetchAll(PDO::FETCH_OBJ);
     
-    if (count($rows)==0) {
-        echo ('<h4> ¡No existen registros! </h4>');
-    } else {
-      
-    
+   
         ?>
 
 <!-- Breadcrumbs-->
@@ -114,8 +110,6 @@
 <!---------------------------------------------->
 <!----------------- Content -------------------->
 <!---------------------------------------------->
-
-
     
 <div class="col-md-12">
     <div class="card">
@@ -127,28 +121,28 @@
                 <input type="date" name="desde" id="desde" class="form-control" value="<?php echo $desde ?>" required>
                 <input type="date" name="hasta" id="hasta" class="form-control" value="<?php echo $hasta ?>" required>
 
-<?php 
-    if ($conteo==1) {
-        echo "<label>.  Conteo<input type='checkbox' name='conteo' checked ></label>";
-    } else {
-        echo "<label>.  Conteo<input type='checkbox' name='conteo'></label>";
-    }
-    if ($reconteo==1) {
-        echo "<label>.  Reconteo<input type='checkbox' name='reconteo' checked ></label>";
-    } else {
-        echo "<label>.  Reconteo<input type='checkbox' name='reconteo'></label>";
-    }
-    if ($cerrado==1) {
-        echo "<label>.  Cerrado<input type='checkbox' name='cerrado' checked ></label>";
-    } else {
-        echo "<label>.  Cerrado<input type='checkbox' name='cerrado'></label>";
-    }
-    if ($diferencias==1) {
-        echo "<label>.  Diferencia<input type='checkbox' name='diferencias' checked ></label>";
-    } else {
-        echo "<label>.  Diferencia<input type='checkbox' name='diferencias'></label>.   .";
-    }
-?>
+            <?php 
+                if ($conteo==1) {
+                    echo "<label>.  Conteo<input type='checkbox' name='conteo' checked ></label>";
+                } else {
+                    echo "<label>.  Conteo<input type='checkbox' name='conteo'></label>";
+                }
+                if ($reconteo==1) {
+                    echo "<label>.  Reconteo<input type='checkbox' name='reconteo' checked ></label>";
+                } else {
+                    echo "<label>.  Reconteo<input type='checkbox' name='reconteo'></label>";
+                }
+                if ($cerrado==1) {
+                    echo "<label>.  Cerrado<input type='checkbox' name='cerrado' checked ></label>";
+                } else {
+                    echo "<label>.  Cerrado<input type='checkbox' name='cerrado'></label>";
+                }
+                if ($diferencias==1) {
+                    echo "<label>.  Diferencia<input type='checkbox' name='diferencias' checked ></label>";
+                } else {
+                    echo "<label>.  Diferencia<input type='checkbox' name='diferencias'></label>.   .";
+                }
+            ?>
 
 
                 <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="tfaL.php">	
@@ -161,6 +155,16 @@
     </div>
 </div>
     
+<!---------------------------------------------->
+
+<?php
+ if (count($rows)==0) {
+    echo ('<h4> ¡No existen registros! </h4>');
+} else {
+  
+
+    ?>
+
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">

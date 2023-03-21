@@ -64,7 +64,7 @@
                 <div class="card-body">
                     <div class="stat-widget-five">
                         <div class="stat-icon dib flat-color-3">
-                        <a href="https://www.w3schools.com">
+                        <a href="TTreporteSacns.php?idcab=<?php echo $user->id?>">
                             <i class="pe-7s-browser"></i>
                             </a>
                         </div>

@@ -35,7 +35,7 @@ $result = $sent->fetch(PDO::FETCH_OBJ);
 //detalle toma actual INICIAL-CONTEO
 $s1 = $db->prepare("select det.id, ID_articulo, descripcion, nombreGrupo, stock, scan, conteo, reconteo, estado 
   from stockdet det join Articulo a on det.FK_ID_articulo=a.id
-  where FK_id_StockCab= ? order by 2" );
+  where FK_id_StockCab= ? order by nombreGrupo,ID_articulo" );
   $s1->execute([$id_cab]);
 $citems = $s1->fetchAll(PDO::FETCH_OBJ);    
     

@@ -34,19 +34,19 @@
     //detalle toma actual INICIAL-CONTEO
         $s1 = $db->prepare("select det.id, ID_articulo, descripcion, nombreGrupo, stock, scan, conteo, reconteo, estado 
             from stockdet det join Articulo a on det.FK_ID_articulo=a.id
-            where estado= 'INI' and FK_id_StockCab= ? order by 2" );
+            where estado= 'INI' and FK_id_StockCab= ? order by nombreGrupo,ID_articulo" );
             $s1->execute([$id_cab]);
         $citems = $s1->fetchAll(PDO::FETCH_OBJ);            
     //detalle toma actual RECONTEO
         $s2 = $db->prepare("select det.id, ID_articulo, descripcion, nombreGrupo, stock, scan, conteo, reconteo, estado 
             from stockdet det join Articulo a on det.FK_ID_articulo=a.id
-            where estado= 'REC' and FK_id_StockCab= ? order by 2" );
+            where estado= 'REC' and FK_id_StockCab= ? order by nombreGrupo,ID_articulo" );
             $s2->execute([$id_cab]);
         $reconteos = $s2->fetchAll(PDO::FETCH_OBJ);  
     //detalle toma actual FIN
         $s3 = $db->prepare("select det.id, ID_articulo, descripcion, nombreGrupo, stock, scan, conteo, reconteo, estado 
             from stockdet det join Articulo a on det.FK_ID_articulo=a.id
-            where estado= 'FIN' and FK_id_StockCab= ? " );
+            where estado= 'FIN' and FK_id_StockCab= ? order by nombreGrupo,ID_articulo" );
             $s3->execute([$id_cab]);
         $cerrados = $s3->fetchAll(PDO::FETCH_OBJ);           
     

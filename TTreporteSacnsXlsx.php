@@ -32,9 +32,12 @@ $hojaActiva->setCellValue('C1', 'descripcion');
 $hojaActiva->setCellValue('D1', 'stock');
 $hojaActiva->setCellValue('E1', 'scans');
 $hojaActiva->setCellValue('F1', 'diferencia');
-//detalle
+$hojaActiva->setCellValue('G1', 'categoria');
+$hojaActiva->setCellValue('H1', 'subcategoria');
+$hojaActiva->setCellValue('I1', 'nombreGrupo');
+$hojaActiva->setCellValue('J1', 'familia');
 
-               
+//detalle
 
 $count = 2;
 foreach ($regs as $reg) {
@@ -45,6 +48,10 @@ foreach ($regs as $reg) {
    $hojaActiva->setCellValue('D'.$count , $reg->stock);
    $hojaActiva->setCellValue('E'.$count , $reg->scans);
    $hojaActiva->setCellValue('F'.$count , $reg->scans-$reg->stock);
+   $hojaActiva->setCellValue('G'.$count , $reg->categoria);
+   $hojaActiva->setCellValue('H'.$count , $reg->subcategoria);
+   $hojaActiva->setCellValue('I'.$count , $reg->nombreGrupo);
+   $hojaActiva->setCellValue('J'.$count , $reg->familia);
    
 
    $count++;

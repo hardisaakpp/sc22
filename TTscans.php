@@ -86,6 +86,7 @@
         <div class="card">
             <div class="card-header">
                 <strong class="card-title">ENVIADOS</strong>
+                <input type='number' value=-1 id='ItmsSav' style='border:0; text-align:center;' readonly>
             </div>
             <div style="overflow-x: hidden; overflow-y: scroll;">
             <ul id="lsSaved">
@@ -191,7 +192,8 @@
                 node.appendChild(document.createTextNode(codebar));
                 //var node = document.getElementById("myList2").lastChild;
                 document.getElementById("lsSaved").appendChild(node);
-            
+                conta = document.getElementById("ItmsSav");
+                conta.value = parseInt(conta.value,10) + 1;
             },
              error: function(){
                 var node = document.createElement('li');

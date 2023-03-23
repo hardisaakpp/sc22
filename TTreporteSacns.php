@@ -61,6 +61,8 @@
                                   <input type="submit"class="dropdown-item" value="Diferencias" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=3&idcab=<?php echo $idcab ?>">
                                   
                                   <input type="submit"class="dropdown-item" value="Otros Codigos" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=4&idcab=<?php echo $idcab ?>">
+                                  <div class="dropdown-divider"></div>
+                                  <input type="submit"class="dropdown-item" value="Scans por usuario" onclick=this.form.action="TTreporteScansUXlsx.php?idcab=<?php echo $idcab ?>">
                             </div>
                         </div>
         
@@ -132,6 +134,10 @@
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
                 <thead>
                     <tr>
+                        <th>categoria</th>
+                        <th>subcategoria</th>
+                        <th>nombreGrupo</th>
+                        <th>familia</th>    
                         <th>Codigo Barras</th>
                         <th>Item Code</th>
                         <th>Descripcion</th>
@@ -146,6 +152,10 @@
                 
                 foreach($scans as $user){ ?>
                     <tr>
+                        <td><?php echo $user->categoria ?></td>
+                        <td><?php echo $user->subcategoria ?></td>
+                        <td><?php echo $user->nombreGrupo ?></td>
+                        <td><?php echo $user->familia ?></td>
                         <td><?php echo $user->codigoBarras ?></td>
                         <td><?php echo $user->ID_articulo ?></td>
                         <td><?php echo $user->descripcion ?></td>

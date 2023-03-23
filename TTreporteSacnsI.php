@@ -48,6 +48,8 @@
                                   <input type="submit"class="dropdown-item" value="Diferencias" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=3&idcab=<?php echo $idcab ?>">
                                   
                                   <input type="submit"class="dropdown-item" value="Otros Codigos" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=4&idcab=<?php echo $idcab ?>">
+                                  <div class="dropdown-divider"></div>
+                                  <input type="submit"class="dropdown-item" value="Scans por usuario" onclick=this.form.action="TTreporteScansUXlsx.php?idcab=<?php echo $idcab ?>">
                             </div>
                         </div>
         

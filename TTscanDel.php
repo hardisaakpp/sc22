@@ -32,18 +32,28 @@
                     </div>
                 </div>
                 <div class="col-sm-8"> 
+                    
                     <div class="page-header float-right">
-                        <div class="page-title">
-                            <ol class="breadcrumb text-right">
-                                <li>
-                                <button type="button" class="btn btn-outline-success" onclick="window.location.href='TTscans.php?idcab=<?php echo $idcab ?>'">ESCANEAR</button>
-                                <button type="button" class="btn btn-outline-warning" onclick="window.location.href='TTscanRes.php?idcab=<?php echo $idcab ?>'">RESUMEN</button>
-                                <button type="button" class="btn btn-outline-warning">ITEMS PARA ELIMINAR</button>
-                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='wllcm.php'">X</button>
-                                </li>
-                            </ol>
+
+                        <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acciones
+                        </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <button type="button" class="dropdown-item" onclick="window.location.href='TTscans.php?idcab=<?php echo $idcab ?>'">ESCANEAR</button>
+                                <button type="button" class="dropdown-item" onclick="window.location.href='TTscanRes.php?idcab=<?php echo $idcab ?>'">RESUMEN</button>
+                                <button type="button" class="dropdown-item" onclick="window.location.href='wllcm.php'">SALIR</button>
+                            </div>
                         </div>
+
                     </div>
+
+
+
+
+
+
+
                 </div>  
             </div>
         </div>

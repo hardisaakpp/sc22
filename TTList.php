@@ -1,10 +1,7 @@
 <?php
     include_once "header.php";
     //si no es admin no abre
-    if($userAdmin<>1){
-        echo ('ACCESO DENEGADO');
     
-        }else {
             
         $s1 = $db->query("
         select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items
@@ -96,6 +93,6 @@
 <!---------------------------------------------->
 </div>
       
-<?php   }; 
+<?php   
 include_once "footer.php";
  ?>

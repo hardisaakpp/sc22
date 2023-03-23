@@ -11,7 +11,7 @@
         $s1 = $db->query("	select a.id as 'WhsCode', articulosContar as 'Quantity', a.nombre, tcd.tomaCode
         from users u
             join Almacen a on u.fk_ID_almacen_invs=a.id
-            left join (select FK_ID_almacen, tomaCode from StockCab where convert(varchar(10), [date], 102) = convert(varchar(10), getdate(), 102)) tcd
+            left join (select FK_ID_almacen, tomaCode from StockCab where tipo='TF' and convert(varchar(10), [date], 102) = convert(varchar(10), getdate(), 102)) tcd
                 on a.id=tcd.FK_ID_almacen
         where realizaConteo=1;" );
         $users = $s1->fetchAll(PDO::FETCH_OBJ);   

@@ -76,6 +76,7 @@ $(document).ready(function() {
         info: false,
     });
     $('.js-example-basic-single').select2();
+    indexesLX();
 } );
 
 

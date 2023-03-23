@@ -159,7 +159,37 @@
                         </li>
             <?php 
              }  
+            
+ if ($userAdmin==4) {   
             ?>
+
+                        <!--//Reportes-->
+
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
+                            <ul class="sub-menu children dropdown-menu">     
+                                        <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
+                                        <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
+                            
+
+
+                            </ul>
+                        </li>
+
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti ti-check-box"></i>Toma Fisica Total</a>
+                            <ul class="sub-menu children dropdown-menu">     
+                                 
+                                        <li><i class="fa fa-barcode"></i><a href="TTList.php">Scanear</a></li>
+
+
+
+                            </ul>
+                        </li>
+            <?php 
+             }  
+            ?>
+
                         <!--//INVENTARIOS-->
                         <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square-o"></i>Inventarios</a>

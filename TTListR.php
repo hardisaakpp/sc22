@@ -64,15 +64,15 @@
                 <div class="card-body">
                     <div class="stat-widget-five">
                         <div class="stat-icon dib flat-color-3">
-                        <a href="TTreporteSacns.php?idcab=<?php echo $user->id?>">
+                        <a href="TTreporteSacnsI.php?idcab=<?php echo $user->id?>">
                             <i class="pe-7s-browser"></i>
                             </a>
                         </div>
                         <div class="stat-content">
                             <div class="text-left dib">
-                                <div class="stat-text"><span class="count"><?php echo $user->items ?></span></div>
-                                <div class="stat-heading"><?php echo $user->id.'-'.$user->cod_almacen ?></div>
-                                <div class="stat-heading"><?php echo $user->fec ?></div>
+                                <div class="stat-text"><span class="count"><?php echo $user->items ?></span> items</div>
+                                <div class="stat-text"><?php echo 'Conteo N°.'.$user->id?></div>
+                                <div class="stat-heading"><?php echo $user->cod_almacen .' al '.$user->fec ?></div>
                             </div>
                         </div>
                     </div>

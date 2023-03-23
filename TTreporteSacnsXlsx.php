@@ -11,8 +11,8 @@ session_start();
             exit();
         }
         $idcab = $_GET["idcab"];
-       
-        $s1 = $db->query("exec sp_getTFT_resumen ".$idcab." " );
+        $ti = $_GET["ti"];
+        $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",".$ti." " );
         $regs = $s1->fetchAll(PDO::FETCH_OBJ);   
 
 //use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

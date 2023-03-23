@@ -6,9 +6,22 @@
         exit();
     }
     $idcab = $_GET["idcab"];
+   $tipo=$_GET["tipo"];
+
+   if ($tipo=='CERRADOS') {
+    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",2 " );
+    $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
+   } else  if ($tipo=='DIFERENCIAS') {
+    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",3 " );
+    $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
+   } else {
+    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",4 " );
+    $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
+   }
    
-    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab." " );
-    $scans = $s1->fetchAll(PDO::FETCH_OBJ);    
+   $s1 = $db->query("exec sp_getTFT_resumenSum ".$idcab." " );
+   $zcans = $s1->fetchAll(PDO::FETCH_OBJ);    
+  
 
 ?>
 
@@ -34,8 +47,22 @@
 
         <input type=number id="idcab" class="form-control" name="idcab" value=<?php echo $idcab; ?> hidden >
 
-        <input type="submit" name="find" value="Descargar .xlsx" class="form-control"
-        onclick=this.form.action="TTreporteSacnsXlsx.php?idcab=<?php echo $idcab ?>">
+
+        
+        <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Descargar Xlsx
+                        </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                           
+                                  <input type="submit"class="dropdown-item" value="Consolidado" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=1&idcab=<?php echo $idcab ?>">
+                                  <div class="dropdown-divider"></div>
+                                  <input type="submit"class="dropdown-item" value="Cerrados" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=2&idcab=<?php echo $idcab ?>">
+                                  <input type="submit"class="dropdown-item" value="Diferencias" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=3&idcab=<?php echo $idcab ?>">
+                                  
+                                  <input type="submit"class="dropdown-item" value="Otros Codigos" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=4&idcab=<?php echo $idcab ?>">
+                            </div>
+                        </div>
         
         </form>
 
@@ -56,6 +83,42 @@
 <!---------------------------------------------->
 <!----------------- Content -------------------->
 <!---------------------------------------------->
+<!-- Widgets  -->
+<div class="row">
+
+<?php   foreach($zcans as $scan){ ?>
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-five">
+                    <div class="stat-icon dib flat-color-1">
+
+                        <i class="pe-7s-cart"></i>
+
+                    </div>
+                    <div class="stat-content">
+                        <div class="text-left dib">
+                            <div class="stat-text"><span class="count"><?php echo $scan->items ?></span> items</div>
+                            <div class="stat-heading">
+                                
+                            <a href="TTreporteSacns.php?idcab=<?php echo $idcab?>&tipo=<?php echo $scan->TIPO?>">
+                                <?php echo $scan->TIPO  ?>
+                            </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php } ?> 
+
+    
+
+</div>
+
 
 <div class="col-md-12">
         <div class="card">

@@ -152,6 +152,7 @@
                             <ul class="sub-menu children dropdown-menu">     
                                         <li><i class="fa fa-file-o"></i><a href="loadTT.php">Generar</a></li>
                                         <li><i class="fa fa-barcode"></i><a href="TTList.php">Scanear</a></li>
+                                        <li><i class="ti ti-reload"></i><a href="TTrefresh.php">Actualizar Stock</a></li>
                                         <li><i class="fa fa-hospital-o"></i><a href="TTListR.php">Reportes</a></li>
 
 

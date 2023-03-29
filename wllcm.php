@@ -243,7 +243,7 @@ if($userAdmin==2) // si es TIENDA
       <div class="content">
         <h2>📝</h2>
         <h3>Toma Física Diaria</h3>
-        <p>Items de forma aleatoria se listan diariamente, excepto fines de semana y feriados.</p>
+        <p>Items de forma aleatoria se listan de LUNES a JUEVES, excepto feriados.</p>
         <a href="tfaD.php">Iniciar</a>
       </div>
     </div>

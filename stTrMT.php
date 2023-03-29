@@ -75,11 +75,11 @@ $sentencia2 = $db->query("exec sp_getStockTransitorioAllMT" );
 
 
                     <tr>
-                                    <td><?php echo $citem->ToWhsCode ?></td>
-                                    <td><?php echo $citem->NORMAL ?></td>
-                                    <td><?php echo $citem->RETRASADO ?></td>
-                                
-                                </tr>
+                        <td><a href="<?php echo "stTrMTd.php?id=" . $citem->ToWhsCode ?>"> <?php echo $citem->ToWhsCode ?> </a></td>
+                        <td><?php echo $citem->NORMAL ?></td>
+                        <td><?php echo $citem->RETRASADO ?></td>
+                    
+                    </tr>
                    
                 <?php } ?>   
                 </tbody>

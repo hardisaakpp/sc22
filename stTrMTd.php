@@ -8,8 +8,8 @@
         # code...
     
 // cabecerqa de toma actual
-
-$sentencia2 = $db->query("exec sp_getStockTransitorioAllCE" );
+$idWhs = $_GET["id"];
+$sentencia2 = $db->query("exec sp_getStockTransitorioItems '". $idWhs ."' " );
     $reconteos = $sentencia2->fetchAll(PDO::FETCH_OBJ);
     
     
@@ -17,7 +17,7 @@ $sentencia2 = $db->query("exec sp_getStockTransitorioAllCE" );
         echo ('<h4> ¡No existen registros! </h4>');
     } else {
       
-    
+        
         ?>
 
 <!-- Breadcrumbs-->
@@ -27,7 +27,7 @@ $sentencia2 = $db->query("exec sp_getStockTransitorioAllCE" );
                 <div class="col-sm-4">
                     <div class="page-header float-left">
                         <div class="page-title">
-                            <h1>BODEGAS TRANSITORIAS COSMETICOS DEL ECUADOR</h1>
+                            <h1>BODEGAS TRANSITORIAS MABEL TRADING S.A.</h1>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@ $sentencia2 = $db->query("exec sp_getStockTransitorioAllCE" );
                             <ol class="breadcrumb text-right">
                                 <li>
                                 <button type="button" class="btn btn-outline-warning" onclick="location.reload();">🔃</button>
-                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='wllcm.php';">X</button>
+                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='stTrMT.php';">X</button>
                                 </li>
                             </ol>
                         </div>
@@ -58,28 +58,36 @@ $sentencia2 = $db->query("exec sp_getStockTransitorioAllCE" );
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
-            <strong class="card-title">STOCK ACTUAL</strong>
+            <strong class="card-title">STOCK EN <?php echo $idWhs ?></strong>
         </div>
         <div class="card-body">
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
                 <thead>
                 <tr>
-                                    <th>ORIGEN</th>
-                                    <th>STOCK NORMAL</th>
-                                    <th>STOCK > 72 HORAS</th>
-
-                                </tr>
+                    <th>DocNum</th>
+                    <th>DocDate</th>
+                    <th>ItemCode</th>
+                    <th>Quantity</th>   
+                    <th>OpenQty</th>
+                </tr>
                 </thead>
                 <tbody>
-                <?php   foreach($reconteos as $citem){ ?>
-
-
-                    <tr>
-                                    <td><a href="<?php echo "stTrCEd.php?id=" . $citem->ToWhsCode ?>"> <?php echo $citem->ToWhsCode ?> </a></td>
-                                    <td><?php echo $citem->NORMAL ?></td>
-                                    <td><?php echo $citem->RETRASADO ?></td>
-                                
-                                </tr>
+                <?php   
+                foreach($reconteos as $reconteo){ 
+                    $DocNum = $reconteo->DocNum;
+                    $DocDate = $reconteo->DocDate;
+                    $ItemCode = $reconteo->ItemCode;
+                    $Quantity = $reconteo->Quantity;
+                    $OpenQty = $reconteo->OpenQty;
+                
+                    ?>
+                    <tr>                            
+                        <td><?php echo $DocNum ?></td>
+                        <td><?php echo $DocDate ?></td>
+                        <td><?php echo $ItemCode ?></td>
+                        <td><?php echo $Quantity ?></td>
+                        <td><?php echo $OpenQty ?></td>
+                    </tr>
                    
                 <?php } ?>   
                 </tbody>

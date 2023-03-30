@@ -42,12 +42,15 @@
     }
     
     include_once "php/bd_StoreControl.php";
+    include_once "php/bd_Biometricos.php";
+    
     date_default_timezone_set('America/Bogota');
 
     $userName = $_SESSION['username'];
     $userId = $_SESSION['idU'];
     $userAdmin = $_SESSION["perfil"];
-    $whsInvs = $_SESSION["whsInvs"]
+    $whsInvs = $_SESSION["whsInvs"];
+    $whsTurem = $_SESSION["whsTurem"];
 
 
 ?>
@@ -107,14 +110,79 @@
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                      
+               
+                 <!--//Home-->
+                 <li>
+                            <a href="wllcm.php"><i class="menu-icon fa fa-home"></i>Inicio </a>
+                        </li>
+       <!--//INVENTARIOS-->
+       <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                <?php 
+                                    if ($userAdmin==1) { // ADMIN   
+                                        echo '
+                                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
+                                            <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
+                                        ';
+                                    } else if ($userAdmin==2){ // TIENDA
+                                        echo '
+                                            <li><i class="fa fa-pencil-square-o"></i><a href="tfaD.php">Toma aleatoria</a></li>
+                                            <li><i class="fa fa-h-square"></i><a href="tfaHu.php">Historial</a></li>
+                                        ';
+                                    } else if ($userAdmin==3){ // INVENTARIO
+                                        echo '
+                                            
+                                        ';
+                                    }else if ($userAdmin==4){ // cuentaInventarios
+                                        # code...
+                                    }else if ($userAdmin==5){ // bodega
+
+                                    }  
+                                ?>
+
+                                
+                            </ul>
+                        </li>
+                        <!--//HORARIOS-->
+                        <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Horarios</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                <?php 
+                                    if ($userAdmin==1) { // ADMIN   
+                                        echo '
+                                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Resumen Turnos</a></li>
+                                            
+                                        ';
+                                    } else if ($userAdmin==2){ // TIENDA
+                                        echo '
+                                            <li><i class="fa fa-calendar"></i><a href="turempY.php">Turnos</a></li>
+                                            <li><i class="fa fa-upload"></i><a href="tfaHu.php">Importar Turnos</a></li>
+                                        ';
+                                    } else if ($userAdmin==3){ // INVENTARIO
+                                        echo '
+                                            
+                                        ';
+                                    }else if ($userAdmin==4){ // cuentaInventarios
+                                        # code...
+                                    }else if ($userAdmin==5){ // bodega
+
+                                    }  
+                                ?>
+
+                                
+                            </ul>
+                        </li>
+
+                 
+
             <?php 
             if ($userAdmin==1) {   
             ?>
-                      <!--//Dashboard-->
+                      <!--//Dashboard
                         <li>
                             <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
-                        </li>
+                        </li>-->
                         <!--//Configuración-->
 
                         <li class="menu-item-has-children dropdown">
@@ -191,37 +259,6 @@
              }  
             ?>
 
-                        <!--//INVENTARIOS-->
-                        <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square-o"></i>Inventarios</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <?php 
-                                    if ($userAdmin==1) { // ADMIN   
-                                        echo '
-                                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
-                                            <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
-                                        ';
-                                    } else if ($userAdmin==2){ // TIENDA
-                                        echo '
-                                            <li><i class="fa fa-pencil-square-o"></i><a href="tfaD.php">Toma fisica aleatoria</a></li>
-                                            <li><i class="fa fa-h-square"></i><a href="tfaHu.php">Historial Tomas fisicas</a></li>
-                                        ';
-                                    } else if ($userAdmin==3){ // INVENTARIO
-                                        echo '
-                                            
-                                        ';
-                                    }else if ($userAdmin==4){ // cuentaInventarios
-                                        # code...
-                                    }else if ($userAdmin==5){ // bodega
-
-                                    }  
-                                ?>
-
-                                
-                            </ul>
-                        </li>
-                        
-
                  
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -258,9 +295,9 @@
                         </a>
 
                         <div class="user-menu dropdown-menu">
-                            <a class="nav-link" href="#"><i class="fa fa-user"></i>My Profile</a>
+                          <!--   <a class="nav-link" href="#"><i class="fa fa-user"></i>My Profile</a>
 
-                         <!--   <a class="nav-link" href="#"><i class="fa fa-bell-o"></i>Notifications <span class="count">13</span></a> -->
+                           <a class="nav-link" href="#"><i class="fa fa-bell-o"></i>Notifications <span class="count">13</span></a> -->
 
                             <a class="nav-link" href="psswrd.php"><i class="fa fa-key"></i>Cambiar clave</a>
 

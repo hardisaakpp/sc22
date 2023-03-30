@@ -41,6 +41,8 @@ include_once "php/bd_StoreControl.php";
                     $_SESSION["username"] = $xusername;  
 
                     $_SESSION["whsInvs"] = $IDCONTEO->fk_ID_almacen_invs;  
+                    
+                    $_SESSION["whsTurem"] = $IDCONTEO->fk_ID_almacen_turemp;  
                      
                      header("location:wllcm.php");  
                 }

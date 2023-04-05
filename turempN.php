@@ -76,45 +76,56 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
 <div class="row">
 
 <script>
-    $(document).ready(function() {
-      
-      $(".boton").click(function() {
+
+function indexesLX(){
+
+try {
+    $(".boton").click(function() {
 
         
-        var cedula='';
-        // Obtenemos todos los valores contenidos en los <td> de la fila
-        // seleccionada
-        $(this).parents("tr").find(".cedula").each(function() {
-            cedula += $(this).html() + "\n";
-        });
-        
-        var nombre='';
-        $(this).parents("tr").find(".nombre").each(function() {
-            nombre += $(this).html() + "\n";
-        });
-
-        var apellido='';
-        $(this).parents("tr").find(".apellido").each(function() {
-            apellido += $(this).html() + "\n";
-        });
-
-        var terminal='';
-        $(this).parents("tr").find(".terminal").each(function() {
-            terminal += $(this).html() + "\n";
-        });
-
-        var sueldo= 0.0;
-        console.log(sueldo);
-        $(this).parents("tr").find(".sueldo").each(function() {
-            //sueldo += $(this).html() + "\n";
-            sueldo = parseFloat($(this).html());
-        });
-        console.log(sueldo);
-       /* console.log(valores);
-        alert(valores);*/
-        myFunction(cedula,nombre, apellido, terminal, sueldo);
-      });
+    var cedula='';
+    // Obtenemos todos los valores contenidos en los <td> de la fila
+    // seleccionada
+    $(this).parents("tr").find(".cedula").each(function() {
+        cedula += $(this).html() + "\n";
     });
+
+    var nombre='';
+    $(this).parents("tr").find(".nombre").each(function() {
+        nombre += $(this).html() + "\n";
+    });
+
+    var apellido='';
+    $(this).parents("tr").find(".apellido").each(function() {
+        apellido += $(this).html() + "\n";
+    });
+
+    var terminal='';
+    $(this).parents("tr").find(".terminal").each(function() {
+        terminal += $(this).html() + "\n";
+    });
+
+    var sueldo= 0.0;
+    console.log(sueldo);
+    $(this).parents("tr").find(".sueldo").each(function() {
+        //sueldo += $(this).html() + "\n";
+        sueldo = parseFloat($(this).html());
+    });
+    console.log(sueldo);
+    /* console.log(valores);
+    alert(valores);*/
+    myFunction(cedula,nombre, apellido, terminal, sueldo);
+    });
+}
+    catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
+    //document.getElementById("ejemplo").innerHTML = x.message;
+}
+
+    
+   // setInterval('contadoradd()',2000);
+}
+
+   
   </script>
 
 

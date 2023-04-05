@@ -14,7 +14,7 @@
 
 
 
-   $sentencia2 = $db->query("select * from turem where mes=".$mes." and anio=".$year." and fk_id_almacen=".$whsTurem." ");
+   $sentencia2 = $db->query("select * from vw_turnosEmpMes where mes=".$mes." and anio=".$year." and fk_id_almacen=".$whsTurem." ");
     $mascotas = $sentencia2->fetchAll(PDO::FETCH_OBJ);
 
 ?>
@@ -53,6 +53,19 @@
 
 <script>
     document.getElementById('mes').value = <?php echo $mes; ?>;
+
+	updateSubTotal(); // Initial call
+
+function updateSubTotal() {
+	console.log('aaaa');
+  var table = document.getElementById("tblList");
+  let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+    return total + parseFloat(row.cells[3].innerHTML);
+  }, 0);
+  document.getElementById("ttHTR").innerHTML = "$" + subTotal.toFixed(2);
+}
+
+
 </script>
 
 <div class="row">
@@ -67,32 +80,66 @@
 	if (count($mascotas)>0) {
 ?>
 		<div class="table-sm">
-			<table class="table table-hover">
+			<table class="table table-hover" name='tblList'>
 				<thead class="thead-dark">
 					<tr>
 						<th>CEDULA</th>	
 						<th>NOMBRE</th>
-						<th>APELLIDO</th>
+						<th>ALMACEN</th>
+						
+						<th>HORAS TRABAJADAS</th>
+						<th>HORAS REQUERIDAS</th>
+						<th>HORAS EXTRAS</th>
+						<th>HORAS FALTANTES</th>
+						<th>Horas 50%</th>
+						<th>Horas 100%</th>
 						<th> </th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach($mascotas as $mascota){ ?>
 						<tr>
-							<td><?php echo $mascota->cedula ?></td>
-							<td><?php echo $mascota->nombre ?></td>
-							<td><?php echo $mascota->apellido ?></td>
+						<td><?php echo $mascota->cedula ?></td>
+							<td><?php echo $mascota->nombre.' '. $mascota->apellido ?></td>
+							<td><?php echo $mascota->cod_almacen ?></td>
+							
+							<td><?php echo $mascota->horasTrabajadas ?></td>
+							<td><?php echo $mascota->horasRequeridas ?></td>
+							<td><?php
+							if ($mascota->HorasExtrasFaltantes>0) {
+								echo $mascota->HorasExtrasFaltantes;
+							} else {
+								echo 0;
+							}
+							
+							 ?></td>
+							 							<td><?php
+							if ($mascota->HorasExtrasFaltantes<0) {
+								echo $mascota->HorasExtrasFaltantes;
+							} else {
+								echo 0;
+							}
+							
+							 ?></td>
+							<td><?php echo '$ '. round($mascota->Horas50, 2) ?></td>
+							<td><?php echo $mascota->h100 ?></td>
 							<td>
 
 
-                                <input type="button" onclick="window.open('turEmpX.php?id=<?php echo $mascota->id; ?>',
+                                <input type="button" onclick="window.open('turEmpX.php?id=<?php echo $mascota->idcab; ?>',
             '_blank', 'width=1100, height=700');" class="btn btn-secondary" name="atach" value="Editar 📝">
 
-								<a class="btn btn-warning" href="<?php echo "turempDel.php?id=" . $mascota->id?>">Eliminar ⛔</a>			
+								<a class="btn btn-warning" href="<?php echo "php/turempDel.php?id=" . $mascota->idcab?>">Eliminar ⛔</a>			
 							</td>
 						</tr>
 					<?php } ?>
 				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3">Totales</td>
+					<td id='ttHTR'></td>
+				</tr>
+				</tfoot>
 			</table>
 		</div>
  
@@ -102,7 +149,7 @@
 
 
 
-
+		<input type="button" onclick="updateSubTotal();" class="btn btn-secondary" name="atach" value="aaaa 📝">
 
 <?php 
 

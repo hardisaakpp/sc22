@@ -157,7 +157,7 @@
                                     } else if ($userAdmin==2){ // TIENDA
                                         echo '
                                             <li><i class="fa fa-calendar"></i><a href="turempY.php">Turnos</a></li>
-                                            <li><i class="fa fa-upload"></i><a href="tfaHu.php">Importar Turnos</a></li>
+                                            <li><i class="fa fa-upload"></i><a href="turempimp.php">Importar Turnos</a></li>
                                         ';
                                     } else if ($userAdmin==3){ // INVENTARIO
                                         echo '

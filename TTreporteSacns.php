@@ -14,11 +14,16 @@
    } else  if ($tipo=='DIFERENCIAS') {
     $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",3 " );
     $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
+   } else if ($tipo=='DIFPOS') {
+    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",5 " );
+    $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
    } else {
     $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",4 " );
     $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
    }
    
+
+
    $s1 = $db->query("exec sp_getTFT_resumenSum ".$idcab." " );
    $zcans = $s1->fetchAll(PDO::FETCH_OBJ);    
   
@@ -116,6 +121,33 @@
     </div>
 
 <?php } ?> 
+
+
+<div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-five">
+                    <div class="stat-icon dib flat-color-1">
+
+                        <i class="pe-7s-cart"></i>
+
+                    </div>
+                    <div class="stat-content">
+                        <div class="text-left dib">
+                            <div class="stat-text"><span class="count">9999 </span> items</div>
+                            <div class="stat-heading">
+                                
+                            <a href="TTreporteSacns.php?idcab=<?php echo $idcab?>&tipo=DIFPOS">
+                                <?php echo 'DIFERENCIAS POSITIVAS'  ?>
+                            </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     
 

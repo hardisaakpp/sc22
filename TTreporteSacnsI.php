@@ -47,6 +47,7 @@
                                   <input type="submit"class="dropdown-item" value="Cerrados" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=2&idcab=<?php echo $idcab ?>">
                                   <input type="submit"class="dropdown-item" value="Diferencias" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=3&idcab=<?php echo $idcab ?>">
                                   
+                                  
                                   <input type="submit"class="dropdown-item" value="Otros Codigos" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=4&idcab=<?php echo $idcab ?>">
                                   <div class="dropdown-divider"></div>
                                   <input type="submit"class="dropdown-item" value="Scans por usuario" onclick=this.form.action="TTreporteScansUXlsx.php?idcab=<?php echo $idcab ?>">
@@ -107,6 +108,32 @@
 <?php } ?> 
 
     
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-five">
+                    <div class="stat-icon dib flat-color-1">
+
+                        <i class="pe-7s-cart"></i>
+
+                    </div>
+                    <div class="stat-content">
+                        <div class="text-left dib">
+                            <div class="stat-text"><span class="count">9999 </span> items</div>
+                            <div class="stat-heading">
+                                
+                            <a href="TTreporteSacns.php?idcab=<?php echo $idcab?>&tipo=DIFPOS">
+                                <?php echo 'DIFERENCIAS POSITIVAS'  ?>
+                            </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 

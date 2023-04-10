@@ -50,7 +50,7 @@ if (isset($_POST['submit'])) {
             $arrayFECHAS= array();
  
             for ($i=1; $i<count($sheetData); $i++) {
-                $identificacion = $sheetData[$i][0];
+                $identificacion = substr('0'.$sheetData[$i][0], -10);
                 $fecha = $sheetData[$i][1];
                 $turno = $sheetData[$i][3];
 
@@ -82,10 +82,10 @@ if (isset($_POST['submit'])) {
            //validaciones etapa 1 formatos
             foreach ($distinctTURNOS as $i => $value) {
                 if (empty($distinctTURNOS[$i])) {
-                    echo 'Registro ' . $i+1 . ' - ERROR, CODIGO DE TURNO VACIO <br>';
+                    echo 'Registro ' . $i+2 . ' - ERROR, CODIGO DE TURNO VACIO <br>';
                     $errors++;
                 }elseif (!is_numeric($distinctTURNOS[$i])) {
-                    echo 'Registro ' . $i+1 . ' - ERROR, EL CODIGO DE TURNO DEBE SER NUMERICO <br>';
+                    echo 'Registro ' . $i+2 . ' - ERROR, EL CODIGO DE TURNO DEBE SER NUMERICO <br>';
                     $errors++;
                 }
             }
@@ -93,17 +93,17 @@ if (isset($_POST['submit'])) {
             foreach ($distinctFECHAS as $i => $value) {
                 
                 if (empty($distinctFECHAS[$i])) {
-                    echo 'Registro ' . $i+1 . ' - ERROR, FECHA VACIA <br>';
+                    echo 'Registro ' . $i+2 . ' - ERROR, FECHA VACIA <br>';
                     $errors++;
                 }elseif (!validar_fecha_espanol($distinctFECHAS[$i])) {
-                    echo 'Registro ' . $i+1 . ' - FECHA INVALIDA <br>';
+                    echo 'Registro ' . $i+2 . ' - FECHA INVALIDA <br>';
                     $errors++;
                 }
             }
 
             foreach ($distinctCEDS as $i => $value) {
                 if (empty($distinctCEDS[$i])) {
-                    echo 'Registro ' . $i+1 . ' - ERROR, IDENTIFICACION VACIA <br>';
+                    echo 'Registro ' . $i+2 . ' - ERROR, IDENTIFICACION VACIA <br>';
                     $errors++;
                 }
             }
@@ -112,12 +112,12 @@ if (isset($_POST['submit'])) {
             if ($errors==0)  {
                 ////VALIDO EXISTAN EN BASE DE DATOS
                 foreach ($distinctCEDS as $i => $value) {
-                    $sentencia3 = $dbB->query("select count(*) as ROWS from tblEmpleados e where e.strIdentificacion='".trim($distinctCEDS[$i])."' " );
+                    $sentencia3 = $dbB->query("select count(*) as ROWS from tblEmpleados e where e.strIdentificacion=RIGHT('0".trim($distinctCEDS[$i])."',10) " );
                     $regC = $sentencia3->fetchObject();
                             $XROWS=$regC->ROWS;
                         // echo $XROWS;
                     if ($XROWS==0) {
-                        echo 'Registro ' . $i+1 . ' - ERROR, CEDULA NO EXISTE EN BASE DE EMPLEADOS <br>';
+                        echo 'Registro ' . $i+2 . ' - ERROR, CEDULA NO EXISTE EN BASE DE EMPLEADOS <br>';
                         $errors++;
                     }
                 }
@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
                             $XROWS=$regC->ROWS;
                         // echo $XROWS;
                     if ($XROWS==0) {
-                        echo 'Registro ' . $i+1 . ' - ERROR, CODIGO DE TURNO NO EXISTE EN BASE DE EMPLEADOS <br>';
+                        echo 'Registro ' . $i+2 . ' - ERROR, CODIGO DE TURNO NO EXISTE EN BASE DE EMPLEADOS <br>';
                         $errors++;
                     }
                 }
@@ -148,7 +148,7 @@ if (isset($_POST['submit'])) {
                 //generar unicos empleado/mes ppara generar en mis tablas
                 $arraybCEDFEC = array();
                 for ($i=1; $i<count($sheetData); $i++) {
-                    $identificacion = $sheetData[$i][0];
+                    $identificacion =substr('0'.$sheetData[$i][0], -10);
                     $fecha = $sheetData[$i][1];
 
                     $fecA =  explode("/",$fecha);
@@ -174,7 +174,8 @@ if (isset($_POST['submit'])) {
                     $cedula = $bike[0];
                     $mes = $bike[1];
                     $anio = $bike[2];
-                    $sentencia4 = $dbB->query("select top 1 strNombres, strApellidos, intIdEmpleadoTerminal, monSalario  from tblEmpleados e where strIdentificacion='".trim($cedula)."' " );
+                    $sentencia4 = $dbB->query("select top 1 strNombres, strApellidos, intIdEmpleadoTerminal, monSalario  from tblEmpleados e where strIdentificacion= RIGHT('0".trim($cedula)."',10) " );
+
                     $regC = $sentencia4->fetchObject();
                             $xNombre=$regC->strNombres;
                             $xApellido=$regC->strApellidos;
@@ -188,7 +189,7 @@ if (isset($_POST['submit'])) {
              
 
                    for ($i=1; $i<count($sheetData); $i++) {
-                        $zidentificacion = $sheetData[$i][0];
+                        $zidentificacion = substr('0'.$sheetData[$i][0], -10);
                         $zfecha = $sheetData[$i][1];
                         $zturno = $sheetData[$i][3];
 
@@ -235,7 +236,7 @@ if (isset($_POST['submit'])) {
                             set @minTrab=CAST('".$XminTrab."' AS decimal);
 
                             declare @idTurem int;
-                            set @idTurem=(select top 1 id as idTurem from turem where cedula like '".$zidentificacion."%' and mes=@mes and anio=@anio and fk_id_almacen=@idalm);
+                            set @idTurem=(select top 1 id as idTurem from turem where cedula like '%".$zidentificacion."%' and mes=@mes and anio=@anio and fk_id_almacen=@idalm);
                             declare @DateKey int;
                             set @DateKey= cast((CONCAT((right('00' + CAST( @anio as nvarchar(4)),4)),(right('00' + CAST( @mes as nvarchar(4)),2)),(right('00' + CAST( @dia as nvarchar(4)),2)))) as int);   
 

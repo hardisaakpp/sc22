@@ -2,7 +2,7 @@
 $contraseña = "#DPJ(HcPn'ysT'@C";
 $usuario = "tswmabel";
 //$nombreBaseDeDatos = "dbTimeSoftWebAutomatic_MABEL";  ///produccion
-$nombreBaseDeDatos = "dbTimeSoftWebAutomatic_MABEL_test";
+$nombreBaseDeDatos = "dbTimeSoftWebAutomatic_MABEL";
 $rutaServidor = "34.68.56.120";
 try {
     $dbB = new PDO("sqlsrv:server=$rutaServidor;database=$nombreBaseDeDatos", $usuario, $contraseña);

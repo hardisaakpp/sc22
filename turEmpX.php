@@ -269,7 +269,7 @@ if ($emp=='MT') {
                 x1Min.style.display = 'block';
               }
 
-              if (x1codTurno.value==209 || x1codTurno.value==231) {
+              if (x1codTurno.value==209 || x1codTurno.value==231 || x1codTurno.value==210) {
                 x1codTurnotxt.style.backgroundColor="yellow";
               } else {
                 x1codTurnotxt.style.backgroundColor="white";
@@ -397,7 +397,7 @@ if ($emp=='MT') {
       //contar dias trabajados lxlxlx
       for (ix = 0; ix < xDiaZ.length; ix++) {
           var c2c = document.getElementById("tur"+xDiaZ[ix][0]);
-          if(c2c.value!=209 && c2c.value!=231){
+          if(c2c.value!=209 && c2c.value!=231 && c2c.value!=210){
             turnosLaborables=turnosLaborables+1;
           }
         
@@ -459,7 +459,7 @@ if ($emp=='MT') {
        //console.log(ix + ' --> ' + xDiaZ[ix][0] + ' --> ' + xDiaZ[ix][1]);
         if (xDiaZ[ix][1]==i) {
           var cc = document.getElementById("tur"+xDiaZ[ix][0]);
-          if(cc.value==209 || cc.value==231){
+          if(cc.value==209 || cc.value==231 || cc.value==210){
             cell.innerHTML = parseFloat(cell.innerHTML, 0) + 1;
           }
           if (cell.innerHTML != 2 ) {
@@ -562,6 +562,8 @@ if ($emp=='MT') {
             x1codTurnotxt.style.backgroundColor="yellow";
           } else if (val==231) {
             x1codTurnotxt.style.backgroundColor="yellow";
+          } else if (val==210) {
+            x1codTurnotxt.style.backgroundColor="yellow";
           } else {
             x1codTurnotxt.style.backgroundColor="white";
           }
@@ -622,7 +624,7 @@ if ($emp=='MT') {
         x1codTurnotxt.value=ivalue;
 
         var x1codTurno = document.getElementById(id);
-        if (ivalue==209 || ivalue==231) {
+        if (ivalue==209 || ivalue==231 || ivalue==210) {
             x1codTurnotxt.style.backgroundColor="yellow";
           } else {
             x1codTurnotxt.style.backgroundColor="white";

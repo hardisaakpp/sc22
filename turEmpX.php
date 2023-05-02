@@ -83,7 +83,7 @@ if ($emp=='MT') {
           from tblTurnos t
           inner join tblDetalleTurnos d on t.intIdTurno = d.intIdTurno
         where 
-        t.intIdTurno in (3,4,11,12,14)  " );
+        t.intIdTurno in (3,4,11,12,14,17,15,16)  " );
       $turnos = $sentencia4->fetchAll(PDO::FETCH_OBJ);
     }else {
       $sentencia4 = $dbB->query("  select d.intiddetalleturno  ,t.strNombre, -- intMinutosDescanso,
@@ -99,7 +99,7 @@ if ($emp=='MT') {
           from tblTurnos t
           inner join tblDetalleTurnos d on t.intIdTurno = d.intIdTurno
         where 
-        t.intIdTurno in (5,6,11,12,14)  " );
+        t.intIdTurno in (5,6,11,12,14,17,15,16)  " );
       $turnos = $sentencia4->fetchAll(PDO::FETCH_OBJ);
     }
 
@@ -269,7 +269,7 @@ if ($emp=='MT') {
                 x1Min.style.display = 'block';
               }
 
-              if (x1codTurno.value==209 || x1codTurno.value==231 || x1codTurno.value==210) {
+              if (x1codTurno.value==209 || x1codTurno.value==231 ||x1codTurno.value==268 || x1codTurno.value==235 || x1codTurno.value==236 || x1codTurno.value==210) {
                 x1codTurnotxt.style.backgroundColor="yellow";
               } else {
                 x1codTurnotxt.style.backgroundColor="white";
@@ -354,6 +354,8 @@ if ($emp=='MT') {
         saveDayAjax(DateKey,xcodTurno.value, selextText, horLab.value, o1, o2, o3, o4, o5, o6);  //DATAKEY , CodTurno, descripcio, horasLab
         //  console.log("save");
       } 
+
+      
         alert("Guardado correctamente");
         //  alert("guardado exitosamente");
     }
@@ -397,7 +399,7 @@ if ($emp=='MT') {
       //contar dias trabajados lxlxlx
       for (ix = 0; ix < xDiaZ.length; ix++) {
           var c2c = document.getElementById("tur"+xDiaZ[ix][0]);
-          if(c2c.value!=209 && c2c.value!=231 && c2c.value!=210){
+          if(c2c.value!=209 && c2c.value!=231 && c2c.value!=268 && c2c.value!=235 && c2c.value!=236 && c2c.value!=210){
             turnosLaborables=turnosLaborables+1;
           }
         
@@ -459,7 +461,7 @@ if ($emp=='MT') {
        //console.log(ix + ' --> ' + xDiaZ[ix][0] + ' --> ' + xDiaZ[ix][1]);
         if (xDiaZ[ix][1]==i) {
           var cc = document.getElementById("tur"+xDiaZ[ix][0]);
-          if(cc.value==209 || cc.value==231 || cc.value==210){
+          if(cc.value==209 || cc.value==231 || cc.value==235 || cc.value==268 || cc.value==236  || cc.value==210){
             cell.innerHTML = parseFloat(cell.innerHTML, 0) + 1;
           }
           if (cell.innerHTML != 2 ) {
@@ -535,6 +537,7 @@ if ($emp=='MT') {
               };
             $.ajax({
                 data:parametros,
+                async: false,
                 url:'turEmpSaveDay.php',
                 type: 'post',
                 //beforeSend: function () {
@@ -561,6 +564,12 @@ if ($emp=='MT') {
           if (val==209 ) {
             x1codTurnotxt.style.backgroundColor="yellow";
           } else if (val==231) {
+            x1codTurnotxt.style.backgroundColor="yellow";
+          } else if (val==235) {
+            x1codTurnotxt.style.backgroundColor="yellow";
+          } else if (val==268) {
+            x1codTurnotxt.style.backgroundColor="yellow";
+          } else if (val==236) {
             x1codTurnotxt.style.backgroundColor="yellow";
           } else if (val==210) {
             x1codTurnotxt.style.backgroundColor="yellow";
@@ -624,7 +633,7 @@ if ($emp=='MT') {
         x1codTurnotxt.value=ivalue;
 
         var x1codTurno = document.getElementById(id);
-        if (ivalue==209 || ivalue==231 || ivalue==210) {
+        if (ivalue==209 || ivalue==231 || ivalue==268 || ivalue==235 || ivalue==236 || ivalue==210) {
             x1codTurnotxt.style.backgroundColor="yellow";
           } else {
             x1codTurnotxt.style.backgroundColor="white";

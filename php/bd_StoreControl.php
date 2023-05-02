@@ -7,5 +7,5 @@ try {
     $db = new PDO("sqlsrv:server=$rutaServidor;database=$nombreBaseDeDatos", $usuario, $contraseña);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
-    echo "Ocurrió un error con la base de datos: " . $e->getMessage();
+    echo "Ocurrió un error con la base de datos STORE CONTROL: " . $e->getMessage();
 }

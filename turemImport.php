@@ -112,7 +112,7 @@ if (isset($_POST['submit'])) {
             if ($errors==0)  {
                 ////VALIDO EXISTAN EN BASE DE DATOS
                 foreach ($distinctCEDS as $i => $value) {
-                    $sentencia3 = $dbB->query("select count(*) as ROWS from tblEmpleados e where e.strIdentificacion=RIGHT('0".trim($distinctCEDS[$i])."',10) " );
+                    $sentencia3 = $dbB->query("select count(*) as ROWS from tblEmpleados e where   RIGHT(CONCAT('00',e.strIdentificacion),10)=RIGHT('0".trim($distinctCEDS[$i])."',10) " );
                     $regC = $sentencia3->fetchObject();
                             $XROWS=$regC->ROWS;
                         // echo $XROWS;
@@ -174,7 +174,7 @@ if (isset($_POST['submit'])) {
                     $cedula = $bike[0];
                     $mes = $bike[1];
                     $anio = $bike[2];
-                    $sentencia4 = $dbB->query("select top 1 strNombres, strApellidos, intIdEmpleadoTerminal, monSalario  from tblEmpleados e where strIdentificacion= RIGHT('0".trim($cedula)."',10) " );
+                    $sentencia4 = $dbB->query("select top 1 strNombres, strApellidos, intIdEmpleadoTerminal, monSalario  from tblEmpleados e where RIGHT(CONCAT('00',strIdentificacion),10)= RIGHT('00".trim($cedula)."',10) " );
 
                     $regC = $sentencia4->fetchObject();
                             $xNombre=$regC->strNombres;

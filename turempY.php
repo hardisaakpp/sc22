@@ -54,16 +54,7 @@
 <script>
     document.getElementById('mes').value = <?php echo $mes; ?>;
 
-	updateSubTotal(); // Initial call
-
-function updateSubTotal() {
-	console.log('aaaa');
-  var table = document.getElementById("tblList");
-  let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
-    return total + parseFloat(row.cells[3].innerHTML);
-  }, 0);
-  document.getElementById("ttHTR").innerHTML = "$" + subTotal.toFixed(2);
-}
+	
 
 
 </script>
@@ -134,22 +125,17 @@ function updateSubTotal() {
 						</tr>
 					<?php } ?>
 				</tbody>
-				<tfoot>
+			<!--	<tfoot>
 				<tr>
 					<td colspan="3">Totales</td>
 					<td id='ttHTR'></td>
 				</tr>
 				</tfoot>
+						-->
 			</table>
 		</div>
  
-	
-		
 
-
-
-
-		<input type="button" onclick="updateSubTotal();" class="btn btn-secondary" name="atach" value="aaaa 📝">
 
 <?php 
 

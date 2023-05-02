@@ -8,5 +8,5 @@ try {
     $dbB = new PDO("sqlsrv:server=$rutaServidor;database=$nombreBaseDeDatos", $usuario, $contraseña);
     $dbB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
-    echo "Ocurrió un error con la base de datos: " . $e->getMessage();
+    echo "Ocurrió un error con la base de datos DB BIOMETRICOS TIMESOFT:  " . $e->getMessage();
 }

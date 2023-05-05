@@ -1,5 +1,5 @@
 <?php
-$contraseña = "#DPJ(HcPn'ysT'@C";
+$contraseña = "ppMEkwDrem";
 $usuario = "tswmabel";
 //$nombreBaseDeDatos = "dbTimeSoftWebAutomatic_MABEL";  ///produccion
 $nombreBaseDeDatos = "dbTimeSoftWebAutomatic_MABEL";

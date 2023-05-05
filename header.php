@@ -151,7 +151,7 @@
                                 <?php 
                                     if ($userAdmin==1) { // ADMIN   
                                         echo '
-                                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Resumen Turnos</a></li>
+                                            <li><i class="fa fa-spinner"></i><a href="turempY2.php">Resumen Turnos</a></li>
                                             
                                         ';
                                     } else if ($userAdmin==2){ // TIENDA

@@ -7,7 +7,7 @@ $mes=$_POST['mes'];
         include_once "php/bd_StoreControl.php";
 
 $sentencia2 = $db->query("
-select cedula as identificacion, 
+select LTRIM(RTRIM(cedula)) as identificacion, 
 FORMAT (f.Date, 'dd/MM/yyyy')  as fecha,
 CASE
 WHEN d.cod_turno=209 THEN 'LIBRE'

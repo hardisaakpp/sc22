@@ -210,7 +210,7 @@
                             <ul class="sub-menu children dropdown-menu">     
                                         <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
                                         <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
-                            
+                                        <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
 
 
                             </ul>
@@ -240,6 +240,7 @@
                             <ul class="sub-menu children dropdown-menu">     
                                         <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
                                         <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
+                                        <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
                             
 
 

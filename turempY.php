@@ -53,24 +53,29 @@
 
 <script>
     document.getElementById('mes').value = <?php echo $mes; ?>;
-
-	
-
-
 </script>
 
-<div class="row">
+
+<div class="content">
+<!---------------------------------------------->
+<!----------------- Content -------------------->
+<!---------------------------------------------->
 
 
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <strong class="card-title"><?php echo $mes."/".$year ; ?> - Horarios generados:</strong>
+        </div>
+        <div class="card-body">
 
 <!-- Aquí pon las col-x necesarias, comienza tu contenido, etcétera -->
-	<div class="col-12">
-		 <h2 style="color:gray";><?php echo $mes."/".$year ; ?> - Horarios generados:</h2>
+	
 
 <?php 
 	if (count($mascotas)>0) {
 ?>
-		<div class="table-sm">
+		
 			<table class="table table-hover" name='tblList'>
 				<thead class="thead-dark">
 					<tr>
@@ -118,14 +123,14 @@
 
 
                                 <input type="button" onclick="window.open('turEmpX.php?id=<?php echo $mascota->idcab; ?>',
-            '_blank', 'width=1100, height=700');" class="btn btn-secondary" name="atach" value="Editar 📝">
+            	'_blank', 'width=1100, height=700');" class="btn btn-secondary" name="atach" value="📝">
 
-								<a class="btn btn-warning" href="<?php echo "php/turempDel.php?id=" . $mascota->idcab?>">Eliminar ⛔</a>			
+								<a class="btn btn-warning" href="<?php echo "php/turempDel.php?id=" . $mascota->idcab?>">⛔</a>			
 							</td>
 						</tr>
 					<?php } ?>
 				</tbody>
-			<!--	<tfoot>
+				<!--	<tfoot>
 				<tr>
 					<td colspan="3">Totales</td>
 					<td id='ttHTR'></td>
@@ -133,10 +138,14 @@
 				</tfoot>
 						-->
 			</table>
-		</div>
+
  
+        </div>
+    </div>
+</div>
 
 
+</div>
 <?php 
 
                     }

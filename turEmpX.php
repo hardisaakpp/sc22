@@ -62,7 +62,7 @@
     //dias festivos
               $sentencia6 = $dbB->query(" SELECT CONCAT(YEAR([dtmFestivo]),RIGHT('00' + Ltrim(Rtrim(MONTH([dtmFestivo]))),2) ,RIGHT('00' + Ltrim(Rtrim(DAY([dtmFestivo]))),2))  AS 'DATAKEY'
               ,[strObservaciones]
-            FROM [dbTimeSoftWebAutomatic_MABEL].[dbo].[tblFestivos]
+            FROM [tblFestivos]
             where YEAR([dtmFestivo])='".$year."' and MONTH([dtmFestivo])='".$mes."' " );
               $fers = $sentencia6->fetchAll(PDO::FETCH_OBJ);
 

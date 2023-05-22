@@ -18,7 +18,8 @@
 
 
    $sentencia2 = $dbB->query("
- 
+   select * from (
+
 SELECT *,(
 	select top 1 descanso
 		from(
@@ -88,8 +89,15 @@ on TP.intIdEmpleadoTerminal=MC.intIdEmpleadoTerminal and TP.fecha=MC.fecha) QCAB
 
 	
 
-WHERE intIdCentroCosto=".$centrocosto." 
-AND month(fecha)=".$mes." and year(fecha)=".$year."  ");
+WHERE
+intIdCentroCosto=".$centrocosto." 
+AND month(fecha)=".$mes." and year(fecha)=".$year."  
+
+) plus
+
+where 
+(TurnoHoraEntrada<>TurnoHoraSalida) and (Entrada<-5 or Salida<-5 or (intMinutosDescanso < ISNULL ( MINDESCANSO , 0) ) or (marcaciones<>4 and marcaciones is not null)) --//warning 
+");
     $mascotas = $sentencia2->fetchAll(PDO::FETCH_OBJ);
 
 ?>

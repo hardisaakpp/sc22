@@ -88,7 +88,7 @@ header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetm
 header('Content-Disposition: attachment;filename="Horarios.xls"');
 header('Cache-Control: max-age=0');
 
-$writer = IOfactory::createWriter($spreadsheet,'Xls');
+$writer = IOfactory::createWriter($spreadsheet,'Xlsx');
 $writer->save('php://output');
  exit;
  ?>

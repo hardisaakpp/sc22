@@ -51,7 +51,7 @@
     $userAdmin = $_SESSION["perfil"];
     $whsInvs = $_SESSION["whsInvs"];
     $whsTurem = $_SESSION["whsTurem"];
-
+    $whsCica= $_SESSION["whsCica"];
 
 ?>
 

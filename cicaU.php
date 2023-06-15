@@ -19,8 +19,9 @@ if($whsCica==0){
         $caja = $TEMP1->caja;
        // $Items = $TEMP1->items;
        // $cantidad = $TEMP1->cantidad;
+       $fk_ID_almacen = $TEMP1->fk_ID_almacen;
         $fecha = $TEMP1->fecha;
-        $Cerrado = $TEMP1->cerrado;
+        $cerrado = $TEMP1->cerrado;
         $responsable = $TEMP1->responsable;
         $observacion = $TEMP1->observacion;
 
@@ -94,10 +95,22 @@ if($whsCica==0){
     <div class="card">
         
         <div class="card-header">
-            <strong> <?php echo $caja."  [".$fecha."]" ?> </strong>         
+            <strong> <?php 
+                if ($cerrado==1) {
+                    echo $caja."  [".$fecha."] 🔒";
+                } else {
+                    echo $caja."  [".$fecha."] 🔓";
+                }
+                
+            
+             ?> </strong>  
+             
         </div>
         <div class="card-body card-block">
-            <form action="" id="frmConteo" method="post">    
+            <form action="php/cicaSave.php" id="frmConteo" method="post" onSubmit="return validate()">    
+                <input class="form-control" name='id' type="hidden" value="<?php echo $id; ?>" >        
+                <input class="form-control" name='ccaja' type="hidden" value="<?php echo $caja; ?>" >        
+                <input class="form-control" name='fec' type="hidden" value="<?php echo $fecha; ?>">        
                 <!---------cabecera------------>
                 <div style="width: 20%; float:left" class="input-group">
                     <input class="form-control" placeholder="Responsable" name='crespons' type="text" maxlength="49" value="<?php echo $responsable; ?>">
@@ -109,7 +122,7 @@ if($whsCica==0){
                 <table id="resumentbl" class="table table-hover">
                     <thead class="thead-dark">
                         <tr>
-
+                            <th id='idcicasap' style='display: none;'>idcicasap</th>
                             <th>FORMA PAGO</th>
                             <th id='v1'>VALOR.SAP</th>
                             <th id='v2'>RECIBIDO</th>
@@ -127,6 +140,9 @@ if($whsCica==0){
                             foreach($consolidados as $forpag){
                         ?>
                         <tr>
+                            <td style='display: none;'>
+                                <input name="idcicasap[]" type="number"  value="<?php echo $forpag->id ?>" >
+                            </td>
                             <td><input type="text" id="valSAP" name="forPag[]" value="<?php echo $forpag->CardName ?>" readonly></td>
                             <td class="valSAP">  
                                 <input type="number" id="valSAP" name="valSAP[]" value="<?php echo $forpag->Valor; ?>" readonly>
@@ -177,15 +193,25 @@ if($whsCica==0){
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary btn-sm">
-                <i class="fa fa-dot-circle-o"></i> Submit
+                <i class="fa fa-save"></i> Submit
             </button>
             <button type="reset" class="btn btn-danger btn-sm">
                 <i class="fa fa-ban"></i> Reset
+            </button>
+            <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "adjuntos.php?id=" . $id ?>","demo","toolbar=0,status=0,")>
+                <i class="fa fa-paperclip"></i>&nbsp; Adjuntos
+            </button>
+
+            <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='cica.php?pFecha=<?php echo $fecha ?>&pIdAlmacen=<?php echo $fk_ID_almacen ?>'">
+                <i class="fa fa-sign-out"></i>&nbsp; Regresar
             </button>
         </div>
             </form>
 
     </div>
+
+
+
 
 
 <style>

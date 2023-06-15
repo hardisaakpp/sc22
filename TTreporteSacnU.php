@@ -6,23 +6,17 @@
         exit();
     }
     $idcab = $_GET["idcab"];
-   $tipo=$_GET["tipo"];
 
-   if ($tipo=='CERRADOS') {
-    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",2 " );
-    $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
-   } else  if ($tipo=='DIFERENCIAS') {
-    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",3 " );
-    $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
-   } else if ($tipo=='DIFPOS') {
-    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",5 " );
-    $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
-   } else {
-    $s1 = $db->query("exec sp_getTFT_resumen ".$idcab.",4 " );
-    $scans = $s1->fetchAll(PDO::FETCH_OBJ);  
-   }
+
+
    
-
+   $sU1 = $db->query("select c.fecScan, username, c.barcode, a.ID_articulo, a.descripcion, a.nombreGrupo
+   from StockScan c
+       join users u on c.id_user=u.id
+       left join Articulo a on c.barcode=a.codigoBarras
+   where fk_id_stockCab=".$idcab."
+   order by 1 desc  " );
+   $zUcans = $sU1->fetchAll(PDO::FETCH_OBJ); 
 
    $s1 = $db->query("exec sp_getTFT_resumenSum ".$idcab." " );
    $zcans = $s1->fetchAll(PDO::FETCH_OBJ);    
@@ -67,10 +61,8 @@
                                   
                                   <input type="submit"class="dropdown-item" value="Otros Codigos" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=4&idcab=<?php echo $idcab ?>">
                                   <div class="dropdown-divider"></div>
-                                  <input type="submit"class="dropdown-item" value="Scans por usuario XLSX" onclick=this.form.action="TTreporteScansUXlsx.php?idcab=<?php echo $idcab ?>">
-                                  <input type="submit"class="dropdown-item" value="Scans por usuario VIEW" onclick=this.form.action="TTreporteSacnU.php?idcab=<?php echo $idcab ?>">
-                                </div>
-                            
+                                  <input type="submit"class="dropdown-item" value="Scans por usuario" onclick=this.form.action="TTreporteScansUXlsx.php?idcab=<?php echo $idcab ?>">
+                            </div>
                         </div>
         
         </form>
@@ -159,7 +151,7 @@
 <div class="col-md-12">
         <div class="card">
              <div class="card-header">
-                <strong class="card-title">50 ULTIMOS CODIGOS INGRESADOS </strong>
+                <strong class="card-title">SCAN POR USUARIO</strong>
             </div>
             <div class="card-body">
               
@@ -168,34 +160,28 @@
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>categoria</th>
-                        <th>subcategoria</th>
+                        <th>fecScan</th>
+                        <th>username</th>
+                        <th>barcode</th>
+                        <th>ID_articulo</th>    
+                        <th>descripcion</th>
                         <th>nombreGrupo</th>
-                        <th>familia</th>    
-                        <th>Codigo Barras</th>
-                        <th>Item Code</th>
-                        <th>Descripcion</th>
-                        <th>Stock</th>
-                        <th>Scan</th>
-                        <th>Diferencia</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
                 <?php  
 
                 
-                foreach($scans as $user){ ?>
+                foreach($zUcans as $user){ ?>
                     <tr>
-                        <td><?php echo $user->categoria ?></td>
-                        <td><?php echo $user->subcategoria ?></td>
-                        <td><?php echo $user->nombreGrupo ?></td>
-                        <td><?php echo $user->familia ?></td>
-                        <td><?php echo $user->codigoBarras ?></td>
+                        <td><?php echo $user->fecScan ?></td>
+                        <td><?php echo $user->username ?></td>
+                        <td><?php echo $user->barcode ?></td>
                         <td><?php echo $user->ID_articulo ?></td>
                         <td><?php echo $user->descripcion ?></td>
-                        <td><?php echo $user->stock ?></td>
-                        <td><?php echo $user->scans ?></td>
-                        <td><?php echo $user->scans-$user->stock ?></td>
+                        <td><?php echo $user->nombreGrupo ?></td>
+                
                     </tr>
                    
                 <?php 
@@ -220,43 +206,7 @@
 <!--------------Fin Content -------------------->
 <!---------------------------------------------->
 </div>
-<script>
-    function delete_user(row,id)
-        { 
-          //  alert(id);
-            delTD(id,row);
-            //row.closest('tr').remove();
-        }
 
-    function delTD(id,row) {
-        
-        var parametros = 
-            {
-                "id" : id
-            };
-
-            $.ajax({
-                data: parametros,
-                url: 'php/scanDelete.php',
-                type: 'GET',
-                async: false,
-                success: function(data){
-                    row.closest('tr').remove();
-                    Swal.fire({
-                    position: 'top-end',
-                    icon: 'Eliminado',
-                    title: 'Se elimino 1 registro',
-                    showConfirmButton: false,
-                    timer: 1500
-                    })
-
-                },
-                error: function(){
-                    console.log('error de conexion - revisa tu red');
-                }
-            });
-    }
-</script>
 <?php   
 include_once "footer.php";
  ?>

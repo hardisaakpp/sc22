@@ -20,7 +20,8 @@
     from StockCab c
     join Almacen a on c.FK_ID_almacen=a.id
     left join StockDet d on c.id=d.FK_id_StockCab 
-    where c.id=".$idcab." and [date]>DATEADD(MONTH,-1,getdate())
+    left join Articulo art on d.FK_ID_articulo=art.id
+    where c.id=".$idcab." and [date]>DATEADD(MONTH,-1,getdate()) and art.nombreGrupo not in ('RL-REPROCESO ARMADOR','R-PAQUETERÍA')
     group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) 
     order by CONCAT(date,' ',left(time,5)) desc
     "  );

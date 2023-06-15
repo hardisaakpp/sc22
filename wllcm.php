@@ -187,6 +187,9 @@ if($userAdmin==2) // si es TIENDA
         <p>
         <?php foreach($qtrans as $mascota){ 
                     if ($mascota->ANTIGUEDAD=='RETRASADO') {?>
+
+
+
                         <h5 class="card-title" style=" color: red;">
                             <?php echo $mascota->OpenQty; ?> u. pendientes mayor a 48horas
                         </h5>
@@ -252,10 +255,10 @@ if($userAdmin==2) // si es TIENDA
   <div class="card">
     <div class="box">
       <div class="content">
-        <h2>🗝️</h2>
-        <h3>Seguridad</h3>
-        <p>Cambia tu contraseña. </p>
-        <a href="psswrd.php">Ir</a>
+        <h2>🛠️</h2>
+        <h3>Mesa de Servicios</h3>
+        <p>Genera requerimientos mediante tickets. </p>
+        <a href="http://192.168.2.12:8081/glpi/index.php">Ir</a>
       </div>
     </div>
   </div>

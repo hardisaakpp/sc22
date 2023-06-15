@@ -42,19 +42,34 @@ if($whsCica==0){
 
 <script type="text/javascript">
 
-    $(document).ready(function() {
+
+function indexesLX(){
+
+try {
         $('#n1').click(function() {
-            var n11 = 7;
+            var n11 = 6;
             $("td:nth-child(" + n11 + "),th:nth-child(" + n11 + ")").toggle();
             
         });
         $('#n2').click(function() {
-            $('td:nth-child(9),th:nth-child(9)').toggle();
+            $('td:nth-child(8),th:nth-child(8)').toggle();
         });
         $('#n3').click(function() {
-            $('td:nth-child(11),th:nth-child(11)').toggle();
+            $('td:nth-child(10),th:nth-child(10)').toggle();
         });
-    });
+}
+    catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
+    //document.getElementById("ejemplo").innerHTML = x.message;
+}
+
+    
+   // setInterval('contadoradd()',2000);
+}
+
+
+   
+       
+   
 
   
 
@@ -67,6 +82,14 @@ if($whsCica==0){
         var online=row.cells[( document.getElementById('v3')).cellIndex].getElementsByTagName('input')[0].value;
         var pinpad=row.cells[( document.getElementById('v4')).cellIndex].getElementsByTagName('input')[0].value;
         var dataf=row.cells[( document.getElementById('v5')).cellIndex].getElementsByTagName('input')[0].value;
+        
+        //encerando
+        if (recibido == null || recibido == '') { row.cells[( document.getElementById('v2')).cellIndex].getElementsByTagName('input')[0].value=0.00; recibido = 0.00;}
+        if (online == null || online == '') { row.cells[( document.getElementById('v3')).cellIndex].getElementsByTagName('input')[0].value=0.00;online =0.00; }
+        if (dataf == null || dataf == '') { row.cells[( document.getElementById('v5')).cellIndex].getElementsByTagName('input')[0].value=0.00; dataf=0.00;}
+
+        
+        
         if(online==null || online=='') {
         res=parseFloat(valSAP)*parseFloat(recibido);
         } else {
@@ -128,7 +151,7 @@ if($whsCica==0){
                             <th id='v2'>RECIBIDO</th>
                             <th id='v3'>ONLINE <i id='n1' aria-hidden="true" class="fa fa-comment"></i></th>
                             <th id='n1' style='display: none;'>NOTA</th>
-                            <th id='v4'>PINPAD <i id='n2' aria-hidden="true" class="fa fa-comment"></i></th>
+                            <th id='v4'>PINPAD</th>
                             <th id='n2' style='display: none;'>NOTA</th>
                             <th id='v5'>DATAFAST/MEDIANET <i id='n3' aria-hidden="true" class="fa fa-comment"></i></th>
                             <th id='n3' style='display: none;'>NOTA</th>

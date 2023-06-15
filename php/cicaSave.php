@@ -24,11 +24,11 @@ $valSAP = $_POST['valSAP'];
 
 
 
-$refOnline = $_POST['refOnline'];
+
 $valPinPad = $_POST['valPinPad'];
 $refPinPad = $_POST['refPinPad'];
 
-$refDatMed = $_POST['refDatMed'];
+
 
 $total = count($forPag);
 */
@@ -38,6 +38,8 @@ $idcicasap = $_POST['idcicasap'];
 $valRec = $_POST['valRec'];
 $valOnline = $_POST['valOnline'];
 $valDatMed = $_POST['valDatMed'];
+$refOnline = $_POST['refOnline'];
+$refDatMed = $_POST['refDatMed'];
 
 $total = count($idcicasap);
 //guardando
@@ -51,8 +53,9 @@ for($i=0;$i<$total;$i++){
 
     $sentencia1 = $db->prepare("UPDATE [dbo].[CiCaSAP]
                 SET [valRec] = ?, [valOnline]=?, [valPinpadOff]=?
+                    ,[refOnline] = ?, [refPinpadOff]=?
                 WHERE [id] = '" . $idcicasap[$i] . "' ");
-    $resultado1 = $sentencia1->execute([$valRec[$i],$valOnline[$i],$valDatMed[$i]]);
+    $resultado1 = $sentencia1->execute([$valRec[$i],$valOnline[$i],$valDatMed[$i],$refOnline[$i],$refDatMed[$i]]);
 
 
                         

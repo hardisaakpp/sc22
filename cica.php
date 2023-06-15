@@ -17,8 +17,9 @@
         $whsCica = $_POST["pIdAlmacen"];
     }
    
-    //$pFecha= Date('Y-m-d') ;
-    $pFecha= Date('2023-06-14') ;
+    
+    //$pFecha= Date('2023-06-14') ;
+    $pFecha= Date('Y-m-d') ;
     if (isset($_POST["pFecha"])) {
         $pFecha = $_POST["pFecha"];
     }

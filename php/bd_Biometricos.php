@@ -1,19 +1,19 @@
 <?php
-/*
+
 
 $contraseña = "Datos.22";
 $usuario = "consultas";
-$nombreBaseDeDatos = "TimeSoft";
+$nombreBaseDeDatos = "TimeSoft2";
 $rutaServidor = "10.10.100.12";
-*/
 
 
+/*
 $contraseña = "ppMEkwDrem";
 $usuario = "tswmabel";
 //$nombreBaseDeDatos = "dbTimeSoftWebAutomatic_MABEL";  ///produccion
 $nombreBaseDeDatos = "dbTimeSoftWebAutomatic_MABEL";
 $rutaServidor = "34.68.56.120";
-
+*/
 
 
 try {

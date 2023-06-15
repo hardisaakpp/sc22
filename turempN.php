@@ -29,7 +29,7 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
 
    $sentencia3 = $dbB->query("SELECT 
                 strIdentificacion,strNombres,strApellidos,intIdEmpleadoTerminal, ISNULL(monSalario, 0)  as 'monSalario'
-            FROM [dbTimeSoftWebAutomatic_MABEL].[dbo].[tblEmpleados]
+            FROM [dbo].[tblEmpleados]
             where intIdCentroCosto='". $centrocosto ."' " );
    $mascotas = $sentencia3->fetchAll(PDO::FETCH_OBJ);
 

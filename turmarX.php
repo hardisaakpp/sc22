@@ -101,7 +101,7 @@
  //CONSULTO BODEGAS PARA CARGAR LA TABLA
  $sentencia2 = $dbB->query("
         
- select Q1.*, concat(Q2.strNombres,' ', Q2.strApellidos) as Nombre, 
+ select distinct Q1.*, concat(Q2.strNombres,' ', Q2.strApellidos) as Nombre, 
  Q2.strIdentificacion , Q2.intIdEmpleadoTerminal
  ,Q3.strNombre
  ,convert(char(8), Q1.dtmEntrada, 108) as HoraEntrada 

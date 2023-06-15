@@ -17,7 +17,8 @@
         $whsCica = $_POST["pIdAlmacen"];
     }
    
-    $pFecha= Date('Y-m-d') ;
+    //$pFecha= Date('Y-m-d') ;
+    $pFecha= Date('2023-06-14') ;
     if (isset($_POST["pFecha"])) {
         $pFecha = $_POST["pFecha"];
     }
@@ -32,14 +33,15 @@ if($whsCica==0){
     //exit();
 }else{
 
+    $auxCAJA=0;
 
 if ($pFecha==date('Y-m-d')) {
    // echo "mismo dia!";  ///solo actualiza si es el mismo dia
     $sentencia = $db->query("
         
-    EXEC sp_cica_sincSAPSingle '". $whsCica ."', '". date('Y-m-d') ."';
+    EXEC sp_cica_sincSAPSingle '". $whsCica ."', '". $pFecha ."';
 
-    EXEC sp_cica_createCajas '". $whsCica ."', '". date('Y-m-d') ."';
+    EXEC sp_cica_createCajas '". $whsCica ."', '". $pFecha ."';
     
     " );
     $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -52,6 +54,14 @@ if ($pFecha==date('Y-m-d')) {
 
   //  echo $whsCica;
    // echo $pFecha;
+
+   $senten2 = $db->query("
+   select * from almacen where id=".$whsCica."  "  );
+   $TEMPa1 = $senten2->fetchObject();
+
+       $almacenCica = $TEMPa1->cod_almacen;
+       $nomealmacenCica = $TEMPa1->nombre;
+
 
     $s1 = $db->query("
     select * from CiCa 
@@ -119,7 +129,10 @@ if ($pFecha==date('Y-m-d')) {
 <!-- Widgets  -->
 <div class="row">
 
-<?php   foreach($cajas as $user){ ?>
+<?php   foreach($cajas as $user){ 
+    $auxCAJA=$user->id;
+  
+    ?>
     <div class="col-lg-3 col-md-6">
         <div class="card">
             <div class="card-body">
@@ -159,64 +172,62 @@ if ($pFecha==date('Y-m-d')) {
        
 
         <div class="card">
-            <form action="" id="frmConteo" method="post">
+            <form id="frmConteo" >
                 <div class="card-header">
-                    <div class="input-group">
-                    <label class="form-control" >
-                        <blockquote class="blockquote"><strong>
-                        <?php echo $pFecha ?> CIERRE DE CAJA CONSOLIDADO
-                        </blockquote></strong>
-                    </label>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">Button</button>
-                        <button class="btn btn-outline-secondary" type="button">Button</button>
-                    </div>
-                    </div>
-                
-                
-                    
-                        
+                    <?php echo "<strong>[".$pFecha."] CIERRE DE CAJA CONSOLIDADO DE ".$nomealmacenCica." </strong>" ?>                     
                 </div>
-                <table id="resumentbl" class="table table-hover">
-                    <thead class="thead-dark">
-                        <tr>
+                <div class="card-body card-block">
+                    <table id="resumentbl" class="table table-hover">
+                        <thead class="thead-dark">
+                            <tr>
 
-                            <th>FORMA PAGO</th>
-                            <th id='v1'>VALOR SAP</th>
-                            <th id='v2'>RECIBIDO</th>
-                            <th id='v3'>ONLINE</th>
+                                <th>FORMA PAGO</th>
+                                <th id='v1'>VALOR SAP</th>
+                                <th id='v2'>RECIBIDO</th>
+                                <th id='v3'>ONLINE</th>
+                            
+                                <th id='v4'>PINPAD</th>
+                            
+                                <th id='v5'>DATAFAST/ MEDIANET</th>
+            
+                                <th id='v6'>DIFERENCIA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                foreach($consolidados as $forpag){
+                            ?>
+                            <tr>
+                                <td><?php echo $forpag->forPag ?></td>
+                                <td class="valSAP"><?php echo $forpag->valSAP; ?></td>
+                                <td class="valRec"><?php echo $forpag->valRec; ?></td>
+                                <td class="valOnline"><?php echo $forpag->valOnline; ?></td>
+                                <td class="valPinpad"><?php echo $forpag->valPinpad; ?></td>
+                                <td class="valMedianet"><?php echo $forpag->valMedianet; ?></td>
+                               <?php 
+                                $difz=$forpag->Diferencia;
+                                if ($difz<0) {
+                                    echo '<td class="Diferencia"  style="color:red;">'.$difz.' </td>';
+                                } elseif ($difz>0) {
+                                    echo '<td class="Diferencia"  style="color:green;">'.$difz.' </td>';
+                                }else{
+                                    echo '<td class="Diferencia" >'.$difz.' </td>';
+                                }
+                                
+                                 ?>
+                            </tr>
+                            <?php } ?>
                         
-                            <th id='v4'>PINPAD</th>
-                        
-                            <th id='v5'>DATAFAST/ MEDIANET</th>
-        
-                            <th id='v6'>DIFERENCIA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php 
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
 
-            foreach($consolidados as $forpag){
-                
-                    ?>
-                <tr>
-                    <td><?php echo $forpag->forPag ?></td>
-
-                    <td class="valSAP"><?php echo $forpag->valSAP; ?></td>
-                    <td class="valRec"><?php echo $forpag->valRec; ?></td>
-                    <td class="valOnline"><?php echo $forpag->valOnline; ?></td>
-                    <td class="valPinpad"><?php echo $forpag->valPinpad; ?></td>
-                    <td class="valMedianet"><?php echo $forpag->valMedianet; ?></td>
-                    <td class="Diferencia"><?php echo $forpag->Diferencia; ?></td>
-                    
-
-                </tr>
-            <?php } ?>
-                    
-                </tbody>
-            </table>
+                    <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "cicaPrint.php?id=" . $auxCAJA ?>","demo","toolbar=0,status=0,")>
+                        <i class="fa fa-print"></i>&nbsp; Imprimir
+                    </button>
+                </div>
             </form> 
-
         </div>
 
 

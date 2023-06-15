@@ -21,6 +21,8 @@ if($whsCica==0){
        // $cantidad = $TEMP1->cantidad;
         $fecha = $TEMP1->fecha;
         $Cerrado = $TEMP1->cerrado;
+        $responsable = $TEMP1->responsable;
+        $observacion = $TEMP1->observacion;
 
      //   echo $caja . $fecha  . $Cerrado;
 
@@ -89,23 +91,21 @@ if($whsCica==0){
         
        
 
-        <div class="card">
-            <form action="" id="frmConteo" method="post">
-                <div class="card-header">
-                    <div class="input-group">
-                    <label class="form-control" >
-                        <blockquote class="blockquote"><strong>
-                        <?php echo $fecha." - ".$caja ?> 
-                        </blockquote></strong>
-                    </label>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">Button</button>
-                        <button class="btn btn-outline-secondary" type="button">Button</button>
-                    </div>
-                    </div>
-                
-                        
+    <div class="card">
+        
+        <div class="card-header">
+            <strong> <?php echo $caja."  [".$fecha."]" ?> </strong>         
+        </div>
+        <div class="card-body card-block">
+            <form action="" id="frmConteo" method="post">    
+                <!---------cabecera------------>
+                <div style="width: 20%; float:left" class="input-group">
+                    <input class="form-control" placeholder="Responsable" name='crespons' type="text" maxlength="49" value="<?php echo $responsable; ?>">
                 </div>
+                <div style="width: 80%; float:right">
+                    <input class="form-control" placeholder="Observaciones" name='cobs' maxlength="400" type="text" value="<?php echo $observacion; ?>">
+                </div>
+                <!---------grid------------>
                 <table id="resumentbl" class="table table-hover">
                     <thead class="thead-dark">
                         <tr>
@@ -123,66 +123,67 @@ if($whsCica==0){
                         </tr>
                     </thead>
                     <tbody>
-                    <?php 
+                        <?php 
+                            foreach($consolidados as $forpag){
+                        ?>
+                        <tr>
+                            <td><input type="text" id="valSAP" name="forPag[]" value="<?php echo $forpag->CardName ?>" readonly></td>
+                            <td class="valSAP">  
+                                <input type="number" id="valSAP" name="valSAP[]" value="<?php echo $forpag->Valor; ?>" readonly>
+                            </td>
+                            <td class="valRec">
+                                <input name="valRec[]" onkeyup="calc(this);"  step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" >
+                            </td>
+                            <td class="valOnline">
+                                <input name="valOnline[]" onkeyup="calc(this);" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" >
+                            </td>
+                            <td style='display: none;'>
+                                <input name="refOnline[]" type="text"  value="<?php echo $forpag->refOnline ?>" >
+                            </td>
+                            <td class="valPinpad">
+                                <input name="valPinPad[]"  onkeyup="calc(this);" step="any" type="number" value="<?php echo $forpag->valPinpadOn ?>"  readonly>
+                            </td>
+                            <td style='display: none;'>
+                                <input name="refPinPad[]" type="text"  value="<?php echo $forpag->refPinpadOn ?>" >
+                            </td>
+                            <td class="valMedianet">
+                                <input name="valDatMed[]" onkeyup="calc(this);" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" >
+                            </td>
+                            <td style='display: none;'>
+                                <input name="refDatMed[]" type="text"  value="<?php echo $forpag->refPinpadOff ?>" >
+                            </td>
+                            <td class="Diferencia"> 
+                            <?php 
+                                
+                                $difz=$forpag->valRec+$forpag->valOnline+$forpag->valPinpadOn+$forpag->valPinpadOff-$forpag->Valor ;
 
-            foreach($consolidados as $forpag){
-                
-                    ?>
-                <tr>
-                    <td><input type="text" id="valSAP" name="forPag[]" value="<?php echo $forpag->CardName ?>" readonly></td>
-                        <td class="valSAP">  
-                            <input type="number" id="valSAP" name="valSAP[]" value="<?php echo $forpag->Valor; ?>" readonly>
-                        </td>
-                        <td class="valRec">
-                            <input name="valRec[]" onkeyup="calc(this);"  step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" >
-                        </td>
-                        <td class="valOnline">
-                            <input name="valOnline[]" onkeyup="calc(this);" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" >
-                        </td>
-                        <td style='display: none;'>
-                            <input name="refOnline[]" type="text"  value="<?php echo $forpag->refOnline ?>" >
-                        </td>
-                        <td class="valPinpad">
-                            <input name="valPinPad[]"  onkeyup="calc(this);" step="any" type="number" value="<?php echo $forpag->valPinpadOn ?>"  readonly>
-                        </td>
-                        <td style='display: none;'>
-                            <input name="refPinPad[]" type="text"  value="<?php echo $forpag->refPinpadOn ?>" >
-                        </td>
-                        <td class="valMedianet">
-                            <input name="valDatMed[]" onkeyup="calc(this);" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" >
-                        </td>
-                        <td style='display: none;'>
-                            <input name="refDatMed[]" type="text"  value="<?php echo $forpag->refPinpadOff ?>" >
-                        </td>
-                        <td class="Diferencia"> 
-                           <?php 
-                            
-                            $difz=$forpag->valRec+$forpag->valOnline+$forpag->valPinpadOn+$forpag->valPinpadOff-$forpag->Valor ;
-
-                            if ($difz<0) {
-                                echo '<input type="number" id="valSAP" style="color:red;" name="Dif[]" value="'.$difz.'" readonly>';
-                            } elseif ($difz>0) {
-                                echo '<input type="number" id="valSAP" style="color:green;" name="Dif[]" value="'.$difz.'" readonly>';
-                            }else{
-                                echo '<input type="number" id="valSAP" name="Dif[]" value="'.$difz.'" readonly>';
-                            }
-                            
-                              ?>
-                            
-                            
-                            
-                        </td>
-                    
-                </tr>
-            <?php } ?>
-                    
-                </tbody>
-            </table>
-            </form> 
+                                if ($difz<0) {
+                                    echo '<input type="number" id="valSAP" style="color:red;" name="Dif[]" value="'.$difz.'" readonly>';
+                                } elseif ($difz>0) {
+                                    echo '<input type="number" id="valSAP" style="color:green;" name="Dif[]" value="'.$difz.'" readonly>';
+                                }else{
+                                    echo '<input type="number" id="valSAP" name="Dif[]" value="'.$difz.'" readonly>';
+                                }
+                                ?>
+                            </td>
+                        
+                        </tr>
+                        <?php } ?>
+                        
+                    </tbody>
+                </table>
+             
 
         </div>
-
-
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary btn-sm">
+                <i class="fa fa-dot-circle-o"></i> Submit
+            </button>
+            <button type="reset" class="btn btn-danger btn-sm">
+                <i class="fa fa-ban"></i> Reset
+            </button>
+        </div>
+            </form>
 
     </div>
 

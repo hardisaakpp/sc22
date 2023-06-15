@@ -36,50 +36,6 @@ if($whsCica==0){
 ?>
 
 
-
-<script type="text/javascript">
-
-    $(document).ready(function() {
-        $('#n1').click(function() {
-            var n11 = 7;
-            $("td:nth-child(" + n11 + "),th:nth-child(" + n11 + ")").toggle();
-            
-        });
-        $('#n2').click(function() {
-            $('td:nth-child(9),th:nth-child(9)').toggle();
-        });
-        $('#n3').click(function() {
-            $('td:nth-child(11),th:nth-child(11)').toggle();
-        });
-    });
-
-  
-
-    function calc(id) {
-        var row=id.parentNode.parentNode;
-        //alert("Cell index is: " + ( document.getElementById('valSAP')).cellIndex);
-        
-        var valSAP=row.cells[( document.getElementById('v1')).cellIndex].getElementsByTagName('input')[0].value;
-        var recibido=row.cells[( document.getElementById('v2')).cellIndex].getElementsByTagName('input')[0].value;
-        var online=row.cells[( document.getElementById('v3')).cellIndex].getElementsByTagName('input')[0].value;
-        var pinpad=row.cells[( document.getElementById('v4')).cellIndex].getElementsByTagName('input')[0].value;
-        var dataf=row.cells[( document.getElementById('v5')).cellIndex].getElementsByTagName('input')[0].value;
-        if(online==null || online=='') {
-        res=parseFloat(valSAP)*parseFloat(recibido);
-        } else {
-        var res=(parseFloat(0+pinpad)+parseFloat(0+dataf)+parseFloat(0+recibido)+parseFloat(0+online)-parseFloat(0+valSAP)).toFixed(2);
-        }
-        row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].value=res;
-        if (res<0) {
-            row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].style.color='red';
-        } else {
-            row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].style.color='green';
-        }
-    };
-
-</script>
-
-
 <div class="content">
 <!---------------------------------------------->
 <!----------------- Content -------------------->
@@ -155,22 +111,7 @@ if($whsCica==0){
                             <input name="refDatMed[]" type="text"  value="<?php echo $forpag->refPinpadOff ?>" >
                         </td>
                         <td class="Diferencia"> 
-                           <?php 
-                            
-                            $difz=$forpag->valRec+$forpag->valOnline+$forpag->valPinpadOn+$forpag->valPinpadOff-$forpag->Valor ;
-
-                            if ($difz<0) {
-                                echo '<input type="number" id="valSAP" style="color:red;" name="Dif[]" value="'.$difz.'" readonly>';
-                            } elseif ($difz>0) {
-                                echo '<input type="number" id="valSAP" style="color:green;" name="Dif[]" value="'.$difz.'" readonly>';
-                            }else{
-                                echo '<input type="number" id="valSAP" name="Dif[]" value="'.$difz.'" readonly>';
-                            }
-                            
-                              ?>
-                            
-                            
-                            
+                            <input type="number" id="valSAP" name="Dif[]" value="<?php echo  $forpag->valRec+$forpag->valOnline+$forpag->valPinpadOn+$forpag->valPinpadOff-$forpag->Valor ?>" readonly>
                         </td>
                     
                 </tr>
@@ -193,6 +134,98 @@ if($whsCica==0){
     background: transparent;
 }
     </style>
+
+    <script language="javascript" type="text/javascript">
+        var tds = document.getElementById('resumentbl').getElementsByTagName('td');
+        var sum = 0.0;
+        var svalRec = 0.0;
+        var svalOnline = 0.0;
+        var svalPinpad = 0.0;
+        var svalMedianet = 0.0;
+        for(var i = 0; i < tds.length; i ++) {
+            console.log('ok');
+            console.log(tds[i].className);
+            console.log(tds[i].getElementsByTagName('input')[0].value);
+
+            if(tds[i].className == 'valSAP') {
+                sum += isNaN(tds[i].getElementsByTagName('input')[0].value) ? 0 : parseFloat(tds[i].getElementsByTagName('input')[0].value);
+                //sum += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+               // console.log('ok');
+            }else if(tds[i].className == 'valRec') {
+                svalRec += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }else if(tds[i].className == 'valOnline') {
+                svalOnline += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }else if(tds[i].className == 'valPinpad') {
+                svalPinpad += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }else if(tds[i].className == 'valMedianet') {
+                svalMedianet += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }
+
+        }
+        document.getElementById('resumentbl').innerHTML += '<tr class="table-secondary"><td>TOTAL:</td><td>' + sum.toFixed(2) + '</td><td>' +  svalRec.toFixed(2) +
+        '</td><td>' +  svalOnline.toFixed(2) +
+        '</td><td>' +  svalPinpad.toFixed(2) +
+        '</td><td>' +  svalMedianet.toFixed(2) +'</td></tr>';
+
+        function calc(id) {
+      
+         //console.log(id);
+            var row=id.parentNode.parentNode;
+          //console.log(row);
+        
+
+            //celdas de ROW
+            var valSAP =row.cells[1].getElementsByTagName('input')[0].value;
+            var valPinpadOn =row.cells[4].getElementsByTagName('input')[0].value;
+
+            var valRec =row.cells[2].getElementsByTagName('input')[0].value;
+            var valOnline =row.cells[3].getElementsByTagName('input')[0].value;
+            var valPinpadOff =row.cells[5].getElementsByTagName('input')[0].value;
+
+            //encerando
+            if (valRec == null || valRec == '') { row.cells[2].getElementsByTagName('input')[0].value=0.00; valRec = 0.00;}
+            if (valOnline == null || valOnline == '') { row.cells[3].getElementsByTagName('input')[0].value=0.00;valOnline =0.00; }
+            if (valPinpadOff == null || valPinpadOff == '') { row.cells[5].getElementsByTagName('input')[0].value=0.00; valPinpadOff=0.00;}
+
+
+            
+            //actualizo total
+            var difx= parseFloat(valPinpadOff)+parseFloat(valOnline)+parseFloat(valRec)+parseFloat(valPinpadOn)-parseFloat(valSAP);
+console.log(difx);
+
+row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].value=difx;
+
+
+           // var diff =row.cells[6].getElementsByTagName('input')[0].value;
+
+         //   diff=parseFloat(valRec)+parseFloat(valOnline);
+
+        /*
+            console.log(quant);
+            console.log(price);
+            console.log(disc);
+        */
+            /*
+            if(disc==null || disc=='') {
+            res=parseFloat(quant)*parseFloat(price);
+            } else {
+            var res=(parseFloat(quant)*parseFloat(price))-(parseFloat(quant)*parseFloat(price)*(parseFloat(disc)/100));
+            }
+            row.cells[4].getElementsByTagName('input')[0].value=res;
+            */
+
+
+
+
+
+        }
+       
+
+
+
+    </script>
+
+
 
 
         <?php

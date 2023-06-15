@@ -16,7 +16,7 @@
     if (isset($_POST["pIdAlmacen"])) {
         $whsCica = $_POST["pIdAlmacen"];
     }
-
+   
     $pFecha= Date('Y-m-d') ;
     if (isset($_POST["pFecha"])) {
         $pFecha = $_POST["pFecha"];
@@ -37,9 +37,9 @@ if ($pFecha==date('Y-m-d')) {
    // echo "mismo dia!";  ///solo actualiza si es el mismo dia
     $sentencia = $db->query("
         
-    EXEC sp_setCica '". $whsCica ."', '". date('Y-m-d') ."';
+    EXEC sp_cica_sincSAPSingle '". $whsCica ."', '". date('Y-m-d') ."';
 
-    EXEC sp_cierreCaja '". $whsCica ."', '". date('Y-m-d') ."';
+    EXEC sp_cica_createCajas '". $whsCica ."', '". date('Y-m-d') ."';
     
     " );
     $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -54,24 +54,24 @@ if ($pFecha==date('Y-m-d')) {
    // echo $pFecha;
 
     $s1 = $db->query("
-    select * from CiCa
+    select * from CiCa 
     where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."'
     " );
     $cajas = $s1->fetchAll(PDO::FETCH_OBJ);   
 
     $sentencia = $db->query("      
     select 
-            forPag
-            , sum(valSAP) as 'valSAP'
+            c.CardName as 'forPag'
+            , sum(Valor) as 'valSAP'
             , sum(valRec) as 'valRec'
             , sum(valOnline) as 'valOnline'
-            , sum(valPinpad) as 'valPinpad'
-            , sum(valDatMed) as 'valMedianet'
-            , ( sum(valRec) +sum(valDatMed)+ sum(valPinpad)+sum(valOnline)-sum(valSAP)) as 'Diferencia'
+            , sum(valPinpadOn) as 'valPinpad'
+            , sum(valPinpadOff) as 'valMedianet'
+            , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
 
-        from CiCa c join CiCaSys d on c.id=d.FK_idCiCa
-        where fk_ID_almacen='". $whsCica ."' and fecha='". $pFecha ."'
-        group by forPag" );
+        from CiCaSAP c join Almacen a on a.cod_almacen=c.whsCode
+        where a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
+        group by c.CardName" );
     $consolidados = $sentencia->fetchAll(PDO::FETCH_OBJ);
        
 ?>
@@ -125,7 +125,7 @@ if ($pFecha==date('Y-m-d')) {
             <div class="card-body">
                 <div class="stat-widget-five">
                     <div class="stat-icon dib flat-color-3">
-                    <a href="cicaU.php?idcaja=<?php echo $user->id?>&pW=<?php echo $whsCica?>&pF='<?php echo $pFecha?>'">
+                    <a href="cicaU.php?id=<?php echo $user->id?>">
                         <i class="pe-7s-browser"></i>
                         </a>
                     </div>

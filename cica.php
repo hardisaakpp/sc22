@@ -13,15 +13,15 @@
 ------------------------------------------------------------->*/
 
     /*Si viene por parametro se coge sino nada */
-    if (isset($_POST["pIdAlmacen"])) {
-        $whsCica = $_POST["pIdAlmacen"];
+    if (isset($_GET["pIdAlmacen"])) {
+        $whsCica = $_GET["pIdAlmacen"];
     }
    
     
     //$pFecha= Date('2023-06-14') ;
     $pFecha= Date('Y-m-d') ;
-    if (isset($_POST["pFecha"])) {
-        $pFecha = $_POST["pFecha"];
+    if (isset($_GET["pFecha"])) {
+        $pFecha = $_GET["pFecha"];
     }
 
 

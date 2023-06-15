@@ -135,12 +135,29 @@ try {
                 <input class="form-control" name='ccaja' type="hidden" value="<?php echo $caja; ?>" >        
                 <input class="form-control" name='fec' type="hidden" value="<?php echo $fecha; ?>">        
                 <!---------cabecera------------>
-                <div style="width: 20%; float:left" class="input-group">
+                
+                <?php
+                if ($cerrado==0) {
+                ?> 
+                   <div style="width: 20%; float:left" class="input-group">
                     <input class="form-control" placeholder="Responsable" name='crespons' type="text" maxlength="49" value="<?php echo $responsable; ?>">
-                </div>
-                <div style="width: 80%; float:right">
-                    <input class="form-control" placeholder="Observaciones" name='cobs' maxlength="400" type="text" value="<?php echo $observacion; ?>">
-                </div>
+                    </div>
+                    <div style="width: 80%; float:right">
+                        <input class="form-control" placeholder="Observaciones" name='cobs' maxlength="400" type="text" value="<?php echo $observacion; ?>">
+                    </div>
+                <?php
+                }else{
+                ?>
+                    <div style="width: 20%; float:left" class="input-group">
+                    <input class="form-control" placeholder="Responsable" name='crespons' type="text" maxlength="49" value="<?php echo $responsable; ?>" readonly>
+                    </div>
+                    <div style="width: 80%; float:right">
+                        <input class="form-control" placeholder="Observaciones" name='cobs' maxlength="400" type="text" value="<?php echo $observacion; ?>" readonly>
+                    </div>
+                <?php   
+                }
+                ?>
+                
                 <!---------grid------------>
                 <table id="resumentbl" class="table table-hover">
                     <thead class="thead-dark">
@@ -170,27 +187,70 @@ try {
                             <td class="valSAP">  
                                 <input type="number" id="valSAP" name="valSAP[]" value="<?php echo $forpag->Valor; ?>" readonly>
                             </td>
-                            <td class="valRec">
-                                <input name="valRec[]" onkeyup="calc(this);"  step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" >
-                            </td>
-                            <td class="valOnline">
-                                <input name="valOnline[]" onkeyup="calc(this);" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" >
-                            </td>
-                            <td style='display: none;'>
-                                <input name="refOnline[]" type="text"  value="<?php echo $forpag->refOnline ?>" >
-                            </td>
-                            <td class="valPinpad">
-                                <input name="valPinPad[]"  onkeyup="calc(this);" step="any" type="number" value="<?php echo $forpag->valPinpadOn ?>"  readonly>
-                            </td>
-                            <td style='display: none;'>
-                                <input name="refPinPad[]" type="text"  value="<?php echo $forpag->refPinpadOn ?>" >
-                            </td>
-                            <td class="valMedianet">
-                                <input name="valDatMed[]" onkeyup="calc(this);" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" >
-                            </td>
-                            <td style='display: none;'>
-                                <input name="refDatMed[]" type="text"  value="<?php echo $forpag->refPinpadOff ?>" >
-                            </td>
+
+
+                            <?php
+                            if ($cerrado==0) {
+                            ?> 
+                            <div style="width: 20%; float:left" class="input-group">
+                                <td class="valRec">
+                                    <input name="valRec[]" onkeyup="calc(this);"  step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" >
+                                </td>
+                                <td class="valOnline">
+                                    <input name="valOnline[]" onkeyup="calc(this);" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" >
+                                </td>
+                                <td style='display: none;'>
+                                    <input name="refOnline[]" type="text"  value="<?php echo $forpag->refOnline ?>" >
+                                </td>
+                                <td class="valPinpad">
+                                    <input name="valPinPad[]"  onkeyup="calc(this);" step="any" type="number" value="<?php echo $forpag->valPinpadOn ?>"  readonly>
+                                </td>
+                                <td style='display: none;'>
+                                    <input name="refPinPad[]" type="text"  value="<?php echo $forpag->refPinpadOn ?>" >
+                                </td>
+                                <td class="valMedianet">
+                                    <input name="valDatMed[]" onkeyup="calc(this);" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" >
+                                </td>
+                                <td style='display: none;'>
+                                    <input name="refDatMed[]" type="text"  value="<?php echo $forpag->refPinpadOff ?>" >
+                                </td>
+                            <?php
+                            }else{
+                            ?>
+                                <td class="valRec">
+                                    <input name="valRec[]" onkeyup="calc(this);"  step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" readonly>
+                                </td>
+                                <td class="valOnline">
+                                    <input name="valOnline[]" onkeyup="calc(this);" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" readonly>
+                                </td>
+                                <td style='display: none;'>
+                                    <input name="refOnline[]" type="text"  value="<?php echo $forpag->refOnline ?>" readonly>
+                                </td>
+                                <td class="valPinpad">
+                                    <input name="valPinPad[]"  onkeyup="calc(this);" step="any" type="number" value="<?php echo $forpag->valPinpadOn ?>"  readonly>
+                                </td>
+                                <td style='display: none;'>
+                                    <input name="refPinPad[]" type="text"  value="<?php echo $forpag->refPinpadOn ?>" readonly>
+                                </td>
+                                <td class="valMedianet">
+                                    <input name="valDatMed[]" onkeyup="calc(this);" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" readonly>
+                                </td>
+                                <td style='display: none;'>
+                                    <input name="refDatMed[]" type="text"  value="<?php echo $forpag->refPinpadOff ?>" readonly>
+                                </td>
+                            <?php   
+                            }
+                            ?>
+
+
+                            
+
+
+
+
+
+
+
                             <td class="Diferencia"> 
                             <?php 
                                 
@@ -215,8 +275,12 @@ try {
 
         </div>
         <div class="card-footer">
+
+        <?php
+        if ($cerrado==0) {
+        ?> 
             <button type="submit" class="btn btn-primary btn-sm">
-                <i class="fa fa-save"></i> Submit
+            <i class="fa fa-save"></i> Submit
             </button>
             <button type="reset" class="btn btn-danger btn-sm">
                 <i class="fa fa-ban"></i> Reset
@@ -224,6 +288,12 @@ try {
             <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "adjuntos.php?id=" . $id ?>","demo","toolbar=0,status=0,")>
                 <i class="fa fa-paperclip"></i>&nbsp; Adjuntos
             </button>
+        <?php
+        }
+        ?>
+            
+
+
 
             <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='cica.php?pFecha=<?php echo $fecha ?>&pIdAlmacen=<?php echo $fk_ID_almacen ?>'">
                 <i class="fa fa-sign-out"></i>&nbsp; Regresar
@@ -232,6 +302,64 @@ try {
             </form>
 
     </div>
+
+
+    <?php if ($cerrado==1) { 
+         $path = "films/" . $id;
+        ?> 
+    
+        <div class="card">
+            <div class="card-header"><strong>ADJUNTOS</strong></div>
+            <div class="card-body card-block">
+ 
+                <!--tabla-->
+                <div class="panel panel-primary">
+                   
+                    <div class="panel-body">
+                
+                <table class="table">
+                <thead>
+                    <tr>
+                    <th width="7%">#</th>
+      <th width="70%">Nombre del Archivo</th>
+      <th width="23%">Descargar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+
+
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+
+                $archivos = scandir($path);
+                $num=0;
+                for ($i=2; $i<count($archivos); $i++)
+                {$num++;
+                ?>
+                <p>  
+                </p>
+                        
+                <tr>
+      <th scope="row"><?php echo $num;?></th>
+      <td><?php echo $archivos[$i]; ?></td>
+      <td><a
+      href="<?php echo $path . "/" . $archivos[$i]; ?>" download="<?php echo $archivos[$i]; ?>"
+      > 💾  </a>  </td>
+      </tr>
+                <?php }?> 
+
+                </tbody>
+                </table>
+                </div>
+                </div>
+                <!-- Fin tabla--> 
+            </div>
+        </div>
+
+    <?php }    ?>
+
 
 
 

@@ -84,11 +84,11 @@ try {
         var dataf=row.cells[( document.getElementById('v5')).cellIndex].getElementsByTagName('input')[0].value;
         
         //encerando
-        if (recibido == null || recibido == '') { row.cells[( document.getElementById('v2')).cellIndex].getElementsByTagName('input')[0].value=0.00; recibido = 0.00;}
+       /* if (recibido == null || recibido == '') { row.cells[( document.getElementById('v2')).cellIndex].getElementsByTagName('input')[0].value=0.00; recibido = 0.00;}
         if (online == null || online == '') { row.cells[( document.getElementById('v3')).cellIndex].getElementsByTagName('input')[0].value=0.00;online =0.00; }
         if (dataf == null || dataf == '') { row.cells[( document.getElementById('v5')).cellIndex].getElementsByTagName('input')[0].value=0.00; dataf=0.00;}
 
-        
+        */
         
         if(online==null || online=='') {
         res=parseFloat(valSAP)*parseFloat(recibido);

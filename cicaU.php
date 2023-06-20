@@ -2,8 +2,8 @@
 include_once "header.php";
    
 
-    //si no es ADMIN o no se  no abre
-if($whsCica==0){  
+    //si es tienda y no tiene asignada una tienda para cierres
+if($whsCica==0 && $userAdmin==2 ){  
         echo ('NO TIENE UNA TIENDA ASIGNADA PARA CIERRE DE CAJA');
 }elseif( !isset($_GET["id"])){  
     echo ('...');
@@ -24,6 +24,12 @@ if($whsCica==0){
         $cerrado = $TEMP1->cerrado;
         $responsable = $TEMP1->responsable;
         $observacion = $TEMP1->observacion;
+
+//SI ES ADMIN SIEMPRE DESBLOQUEADO
+if ($userAdmin==1) {
+    $cerrado=0;
+}
+
 
      //   echo $caja . $fecha  . $Cerrado;
 
@@ -170,7 +176,7 @@ try {
                             <th id='n1' style='display: none;'>NOTA</th>
                             <th id='v4'>PINPAD</th>
                             <th id='n2' style='display: none;'>NOTA</th>
-                            <th id='v5'>DATAFAST/MEDIANET <i id='n3' aria-hidden="true" class="fa fa-comment"></i></th>
+                            <th id='v5'>DATAFAST/ MEDIANET <i id='n3' aria-hidden="true" class="fa fa-comment"></i></th>
                             <th id='n3' style='display: none;'>NOTA</th>
                             <th id='v6'>DIFERENCIA</th>
                         </tr>
@@ -194,25 +200,25 @@ try {
                             ?> 
                             <div style="width: 20%; float:left" class="input-group">
                                 <td class="valRec">
-                                    <input name="valRec[]" onkeyup="calc(this);"  step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" >
+                                    <input name="valRec[]" onkeyup="calc(this);"  step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" required >
                                 </td>
                                 <td class="valOnline">
-                                    <input name="valOnline[]" onkeyup="calc(this);" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" >
+                                    <input name="valOnline[]" onkeyup="calc(this);" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" required >
                                 </td>
                                 <td style='display: none;'>
-                                    <input name="refOnline[]" type="text"  value="<?php echo $forpag->refOnline ?>" >
+                                    <input name="refOnline[]" type="text" maxlength="30" value="<?php echo $forpag->refOnline ?>" >
                                 </td>
                                 <td class="valPinpad">
                                     <input name="valPinPad[]"  onkeyup="calc(this);" step="any" type="number" value="<?php echo $forpag->valPinpadOn ?>"  readonly>
                                 </td>
                                 <td style='display: none;'>
-                                    <input name="refPinPad[]" type="text"  value="<?php echo $forpag->refPinpadOn ?>" >
+                                    <input name="refPinPad[]" type="text" maxlength="30" value="<?php echo $forpag->refPinpadOn ?>" >
                                 </td>
                                 <td class="valMedianet">
-                                    <input name="valDatMed[]" onkeyup="calc(this);" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" >
+                                    <input name="valDatMed[]" onkeyup="calc(this);" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" required >
                                 </td>
                                 <td style='display: none;'>
-                                    <input name="refDatMed[]" type="text"  value="<?php echo $forpag->refPinpadOff ?>" >
+                                    <input name="refDatMed[]" type="text" maxlength="30" value="<?php echo $forpag->refPinpadOff ?>" >
                                 </td>
                             <?php
                             }else{
@@ -279,14 +285,14 @@ try {
         <?php
         if ($cerrado==0) {
         ?> 
-            <button type="submit" class="btn btn-primary btn-sm">
-            <i class="fa fa-save"></i> Submit
+            <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fa fa-save"></i> GUARDAR
             </button>
-            <button type="reset" class="btn btn-danger btn-sm">
-                <i class="fa fa-ban"></i> Reset
+            <button type="reset" class="btn btn-danger btn-lg">
+                <i class="fa fa-ban"></i> RESET
             </button>
             <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "adjuntos.php?id=" . $id ?>","demo","toolbar=0,status=0,")>
-                <i class="fa fa-paperclip"></i>&nbsp; Adjuntos
+                <i class="fa fa-paperclip"></i>&nbsp; ADJUNTOS
             </button>
         <?php
         }
@@ -296,7 +302,7 @@ try {
 
 
             <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='cica.php?pFecha=<?php echo $fecha ?>&pIdAlmacen=<?php echo $fk_ID_almacen ?>'">
-                <i class="fa fa-sign-out"></i>&nbsp; Regresar
+                <i class="fa fa-sign-out"></i>&nbsp; REGRESAR
             </button>
         </div>
             </form>

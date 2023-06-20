@@ -3,6 +3,16 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+<!--/*-----------------------------------------------------------
+------------------- PERFILES ------------    $userAdmin = $_SESSION["perfil"];--------------------
+-------------------0->DESACTIVADO----------------------------
+-------------------1->ADMIN----------------------------------
+-------------------2->TIENDA---------------------------------
+-------------------3->INVENTARIOS----------------------------
+-------------------4->ASISTENTE PARA CONTEOS TFT-------------
+-------------------5->BODEGA---------------------------------
+------------------------------------------------------------->
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -174,6 +184,38 @@
                                 
                             </ul>
                         </li>
+
+
+                        <!--//CIERRES DE CAJA-->
+                        <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                <?php 
+                                    if ($userAdmin==1) { // ADMIN   
+                                        echo '
+                                            <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
+                                            <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
+                                        ';
+                                    } else if ($userAdmin==2){ // TIENDA
+                                        echo '
+                                            <li><i class="fa fa-pencil-square-o"></i><a href="cica.php">Cierre de Caja</a></li>
+                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                                        ';
+                                    } else if ($userAdmin==3){ // INVENTARIO
+                                        echo '
+                                            
+                                        ';
+                                    }else if ($userAdmin==4){ // cuentaInventarios
+                                        # code...
+                                    }else if ($userAdmin==5){ // bodega
+
+                                    }  
+                                ?>
+
+                                
+                            </ul>
+                        </li>
+
 
                  
 

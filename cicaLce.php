@@ -1,7 +1,7 @@
 <?php
     include_once "header.php";
     //si no es admin no abre
-    if ($userAdmin!=1 && $userAdmin!=3){
+    if ($userAdmin!=1 && $userAdmin!=3 && $userAdmin!=6){
         echo ('<h4> NO TIENE ACCESO</h4>');
         
     }else{
@@ -81,7 +81,7 @@ $sentencia = $db->query("
                 Rango fecha
                 <input type="date" name="desde" id="desde" class="form-control" value="<?php echo $desde ?>" required>
                 <input type="date" name="hasta" id="hasta" class="form-control" value="<?php echo $hasta ?>" required>
-                <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="cicaL.php">	
+                <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="cicaLce.php">	
             </div>
         </form>
 

@@ -1,7 +1,7 @@
 <?php
     include_once "header.php";
     //si no es admin no abre
-    if ($userAdmin!=1 && $userAdmin!=3){
+    if ($userAdmin!=1 && $userAdmin!=3 && $userAdmin!=6){
         echo ('<h4> NO TIENE ACCESO</h4>');
         
     }else{

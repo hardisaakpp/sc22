@@ -18,12 +18,12 @@
     }else{
 
         //recupero codigo almacen
-        $sentencia2 = $db->query("select * from cica where id='". $_GET["id"] ."' " );
+        $sentencia2 = $db->query(" select c.*, a.cod_almacen, a.nombre from cica c join Almacen a on c.fk_ID_almacen=a.id where c.id='". $_GET["id"] ."' " );
         $regCodCierre = $sentencia2->fetchObject();
 
         $whsCica = $regCodCierre->fk_ID_almacen;
         $pFecha =$regCodCierre->fecha;
-
+        $pAlmacen = $regCodCierre->cod_almacen.' '.$regCodCierre->nombre ;
     
 
         $sentencia = $db->query("      
@@ -106,24 +106,28 @@
         }
 
         table {
-   width: 100%;
-   border: 1px solid #000;
-}
-th, td {
-   width: 25%;
-   text-align: left;
-   vertical-align: top;
-   border: 1px solid #000;
-   border-collapse: collapse;
-}
+        width: 100%;
+        border: 1px solid #000;
+        }
+        th, td {
+        width: 25%;
+        text-align: left;
+        vertical-align: top;
+        border: 1px solid #000;
+        border-collapse: collapse;
+        }
 
       
     </style>
 </head>
 <body onload="window.print();">
-<h1 class="display-6">Cuadre de Caja - <?php echo date('Y-m-d'); ?></h1>
+<h2 class="display-6">CUADRE DE CAJAS</h2>
 <p class="lead">
-  Usuario: <?php echo $_SESSION['username']; ?>
+    FECHA DE CIERRE: <?php echo  $pFecha; ?></br>
+    ALMACEN: <?php echo $pAlmacen; ?></br>
+</p> <p class="lead"> 
+    USUARIO: <?php echo $_SESSION['username']; ?></br>
+    FECHA IMPRESION: <?php echo date('Y-m-d H:i:s') ?>
 </p>
 <div class="table-sm" style="width:100%">
             <table class="table" id="resumentbl" >

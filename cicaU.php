@@ -29,6 +29,10 @@ if($whsCica==0 && $userAdmin==2 ){
 if ($userAdmin==1) {
     $cerrado=0;
 }
+//SI ES CONTABILIDAD
+if ($userAdmin==6) {
+    $cerrado=0;
+}
 
 
      //   echo $caja . $fecha  . $Cerrado;
@@ -48,29 +52,124 @@ if ($userAdmin==1) {
 
 <script type="text/javascript">
 
+document.addEventListener("DOMContentLoaded", function() {
+document.getElementById("frmConteo").addEventListener('submit', validarFormulario); 
+});
 
-function indexesLX(){
+function validarFormulario(evento) {
+  evento.preventDefault();
+  
+  /*var usuario = document.getElementById('usuario').value;
+  if(usuario.length == 0) {
+    alert('No has escrito nada en el usuario');
+    return;
+  }
+  var clave = document.getElementById('clave').value;
+  if (clave.length < 6) {
+    alert('La clave no es válida');
+    return;
+  }
+  this.submit();
+  */
 
-try {
-        $('#n1').click(function() {
-            var n11 = 6;
-            $("td:nth-child(" + n11 + "),th:nth-child(" + n11 + ")").toggle();
+  var observacion = document.getElementById("Observaciones");
+  observacion.value = observacion.value.trim();
+  // console.log (observacion.value.trim().length);
+
+if (observacion.value.trim().length==0) {
+    //console.log ('vacio');
+
+    const resume_table = document.getElementById("resumentbl");
+    var filas = $("#ajuste").find("tr"); //devulve las filas del body de tu tabla segun el ejemplo que brindaste
+	
+	for(i=0; i<filas.length; i++){ //Recorre las filas 1 a 1
+		var celdas = $(filas[i]).find("td"); //devolverá las celdas de una fila
+		//codigo = $(celdas[0]).text();
+		//descripcion= $(celdas[1]).text();
+		//valorsap = $($(celdas[8]).children("input")[0]).val();
+       // diferencia = $($(celdas[9]).children("input")[0]).val();
+        impuesto = $($(celdas[10]).children("input")[0]).val();
             
-        });
-        $('#n2').click(function() {
-            $('td:nth-child(8),th:nth-child(8)').toggle();
-        });
-        $('#n3').click(function() {
-            $('td:nth-child(10),th:nth-child(10)').toggle();
-        });
-}
-    catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
-    //document.getElementById("ejemplo").innerHTML = x.message;
+        if (impuesto!=0) {
+            alert('Tiene diferencias, favor ingrese una observacion para guardar. Gracias.');
+            observacion.focus();
+            return;
+        }
+	}
+
+    this.submit();
+
+
+
+
+} else {
+    this.submit();
 }
 
-    
-   // setInterval('contadoradd()',2000);
+
+
+   /*
+    const resume_table = document.getElementById("resumentbl");
+    var filas = $("#ajuste").find("tr"); //devulve las filas del body de tu tabla segun el ejemplo que brindaste
+	  var resultado = 0;
+	for(i=0; i<filas.length; i++){ //Recorre las filas 1 a 1
+		var celdas = $(filas[i]).find("td"); //devolverá las celdas de una fila
+		//codigo = $(celdas[0]).text();
+		//descripcion= $(celdas[1]).text();
+		//valorsap = $($(celdas[8]).children("input")[0]).val();
+       // diferencia = $($(celdas[9]).children("input")[0]).val();
+        impuesto = $($(celdas[10]).children("input")[0]).val();
+            
+        if (impuesto!=0) {
+            resultado=resultado+1;
+            //console.log(impuesto);
+        }
+	}
+	
+	alert(resultado);
+
+*/
+
+
+
+
+
+
+  //alert('La clave no es válida');
+    return;
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+    function indexesLX(){
+        try {
+                $('#n1').click(function() {
+                    var n11 = 6;
+                    $("td:nth-child(" + n11 + "),th:nth-child(" + n11 + ")").toggle();
+                    
+                });
+                $('#n2').click(function() {
+                    $('td:nth-child(8),th:nth-child(8)').toggle();
+                });
+                $('#n3').click(function() {
+                    $('td:nth-child(10),th:nth-child(10)').toggle();
+                });
+        }
+            catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
+            //document.getElementById("ejemplo").innerHTML = x.message;
+        }
+    // setInterval('contadoradd()',2000);
+    }
 
 
    
@@ -146,10 +245,10 @@ try {
                 if ($cerrado==0) {
                 ?> 
                    <div style="width: 20%; float:left" class="input-group">
-                    <input class="form-control" placeholder="Responsable" name='crespons' type="text" maxlength="49" value="<?php echo $responsable; ?>">
+                    <input class="form-control" placeholder="Responsable" name='crespons' type="text" maxlength="49" value="<?php echo $responsable; ?>" required>
                     </div>
                     <div style="width: 80%; float:right">
-                        <input class="form-control" placeholder="Observaciones" name='cobs' maxlength="400" type="text" value="<?php echo $observacion; ?>">
+                        <input class="form-control" placeholder="Observaciones" id='Observaciones'  name='cobs' maxlength="400" type="text" value="<?php echo $observacion; ?>">
                     </div>
                 <?php
                 }else{
@@ -181,7 +280,7 @@ try {
                             <th id='v6'>DIFERENCIA</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="ajuste">
                         <?php 
                             foreach($consolidados as $forpag){
                         ?>
@@ -200,10 +299,10 @@ try {
                             ?> 
                             <div style="width: 20%; float:left" class="input-group">
                                 <td class="valRec">
-                                    <input name="valRec[]" onkeyup="calc(this);"  step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" required >
+                                    <input name="valRec[]" onkeyup="calc(this);" min="0" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valRec ?>" required >
                                 </td>
                                 <td class="valOnline">
-                                    <input name="valOnline[]" onkeyup="calc(this);" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" required >
+                                    <input name="valOnline[]" onkeyup="calc(this);" min="0" step="any"  onchange="calc(this);" type="number"  value="<?php echo $forpag->valOnline ?>" required >
                                 </td>
                                 <td style='display: none;'>
                                     <input name="refOnline[]" type="text" maxlength="30" value="<?php echo $forpag->refOnline ?>" >
@@ -215,7 +314,7 @@ try {
                                     <input name="refPinPad[]" type="text" maxlength="30" value="<?php echo $forpag->refPinpadOn ?>" >
                                 </td>
                                 <td class="valMedianet">
-                                    <input name="valDatMed[]" onkeyup="calc(this);" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" required >
+                                    <input name="valDatMed[]" onkeyup="calc(this);" min="0" step="any" onchange="calc(this);" type="number"  value="<?php echo $forpag->valPinpadOff ?>" required >
                                 </td>
                                 <td style='display: none;'>
                                     <input name="refDatMed[]" type="text" maxlength="30" value="<?php echo $forpag->refPinpadOff ?>" >
@@ -263,11 +362,11 @@ try {
                                 $difz=$forpag->valRec+$forpag->valOnline+$forpag->valPinpadOn+$forpag->valPinpadOff-$forpag->Valor ;
 
                                 if ($difz<0) {
-                                    echo '<input type="number" id="valSAP" style="color:red;" name="Dif[]" value="'.$difz.'" readonly>';
+                                    echo '<input class="status" type="number" style="color:red;" name="Dif[]" value="'.$difz.'" readonly>';
                                 } elseif ($difz>0) {
-                                    echo '<input type="number" id="valSAP" style="color:green;" name="Dif[]" value="'.$difz.'" readonly>';
+                                    echo '<input class="status" type="number" style="color:green;" name="Dif[]" value="'.$difz.'" readonly>';
                                 }else{
-                                    echo '<input type="number" id="valSAP" name="Dif[]" value="'.$difz.'" readonly>';
+                                    echo '<input class="status" type="number" name="Dif[]" value="'.$difz.'" readonly>';
                                 }
                                 ?>
                             </td>
@@ -375,16 +474,10 @@ try {
     input {
     border: none;
     background: transparent;
-}
-    </style>
+    }
+</style>
 
 
-        <?php
-    
-?>
-
-
-  
 <!---------------------------------------------->
 <!--------------Fin Content -------------------->
 <!---------------------------------------------->

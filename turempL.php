@@ -29,8 +29,10 @@
 <!---------------------------------------------->
 <!----------------- Content -------------------->
 <!---------------------------------------------->
-
-
+<form>
+    <input type="submit" name="find" value="Descargar.xlsx" class="form-control"
+		onclick=this.form.action="turempLxls.php">
+    </form>
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">

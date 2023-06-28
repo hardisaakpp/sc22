@@ -233,7 +233,7 @@ if ($emp=='MT') {
                         "  <div class='row'>"+
                                 " <select name='turno' style='width:200px;' class='operator' id='tur"+ DataKey +"'  Size='Number_of_options' class='form-select' onchange='handleSelectChange(event,this.id)'    "+         
                         "                 <?php foreach($turnos as $turno){ 
-                                                if ($turno->strNombre=='Cosmeticos Operativo' || $turno->strNombre=='Cosmeticos Operativo') { ?>"+
+                                                if ($turno->strNombre=='Cosmeticos Operativo' || $turno->strNombre=='Mabel Operativo') { ?>"+
                                 "                     <option value=<?php echo $turno->intiddetalleturno ?>> <?php echo $turno->Horario.' [-'.$turno->intMinutosDescanso.'min.]' ?>   </option>"+
                                                 "<?php } else { ?>"+
                                 "                     <option value=<?php echo $turno->intiddetalleturno ?>> <?php echo $turno->strNombre?>   </option>"+

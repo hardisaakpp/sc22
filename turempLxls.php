@@ -27,7 +27,7 @@ if ($idcab=='MT') {
         from tblTurnos t
         inner join tblDetalleTurnos d on t.intIdTurno = d.intIdTurno
       where 
-      t.intIdTurno in (3,4,11,12,14,17,15,16) 
+      t.intIdTurno in (4,11,12,14,17,15,16) 
       " );
   $regs = $sentencia2->fetchAll(PDO::FETCH_OBJ);
 } else if ($idcab=='CE'){
@@ -45,7 +45,7 @@ if ($idcab=='MT') {
             from tblTurnos t
             inner join tblDetalleTurnos d on t.intIdTurno = d.intIdTurno
             where 
-            t.intIdTurno in (5,6,11,12,14,17,15,16) " );
+            t.intIdTurno in (6,11,12,14,17,15,16) " );
             $regs = $sentencia2->fetchAll(PDO::FETCH_OBJ); 
 }else{
   $sentencia2 = $dbB->query(" select d.intiddetalleturno,

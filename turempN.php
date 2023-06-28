@@ -30,7 +30,8 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
    $sentencia3 = $dbB->query("SELECT 
                 strIdentificacion,strNombres,strApellidos,intIdEmpleadoTerminal, ISNULL(monSalario, 0)  as 'monSalario'
             FROM [dbo].[tblEmpleados]
-            where intIdCentroCosto='". $centrocosto ."' " );
+             " );
+            //where intIdCentroCosto='". $centrocosto ."' " );
    $mascotas = $sentencia3->fetchAll(PDO::FETCH_OBJ);
 
 
@@ -77,56 +78,58 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
 
 <script>
 
-function indexesLX(){
+    function indexesLX(){
 
-try {
-    $(".boton").click(function() {
+    try {
+        $(".boton").click(function() {
+
+            
+        var cedula='';
+        // Obtenemos todos los valores contenidos en los <td> de la fila
+        // seleccionada
+        $(this).parents("tr").find(".cedula").each(function() {
+            cedula += $(this).html() + "\n";
+        });
+
+        var nombre='';
+        $(this).parents("tr").find(".nombre").each(function() {
+            nombre += $(this).html() + "\n";
+        });
+
+        var apellido='';
+        $(this).parents("tr").find(".apellido").each(function() {
+            apellido += $(this).html() + "\n";
+        });
+
+        var terminal='';
+        $(this).parents("tr").find(".terminal").each(function() {
+            terminal += $(this).html() + "\n";
+        });
+
+        var sueldo= 500;
+        /*
+        console.log(sueldo);
+        $(this).parents("tr").find(".sueldo").each(function() {
+            //sueldo += $(this).html() + "\n";
+            sueldo = parseFloat($(this).html());
+        });
+        console.log(sueldo);
+  */
+        /* console.log(valores);
+        alert(valores);*/
+        myFunction(cedula,nombre, apellido, terminal, sueldo);
+        });
+    }
+        catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
+        //document.getElementById("ejemplo").innerHTML = x.message;
+    }
 
         
-    var cedula='';
-    // Obtenemos todos los valores contenidos en los <td> de la fila
-    // seleccionada
-    $(this).parents("tr").find(".cedula").each(function() {
-        cedula += $(this).html() + "\n";
-    });
-
-    var nombre='';
-    $(this).parents("tr").find(".nombre").each(function() {
-        nombre += $(this).html() + "\n";
-    });
-
-    var apellido='';
-    $(this).parents("tr").find(".apellido").each(function() {
-        apellido += $(this).html() + "\n";
-    });
-
-    var terminal='';
-    $(this).parents("tr").find(".terminal").each(function() {
-        terminal += $(this).html() + "\n";
-    });
-
-    var sueldo= 0.0;
-    console.log(sueldo);
-    $(this).parents("tr").find(".sueldo").each(function() {
-        //sueldo += $(this).html() + "\n";
-        sueldo = parseFloat($(this).html());
-    });
-    console.log(sueldo);
-    /* console.log(valores);
-    alert(valores);*/
-    myFunction(cedula,nombre, apellido, terminal, sueldo);
-    });
-}
-    catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
-    //document.getElementById("ejemplo").innerHTML = x.message;
-}
-
-    
-   // setInterval('contadoradd()',2000);
-}
+    // setInterval('contadoradd()',2000);
+    }
 
    
-  </script>
+</script>
 
 
 <!-- Aquí pon las col-x necesarias, comienza tu contenido, etcétera -->
@@ -140,60 +143,41 @@ try {
 	<div class="col-12">
 		 <h2 style="color:gray";><?php echo $mes."/".$year ; ?> - Nuevo Usuario</h2>
 
-
-
-         <div class="col-12">
-
-
-<div ALIGN="right" >
-
-</div>    
-    <div class="table-responsive">
-        <table class="table table-bordered display" id="example" style="width:100%">
-            <thead class="thead-dark">
-                <tr>
-                    <!--<th>FECHA STOCK</th>-->
-            
-                    <th>CEDULA</th>
-                    <th>NOMBRES</th>
-                    <th>APELLIDOS</th>
-                    <th>CODIGO TERMINAL</th>
-                    <th></th>
-                    <th></th>
-                 
-                </tr>
-            </thead>
-            <tbody>
-            <?php 
-            foreach($mascotas as $mascota){   ?>
+        <div ALIGN="right" >
+            <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                <thead>
                     <tr>
-                   
-                        
+                        <th>CEDULA</th>
+                        <th>NOMBRES</th>
+                        <th>APELLIDOS</th>
+                        <th>CODIGO TERMINAL</th>
+                        <th>.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php   foreach($mascotas as $mascota){   ?>
+
+
+                    <tr>
                         <td class="cedula"><?php echo $mascota->strIdentificacion ?></td>
                         <td class="nombre"><?php echo $mascota->strNombres ?></td>
                         <td class="apellido"><?php echo $mascota->strApellidos ?></td>
-                        <td class="terminal"><?php echo $mascota->intIdEmpleadoTerminal ?></td>
-                        <td class="sueldo"  style="visibility:collapse; display:none;"> <?php echo $mascota->monSalario ?> </td>
-                        <td> <a class="boton btn btn-warning">CARGAR ✅</a>				
-                        </td>
+                        <td class="terminal"><?php echo $mascota->intIdEmpleadoTerminal ?></td>                        
+                        <td> <a class="boton btn btn-warning">CARGAR ✅</a>	
 
-                       
                     </tr>
-                    <?php } ?>
-            </tbody>
-        </table>
-    </div>
+                   
+                <?php } ?>   
+                </tbody>
+            </table>
+        </div>    
+    </div> 
 
-
-
-
-
-</div>
 
 <script>
-function myFunction(cedula,nombre,apellido,terminal,sueldo) {
- // alert(cedula+nombre+apellido+terminal);
-    var parametros = 
+    function myFunction(cedula,nombre,apellido,terminal,sueldo) {
+    // alert(cedula+nombre+apellido+terminal);
+        var parametros = 
           {
             "cedula" : cedula ,
             "nombre" : nombre ,
@@ -217,8 +201,8 @@ function myFunction(cedula,nombre,apellido,terminal,sueldo) {
             error: function(){
               alert('error de conexion - revisa tu red');
             }
-          });
-}
+        });
+    }
 </script>
 
 <?php 

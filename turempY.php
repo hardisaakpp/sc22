@@ -85,10 +85,9 @@
 						
 						<th>HORAS TRABAJADAS</th>
 						<th>HORAS REQUERIDAS</th>
-						<th>HORAS EXTRAS</th>
-						<th>HORAS FALTANTES</th>
-						<th>Horas 50%</th>
-						<th>Horas 100%</th>
+						<th>DIFERENCIA HORAS</th>
+						
+					
 						<th> </th>
 					</tr>
 				</thead>
@@ -101,28 +100,13 @@
 							
 							<td><?php echo $mascota->horasTrabajadas ?></td>
 							<td><?php echo $mascota->horasRequeridas ?></td>
-							<td><?php
-							if ($mascota->HorasExtrasFaltantes>0) {
-								echo $mascota->HorasExtrasFaltantes;
-							} else {
-								echo 0;
-							}
+							<td><?php echo $mascota->horasTrabajadas-$mascota->horasRequeridas ?></td>
+							 														
 							
-							 ?></td>
-							 							<td><?php
-							if ($mascota->HorasExtrasFaltantes<0) {
-								echo $mascota->HorasExtrasFaltantes;
-							} else {
-								echo 0;
-							}
-							
-							 ?></td>
-							<td><?php echo '$ '. round($mascota->Horas50, 2) ?></td>
-							<td><?php echo $mascota->h100 ?></td>
 							<td>
 
 
-                                <input type="button" onclick="window.open('turEmpX.php?id=<?php echo $mascota->idcab; ?>',
+                                <input type="button" onclick="window.open('turEmpXlite.php?id=<?php echo $mascota->idcab; ?>',
             	'_blank', 'width=1100, height=700');" class="btn btn-secondary" name="atach" value="📝">
 
 								<a class="btn btn-warning" href="<?php echo "php/turempDel.php?id=" . $mascota->idcab?>">⛔</a>			

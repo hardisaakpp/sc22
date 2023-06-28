@@ -6,27 +6,68 @@ session_start();
         include_once "php/bd_Biometricos.php";
 
 
+        $ti=$_GET['ti'];
+        $idcab=$_GET['idcab'];
 
 
-$sentencia2 = $db->query("
-select d.intiddetalleturno
-,
+if ($idcab=='MT') {
+  $sentencia2 = $dbB->query("
+      select d.intiddetalleturno
+      ,
+        convert(char(5), d.dtmHoraDesde, 108) +  ' a ' + convert(char(5), d.dtmHoraHasta, 108) as Horario
+      ,t.strNombre, intMinutosDescanso as minDescanso,
+      case
+      when dtmHoraDesde>dtmHoraHasta then
+        DATEDIFF(MINUTE,   dtmHoraDesde, DATEADD(day,1,dtmHoraHasta))-intMinutosDescanso 
+      else 
+      DATEDIFF(MINUTE,   dtmHoraDesde, dtmHoraHasta)-intMinutosDescanso 
+      end
+      AS minTrabajo
+
+        from tblTurnos t
+        inner join tblDetalleTurnos d on t.intIdTurno = d.intIdTurno
+      where 
+      t.intIdTurno in (3,4,11,12,14,17,15,16) 
+      " );
+  $regs = $sentencia2->fetchAll(PDO::FETCH_OBJ);
+} else if ($idcab=='CE'){
+  $sentencia2 = $dbB->query(" select d.intiddetalleturno,
+            convert(char(5), d.dtmHoraDesde, 108) +  ' a ' + convert(char(5), d.dtmHoraHasta, 108) as Horario
+            ,t.strNombre, intMinutosDescanso as minDescanso,
+            case
+            when dtmHoraDesde>dtmHoraHasta then
+                DATEDIFF(MINUTE,   dtmHoraDesde, DATEADD(day,1,dtmHoraHasta))-intMinutosDescanso 
+            else 
+                DATEDIFF(MINUTE,   dtmHoraDesde, dtmHoraHasta)-intMinutosDescanso 
+                end
+            AS minTrabajo
+
+            from tblTurnos t
+            inner join tblDetalleTurnos d on t.intIdTurno = d.intIdTurno
+            where 
+            t.intIdTurno in (5,6,11,12,14,17,15,16) " );
+            $regs = $sentencia2->fetchAll(PDO::FETCH_OBJ); 
+}else{
+  $sentencia2 = $dbB->query(" select d.intiddetalleturno,
   convert(char(5), d.dtmHoraDesde, 108) +  ' a ' + convert(char(5), d.dtmHoraHasta, 108) as Horario
-,t.strNombre, intMinutosDescanso as minDescanso,
-case
-when dtmHoraDesde>dtmHoraHasta then
-  DATEDIFF(MINUTE,   dtmHoraDesde, DATEADD(day,1,dtmHoraHasta))-intMinutosDescanso 
-else 
-DATEDIFF(MINUTE,   dtmHoraDesde, dtmHoraHasta)-intMinutosDescanso 
-end
-AS minTrabajo
+  ,t.strNombre, intMinutosDescanso as minDescanso,
+  case
+  when dtmHoraDesde>dtmHoraHasta then
+      DATEDIFF(MINUTE,   dtmHoraDesde, DATEADD(day,1,dtmHoraHasta))-intMinutosDescanso 
+  else 
+      DATEDIFF(MINUTE,   dtmHoraDesde, dtmHoraHasta)-intMinutosDescanso 
+      end
+  AS minTrabajo
 
   from tblTurnos t
   inner join tblDetalleTurnos d on t.intIdTurno = d.intIdTurno
-where 
-t.intIdTurno in (3,4,11,12,14,17,15,16) 
-" );
-$regs = $sentencia2->fetchAll(PDO::FETCH_OBJ);
+  where 
+  t.intIdTurno in (5,6,11,12,14,17,15,16,3,4,11,12,14,17,15,16) " );
+  $regs = $sentencia2->fetchAll(PDO::FETCH_OBJ); 
+}
+
+
+
 
 
 //use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

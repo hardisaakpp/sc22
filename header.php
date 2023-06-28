@@ -168,6 +168,7 @@
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Horarios</a>
                             <ul class="sub-menu children dropdown-menu">
                                 <li><i class="fa fa-spinner"></i><a href="turempY2.php">Resumen Turnos</a></li>
+                                <li><i class="fa fa-eye"></i><a href="turempL.php">Maestro Horarios</a></li>
                             </ul>
                             </li>
                             ';
@@ -178,7 +179,7 @@
                             <ul class="sub-menu children dropdown-menu">
                                 <li><i class="fa fa-calendar"></i><a href="turempY.php">Turnos</a></li>
                                 <li><i class="fa fa-upload"></i><a href="turempimp.php">Importar Turnos</a></li>
-                                <li><i class="fa fa-eye"></i><a href="turmar.php">Marcaciones</a></li>
+                                <li><i class="fa fa-eye"></i><a href="turempL.php">Maestro Horarios</a></li>
                             </ul>
                             </li>
                             ';

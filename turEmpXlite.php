@@ -441,7 +441,7 @@ if ($emp=='MT') {
         celda3.innerText=horExtras + ' horas' ;
       }
 
-      var sueldo= parseFloat(<?php echo $sueldo ?>, 0);
+      var sueldo= 500;
       //calculo pago de horas extras
 
           //totales DIAS LIBREs

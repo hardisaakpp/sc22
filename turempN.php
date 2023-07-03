@@ -1,9 +1,6 @@
 <?php
     include_once "header.php";
 	
-
-
-
 	if (!isset($_POST["mes"]) and !isset($_POST["year"]) )
 	{
 		$mes=date("m");
@@ -13,32 +10,19 @@
 		$mes=$_POST['mes'];
 		$year=$_POST['year'];
 	}
-    
-
-
-
-$sentencia2 = $db->query("select  top 1 fk_ID_almacen_turemp,Timesoft_CentroCosto
-from	users
-where	username='". $userName ."' AND fk_ID_almacen_turemp<>0" );
-$regCodCierre = $sentencia2->fetchObject();
-
-$centrocosto = $regCodCierre->Timesoft_CentroCosto;
 
 
 
 
-   $sentencia3 = $dbB->query("SELECT 
-                strIdentificacion,strNombres,strApellidos,intIdEmpleadoTerminal, ISNULL(monSalario, 0)  as 'monSalario'
+
+   $sentencia3 = $dbB->query("SELECT distinct
+                strIdentificacion,strNombres,strApellidos
             FROM [dbo].[tblEmpleados]
              " );
-            //where intIdCentroCosto='". $centrocosto ."' " );
+
    $mascotas = $sentencia3->fetchAll(PDO::FETCH_OBJ);
 
 
-
-
-	//echo(count($mascotas));
-	//echo(count($reconteos));
 ?>
 <form id="monthformX" method="post" action="">
     <div class="input-group">
@@ -90,38 +74,24 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
         $(this).parents("tr").find(".cedula").each(function() {
             cedula += $(this).html() + "\n";
         });
-
+        console.log(cedula);
         var nombre='';
         $(this).parents("tr").find(".nombre").each(function() {
             nombre += $(this).html() + "\n";
         });
-
+        console.log(nombre);
         var apellido='';
         $(this).parents("tr").find(".apellido").each(function() {
             apellido += $(this).html() + "\n";
         });
+        console.log(apellido);
 
-        var terminal='';
-        $(this).parents("tr").find(".terminal").each(function() {
-            terminal += $(this).html() + "\n";
-        });
-
-        var sueldo= 500;
-        /*
-        console.log(sueldo);
-        $(this).parents("tr").find(".sueldo").each(function() {
-            //sueldo += $(this).html() + "\n";
-            sueldo = parseFloat($(this).html());
-        });
-        console.log(sueldo);
-  */
-        /* console.log(valores);
-        alert(valores);*/
-        myFunction(cedula,nombre, apellido, terminal, sueldo);
+       // myFunction(cedula,nombre, apellido);
         });
     }
         catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
         //document.getElementById("ejemplo").innerHTML = x.message;
+        console.log(x.message);
     }
 
         
@@ -130,15 +100,6 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
 
    
 </script>
-
-
-<!-- Aquí pon las col-x necesarias, comienza tu contenido, etcétera -->
-
-
-
-
-
-
 
 	<div class="col-12">
 		 <h2 style="color:gray";><?php echo $mes."/".$year ; ?> - Nuevo Usuario</h2>
@@ -150,7 +111,7 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
                         <th>CEDULA</th>
                         <th>NOMBRES</th>
                         <th>APELLIDOS</th>
-                        <th>CODIGO TERMINAL</th>
+                   
                         <th>.</th>
                     </tr>
                 </thead>
@@ -162,8 +123,8 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
                         <td class="cedula"><?php echo $mascota->strIdentificacion ?></td>
                         <td class="nombre"><?php echo $mascota->strNombres ?></td>
                         <td class="apellido"><?php echo $mascota->strApellidos ?></td>
-                        <td class="terminal"><?php echo $mascota->intIdEmpleadoTerminal ?></td>                        
-                        <td> <a class="boton btn btn-warning">CARGAR ✅</a>	
+                                             
+                        <td> <a class="boton btn btn-warning">CARGAR ✅</a>	</td>
 
                     </tr>
                    
@@ -172,21 +133,22 @@ $centrocosto = $regCodCierre->Timesoft_CentroCosto;
             </table>
         </div>    
     </div> 
+    </div> 
 
 
 <script>
-    function myFunction(cedula,nombre,apellido,terminal,sueldo) {
-    // alert(cedula+nombre+apellido+terminal);
+    function myFunction(cedula,nombre,apellido) {
+    // console.log(cedula+nombre+apellido);
         var parametros = 
           {
             "cedula" : cedula ,
             "nombre" : nombre ,
             "apellido" : apellido ,
-            "terminal" : terminal ,
+          
             "id_alm" : "<?php echo $whsTurem ; ?>" ,
             "mes" : "<?php echo $mes ; ?>" ,
-            "year" : "<?php echo $year ; ?>" ,
-            "sueldo" : sueldo  //pendiente campo nomina 
+            "year" : "<?php echo $year ; ?>" 
+
           };
 
           $.ajax({

@@ -56,11 +56,8 @@
 
 <script>
     document.getElementById('mes').value = <?php echo $mes; ?>;
-</script>
 
-<div class="row">
 
-<script>
 
     function indexesLX(){
 
@@ -86,7 +83,7 @@
         });
         console.log(apellido);
 
-       // myFunction(cedula,nombre, apellido);
+        myFunction(cedula,nombre, apellido);
         });
     }
         catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
@@ -101,39 +98,46 @@
    
 </script>
 
-	<div class="col-12">
-		 <h2 style="color:gray";><?php echo $mes."/".$year ; ?> - Nuevo Usuario</h2>
+<div class="content">
 
-        <div ALIGN="right" >
-            <table id="bootstrap-data-table" class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>CEDULA</th>
-                        <th>NOMBRES</th>
-                        <th>APELLIDOS</th>
-                   
-                        <th>.</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php   foreach($mascotas as $mascota){   ?>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong class="card-title"><?php echo $mes."/".$year ; ?> - Nuevo Usuario</strong>
+            </div>
+            <div class="card-body">
 
 
-                    <tr>
-                        <td class="cedula"><?php echo $mascota->strIdentificacion ?></td>
-                        <td class="nombre"><?php echo $mascota->strNombres ?></td>
-                        <td class="apellido"><?php echo $mascota->strApellidos ?></td>
-                                             
-                        <td> <a class="boton btn btn-warning">CARGAR ✅</a>	</td>
+                <table class="table table-hover" name='tblList'>
+                    <thead>
+                        <tr>
+                            <th>CEDULA</th>
+                            <th>NOMBRES</th>
+                            <th>APELLIDOS</th>
+                    
+                            <th>.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php   foreach($mascotas as $mascota){   ?>
 
-                    </tr>
-                   
-                <?php } ?>   
-                </tbody>
-            </table>
-        </div>    
+
+                        <tr>
+                            <td class="cedula"><?php echo $mascota->strIdentificacion ?></td>
+                            <td class="nombre"><?php echo $mascota->strNombres ?></td>
+                            <td class="apellido"><?php echo $mascota->strApellidos ?></td>
+                                                
+                            <td> <a class="boton btn btn-warning">CARGAR ✅</a>	</td>
+
+                        </tr>
+                    
+                    <?php } ?>   
+                    </tbody>
+                </table>
+            </div>    
+        </div> 
     </div> 
-    </div> 
+</div> 
 
 
 <script>

@@ -52,7 +52,15 @@
 		onclick=this.form.action="turEmpN.php">
         </div>
 </form>
-
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
+	<script type="text/javascript" language="javascript" src="js/syntax/shCore.js"></script>
+	<script type="text/javascript" language="javascript" src="js/demo.js"></script>
+	<script type="text/javascript" language="javascript" class="init">
+            $(document).ready(function() {
+            $('#example').DataTable();
+            } );
+    </script>
 
 <script>
     document.getElementById('mes').value = <?php echo $mes; ?>;
@@ -63,7 +71,7 @@
 
     try {
         $(".boton").click(function() {
-
+            $('#example').DataTable();
             
         var cedula='';
         // Obtenemos todos los valores contenidos en los <td> de la fila
@@ -108,7 +116,7 @@
             <div class="card-body">
 
 
-                <table class="table table-hover" name='tblList'>
+            <table class="table table-bordered display" id="example">
                     <thead>
                         <tr>
                             <th>CEDULA</th>

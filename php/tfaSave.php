@@ -41,6 +41,24 @@ if ($estado=='CONTEO') {
         $resultado = $sentencia->execute([$conteo[$i],$conteo[$i],$conteo[$i],$id[$i]]);
     }
 }else {
+
+    $sentencia1 = $db->prepare("DECLARE @IDCAB INT;
+    SET @IDCAB=?;
+
+    exec [spActualizaInventario] @IDCAB;
+
+    IF not EXISTS
+    (
+        SELECT *
+        FROM StockCab_tfa
+        WHERE fk_id_StockCab=@IDCAB
+    )
+        BEGIN
+            insert into StockCab_tfa (fk_id_StockCab) values (@IDCAB)
+    END;
+    UPDATE StockCab_TFA set responsable=? where fk_id_StockCab=@IDCAB ");
+    $resultado1 = $sentencia1->execute([$idcab,$responsable]);
+
     for($i=0;$i<$total;$i++){
 
         $sentencia = $db->prepare("UPDATE StockDet 

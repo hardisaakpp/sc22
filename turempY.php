@@ -14,7 +14,38 @@
 
 
 
-   $sentencia2 = $db->query("select * from vw_turnosEmpMes where mes=".$mes." and anio=".$year." and fk_id_almacen=".$whsTurem." ");
+   $sentencia2 = $db->query("
+   
+select d.id_turem as idcab, d.cedula, d.nombre,d.apellido, 
+d.cod_almacen, a.nombre as almacen, 
+500 as sueldo_actual,d.CalendarYear as anio,
+d.MonthNumberOfYear as mes, 0 as h100, 
+
+	(sum(
+	case  
+		when t.minTrab=0 then 0
+		else 1
+	end 
+	)*480)/60 as horasRequeridas,
+	(sum(t.minTrab)/60) as horasTrabajadas,
+	((sum(t.minTrab)) - (sum(
+	case  
+		when t.minTrab=0 then 0
+		else 1
+	end 
+	)*480 )/60)
+
+	as HorasExtrasFaltantes, a.id as fk_id_almacen, 0 as Horas50
+from vw_turem_day d
+	join Timesoft2..vwTurnos t on d.cod_turno=t.intIdDetalleTurno
+	join Almacen a on d.cod_almacen=a.cod_almacen
+where d.MonthNumberOfYear=".$mes." and d.CalendarYear=".$year." and a.id=".$whsTurem."
+
+group by d.cedula, d.nombre,d.apellido, d.cod_almacen
+,d.id_turem ,  a.nombre, d.CalendarYear ,
+d.MonthNumberOfYear , a.id
+
+ ");
     $mascotas = $sentencia2->fetchAll(PDO::FETCH_OBJ);
 
 ?>

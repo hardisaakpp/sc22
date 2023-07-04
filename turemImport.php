@@ -181,8 +181,8 @@ if (isset($_POST['submit'])) {
                             $xApellido=$regC->strApellidos;
                             $xTerminal=$regC->intIdEmpleadoTerminal;
                             $xSalario=$regC->monSalario;
-                    $sentencia1 = $db->prepare("exec sp_newTurEmp  ?, ?, ?, ?,?, ?, ?, ? ;" );
-                    $resultado1 = $sentencia1->execute([$_POST['tiendaTuremp'], $cedula, $xNombre, $xApellido, $mes, $anio, $xTerminal, $xSalario]);
+                    $sentencia1 = $db->prepare("exec sp_newTurEmp  ?, ?, ?, ?,?, ?;" );
+                    $resultado1 = $sentencia1->execute([$_POST['tiendaTuremp'], $cedula, $xNombre, $xApellido, $mes, $anio]);
                     
                    }
 

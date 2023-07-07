@@ -161,6 +161,33 @@
                         }else if ($userAdmin==5){ // bodega
 
                         }  
+
+                        //PRESUPUESTOS TFA
+                
+                            if ($userAdmin==1) { // ADMIN   
+                                echo '
+                                <li class="menu-item-has-children dropdown">
+                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Comercial</a>
+                                <ul class="sub-menu children dropdown-menu">
+                                    <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar preupuestos</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar preupuestos</a></li>
+                                </ul>
+                                </li>
+                                ';
+                            } else if ($userAdmin==2){ // TIENDA
+                                echo '
+                              
+                                ';
+                            } else if ($userAdmin==3){ // INVENTARIO
+                                echo '
+                               
+                                    
+                                ';
+                            }else if ($userAdmin==4){ // cuentaInventarios
+                                # code...
+                            }else if ($userAdmin==5){ // bodega
+    
+                            }  
                 //HORARIOS-->
                         if ($userAdmin==1) { // ADMIN   
                             echo '

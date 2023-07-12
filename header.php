@@ -341,9 +341,13 @@
                  
                 </ul>
             </div><!-- /.navbar-collapse -->
+           
         </nav>
+    
+    
+       
     </aside><!-- /#left-panel -->
-
+ 
     <!-- Left Panel -->
 
     <!-- TOP Right Panel -->
@@ -363,9 +367,9 @@
                 <div class="header-menu">
                     <div class="header-left" style="margin: auto;">
                     Usuario: 
-            <?php
-                echo $userName . " [ G" . $userAdmin."-ID". $userId .  "]"; 
-            ?>  
+                <?php
+                    echo $userName . " [ G" . $userAdmin."-ID". $userId .  "]"; 
+                ?>  
                     </div>
 
                     <div class="user-area dropdown float-right">

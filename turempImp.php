@@ -16,7 +16,7 @@
                 <div class="form-group">
                     <input name="tiendaTuremp" value='<?php echo $whsTurem; ?>' hidden>
                     <!-- <label for="exampleInputFile"><h3>Importar turnos</h3></label> -->
-                    <input type="file" name="file" class="form-control" id="exampleInputFile" required>
+                    <input type="file" accept=".xls" name="file" class="form-control" id="exampleInputFile" required>
                 </div>
                 <button type="submit" name="submit" class="btn btn-primary">Cargar</button>
             </form>

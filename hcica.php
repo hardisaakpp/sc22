@@ -36,20 +36,20 @@ if($whsCica==0){
 
     $auxCAJA=0;
 
-    /*
-    if ($pFecha==date('Y-m-d')) {
+    
+   // if ($pFecha==date('Y-m-d')) {
     // echo "mismo dia!";  ///solo actualiza si es el mismo dia
         $sentencia = $db->query("
             
-        EXEC sp_cica_sincSAPSingle '". $whsCica ."', '". $pFecha ."';
+      
 
-        EXEC sp_cica_createCajas '". $whsCica ."', '". $pFecha ."';
+        EXEC sp_cicaH_createCajas '". $whsCica ."', '". $pFecha ."';
         
         " );
         $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
-    }
+  //  }
 
-    */
+    
 
 
 
@@ -81,7 +81,7 @@ if($whsCica==0){
             , sum(valPinpadOff) as 'valMedianet'
             , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
 
-        from CiCaSAP c join Almacen a on a.cod_almacen=c.whsCode
+        from CiCaHitell c join Almacen a on a.cod_almacen=c.whsCode
         where a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
         group by c.CardName" );
     $consolidados = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -173,7 +173,7 @@ if($whsCica==0){
 
                             <form method="post" action="hcicaImport.php" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <input name="tiendaTuremp" value='<?php echo $whsTurem; ?>' hidden>
+                                    <input name="tiendaTuremp" value='<?php echo $whsCica; ?>' hidden>
                                     <!-- <label for="exampleInputFile"><h3>Importar turnos</h3></label> -->
                                     <input type="file" accept=".xlsx" name="file" class="form-control" id="exampleInputFile" required>
                                    

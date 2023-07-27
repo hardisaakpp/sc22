@@ -17,107 +17,44 @@
         $whsCica = $_GET["pIdAlmacen"];
     }
    
-    
     //$pFecha= Date('2023-06-14') ;
     $pFecha= Date('Y-m-d') ;
     if (isset($_GET["pFecha"])) {
         $pFecha = $_GET["pFecha"];
     }
 
-
-
     //si no es ADMIN o no se  no abre
 if($whsCica==0){  
     echo ('NO TIENE UNA TIENDA ASIGNADA PARA CIERRE DE CAJA');
-    //echo $whsCica;
-   // echo $pFecha;
-    //exit();
 }else{
 
     $auxCAJA=0;
 
-    
-   // if ($pFecha==date('Y-m-d')) {
-    // echo "mismo dia!";  ///solo actualiza si es el mismo dia
+    //CREO CABECERAS DE CAJAS
         $sentencia = $db->query("
-            
-      
-
-        EXEC sp_cicaH_createCajas '". $whsCica ."', '". $pFecha ."';
-        
+            EXEC sp_cicaH_createCajas '". $whsCica ."', '". $pFecha ."';
         " );
         $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
-  //  }
-
     
+    //Consulto cajas cabeceras 
+        $s1 = $db->query("
+        select * from CiCa   
+        where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."'
+        " );
+        $cajas = $s1->fetchAll(PDO::FETCH_OBJ);   
+
+        $qtyCajas = count($cajas);
+
+    //Si no hay cajas no consulto si hay cjas realizo consultas
+
+
+        $estado = 'INI';
 
 
 
 
-  //  echo $whsCica;
-   // echo $pFecha;
-
-   $senten2 = $db->query("
-   select * from almacen where id=".$whsCica."  "  );
-   $TEMPa1 = $senten2->fetchObject();
-
-       $almacenCica = $TEMPa1->cod_almacen;
-       $nomealmacenCica = $TEMPa1->nombre;
-
-
-    $s1 = $db->query("
-    select * from CiCa 
-    where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."'
-    " );
-    $cajas = $s1->fetchAll(PDO::FETCH_OBJ);   
-
-    $sentencia = $db->query("      
-    select 
-            c.CardName as 'forPag'
-            , sum(Valor) as 'valSAP'
-            , sum(valRec) as 'valRec'
-            , sum(valOnline) as 'valOnline'
-            , sum(valPinpadOn) as 'valPinpad'
-            , sum(valPinpadOff) as 'valMedianet'
-            , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
-
-        from CiCaHitell c join Almacen a on a.cod_almacen=c.whsCode
-        where a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
-        group by c.CardName" );
-    $consolidados = $sentencia->fetchAll(PDO::FETCH_OBJ);
        
 ?>
-
-<!-- Breadcrumbs-->
-   <!-- <div class="breadcrumbs">
-        <div class="breadcrumbs-inner">
-            <div class="row m-0">
-                <div class="col-sm-4">
-                    <div class="page-header float-left">
-                        <div class="page-title">
-                            <h1>CAMBIO DE CLAVE</h1>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="page-header float-right">
-                        <div class="page-title">
-                            <ol class="breadcrumb text-right">
-                                 <li>
-                                <button type="button" class="btn btn-outline-success" onclick="chargeTFA();">►</button>
-                                <button type="button" class="btn btn-outline-warning" onclick="location.reload();">F5</button>
-                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='wllcm.php'">X</button>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>  
-            </div>
-        </div>
-    </div>-->
-<!-- /.breadcrumbs-->
-
-
 
 
 <div class="content">
@@ -134,72 +71,113 @@ if($whsCica==0){
 
 
 
-    <?php   foreach($cajas as $user){ 
-        $auxCAJA=$user->id;
+    <?php  
     
-        ?>
-        <div class="col-lg-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="stat-widget-five">
-                        <div class="stat-icon dib flat-color-3">
-                        <a href="cicaU.php?id=<?php echo $user->id?>">
-                            <i class="pe-7s-browser"></i>
-                            </a>
-                        </div>
-                        <div class="stat-content">
-                            <div class="text-left dib">
-                        
-                                <div class="stat-text"><?php echo $user->caja?></div>
+    
+    
+    if ($qtyCajas==0) {
+        $estado = 'INI';
+    } else {
+
+        $s2 = $db->query(" select top 1 status from CiCa where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."' " );
+        $stat = $s2->fetchObject();
+
+        $estado= $stat->status;  ///seteo estado 
+        
+
+        $senten2 = $db->query("
+        select * from almacen where id=".$whsCica."  "  );
+        $TEMPa1 = $senten2->fetchObject();
+
+        $almacenCica = $TEMPa1->cod_almacen;
+        $nomealmacenCica = $TEMPa1->nombre;
+
+        $sentencia = $db->query("      
+        select 
+                c.CardName as 'forPag'
+                , sum(Valor) as 'valSAP'
+                , sum(valRec) as 'valRec'
+                , sum(valOnline) as 'valOnline'
+                , sum(valPinpadOn) as 'valPinpad'
+                , sum(valPinpadOff) as 'valMedianet'
+                , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
+    
+            from CiCaHitell c join Almacen a on a.cod_almacen=c.whsCode
+            where a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
+            group by c.CardName" );
+        $consolidados = $sentencia->fetchAll(PDO::FETCH_OBJ);
+
+
+   
+
+    
+    
+    
+        foreach($cajas as $user){ 
+            $auxCAJA=$user->id;
+        
+            ?>
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-five">
+                            <div class="stat-icon dib flat-color-3">
+                            <a href="hcicaU.php?id=<?php echo $user->id?>">
+                                <i class="pe-7s-browser"></i>
+                                </a>
+                            </div>
+                            <div class="stat-content">
+                                <div class="text-left dib">
                             
+                                    <div class="stat-text"><?php echo $user->caja?></div>
+                                
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    <?php } ?> 
-
-
-    <div class="col-lg-3 col-md-6">
-        <div class="card">
-          
-            <div class="card-body">
-               
-                           
-
-
-
-                            <form method="post" action="hcicaImport.php" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <input name="tiendaTuremp" value='<?php echo $whsCica; ?>' hidden>
-                                    <!-- <label for="exampleInputFile"><h3>Importar turnos</h3></label> -->
-                                    <input type="file" accept=".xlsx" name="file" class="form-control" id="exampleInputFile" required>
-                                   
-                                </div>
-                                
-                          
-            </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-secondary btn-lg" >
-                    <i class="fa fa-upload"></i>&nbsp; CARGAR CIERRE HITELL
-                </button>
-            </div>
-            </form>
-        </div>
-    </div>
-
-
-
+        <?php } 
     
+    }
+    //si esta en estado abierto muestra la opcion cargar
+    if ($estado=='INI') {  ?>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+            
+                <div class="card-body">
+                
+                            
+                                <form method="post" action="hcicaImport.php" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <input name="tiendaTuremp" value='<?php echo $whsCica; ?>' hidden>
+                                        <input name="pFecha" value='<?php echo $pFecha; ?>' hidden>
+                                        <!-- <label for="exampleInputFile"><h3>Importar turnos</h3></label> -->
+                                        <input type="file" accept=".xlsx" name="file" class="form-control" id="exampleInputFile" required>
+                                    
+                                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-secondary btn-lg" >
+                        <i class="fa fa-upload"></i>&nbsp; CARGAR CIERRE HITELL
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    <?php }
+    
+     
+    if ($qtyCajas>0) {
+    
+    
+    ?> 
+
 
 </div>
 <!------------------------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------------------------>
-
-
-
 <!------------------------------------------------------------------------------------------------>
 
     <!--//conteo-->
@@ -221,11 +199,8 @@ if($whsCica==0){
                                 <th id='v1'>VALOR SAP</th>
                                 <th id='v2'>RECIBIDO</th>
                                 <th id='v3'>ONLINE</th>
-                            
                                 <th id='v4'>PINPAD</th>
-                            
                                 <th id='v5'>DATAFAST/ MEDIANET</th>
-            
                                 <th id='v6'>DIFERENCIA</th>
                             </tr>
                         </thead>
@@ -259,15 +234,21 @@ if($whsCica==0){
                 </div>
                 <div class="card-footer">
 
-                    <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "cicaPrint.php?id=" . $auxCAJA ?>","demo","toolbar=0,status=0,")>
+                    <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "hcicaPrint.php?id=" . $auxCAJA ?>","demo","toolbar=0,status=0,")>
                         <i class="fa fa-print"></i>&nbsp; Imprimir
                     </button>
+
+                    <?php if ($estado=='INI') {  ?>
+
+                    <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='php/hcica_send.php?whsCica=<?php echo $whsCica?>&fec=<?php echo $pFecha ?>'">
+                        <i class="fa fa-share-square-o"></i>&nbsp; Enviar
+                    </button>
+
+                    <?php }  ?>
+
                 </div>
             </form> 
         </div>
-
-
-
     </div>
 
 
@@ -304,7 +285,30 @@ if($whsCica==0){
 
 
         <?php
-    
+    }else { ?>
+        
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-five">
+                    <div class="stat-icon dib flat-color-3">
+                    
+                        <i class="pe-7s-close"></i>
+                 
+                    </div>
+                    <div class="stat-content">
+                        <div class="text-left dib">
+                    
+                            <div class="stat-text">No hay datos</div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php   }
 ?>
 
 

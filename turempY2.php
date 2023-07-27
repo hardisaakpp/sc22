@@ -64,13 +64,17 @@
 
 <!-- Aquí pon las col-x necesarias, comienza tu contenido, etcétera -->
 	<div class="col-12">
-		 <h2 style="color:gray";><?php echo $mes."/".$year ; ?> - Horarios generados:</h2>
+
 
 <?php 
 	if (count($mascotas)>0) {
 ?>
-		<div class="table-sm">
-			<table class="table table-hover" name='tblList'>
+	<div class="card">
+        <div class="card-header">
+            <strong class="card-title"><?php echo $mes."/".$year ; ?> - Horarios generados: </strong>
+        </div>
+        <div class="card-body">
+			<table id="bootstrap-data-table" class="table table-striped table-bordered" name='tblList'>
 				<thead class="thead-dark">
 					<tr>
 						<th>CEDULA</th>	
@@ -96,31 +100,27 @@
 							<td><?php echo $mascota->horasTrabajadas ?></td>
 							<td><?php echo $mascota->horasRequeridas ?></td>
 							<td><?php
-							if ($mascota->HorasExtrasFaltantes>0) {
-								echo $mascota->HorasExtrasFaltantes;
-							} else {
-								echo 0;
-							}
-							
+								if ($mascota->HorasExtrasFaltantes>0) {
+									echo $mascota->HorasExtrasFaltantes;
+								} else {
+									echo 0;
+								}
+								
 							 ?></td>
-							 							<td><?php
-							if ($mascota->HorasExtrasFaltantes<0) {
-								echo $mascota->HorasExtrasFaltantes;
-							} else {
-								echo 0;
-							}
+							<td><?php
+								if ($mascota->HorasExtrasFaltantes<0) {
+									echo $mascota->HorasExtrasFaltantes;
+								} else {
+									echo 0;
+								}
 							
 							 ?></td>
 							<td><?php echo '$ '. round($mascota->Horas50, 2) ?></td>
 							<td><?php echo $mascota->h100 ?></td>
 							<td>
+							<input type="button" onclick="window.open('turEmpXliteV.php?id=<?php echo $mascota->idcab; ?>',
+            	'_blank', 'width=1100, height=700');" class="btn btn-secondary" name="atach" value="👁️">
 
-<!--
-                                <input type="button" onclick="window.open('turEmpX.php?id=<?php echo $mascota->idcab; ?>',
-            '_blank', 'width=1100, height=700');" class="btn btn-secondary" name="atach" value="Editar 📝">
-
-								<a class="btn btn-warning" href="<?php echo "php/turempDel.php?id=" . $mascota->idcab?>">Eliminar ⛔</a>		
-						-->	
 							</td>
 						</tr>
 					<?php } ?>
@@ -135,7 +135,7 @@
 			</table>
 		</div>
  
-
+	</div>
 
 <?php 
 

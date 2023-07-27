@@ -24,7 +24,17 @@ function validar_fecha_espanol($fecha){
 	return false;
 };
 
-$fechaActual = date('d-m-Y');
+
+
+$fechaActualOriginal = $_POST['pFecha'];
+
+$fecAz =  explode("-",$fechaActualOriginal);
+
+$fechaActual = $fecAz[2].'-'.$fecAz[1].'-'.$fecAz[0];
+
+
+
+//$fechaActual = date('d-m-Y');
 $tiendaCica= $_POST['tiendaTuremp'];
 
 //echo ('.'. $_FILES['file']['name']);
@@ -67,9 +77,6 @@ if (!empty($sheetData)) {
     }
 
 
-
-
-
     for ($i=1; $i<count($sheetData); $i++) {
             $fecha = $sheetData[$i][0];
             $caja = $sheetData[$i][2];
@@ -103,7 +110,9 @@ if (!empty($sheetData)) {
 
 }
 
-header("Location: hcica.php");
+echo "<a href='hcica.php' class='btn btn-warning'>OK, VOLVER</a>";
+
+//header("Location: hcica.php");
 
 ?>
 

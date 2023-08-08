@@ -240,15 +240,35 @@
 
 
                                 <li><i class="fa fa-pencil-square-o"></i><a href="hcica.php">Cierre de Caja H</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="hcicahu.php">Historial H</a></li>
+                                <li><i class="fa fa-h-square"></i><a href="hcicaHu.php">Historial H</a></li>
 
 
 
                             </ul>
                             </li>
                             ';
+                        } else if ($userAdmin==6 ){ // INVENTARIO
+                            echo '
+                           
+
+                            <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                <li><i class="fa fa-pencil-square-o"></i><a href="hcicaL.php">Cierres de caja </a></li>
+                            </ul>
+                            </li>
+                            
+                            ';
+
                         } else if ($userAdmin==6 && $userName=='CONTABILIDADMT'){ // INVENTARIO
                             echo '
+                            <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
+                            </ul>
+                            </li>
+
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
@@ -284,7 +304,7 @@
             
                         }  
             
-            if ($userAdmin==1 || $userAdmin==3) {   
+            if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
             ?>
 
                         <!--//Reportes-->
@@ -292,13 +312,18 @@
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
                             <ul class="sub-menu children dropdown-menu">     
-                                        <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
-                                        <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
-                                        <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
+                                <li><i class="ti ti-dropbox"></i><a href="soltr.php">Solicitud Translado</a></li>
+                                <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
+                                <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
+                                <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
 
 
                             </ul>
                         </li>
+                        <?php 
+            }
+            if ($userAdmin==1 || $userAdmin==3) {   ?>
+
 
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti ti-check-box"></i>Toma Fisica Total</a>

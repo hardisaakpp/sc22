@@ -44,7 +44,7 @@ if ($userAdmin==6) {
 }
 
 
-     //   echo $caja . $fecha  . $Cerrado;
+      echo $caja . $fecha  ;
 
 
     $s1 = $db->query("
@@ -205,11 +205,11 @@ if (observacion.value.trim().length==0) {
         */
         
         if(online==null || online=='') {
-        res=parseFloat(valSAP)*parseFloat(recibido);
+            var res=parseFloat(valSAP)*parseFloat(recibido);
         } else {
-        var res=(parseFloat(0+pinpad)+parseFloat(0+dataf)+parseFloat(0+recibido)+parseFloat(0+online)-parseFloat(0+valSAP)).toFixed(2);
+        var res=(parseFloat(0+pinpad)+parseFloat(0+dataf)+parseFloat(0+recibido)+parseFloat(0+online)-parseFloat(0+valSAP));
         }
-        row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].value=res;
+        row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].value=  parseFloat(res).toFixed(2);
         if (res<0) {
             row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].style.color='red';
         } else {
@@ -282,7 +282,7 @@ if (observacion.value.trim().length==0) {
                             <th id='v2'>RECIBIDO</th>
                             <th id='v3'>ONLINE <i id='n1' aria-hidden="true" class="fa fa-comment"></i></th>
                             <th id='n1' style='display: none;'>NOTA</th>
-                            <th id='v4'>PINPAD</th>
+                            <th id='v4'>PINPAD <i id='n2' aria-hidden="true" class="fa fa-comment"></i> </th>
                             <th id='n2' style='display: none;'>NOTA</th>
                             <th id='v5'>DATAFAST/ MEDIANET <i id='n3' aria-hidden="true" class="fa fa-comment"></i></th>
                             <th id='n3' style='display: none;'>NOTA</th>
@@ -317,7 +317,7 @@ if (observacion.value.trim().length==0) {
                                     <input name="refOnline[]" type="text" maxlength="30" value="<?php echo $forpag->refOnline ?>" >
                                 </td>
                                 <td class="valPinpad">
-                                    <input name="valPinPad[]"  onkeyup="calc(this);" step="any" type="number" value="<?php echo $forpag->valPinpadOn ?>"  readonly>
+                                    <input name="valPinPad[]"  onkeyup="calc(this);" step="any" type="number" value="<?php echo $forpag->valPinpadOn ?>" required>
                                 </td>
                                 <td style='display: none;'>
                                     <input name="refPinPad[]" type="text" maxlength="30" value="<?php echo $forpag->refPinpadOn ?>" >
@@ -368,7 +368,7 @@ if (observacion.value.trim().length==0) {
                             <td class="Diferencia"> 
                             <?php 
                                 
-                                $difz=$forpag->valRec+$forpag->valOnline+$forpag->valPinpadOn+$forpag->valPinpadOff-$forpag->Valor ;
+                                $difz=round($forpag->valRec+$forpag->valOnline+$forpag->valPinpadOn+$forpag->valPinpadOff-$forpag->Valor, 2) ;
 
                                 if ($difz<0) {
                                     echo '<input class="status" type="number" style="color:red;" name="Dif[]" value="'.$difz.'" readonly>';

@@ -286,6 +286,7 @@
 document.getElementById("frmConteo").onsubmit = function() {
    
     if (confirm("¿Seguro de enviar?")) {
+        saveTFA('INI');
         $(".loader-page").css({visibility:"visible",opacity:"0.8"});
         return true;
         } else {

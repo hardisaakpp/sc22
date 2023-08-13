@@ -20,7 +20,7 @@ if ($estado=='CONTEO') {
         $sentencia1 = $db->prepare("DECLARE @IDCAB INT;
         SET @IDCAB=?;
 
-        exec [spActualizaInventario] @IDCAB;
+        exec [sp_getTFAStockSap] @IDCAB;
 
         IF not EXISTS
         (
@@ -45,7 +45,7 @@ if ($estado=='CONTEO') {
     $sentencia1 = $db->prepare("DECLARE @IDCAB INT;
     SET @IDCAB=?;
 
-    exec [spActualizaInventario] @IDCAB;
+    exec [sp_getTFAStockSap] @IDCAB;
 
     IF not EXISTS
     (

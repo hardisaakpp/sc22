@@ -124,37 +124,71 @@ $sentencia = $db->query(" exec sp_getHCiCasContab '".$desde."','".$hasta."','".$
                     <tr>
                                     <td><?php echo $citem->fecha ?></td>
                                     <td><?php echo $citem->cod_almacen.' '.$citem->whsName ?></td>
-                                    <td> <?php  
+                                    <td>
+                                        
+                                    <div class="dropdown">
+                                        <?php 
+                                    
+                                    
+                                    
                                     if ($citem->status=='INI') {
-                                        echo 
-                                        
-                                        'REGISTRADO ❗'
-                                        
-                                        
-                                        ;
+                                        echo 'REGISTRADO ❗
+                                        <button class="btn btn-sm-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            
+                                        </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                <button type="button" class="dropdown-item" onclick="#">Cambiar a ENVIADO 📬</button>
+                                                <button type="button" class="dropdown-item" onclick="#">Cambiar a REVISADO ✅</button>
+                                            </div>';
                                     } else if ($citem->status=='FIN'){
-                                        echo
-                                        '<button type="button" class="btn btn-outline-success"  id_alm='.$citem->id_alm.'&fec='.$citem->fecha.'
-                                        onclick ="delete_user($(this),<?php echo $citem->id ?>,<?php echo $citem->fecha ?>,<?php echo $citem->cerrado ?>)
-                                        > 🔓 </button>'.
-                                        'ENVIADO 📬';
+                                        echo 'ENVIADO 📬
+                                                                            
+                                        <button class="btn btn-sm-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            
+                                        </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                <button type="button" class="dropdown-item" onclick="#">Cambiar a REGISTRADO ❗</button>
+                                                <button type="button" class="dropdown-item" onclick="#">Cambiar a REVISADO ✅</button>
+                                            </div>';
                                     } else if ($citem->status=='REV'){
-                                        echo 'REVISADO ✔️';
+                                        echo 'REVISADO ✅
+                                        <button class="btn btn-sm-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            
+                                        </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                <button type="button" class="dropdown-item" onclick="#">Cambiar a ENVIADO 📬</button>
+                                                <button type="button" class="dropdown-item" onclick="#">Cambiar a REGISTRADO ❗</button>
+                                            </div>';
                                     } else {
-                                        echo 'NULL 🫠';
+                                        echo 'NULL 📛';
                                     }
                                     
-                                    $citem->status ?> </td>
+                                    $citem->status ?> 
+                                    
+                                
+                                    
+
+                                    </div>
+                                
+                                
+                                </td>
                                     <td><?php echo $citem->DifTienda ?></td>
                                     <td><?php echo $citem->difSAP ?></td>
                                     
                                     <td>
 
-                                     
-                                        <button type="button" class="btn btn-outline-success" 
-                                        onclick="window.location.href='hcica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id_alm ?>'"
-                                        > 👁️‍🗨️ </button>                
-                                        
+                                        <?php  if ($citem->status=='INI' || $citem->status=='FIN' ) {   ?>
+                                            <button type="button" class="btn btn-outline-success" 
+                                            onclick="window.location.href='hcica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id_alm ?>'"
+                                            > 👁️‍🗨️ </button>                
+                                        <?php   }   ?>
+
+                                        <?php  if ($citem->status=='INI' || $citem->status=='FIN' ) {   ?>
+
+                                            <button type="button" class="btn btn-outline-success" 
+                                            onclick="window.location.href='hcica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id_alm ?>'"
+                                            > ✔️ </button>    
+                                        <?php   }   ?>
    <!--   
                                         <?php
                                             if ($citem->cerrado==1) {
@@ -202,7 +236,7 @@ $sentencia = $db->query(" exec sp_getHCiCasContab '".$desde."','".$hasta."','".$
 
 
 <script>
-    function delete_user(row,id,fecha,cerrado)
+    function delete_user(row,id,fecha)
         { 
           
             delTD(id,fecha);

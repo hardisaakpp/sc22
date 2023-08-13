@@ -11,7 +11,7 @@
                     </div>
                     
                     <div class="col-sm-6 text-right">
-                        By <a href="mailto:sistemas@sunsetcorpholding.com">SIS-SUN</a>
+                        By <a href="mailto:sistemas@sunsetcorpholding.com">[SIS-SUN]</a>
                     </div>
                 </div>
             </div>

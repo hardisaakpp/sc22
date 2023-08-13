@@ -11,7 +11,7 @@ include_once "header.php";
         <div>
 
             <form class="form-inline" method="GET" >
-            
+                <h3 style="color:gray";>Solicitud de Translado:</h3>    
                 <input type="text" class="form-control mb-2 mr-sm-2" 
                 id="sx" name="sx"  placeholder="NumDoc" value="">
                 <input type="submit" name="find" value="Buscar 🔎" class="form-control"
@@ -19,7 +19,7 @@ include_once "header.php";
 
             </form>
         </div>
-        <h3 style="color:gray";>Solicitud de Translado:</h3>
+        
             <!-- -----------------------------------------------------------------------------------------------------------
             --------------------------------------------------------------------------------------------------------------
             --------------------------------------------------------------------------------------------------------------
@@ -70,26 +70,26 @@ if($userAdmin==5 || $userAdmin==1)
 
                 echo "
                 <div class='container'>
-                <div class='row row-cols-2 row-cols-lg-6 g-2 g-lg-3'>
-                    <div class='col'>
-                    <div class='p-2 border bg-light'>Solicitud No.".$solicitud."</div>
+                    <div class='row row-cols-2 row-cols-lg-6 g-2 g-lg-3'>
+                        <div class='col'>
+                        <div class='p-2 border bg-light'>Solicitud No.".$solicitud."</div>
+                        </div>
+                        <div class='col'>
+                        <div class='p-2 border bg-light'> Fecha solicitud ".$fechaSol."</div>
+                        </div>
+                        <div class='col'>
+                        <div class='p-2 border bg-light'>Origen: ".$origen."</div>
+                        </div>
+                        <div class='col'>
+                        <div class='p-2 border bg-light'>Destino: ".$destino."</div>
+                        </div>
+                        <div class='col'>
+                        <div class='p-2 border  ".$txtTransfer."</div>
+                        </div>
+                        <div class='col'>
+                        <div class='p-2 border bg-light'>Actualización: ".$fecROW."</div>
+                        </div>
                     </div>
-                    <div class='col'>
-                    <div class='p-2 border bg-light'> Fecha solicitud ".$fechaSol."</div>
-                    </div>
-                    <div class='col'>
-                    <div class='p-2 border bg-light'>Origen: ".$origen."</div>
-                    </div>
-                    <div class='col'>
-                    <div class='p-2 border bg-light'>Destino: ".$destino."</div>
-                    </div>
-                    <div class='col'>
-                    <div class='p-2 border  ".$txtTransfer."</div>
-                    </div>
-                    <div class='col'>
-                    <div class='p-2 border bg-light'>Actualización: ".$fecROW."</div>
-                    </div>
-                </div>
                 </div>";
 
              
@@ -133,6 +133,8 @@ if($userAdmin==5 || $userAdmin==1)
 
             
             <div  class="form-group" style="margin: 5px;">
+            <input type="number" required class="form-control"  jsname="quantity" autocomplete="off" value="1" 
+             id="quantity">
             <input type="text" required class="form-control"  jsname="YPqjbf" autocomplete="off" tabindex="0" aria-label="Nombre" value="" 
             dir="ltr" autofocus="" id="searchInput" onkeypress="clickPress(event)">
             <!-- <input type="button" value="SALUDAME" class="btn btn-secondary btn-sm" id="boton" onclick="saludame();"> -->
@@ -146,8 +148,14 @@ if($userAdmin==5 || $userAdmin==1)
                     if (event.keyCode == 13 && !((document.getElementById("searchInput").value).trim()==="")) {
                         console.log("<?php echo $id_cab; ?>");
                         console.log(((document.getElementById("searchInput")).value).replaceAll("'", "-").trim());
-                        saludame();
-                        document.getElementById("msgbox").value = (document.getElementById("searchInput").value).replaceAll("'", "-").trim() + "\n" + document.getElementById("msgbox").value + "\n";
+                        
+                        let ivez= (document.getElementById("quantity")).value;
+                        for (let index = 0; index < ivez; index++) {
+                            saludame();
+                            document.getElementById("msgbox").value = (document.getElementById("searchInput").value).replaceAll("'", "-").trim() + "\n" + document.getElementById("msgbox").value + "\n";    
+                        }
+                        
+                        document.getElementById("quantity").value = 1;
                         document.getElementById("searchInput").value = "";
                         document.getElementById("searchInput").focus();
                     }

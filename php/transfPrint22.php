@@ -47,7 +47,7 @@
         @page 
         {
             size: auto + 2px;   /* auto is the initial value */
-            margin: 8mm;  /* this affects the margin in the printer settings */
+            margin: 4mm;  /* this affects the margin in the printer settings */
         }
         @media print {
             .pagebreak { page-break-before: always; } /* page-break-after works, as well */
@@ -56,8 +56,8 @@
       display: grid;
       /*grid-template-columns: repeat(2, 1fr);*/
       /*grid-auto-columns: auto;*/
-      grid-template-columns: 377px;
-      grid-template-rows: 377px;
+      grid-template-columns: 400 px;
+      grid-template-rows: 397px;
       row-gap: 3px;
       column-gap: 5px;
       align-content: center;
@@ -128,24 +128,10 @@ for ($i=1; $i < $cc+1; $i++) {
     "</div>
     </br>
     <h3 ALIGN=center> N° de Cartón: ".$i . " de " . $cc."</h3>
- 
     </div>    
     </div> 
     ";
-
-}
-               
-
-
-            ?>
-            
-
-
-
-
-
-  
-	
-	</div>
+}      ?>
+ 	</div>
 </body>
 </html>

@@ -12,7 +12,7 @@ include_once "header.php";
         <div>
 
             <form class="form-inline" method="GET" >
-            
+                <h3 style="color:gray";>Solicitud de Translado:</h3>
                 <input type="text" class="form-control mb-2 mr-sm-2" 
                 id="sx"  name="sx"  placeholder="NumDoc" value="" required>
                 <input type="submit" name="find" id="find" value="Buscar 🔎" class="form-control"
@@ -20,7 +20,7 @@ include_once "header.php";
 
             </form>
         </div>
-        <h3 style="color:gray";>Solicitud de Translado:</h3>
+        
             <!-- -----------------------------------------------------------------------------------------------------------
             --------------------------------------------------------------------------------------------------------------
             --------------------------------------------------------------------------------------------------------------
@@ -60,6 +60,16 @@ if($userAdmin==5 || $userAdmin==1)
                     $origen = $cab->origen;
                     $transferencia = $cab->transferencia;
                     $destino = $cab->destino;
+                    $estado = $cab->estado;
+                    if ($cab->estado=='INI') {
+                        $estado = 'CONTEO';
+                    } else if ($cab->estado=='FIN') {
+                        $estado = 'CONTADO ';
+                    }else {
+                        $estado = 'IMPRESO';
+                    }
+                    
+                    $cartones= $cab->cartones;
                 
                 $txtTransfer = '';
                 if($transferencia==0){
@@ -78,7 +88,7 @@ if($userAdmin==5 || $userAdmin==1)
                     <div class='p-2 border bg-light'> Fecha solicitud ".$fechaSol."</div>
                     </div>
                     <div class='col'>
-                    <div class='p-2 border bg-light'>Origen: ".$origen."</div>
+                    <div class='p-2 border bg-light'>Origen:".$origen." Destino:".$destino."</div>
                     </div>
                     <div class='col'>
                     <div class='p-2 border bg-light'>Destino: ".$destino."</div>

@@ -73,7 +73,7 @@ if($userAdmin==5 || $userAdmin==1)
                 
                 $txtTransfer = '';
                 if($transferencia==0){
-                    $txtTransfer="bg-warning text-dark'> Nro.Transferencia aún NO generado";
+                    $txtTransfer="bg-warning text-dark'> Nro.Transferencia aún NO generado  <a class='btn btn-secondary btn-sm' href='refreshSoltrT.php?id=".$solicitud."'>🔁</a>";
                 }else{
                     $txtTransfer="bg-light'> Transferencia Nro.".$transferencia;
                 }
@@ -95,12 +95,15 @@ if($userAdmin==5 || $userAdmin==1)
                     </div>
                     <div class='col'>
                     <div class='p-2 border  ".$txtTransfer."</div>
+                    
                     </div>
                     <div class='col'>
                     <div class='p-2 border bg-light'>Actualización: ".$fecROW."</div>
                     </div>
                 </div>
-                </div>";
+                </div>"
+                
+                ;
 
              
            

@@ -313,6 +313,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
                             <ul class="sub-menu children dropdown-menu">     
                                 <li><i class="ti ti-dropbox"></i><a href="soltr.php">Solicitud Translado</a></li>
+                                <li><i class="fa fa-print"></i><a href="soltrL.php">Etiquetas</a></li>
                                 <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
                                 <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
                                 <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>

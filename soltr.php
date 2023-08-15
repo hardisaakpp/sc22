@@ -62,9 +62,9 @@ if($userAdmin==5 || $userAdmin==1)
                     $destino = $cab->destino;
                     $estado = $cab->estado;
                     if ($cab->estado=='INI') {
-                        $estado = 'CONTEO';
+                        $estado = "CONTEO   <a class='btn btn-secondary btn-sm' href='refreshSoltrLock.php?id=".$solicitud."'>🔒</a>";
                     } else if ($cab->estado=='FIN') {
-                        $estado = 'CONTADO ';
+                        $estado = "CERRADO  <a class='btn btn-secondary btn-sm' href='refreshSoltrUnlock.php?id=".$solicitud."'>🔓</a>";
                     }else {
                         $estado = 'IMPRESO';
                     }
@@ -91,7 +91,7 @@ if($userAdmin==5 || $userAdmin==1)
                     <div class='p-2 border bg-light'>Origen:".$origen." Destino:".$destino."</div>
                     </div>
                     <div class='col'>
-                    <div class='p-2 border bg-light'>Destino: ".$destino."</div>
+                    <div class='p-2 border bg-light'>Estado: ".$estado."</div>
                     </div>
                     <div class='col'>
                     <div class='p-2 border  ".$txtTransfer."</div>
@@ -132,15 +132,23 @@ if($userAdmin==5 || $userAdmin==1)
 
             
             <div class="col-12">
+<form action="refreshSoltrCC.php" method="post">
+    <div ALIGN="right" >  
+                Número de cartones    
+            <input type="number" id="cc" name="cc" style="border: 0; outline: none; width: 45px;" value="<?php echo $cartones;?>">      
+            
+        
+    <!--<input type=button class="btn btn-success" onClick=window.open("<?php echo "transfPrint22.php?id=" . $solicitud . "&cc="?>"+document.getElementById('cc').value,"demo","toolbar=0,status=0,"); value="Etiquetas"> -->
 
-<div ALIGN="right" >  
-            Número de cartones    
-          <input type="number" id="cc" name="cc" style="border: 0; outline: none; width: 45px;" value="1">      
-<!--<input type=button class="btn btn-success" onClick=window.open("<?php echo "transfPrint22.php?id=" . $solicitud . "&cc="?>"+document.getElementById('cc').value,"demo","toolbar=0,status=0,"); value="Etiquetas"> -->
-<a class="btn btn-primary btn-sm" style="color:white" onClick=window.open("<?php echo "php/transfPrint22.php?id=" . $solicitud . "&cc="?>"+document.getElementById('cc').value,"demo","toolbar=0,status=0,"); >Etiquetas</a>
-<a class="btn btn-secondary btn-sm" href="<?php echo "refreshSoltr.php?id=" .$solicitud ?>">Actualizar</a>
-</div>    
 
+    <input class="form-control" id='id' name='id' type="hidden" value="<?php echo  $solicitud; ?>" >  
+
+    <input type="submit" value="💾">
+    
+    <a class="btn btn-primary btn-sm" style="color:white" onClick=window.open("<?php echo "php/transfPrint22.php?id=" . $solicitud . "&cc="?>"+document.getElementById('cc').value,"demo","toolbar=0,status=0,"); >Etiquetas</a>
+    <a class="btn btn-secondary btn-sm" href="<?php echo "refreshSoltr.php?id=" .$solicitud ?>">Actualizar</a>
+    </div>    
+</form>
 
 
             <form method='post' action='download.php'>

@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
                 ////VALIDO EXISTAN EN BASE DE DATOS
                 foreach ($distinctCODE as $i => $value) {
                     $sentencia3 = $db->query("
-                    select count(*) as ROWS from Vendedores_OSLP where SlpCode=".trim($distinctCODE[$i])." and fk_emp='MT'
+                    select count(*) as ROWS from Vendedores_OSLP where SlpCode=".trim($distinctCODE[$i])." and fk_emp='CE'
                     " );
                     $regC = $sentencia3->fetchObject();
                             $XROWS=$regC->ROWS;
@@ -150,7 +150,7 @@ if (isset($_POST['submit'])) {
                         $zvalor = $sheetData[$i][3];
 
                         $tenciaq3 = $db->prepare("select id from Vendedores_OSLP
-                        where fk_emp='MT' and SlpCode=".$zcod." " );
+                        where fk_emp='CE' and SlpCode=".$zcod." " );
                           $tenciaq3->execute();
                         $asas = $tenciaq3->fetchObject();
                                 $zcode_id=$asas->id;

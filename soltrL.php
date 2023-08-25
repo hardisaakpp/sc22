@@ -1,7 +1,7 @@
 <?php
     include_once "header.php";
     //si no es admin no abre
-    if ($userAdmin!=1 && $userAdmin!=3){
+    if ($userAdmin!=1 && $userAdmin!=3  && $userAdmin!=5){
         echo ('<h4> NO TIENE ACCESO</h4>');
         
     }else{
@@ -71,14 +71,16 @@
 if ($conteo==0) {
     $sentencia = $db->prepare("
     select * 
-    from StockCab_ST
-    WHERE fecha_sol between '".$desde."' and '".$hasta."' and estado='FIN'");
+    ,(select count(*) from StockScan scan where scan.fk_id_stockCab=c.fk_id_stockCab) as scans
+    from StockCab_ST c
+    WHERE c.fecha_sol between '".$desde."' and '".$hasta."' and c.estado='FIN'");
 
 } else {
     $sentencia = $db->prepare("
-    select * 
-    from StockCab_ST
-    WHERE fecha_sol between '".$desde."' and '".$hasta."' and estado!='INI'");
+    select *
+    ,(select count(*) from StockScan scan where scan.fk_id_stockCab=c.fk_id_stockCab) as scans 
+    from StockCab_ST c
+    WHERE c.fecha_sol between '".$desde."' and '".$hasta."' and c.estado!='INI'");
 }
 
 
@@ -195,12 +197,18 @@ if ($conteo==0) {
                                     <th>DESTINO</th>
                                     <th>TRANSFERENCIA</th>
                                     <th>CARTONES</th>
+                                    <th>SCANS</th>
                                     <th>ESTADO</th>
                                     <th></th>
                                 </tr>
                 </thead>
                 <tbody>
-                <?php   foreach($rows as $citem){ ?>
+                <?php   
+                
+                $totalscans=0;
+                
+                foreach($rows as $citem){ 
+                    $totalscans=$totalscans+$citem->scans;?>
 
 
                     <tr>
@@ -211,6 +219,7 @@ if ($conteo==0) {
                                     <td><?php echo $citem->destino ?></td>
                                     <td><?php echo $citem->transferencia ?></td>
                                     <td><?php echo $citem->cartones ?></td>
+                                    <td><?php echo $citem->scans ?></td>
                                     <td><?php 
                                     if ($citem->estado=='FIN') {
                                         echo 'CERRADO';
@@ -226,6 +235,8 @@ if ($conteo==0) {
 
                                         if ($citem->transferencia>0) {
                                             echo "<input type='checkbox'/>  ";
+                                        }else {
+                                            echo "<input type='checkbox' onclick='return false' />  ";
                                         }
                                         
 
@@ -239,9 +250,9 @@ if ($conteo==0) {
                 </tbody>
             </table>
 
-
+            Scans:  <?php echo $citem->scans ?>
             <input type="button" value="🖨️ Etiquetas" onclick="GetSelected()" />
-
+            <input type="button" value=" Refrescar #Transferencias" onclick="GetSelectedTrans()" />
         </div>
     </div>
 </div>
@@ -285,6 +296,58 @@ if (message.length>0) {
     //alert(message);
     message = message.substring(0, message.length - 1);
     window.open("<?php echo 'php/transfPrint23.php?cc='?>" + message ,"demo","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no");
+
+} 
+          
+               
+       
+        //window.open('/pageaddress.html','winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
+
+        //Display selected Row data in Alert Box.
+       // alert(message);
+    }
+
+    function GetSelectedTrans() {
+        //Reference the Table.
+        var grid = document.getElementById("bootstrap-data-table");
+ 
+        //Reference the CheckBoxes in Table.
+        var checkBoxes = grid.getElementsByTagName("INPUT");
+        var message = "";
+ 
+        //Loop through the CheckBoxes.
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (!checkBoxes[i].checked) {
+                var row = checkBoxes[i].parentNode.parentNode;
+              
+                if (row.cells[5].innerHTML==0) {
+                    message += row.cells[1].innerHTML;   //solicitud
+              //  message += "-" + row.cells[6].innerHTML;   //cartones
+                
+                
+              //<a class='btn btn-secondary btn-sm' href='refreshSoltrT.php?id=".$solicitud."'>🔁</a>
+               // message += "   " + row.cells[5].innerHTML;  //transferencia
+               
+                message += ",";
+           
+}
+                
+
+
+             //   window.open("<?php echo "php/transfPrint22.php?id="?>" + row.cells[1].innerHTML + "<?php echo  "&cc="?>"+row.cells[6].innerHTML,"demo","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no");  
+            }
+            
+
+        }
+  
+
+
+if (message.length>0) {
+    //alert(message);
+    message = message.substring(0, message.length - 1);
+    //alert(message);
+    location.href ="<?php echo 'refreshSoltrTransf.php?id='?>" + message;
+    //window.open("<?php echo 'php/transfPrint23.php?cc='?>" + message ,"demo","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no");
 
 } 
           

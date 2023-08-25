@@ -137,6 +137,7 @@ $sentencia = $db->query("
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
                 <thead>
                 <tr>
+                                    <th>whsCode</th>
                                     <th>CodVendedor</th>
                                     <th>Nombre Vendedor</th>
                                     <th>Valor</th>
@@ -149,6 +150,7 @@ $sentencia = $db->query("
 
 
                     <tr>
+                        <td><?php echo $citem->whsCode ?></td>
                         <td><?php echo $citem->SlpCode ?></td>
                         <td><?php echo $citem->SlpName ?></td>
                         <td> <?php echo $citem->meta ?> </td>

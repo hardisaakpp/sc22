@@ -48,12 +48,14 @@ if (isset($_POST['submit'])) {
             $arrayANIO= array();
             $arrayMES= array();
             $arrayCODE= array();
+       
  
             for ($i=1; $i<count($sheetData); $i++) {
                 
                 $ianio = $sheetData[$i][0]; 
                 $imes =  $sheetData[$i][1]; 
                 $icod =  $sheetData[$i][2]; 
+           
                 
                 array_push($arrayANIO, $ianio);
                 array_push($arrayMES, $imes);
@@ -86,6 +88,17 @@ if (isset($_POST['submit'])) {
                 }
             }
 
+            for ($i=1; $i<count($sheetData); $i++) {
+                
+                $ILOC = $sheetData[$i][4]; 
+                if (empty($ILOC)) {
+                    echo 'Registro ' . $i+2 . ' - ERROR, LOCAL VACIO <br>';
+                    $errors++;
+                }
+             
+            };
+
+
             foreach ($distinctMES as $i => $value) {
                 if (!is_numeric($distinctMES[$i])) {
                     echo 'Registro ' . $i+2 . ' - ERROR, EL MES DEBE SER NUMERICO <br>';
@@ -110,6 +123,8 @@ if (isset($_POST['submit'])) {
                 }
             }
 
+
+
             //validaciones etapa 2 datos en base
             if ($errors==0)  {
                 ////VALIDO EXISTAN EN BASE DE DATOS
@@ -126,8 +141,6 @@ if (isset($_POST['submit'])) {
                     }
                 }
               
-
-
             }
 
           
@@ -148,6 +161,7 @@ if (isset($_POST['submit'])) {
                         $zmes = $sheetData[$i][1];
                         $zcod = $sheetData[$i][2];
                         $zvalor = $sheetData[$i][3];
+                        $zlocal = $sheetData[$i][4];
 
                         $tenciaq3 = $db->prepare("select id from Vendedores_OSLP
                         where fk_emp='CE' and SlpCode=".$zcod." " );
@@ -165,15 +179,18 @@ if (isset($_POST['submit'])) {
                                 set @fk_id_empleados=".$zcode_id.";
                             declare @valor float;
                                 set @valor=".$zvalor.";
+
+                            declare @local nvarchar(30);
+                                set @local='".$zlocal."';
                             IF EXISTS(
                             SELECT * FROM VendMetas
-                            WHERE anio = @anio AND mes = @mes AND fk_id_empleados=@fk_id_empleados
+                            WHERE anio = @anio AND mes = @mes AND fk_id_empleados=@fk_id_empleados and  whsCode=@local
                             )
                                 UPDATE VendMetas 
                                     SET meta = @valor
-                                    WHERE anio = @anio AND mes = @mes AND fk_id_empleados=@fk_id_empleados;
+                                    WHERE anio = @anio AND mes = @mes AND fk_id_empleados=@fk_id_empleados and  whsCode=@local;
                             ELSE
-                            INSERT VendMetas (fk_id_empleados,mes,anio,meta) values (@fk_id_empleados,@mes,@anio,@valor);
+                            INSERT VendMetas (fk_id_empleados,mes,anio,meta, whsCode) values (@fk_id_empleados,@mes,@anio,@valor,@local);
                             " );
                     $sentenc1->execute();
                        

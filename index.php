@@ -105,7 +105,7 @@ include_once "php/bd_StoreControl.php";
                
                <span class="login100-form-title p-b-26">
                     <h2 class="fw-bold mb-2 text-uppercase">Autenticación</h2>
-                    <p class="text-white-50 mb-5">Toma Física Aleatoria</p>
+                    <p class="text-white-50 mb-5">STORE CONTROL</p>
 			</span>
  
                 <form method="post" class="login100-form validate-form">  

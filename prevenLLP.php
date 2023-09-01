@@ -1,8 +1,8 @@
 <?php
     include_once "header.php";
     //si no es admin no abre
-   // if ($userAdmin!=1 && $userAdmin!=3 && $userAdmin!=6){
-    //    echo ('<h4> NO TIENE ACCESO</h4>');
+   // if ($userAdmin!=1 || $userId!=255){
+     //   echo ('<h4> NO TIENE ACCESO</h4>');
         
     //}else
     {
@@ -39,7 +39,7 @@ $sentencia = $db->query("
     END as 'NameMonth'
             from VendMetas  met
         join  Vendedores_OSLP  ven on met.fk_id_empleados=ven.id
-    where mes=".$mes." and anio=".$anio." and fk_emp='CE' 
+    where mes=".$mes." and anio=".$anio." and fk_emp='MT' AND whsCode not like 'RL-%' 
      ");
 
     

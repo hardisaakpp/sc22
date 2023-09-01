@@ -39,7 +39,7 @@ $sentencia = $db->query("
     END as 'NameMonth'
             from VendMetas  met
         join  Vendedores_OSLP  ven on met.fk_id_empleados=ven.id
-    where mes=".$mes." and anio=".$anio." and fk_emp='CE' 
+    where mes=".$mes." and anio=".$anio." and fk_emp='MT' AND whsCode like 'RL-%' 
      ");
 
     

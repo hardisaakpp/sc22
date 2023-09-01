@@ -8,11 +8,11 @@
 <div class="col-md-6">
     <div class="card">
         <div class="card-header">
-            <strong class="card-title">Importar Presupuestos Vendedores COSMEC</strong>
+            <strong class="card-title">Importar Presupuestos Vendedores LILI PINK</strong>
         </div>
         <div class="card-body">
             El archivo debe subirse en formato "Libro de excel 97-2003 [.xls]".
-            <form method="post" action="prevenImport.php" enctype="multipart/form-data">
+            <form method="post" action="prevenImportMT.php" enctype="multipart/form-data">
                 <div class="form-group">
                     <input name="tiendaTuremp" value='<?php echo $whsTurem; ?>' hidden>
                     <!-- <label for="exampleInputFile"><h3>Importar turnos</h3></label> -->

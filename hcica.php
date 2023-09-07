@@ -38,8 +38,9 @@ if($whsCica==0){
     
     //Consulto cajas cabeceras 
         $s1 = $db->query("
-        select * from CiCa   
-        where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."'
+        SELECT distinct c.*
+        from cica c join CiCaHitell ch on c.fecha=ch.fecha and c.caja=ch.caja
+        where c.fk_ID_almacen=".$whsCica."	and c.fecha= '".$pFecha."'
         " );
         $cajas = $s1->fetchAll(PDO::FETCH_OBJ);   
 
@@ -129,7 +130,7 @@ if($whsCica==0){
                             <div class="stat-content">
                                 <div class="text-left dib">
                             
-                                    <div class="stat-text"><?php echo $user->caja?></div>
+                                  CAJA  <div class="stat-text"><?php echo $user->caja?></div>
                                 
                                 </div>
                             </div>
@@ -196,7 +197,7 @@ if($whsCica==0){
                             <tr>
 
                                 <th>FORMA PAGO</th>
-                                <th id='v1'>VALOR SAP</th>
+                                <th id='v1'>VALOR HITELL</th>
                                 <th id='v2'>RECIBIDO</th>
                                 <th id='v3'>ONLINE</th>
                                 <th id='v4'>PINPAD</th>

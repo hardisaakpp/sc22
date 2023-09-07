@@ -76,7 +76,6 @@ if (!empty($sheetData)) {
 
     }
 
-
     for ($i=1; $i<count($sheetData); $i++) {
             $fecha = $sheetData[$i][0];
             $caja = $sheetData[$i][2];
@@ -102,7 +101,8 @@ if (!empty($sheetData)) {
             echo($mediocobro.$ingreso.' ✔️<br>');
 
         } else {
-            echo($mediocobro.$ingreso.' ➖<br>');
+            echo($mediocobro.$ingreso.' ➖<br>'); 
+           /* echo $fechaActual.'->'.$fecha;*/
           
         }     
     };

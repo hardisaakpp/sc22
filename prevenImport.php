@@ -148,7 +148,7 @@ if (isset($_POST['submit'])) {
         
             if ($errors>0) {
                 echo '<h1> ❌ CORRIJA LOS ERRORES Y VUELVA A INTENTAR </h1>
-                <a href="turempimp.php" class="btn btn-warning">OK, VOLVER</a>';
+                <a href="prevenImp.php" class="btn btn-warning">OK, VOLVER</a>';
             } else {
                 echo '<h3> 👍 Validacion de Archivo </h3>';
 

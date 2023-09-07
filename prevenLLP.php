@@ -107,7 +107,7 @@ $sentencia = $db->query("
                 </select>
                 Año
                 <input type="number" name="anio" min="2022" max="2025" id="anio" class="form-control" value="<?php echo $anio ?>" required>
-                <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="prevenL.php">	
+                <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="prevenLLP.php">	
             </div>
         </form>
         <script>

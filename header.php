@@ -58,7 +58,7 @@
     $userAdmin = $_SESSION["perfil"];
     $whsInvs = $_SESSION["whsInvs"];
     $whsTurem = $_SESSION["whsTurem"];
-    $whsCica= $_SESSION["whsCica"];
+    $whsCica= $_SESSION["whsCica"];  //tambien para preven
 
 ?>
 
@@ -178,7 +178,19 @@
                                 </ul>
                                 </li>
                                 ';
-                            } else if ($userId==255){ // TIENDA
+                            }else if ($userAdmin==2 && substr($userName, 0, 3) === "RL-" ){ // TIENDA
+                                echo '
+                                <li class="menu-item-has-children dropdown">
+                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
+                                <ul class="sub-menu children dropdown-menu">
+                                  
+                                    <li><i class="fa fa-spinner"></i><a href="prevenImpRLt.php">Cargar</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLt.php">Revisar</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenList.php">Maestro Vendedores</a></li>
+                                </ul>
+                                </li>
+                                ';
+                            }  else if ($userId==255){ // TIENDA
                                 echo '
                                 <li class="menu-item-has-children dropdown">
                                 <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>

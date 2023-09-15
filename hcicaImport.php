@@ -50,8 +50,8 @@ if (!empty($sheetData)) {
    
     for ($i=1; $i<count($sheetData); $i++) {
         $fecha = $sheetData[$i][0];
-        $ingreso = (float) str_replace(",","",(str_replace("$","",$sheetData[$i][6]))) ;
-        $mediocobro = $sheetData[$i][4];
+        $ingreso = (float) str_replace(",","",(str_replace("$","",$sheetData[$i][5]))) ;
+        $mediocobro = $sheetData[$i][3];
         if ($fecha==$fechaActual && $ingreso>0 && $mediocobro!='Efectivo - Dotación inicial') {
             $caja = $sheetData[$i][2];
             $fecA =  explode("-",$fecha);
@@ -79,9 +79,9 @@ if (!empty($sheetData)) {
     for ($i=1; $i<count($sheetData); $i++) {
             $fecha = $sheetData[$i][0];
             $caja = $sheetData[$i][2];
-            $mediocobro = $sheetData[$i][4];
-            $movimientos = $sheetData[$i][5];
-            $ingreso = (float) str_replace(",","",(str_replace("$","",$sheetData[$i][6]))) ;
+            $mediocobro = $sheetData[$i][3];
+            $movimientos = $sheetData[$i][4];
+            $ingreso = (float) str_replace(",","",(str_replace("$","",$sheetData[$i][5]))) ;
 
 
         if ($fecha==$fechaActual && $ingreso>0 && $mediocobro!='Efectivo - Dotación inicial') {
@@ -94,6 +94,9 @@ if (!empty($sheetData)) {
 
             $fechaN = $fecA[2].'-'.$fecA[1].'-'.$fecA[0];
 
+
+
+            
             $sentencia1 = $db->prepare("exec sp_CiCaH_insertLine  ?, ?, ?, ?,?, ?;" );
             $resultado1 = $sentencia1->execute([$tiendaCica, $fechaN, $caja, $mediocobro, $ingreso, $movimientos]);
 

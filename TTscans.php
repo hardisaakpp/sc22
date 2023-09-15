@@ -60,6 +60,8 @@
             </div>
             <div class="card-body">                    
                     <div class="form-group">
+                        <input type="number" required class="form-control"  jsname="quantity" autocomplete="off" value="1" 
+                        id="quantity">
                         <input type="text" placeholder="Codigo de barras" required class="form-control"  jsname="YPqjbf" autocomplete="off" tabindex="0" aria-label="Nombre" value="" 
                         maxlength="30" dir="ltr" autofocus="" id="searchInput" onkeypress="clickPress(event)">
                     </div>
@@ -149,7 +151,15 @@
      function clickPress(event) {
         if (event.keyCode == 13 && !((document.getElementById("searchInput").value).trim()==="")) {
            // console.log(<?php echo $userId ; ?>+ '  ' +((document.getElementById("searchInput")).value).replaceAll("'", "-").trim() + '  ' + <?php echo $idcab; ?>);
-            contadoradd((document.getElementById("searchInput").value).replaceAll("'", "-").trim());
+            
+           let ivez= (document.getElementById("quantity")).value;
+           for (let index = 0; index < ivez; index++) {
+            contadoradd((document.getElementById("searchInput").value).replaceAll("'", "-").trim());   
+            }
+
+
+
+            document.getElementById("quantity").value = 1;
             document.getElementById("searchInput").value = "";
             document.getElementById("searchInput").focus();
         }

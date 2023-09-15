@@ -11,7 +11,7 @@
         from StockCab c
         join Almacen a on c.FK_ID_almacen=a.id
         left join StockDet d on c.id=d.FK_id_StockCab 
-        where tipo='TT' and [date]>DATEADD(MONTH,-1,getdate())
+        where tipo='TT' and [date]>DATEADD(MONTH,-12,getdate())
         group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) 
         order by CONCAT(date,' ',left(time,5)) desc
         " );

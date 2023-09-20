@@ -15,10 +15,12 @@ $whsHorario = $_POST["whsHorario"];
 $whsTransitorio = $_POST["whsTransitorio"];
 $codTimeSoft = $_POST["codTimeSoft"];
 $perfil = $_POST["radios"];
+$email1 = $_POST["Email1"];
+$email2 = $_POST["Email2"];
 
 /*echo 
-$perfil .
-$conteo ;
+$email1 .
+$email2 ;
 */
 
 
@@ -35,7 +37,10 @@ $sentencia = $db->prepare("
             ,[fk_ID_almacen_turemp]
             ,[fk_ID_almacen_transitorio]
             ,[Timesoft_CentroCosto]
-            ,[perfil])
+            ,[perfil]
+            ,[email]
+            ,[emailSuper]
+            )
     VALUES
             (?
             ,?
@@ -46,9 +51,12 @@ $sentencia = $db->prepare("
             ,?
             ,?
             ,?
-            ,?);");
+            ,?
+            ,?
+            ,?
+        );");
 //$sentencia->bind_param('is', $userId, $oldPass); 
-$sentencia->execute([$Username, $password, $items, $conteo,$whsCierre, $whsInvs, $whsHorario, $whsTransitorio,$codTimeSoft,  $perfil ]);
+$sentencia->execute([$Username, $password, $items, $conteo,$whsCierre, $whsInvs, $whsHorario, $whsTransitorio,$codTimeSoft,  $perfil ,$email1, $email2]);
 
 $result = $sentencia->rowCount();
 

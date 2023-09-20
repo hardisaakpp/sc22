@@ -6,11 +6,12 @@
         //exit();
         }else{
 
-        $s1 = $db->query("				select id,[Admin],username,realizaConteo,articulosContar,
-        (select a.cod_almacen from Almacen a where a.id=u.fk_ID_almacen_cierre) as h1,
-        (select a.cod_almacen from Almacen a where a.id=u.fk_ID_almacen_invs) as h2,
-        (select a.cod_almacen from Almacen a where a.id=u.fk_ID_almacen_turemp) as h3,
-        (select a.cod_almacen from Almacen a where a.id=u.fk_ID_almacen_transitorio) as h4
+        $s1 = $db->query("				select id,[Admin],username,realizaConteo,articulosContar
+        --,
+        --(select a.cod_almacen from Almacen a where a.id=u.fk_ID_almacen_cierre) as h1,
+        --(select a.cod_almacen from Almacen a where a.id=u.fk_ID_almacen_invs) as h2,
+        --(select a.cod_almacen from Almacen a where a.id=u.fk_ID_almacen_turemp) as h3,
+        --(select a.cod_almacen from Almacen a where a.id=u.fk_ID_almacen_transitorio) as h4
     from users u 	" );
         $users = $s1->fetchAll(PDO::FETCH_OBJ);       
        
@@ -66,10 +67,11 @@
                         <th>Administrador</th>
                         <th>Realiza Conteo</th>
                         <th>Articulos</th>
-                        <th>CierreCaja</th>
+                        <th>Acciones</th>
+                       <!-- <th>CierreCaja</th>
                         <th>Inventarios</th>
                         <th>Horarios</th>
-                        <th>Transitorio</th>
+                        <th>Transitorio</th>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -77,14 +79,24 @@
 
 
                     <tr>
-                        <td><?php echo $user->username ?></td>
+                        <td><?php echo $user->username ?>
+                            
+                            
+
+                        </td>
                         <td><?php echo $user->Admin ?></td>
                         <td><?php echo $user->realizaConteo ?></td>
                         <td><?php echo $user->articulosContar ?></td>
-                        <td><?php echo $user->h1 ?></td>
+                        <th>
+                            
+                            <button type="button" class="btn btn-outline-success" 
+                                    onclick="window.location.href='php/delete_user.php?idcab=<?php echo $user->id ?>'"
+                                    > ❌ </button>
+                        </th>
+                      <!--  <td><?php echo $user->h1 ?></td>
                         <td><?php echo $user->h2 ?></td>
                         <td><?php echo $user->h3 ?></td>
-                        <td><?php echo $user->h4 ?></td>
+                        <td><?php echo $user->h4 ?></td>-->
 
                     </tr>
                    

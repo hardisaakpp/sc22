@@ -157,6 +157,18 @@
                         <input type="number" id="codTimeSoft" name="codTimeSoft" placeholder="Enter code" class="form-control" value='0' required>
                     </div>
         
+                  
+
+                    <div class="form-group">
+                        <label for="Email1" class="px-1  form-control-label">Email tienda</label>
+                        <input type="email" id="Email1" name="Email1" placeholder="jane.doe@example.com" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="Email2" class="px-1  form-control-label">Email supervisor</label>
+                        <input type="email" id="Email2" name="Email2" placeholder="jane.doe@example.com" class="form-control">
+                    </div>
+
+
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary btn-sm">

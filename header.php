@@ -178,7 +178,7 @@
                                 </ul>
                                 </li>
                                 ';
-                            }else if ($userAdmin==2 && substr($userName, 0, 3) === "RL-" ){ // TIENDA
+                            }else if ($userAdmin==2){ // TIENDA
                                 echo '
                                 <li class="menu-item-has-children dropdown">
                                 <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
@@ -198,6 +198,7 @@
                                   
                                     <li><i class="fa fa-spinner"></i><a href="prevenImpLP.php">Cargar LILI PINK</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLLP.php">Revisar LILI PINK</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenListC.php">Maestro Vendedores</a></li>
                                 </ul>
                                 </li>
                                 ';
@@ -209,6 +210,7 @@
                                   
                                 <li><i class="fa fa-spinner"></i><a href="prevenImpRL.php">Cargar ROLAND</a></li>
                                 <li><i class="fa fa-h-square"></i><a href="prevenLRL.php">Revisar ROLAND</a></li>
+                                <li><i class="fa fa-h-square"></i><a href="prevenListC.php">Maestro Vendedores</a></li>
                                 </ul>
                                 </li>
                                 ';
@@ -220,6 +222,7 @@
                                   
                                 <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar COSMEC</a></li>
                                 <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar COSMEC</a></li>
+                                <li><i class="fa fa-h-square"></i><a href="prevenListC.php">Maestro Vendedores</a></li>
                                 </ul>
                                 </li>
                                 ';

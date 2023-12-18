@@ -186,6 +186,7 @@
                                   
                                     <li><i class="fa fa-spinner"></i><a href="prevenImpRLt.php">Cargar</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLRLt.php">Revisar</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLm.php">Cumplimiento</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenList.php">Maestro Vendedores</a></li>
                                 </ul>
                                 </li>

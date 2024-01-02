@@ -41,6 +41,7 @@
                                
                                 <button type="button" class="btn btn-outline-success" onclick="chargeTFA();">►</button>
                                 <button type="button" class="btn btn-outline-warning" onclick="location.reload();">F5</button>
+                                <button type="button" class="btn btn-outline-warning" onclick="location.reload();">📨</button>
                                 <button type="button" class="btn btn-outline-danger" onclick="window.location.href='wllcm.php'">X</button>
                                 </li>
                             </ol>

@@ -38,6 +38,7 @@
                                 <button type="button" class="btn btn-outline-success" onclick="window.location.href='userN.php'">Nuevo</button>
                                 <button type="button" class="btn btn-outline-warning" onclick="location.reload();">F5</button>
                                 <button type="button" class="btn btn-outline-danger" onclick="window.location.href='wllcm.php'">X</button>
+                                
                                 </li>
                             </ol>
                         </div>
@@ -68,6 +69,7 @@
                         <th>Realiza Conteo</th>
                         <th>Articulos</th>
                         <th>Acciones</th>
+                        
                        <!-- <th>CierreCaja</th>
                         <th>Inventarios</th>
                         <th>Horarios</th>
@@ -88,18 +90,24 @@
                         <td><?php echo $user->realizaConteo ?></td>
                         <td><?php echo $user->articulosContar ?></td>
                         <th>
-                            
+                            <button type="button" class="btn btn-outline-success" 
+                                    onclick="window.location.href='userE.php?idcab=<?php echo $user->id ?>'"
+                                    > ✏️ </button>   
                             <button type="button" class="btn btn-outline-success" 
                                     onclick="window.location.href='php/delete_user.php?idcab=<?php echo $user->id ?>'"
                                     > ❌ </button>
+                                
                         </th>
+
+                       
                       <!--  <td><?php echo $user->h1 ?></td>
                         <td><?php echo $user->h2 ?></td>
                         <td><?php echo $user->h3 ?></td>
                         <td><?php echo $user->h4 ?></td>-->
 
                     </tr>
-                   
+                  
+                      
                 <?php } ?>   
                 </tbody>
             </table>

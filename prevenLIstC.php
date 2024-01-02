@@ -15,7 +15,7 @@
     
   
 
-    if ($userId==255 || $userId==256) { //MABELTRADING
+    if ($userId==274 || $userId==275) { //MABELTRADING
         $s1 = $db->query(" SELECT * FROM VENDEDORES_OSLP where fk_emp='MT'" );
         $whs = $s1->fetchAll(PDO::FETCH_OBJ);       
     }else {  //COSMECMAC

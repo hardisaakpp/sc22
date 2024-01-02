@@ -191,7 +191,7 @@
                                 </ul>
                                 </li>
                                 ';
-                            }  else if ($userId==255){ // TIENDA
+                            }  else if ($userId==274){ // TIENDA
                                 echo '
                                 <li class="menu-item-has-children dropdown">
                                 <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
@@ -203,7 +203,7 @@
                                 </ul>
                                 </li>
                                 ';
-                            } else if ($userId==256){ // TIENDA
+                            } else if ($userId==275){ // TIENDA
                                 echo '
                                 <li class="menu-item-has-children dropdown">
                                 <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
@@ -215,7 +215,7 @@
                                 </ul>
                                 </li>
                                 ';
-                            } else if ($userId==257){ // TIENDA
+                            } else if ($userId==276){ // TIENDA
                                 echo '
                                 <li class="menu-item-has-children dropdown">
                                 <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>

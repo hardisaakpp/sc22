@@ -40,6 +40,13 @@
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Descargar Xlsx
                         </button>
+                        <td><button type="button" class="btn btn-outline-success" 
+                                    onclick="window.location.href='php/tftToINI.php?idcab=<?php echo $idcab ?>'"
+                             > Cerrar Captura </button>  </td>
+                             <td><button type="button" class="btn btn-outline-success" 
+                                    onclick="window.location.href='tftD.php?idcab=<?php echo $idcab ?>'"
+                             > Reconteo </button>  </td>
+                     
                             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                            
                                   <input type="submit"class="dropdown-item" value="Consolidado" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=1&idcab=<?php echo $idcab ?>">
@@ -51,6 +58,9 @@
                                   <input type="submit"class="dropdown-item" value="Otros Codigos" onclick=this.form.action="TTreporteSacnsXlsx.php?ti=4&idcab=<?php echo $idcab ?>">
                                   <div class="dropdown-divider"></div>
                                   <input type="submit"class="dropdown-item" value="Scans por usuario" onclick=this.form.action="TTreporteScansUXlsx.php?idcab=<?php echo $idcab ?>">
+
+                                  <div class="dropdown-divider"></div>
+                                  <input type="submit"class="dropdown-item" value="Final Reconteo" onclick=this.form.action="TTreporteSacnsXlsxRec.php?ti=1&idcab=<?php echo $idcab ?>">
                             </div>
                         </div>
         

@@ -51,7 +51,7 @@ $resultado = $sentencia ->execute([
     $whsHorario,
     $whsTransitorio,
     $codTimeSoft,
-    $codTimeSoft,
+    $perfil,
     $email1,
     $email2,
     $id]);

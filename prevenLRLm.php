@@ -37,13 +37,22 @@ if (strncmp($userName, "RL-", 3) === 0 || strncmp($userName, "LP-", 3) === 0) {
     SUM(Q1.total) AS total,SUM(Q1.impuestos) as impuestos, 
     SUM(Q1.facturas) AS facturas, SUM(Q1.meta) as meta, SUM(Q1.Cantidad) as Cantidad
     from (
+
     --FACTURAS
     SELECT SlpCode, 
     SUM(total) AS total, SUM(impuestos) AS impuestos,
     count(total) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
-    FROM DOCS_MT
-    where year(fecha)=@anio and MONTH(fecha)=@mes  and ALMACEN=@whs
+    FROM DOCS3_MT
+    where year(fecha)=@anio and MONTH(fecha)=@mes  and ALMACEN=@whs and TIPO = 'FACTURA'
     GROUP BY ALMACEN, SlpCode 
+    UNION
+    SELECT SlpCode, 
+    SUM(total)*-1 AS total, SUM(impuestos)*-1 AS impuestos,
+    count(total) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
+    FROM DOCS3_MT
+    where year(fecha)=@anio and MONTH(fecha)=@mes  and ALMACEN=@whs and TIPO = 'NOTA CREDITO'
+    GROUP BY ALMACEN, SlpCode 
+
 
     union
     --METAS

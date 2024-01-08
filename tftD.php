@@ -82,7 +82,7 @@ $idcab = $_GET['idcab'];
                             <input type="text" placeholder="Ingrese responsable" name="responsable" id="responsableR" value="<?php echo $responsable ?>"  required>
                             <input type="text" name="estado" value="RECONTEO" hidden>
                             <input type="text" name="idcab" value="<?php echo $id_cab ?>" hidden>
-                            <input type="submit" class="btn btn-outline-success" value='Enviar RECONTEO ►' onclick=this.form.action="php/tfaSave.php"> 
+                            <input type="submit" class="btn btn-outline-success" value='Enviar RECONTEO ►' onclick=this.form.action="php/tftSave.php"> 
                         <!--
                             <button type="button" class="btn btn-outline-success" onclick="saveTFA('REC');"> 💾 </button>
                         -->

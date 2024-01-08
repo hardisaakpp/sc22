@@ -78,42 +78,39 @@
                     </div>
                     <div class="form-group">
                         <label for="password" class=" form-control-label">Password</label>
-                        <input type="password" id="password" value="<?php echo $usuarios->password ?>" name="password" placeholder="Enter Password.." class="form-control" required>
+                        <input type="password" id="password" value = "<?php echo $usuarios->password ?>" name="password" placeholder="Enter Password.." class="form-control" required>
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-3"><label class=" form-control-label">Perfil: </label></div>
                         <div class="col col-md-9">
                             <div class="form-check">
                             <div class="radio">
-                                <label for="inline-radio1" class="form-check-label ">
-                                    <input type="radio" id="padmin" name="radios" value="1" class="form-check-input" checked>Administrador 
-                                </label>
+                            <label for="inline-radio1" class="form-check-label">
+                <input type="radio" id="padmin" name="radios" value="1" class="form-check-input" <?php echo ($usuarios->perfil == 1) ? 'checked' : ''; ?>> Administrador
+            </label>
                             </div>
                             <div class="radio">
-                                <label for="inline-radio2" class="form-check-label ">
-                                    <input type="radio" id="ptienda" name="radios" value="2" class="form-check-input">Tienda
-                                </label>
+                            <label for="inline-radio2" class="form-check-label">
+                <input type="radio" id="ptienda" name="radios" value="2" class="form-check-input" <?php echo ($usuarios->perfil == 2) ? 'checked' : ''; ?>> Tienda
+            </label>
                             </div>
                             <div class="radio">
-                                <label for="inline-radio3" class="form-check-label ">
-                                    <input type="radio" id="pasisinvs" name="radios" value="4" class="form-check-input">Asis.Toma Fisicas Totales
-                                </label>
+                            <label for="inline-radio3" class="form-check-label">
+                <input type="radio" id="pasisinvs" name="radios" value="4" class="form-check-input" <?php echo ($usuarios->perfil == 4) ? 'checked' : ''; ?>> Asis.Toma Fisicas Totales
+            </label>
                             </div>
                             <div class="radio">
-                                <label for="inline-radio3" class="form-check-label ">
-                                    <input type="radio" id="pbodega" name="radios" value="5" class="form-check-input">Bodega
-                                </label>
+                            <label for="inline-radio3" class="form-check-label">
+                <input type="radio" id="pbodega" name="radios" value="5" class="form-check-input" <?php echo ($usuarios->perfil == 5) ? 'checked' : ''; ?>> Bodega
+            </label>
                             </div>
                             </div>
                         </div>
                     </div>
-
-
-
                     <div class="form-check">
                         <div class="checkbox">
                             <label for="checkbox2" class="form-check-label ">
-                                <input type="checkbox" id="conteo" name="conteo" value="<?php echo $usuarios->realizaConteo ?>" class="form-check-input"> Realiza Conteo Aleatorio
+                            <input type="checkbox" id="conteo" name="conteo" <?php echo ($usuarios->realizaConteo == "1") ? 'checked' : ''; ?> class="form-check-input"> Realiza Conteo Aleatorio
                             </label>
                         </div>
                     </div>
@@ -198,38 +195,6 @@
 
    
 
-
-<script>
-var aux=0;
-
-document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("frmUser").addEventListener('submit', validarFormulario); 
-});
-
-function validarFormulario(evento) {
-  
-    evento.preventDefault();
-    
-
-  var usuario = document.getElementById('Username').value;
-
-
-  <?php   foreach($userss as $user){ ?>
-        if ( '<?php  echo $user->username ?>' == usuario ) {
-            Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Ya esta en uso el username!'
-                    })
-                    return;
-        }            
-    <?php  } ?>
-
- this.submit();
-}
-
-
-</script>
 
       
 <!---------------------------------------------->

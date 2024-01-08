@@ -154,7 +154,7 @@ $sentencia = $db->query("
                         <td><?php echo $citem->whsCode ?></td>
                         <td><?php echo $citem->SlpCode ?></td>
                         <td><?php echo $citem->SlpName ?></td>
-                        <td> <?php echo $citem->meta ?> </td>
+                        <td> <?php echo   number_format((float)$citem->meta, 2, '.', '')  ?> </td>
                         
                     </tr>
                    

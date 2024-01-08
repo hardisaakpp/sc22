@@ -75,18 +75,26 @@ if (strncmp($userName, "RL-", 3) === 0 || strncmp($userName, "LP-", 3) === 0) {
       set @whs='".$userName."'
   
   
-  
       select Q1.SlpCode, V.SlpName,
       SUM(Q1.total) AS total,SUM(Q1.impuestos) as impuestos, 
       SUM(Q1.facturas) AS facturas, SUM(Q1.meta) as meta, SUM(Q1.Cantidad) as Cantidad
       from (
+  
       --FACTURAS
       SELECT SlpCode, 
-      SUM(total) AS total, SUM(impuestos) AS impuestos,
-      count(total) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
-      FROM DOCS_CE
-      where year(fecha)=@anio and MONTH(fecha)=@mes  and ALMACEN=@whs
+        SUM(total) AS total, SUM(impuestos) AS impuestos,
+        count(total) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
+      FROM DOCS3_CE
+      where year(fecha)=@anio and MONTH(fecha)=@mes  and ALMACEN=@whs and TIPO = 'FACTURA'
       GROUP BY ALMACEN, SlpCode 
+      UNION
+      SELECT SlpCode, 
+      SUM(total)*-1 AS total, SUM(impuestos)*-1 AS impuestos,
+      count(total) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
+      FROM DOCS3_CE
+      where year(fecha)=@anio and MONTH(fecha)=@mes  and ALMACEN=@whs and TIPO = 'NOTA CREDITO'
+      GROUP BY ALMACEN, SlpCode 
+  
   
       union
       --METAS
@@ -220,7 +228,7 @@ if (strncmp($userName, "RL-", 3) === 0 || strncmp($userName, "LP-", 3) === 0) {
                         <td><?php echo $citem->SlpName ?></td>
                         
                         <td> <?php echo $citem->total - $citem->impuestos ?> </td>
-                        <td> <?php echo $citem->meta ?> </td>
+                        <td> <?php echo    number_format((float)$citem->meta, 2, '.', '')  ?> </td>
                         <td> 
                             <div class="progress mb-2">
                                 <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: <?php 

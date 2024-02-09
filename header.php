@@ -305,7 +305,7 @@
                             </ul>
                             </li>
                             ';
-                        } else if ($userAdmin==6 ){ // INVENTARIO
+                       /* } else if ($userName==6  ){ // INVENTARIO
                             echo '
                            
 
@@ -316,7 +316,7 @@
                             </ul>
                             </li>
                             
-                            ';
+                            ';*/
 
                         } else if ($userAdmin==6 && $userName=='CONTABILIDADMT'){ // INVENTARIO
                             echo '

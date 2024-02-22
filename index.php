@@ -97,7 +97,7 @@ include_once "php/bd_StoreControl.php";
                
       </head>  
       <body>  
-           <br />  
+    
           <div class="limiter">
 		<div class="container-login100">
 		<div class="wrap-login100">

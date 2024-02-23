@@ -297,9 +297,9 @@
                                 <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
 
 
-                                <li><i class="fa fa-pencil-square-o"></i><a href="hcica.php">Cierre de Caja H</a></li>
+                              <!--  <li><i class="fa fa-pencil-square-o"></i><a href="hcica.php">Cierre de Caja H</a></li>
                                 <li><i class="fa fa-h-square"></i><a href="hcicaHu.php">Historial H</a></li>
-
+-->
 
 
                             </ul>

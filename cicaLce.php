@@ -131,7 +131,7 @@ $sentencia = $db->query("
 
                                            
                                     <button type="button" class="btn btn-outline-success" 
-                                    onclick="window.location.href='cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>'"
+                                    onclick="window.open('cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
                                     > 👁️‍🗨️ </button>                
                                         
 

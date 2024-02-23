@@ -130,10 +130,14 @@ $sentencia = $db->query("
                                     <td>
 
                                            
+                                    <!--  
+                                        <button type="button" class="btn btn-outline-success" 
+                                        onclick="window.location.href='cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>'"
+                                        > 👁️‍🗨️ </button>                
+                                    -->  
                                     <button type="button" class="btn btn-outline-success" 
-                                    onclick="window.location.href='cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>'"
-                                    > 👁️‍🗨️ </button>                
-                                        
+                                    onclick="window.open('cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
+                                    > 👁️‍🗨️ </button> 
 
                                         <?php
                                             if ($citem->cerrado==1) {

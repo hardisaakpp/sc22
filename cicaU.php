@@ -288,7 +288,7 @@ if (observacion.value.trim().length==0) {
                             <td style='display: none;'>
                                 <input name="idcicasap[]" type="number"  value="<?php echo $forpag->id ?>" >
                             </td>
-                            <td><input type="text" id="valSAP" name="forPag[]" value="<?php echo $forpag->CardName ?>" readonly></td>
+                            <td><input type="text" id="forPag" name="forPag[]" value="<?php echo $forpag->CardName ?>" readonly></td>
                             <td class="valSAP">  
                                 <input type="number" id="valSAP" name="valSAP[]" value="<?php echo $forpag->Valor; ?>" readonly>
                             </td>
@@ -477,6 +477,32 @@ if (observacion.value.trim().length==0) {
     }
 </style>
 
+<script language="javascript" type="text/javascript">
+        var tds = document.getElementById('resumentbl').getElementsByTagName('td');
+        var sum = 0.0;
+        var svalRec = 0.0;
+        var svalOnline = 0.0;
+        var svalPinpad = 0.0;
+        var svalMedianet = 0.0;
+        for(var i = 0; i < tds.length; i ++) {
+            if(tds[i].className == 'valSAP') {
+                sum += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }else if(tds[i].className == 'valRec') {
+                svalRec += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }else if(tds[i].className == 'valOnline') {
+                svalOnline += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }else if(tds[i].className == 'valPinpad') {
+                svalPinpad += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }else if(tds[i].className == 'valMedianet') {
+                svalMedianet += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
+            }
+
+        }
+        document.getElementById('resumentbl').innerHTML += '<tr class="table-secondary"><td>TOTAL:</td><td>' + sum.toFixed(2) + '</td><td>' +  svalRec.toFixed(2) +
+        '</td><td>' +  svalOnline.toFixed(2) +
+        '</td><td>' +  svalPinpad.toFixed(2) +
+        '</td><td>' +  svalMedianet.toFixed(2) +'</td></tr>';
+    </script>
 
 <!---------------------------------------------->
 <!--------------Fin Content -------------------->

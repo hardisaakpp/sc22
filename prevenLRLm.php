@@ -41,7 +41,7 @@ if (strncmp($userName, "RL-", 3) === 0 || strncmp($userName, "LP-", 3) === 0) {
     --FACTURAS
     SELECT SlpCode, 
     SUM(total) AS total, SUM(impuestos) AS impuestos,
-    count(total) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
+    SUM(Docs) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
     FROM DOCS3_MT
     where year(fecha)=@anio and MONTH(fecha)=@mes  and ALMACEN=@whs and TIPO = 'FACTURA'
     GROUP BY ALMACEN, SlpCode 
@@ -83,7 +83,7 @@ if (strncmp($userName, "RL-", 3) === 0 || strncmp($userName, "LP-", 3) === 0) {
       --FACTURAS
       SELECT SlpCode, 
         SUM(total) AS total, SUM(impuestos) AS impuestos,
-        count(total) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
+        sum(Docs) AS facturas, 0 as meta, SUM(Cantidad) as Cantidad
       FROM DOCS3_CE
       where year(fecha)=@anio and MONTH(fecha)=@mes  and ALMACEN=@whs and TIPO = 'FACTURA'
       GROUP BY ALMACEN, SlpCode 
@@ -248,6 +248,7 @@ if (strncmp($userName, "RL-", 3) === 0 || strncmp($userName, "LP-", 3) === 0) {
                                 </div>
                             </div>
                         </td>
+                       
                         <td> <?php echo $citem->facturas ?> </td>
                         <td> <?php 
                             if ($citem->facturas>0) {

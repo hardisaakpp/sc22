@@ -24,6 +24,7 @@
 $sentencia = $db->query("
     select a.id, d.fecha, concat(d.whsCode,' - ',a.nombre) as almacen,
     sum(d.valRec+ d.valOnline+ d.valPinpadOn+ d.valPinpadOff - d.Valor) as 'Diferencia',
+    sum( d.valPinpadOff ) as 'Datafast',
     (Select top 1 cerrado from CiCa cic where a.id=cic.fk_ID_almacen and d.fecha=cic.fecha) as 'cerrado'
     from CiCaSAP d join Almacen a on d.whsCode=a.cod_almacen
     where  a.fk_emp='CE' and d.fecha between '".$desde."' and '".$hasta."'
@@ -113,6 +114,7 @@ $sentencia = $db->query("
                                     <th>ID</th>
                                     <th>BODEGA</th>
                                     <th>FECHA</th>
+                                    <th>DATAFAST/MEDIANET</th>
                                     <th>DIFERENCIA</th>
                                     <th></th>
                                 </tr>
@@ -125,6 +127,7 @@ $sentencia = $db->query("
                                     <td><?php echo $citem->id ?></td>
                                     <td><?php echo $citem->almacen ?></td>
                                     <td> <?php echo $citem->fecha ?> </td>
+                                    <td> <?php echo $citem->Datafast ?> </td>
                                     <td><?php echo $citem->Diferencia ?></td>
                                     
                                     <td>

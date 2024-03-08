@@ -46,6 +46,13 @@ if ($userAdmin==6) {
     $consolidados = $s1->fetchAll(PDO::FETCH_OBJ);   
 
        
+
+    $ttvValSap =0; //variable para total
+    $ttvRec =0; 
+    $ttvOnline =0; 
+    $ttvPinPad =0; 
+    $ttvDatfast =0; 
+
 ?>
 
 
@@ -206,6 +213,52 @@ if (observacion.value.trim().length==0) {
         } else {
             row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].style.color='green';
         }
+
+       // document.getElementById("ttRec").value="HOLA";
+       // <!--alex-->
+           
+       /*
+       $ttValSap = $ttValSap + $forpag->Valor;
+            $ttvRec = $ttvRec+ $forpag->valRec; 
+            $ttvOnline = $ttvOnline $forpag->valOnline; 
+            $ttPinPad = $ttPinPad + $forpag->valPinpadOn;
+            $ttvDatfast = $ttvDatfast +$forpag->valPinpadOff ; 
+
+*/
+
+
+       var tabla = document.getElementById("resumentbl");
+        var filas = tabla.getElementsByTagName("tr");
+
+
+        var xRECIBIDO = 0;
+        var xONLINE = 0;
+        var xDATAF = 0
+        
+        for (var i = 0; i < filas.length-1; i++) {
+            var celdas = filas[i].getElementsByTagName("td");
+            for (var j = 2; j < celdas.length; j++) {
+                var input = celdas[j].querySelector("input");
+                if (input) {
+                    var valor = input.value;
+                    console.log("Valor del input en fila " + (i + 1) + ", columna " + (j + 1) + ": " + valor);
+
+                if ((j + 1)==4) {
+                    xRECIBIDO = xRECIBIDO  + parseFloat(valor);
+                } else if((j + 1)==5)  {
+                    xONLINE = xONLINE  + parseFloat(valor);
+                }else if((j + 1)==9)  {
+                    xDATAF = xDATAF  + parseFloat(valor);
+                }
+
+                }
+            }
+        }
+
+        document.getElementById("ttvRec").value=xRECIBIDO;
+        document.getElementById("ttvOnline").value=xONLINE;
+        document.getElementById("ttvDatfast").value=xDATAF;
+ 
     };
 
 </script>
@@ -283,6 +336,12 @@ if (observacion.value.trim().length==0) {
                     <tbody id="ajuste">
                         <?php 
                             foreach($consolidados as $forpag){
+                                    $ttvValSap = $ttvValSap + $forpag->Valor;
+                                    $ttvRec = $ttvRec+ $forpag->valRec; 
+                                    $ttvOnline = $ttvOnline + $forpag->valOnline; 
+                                    $ttvPinPad = $ttvPinPad + $forpag->valPinpadOn;
+                                    $ttvDatfast = $ttvDatfast +$forpag->valPinpadOff ; 
+
                         ?>
                         <tr>
                             <td style='display: none;'>
@@ -346,7 +405,7 @@ if (observacion.value.trim().length==0) {
                             <?php   
                             }
                             ?>
-
+                           
 
                             
 
@@ -373,6 +432,41 @@ if (observacion.value.trim().length==0) {
                         
                         </tr>
                         <?php } ?>
+
+
+                        <!--  $ttvValSap = $ttvValSap + $forpag->Valor;
+                                    $ttvRec = $ttvRec+ $forpag->valRec; 
+                                    $ttvOnline = $ttvOnline + $forpag->valOnline; 
+                                    $ttvPinPad = $ttvPinPad + $forpag->valPinpadOn;
+                                    $ttvDatfast = $ttvDatfast +$forpag->valPinpadOff ; 
+                            -->
+                        <tr class="table-secondary"><td>TOTAL:</td>
+                            
+                            <td>
+                                <input type="text"  value="<?php echo $ttvValSap ?>" readonly>
+                            </td>
+                            <td>
+                                <input type="text" value="<?php echo $ttvRec ?>" name="ttvRec" id="ttvRec" readonly>
+                            </td>
+                            <td>
+                                <input type="text" value="<?php echo $ttvOnline ?>" name="ttvOnline" id="ttvOnline" readonly>
+                            </td>
+                            <td>
+                                <input type="text"  value="<?php echo $ttvPinPad ?>" readonly>
+                            </td>
+                            <td>
+                                <input type="text" value="<?php echo $ttvDatfast ?>" name="ttvDatfast" id="ttvDatfast" readonly>
+                            </td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+
+                      <!--      <td>' +  svalRec.toFixed(2) +
+        '</td><td>' +  svalOnline.toFixed(2) +
+        '</td><td>' +  svalPinpad.toFixed(2) +
+        '</td><td>' +  svalMedianet.toFixed(2) +'</td></tr>';-->
+
                         
                     </tbody>
                 </table>
@@ -476,33 +570,6 @@ if (observacion.value.trim().length==0) {
     background: transparent;
     }
 </style>
-
-<script language="javascript" type="text/javascript">
-        var tds = document.getElementById('resumentbl').getElementsByTagName('td');
-        var sum = 0.0;
-        var svalRec = 0.0;
-        var svalOnline = 0.0;
-        var svalPinpad = 0.0;
-        var svalMedianet = 0.0;
-        for(var i = 0; i < tds.length; i ++) {
-            if(tds[i].className == 'valSAP') {
-                sum += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
-            }else if(tds[i].className == 'valRec') {
-                svalRec += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
-            }else if(tds[i].className == 'valOnline') {
-                svalOnline += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
-            }else if(tds[i].className == 'valPinpad') {
-                svalPinpad += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
-            }else if(tds[i].className == 'valMedianet') {
-                svalMedianet += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
-            }
-
-        }
-        document.getElementById('resumentbl').innerHTML += '<tr class="table-secondary"><td>TOTAL:</td><td>' + sum.toFixed(2) + '</td><td>' +  svalRec.toFixed(2) +
-        '</td><td>' +  svalOnline.toFixed(2) +
-        '</td><td>' +  svalPinpad.toFixed(2) +
-        '</td><td>' +  svalMedianet.toFixed(2) +'</td></tr>';
-    </script>
 
 <!---------------------------------------------->
 <!--------------Fin Content -------------------->

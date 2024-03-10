@@ -107,10 +107,10 @@ if (isset($_POST['submit'])) {
                 elseif (empty($distinctMES[$i])) {
                     echo 'Registro ' . $i+2 . ' - ERROR, MES VACIO <br>';
                     $errors++;
-                } /*elseif ($distinctMES[$i]<>3) {
+                }elseif ($distinctMES[$i]<>3) {
                     echo 'Registro ' . $i+2 . ' - ERROR, EL VALOR MES ESTA FUERA DEL RANGO PERMITIDO (MARZO) <br>';
                     $errors++;
-                }*/
+                }
             }
 
             foreach ($distinctCODE as $i => $value) {

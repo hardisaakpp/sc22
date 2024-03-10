@@ -102,8 +102,8 @@ if (isset($_POST['submit'])) {
                 elseif (empty($distinctANIO[$i])) {
                     echo 'Registro ' . $i+2 . ' - ERROR, AÑO VACIO <br>';
                     $errors++;
-                }elseif ($distinctANIO[$i]<>2023) {
-                    echo 'Registro ' . $i+2 . ' - ERROR, EL AÑO ESTA FUERA DEL RANGO PERMITIDO (2023) <br>';
+                }elseif ($distinctANIO[$i]<>2024) {
+                    echo 'Registro ' . $i+2 . ' - ERROR, EL AÑO ESTA FUERA DEL RANGO PERMITIDO (2024) <br>';
                     $errors++;
                 }
             }
@@ -127,10 +127,10 @@ if (isset($_POST['submit'])) {
                 elseif (empty($distinctMES[$i])) {
                     echo 'Registro ' . $i+2 . ' - ERROR, MES VACIO <br>';
                     $errors++;
-                }/*elseif ($distinctMES[$i]<>3) {
+                }elseif ($distinctMES[$i]<>3) {
                     echo 'Registro ' . $i+2 . ' - ERROR, EL VALOR MES ESTA FUERA DEL RANGO PERMITIDO (MARZO) <br>';
                     $errors++;
-                }*/
+                }
             }
 
             foreach ($distinctCODE as $i => $value) {

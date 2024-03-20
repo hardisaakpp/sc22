@@ -252,7 +252,8 @@
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Horarios</a>
                             <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-spinner"></i><a href="turempY2.php">Resumen Turnos</a></li>
+                                <li><i class="fa fa-spinner"></i><a href="turempY2.php">Reporte Turnos/mes</a></li>
+                                <li><i class="fa fa-spinner"></i><a href="turempY3.php">Reporte Turnos/dia</a></li>
                                 <li><i class="fa fa-eye"></i><a href="turempL.php">Maestro Horarios</a></li>
                             </ul>
                             </li>

@@ -185,7 +185,8 @@
                                 <ul class="sub-menu children dropdown-menu">
                                   
                                     <li><i class="fa fa-spinner"></i><a href="prevenImpRLt.php">Cargar</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLt.php">Revisar</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLt.php">Revisar Metas</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLmDAY.php">Ventas Día/Asesor</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLRLm.php">Cumplimiento</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenList.php">Maestro Vendedores</a></li>
                                 </ul>

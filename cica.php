@@ -41,7 +41,7 @@ if ($pFecha==date('Y-m-d')) {
     $sentencia = $db->query("
         
     EXEC sp_cica_sincSAPSingle '". $whsCica ."', '". $pFecha ."';
-    delete from CiCaSAP where whsCode='". $whsCica ."' and caja='NE' and fecha='". $pFecha ."';
+    delete from CiCaSAP where caja='NE' and fecha='". $pFecha ."';
     EXEC sp_cica_createCajas '". $whsCica ."', '". $pFecha ."';
     
     " );

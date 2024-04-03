@@ -189,6 +189,12 @@
                                     <li><i class="fa fa-h-square"></i><a href="prevenLRLmDAY.php">Ventas Día/Asesor</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLRLm.php">Cumplimiento</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenList.php">Maestro Vendedores</a></li>
+
+
+
+                                    <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar COSMEC</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar COSMEC</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenListC.php">Maestro Vendedores COSMEC</a></li>
                                 </ul>
                                 </li>
                                 ';

@@ -163,41 +163,69 @@
                         }  
 
                         //PRESUPUESTOS TFA
-                
+                        $LP = "LP";
+                        $RL = "RL";
+                        $OUT = "OUT";
+                        $YHD = "YHD";
+
                             if ($userAdmin==1 ) { // ADMIN   
                                 echo '
                                 <li class="menu-item-has-children dropdown">
                                 <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
                                 <ul class="sub-menu children dropdown-menu">
+
                                     <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar COSMEC</a></li>
                                     <li><i class="fa fa-spinner"></i><a href="prevenImpRL.php">Cargar ROLAND</a></li>
                                     <li><i class="fa fa-spinner"></i><a href="prevenImpLP.php">Cargar LILI PINK</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar COSMEC</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLRL.php">Revisar ROLAND</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLLP.php">Revisar LILI PINK</a></li>
+                                
+                                
                                 </ul>
                                 </li>
                                 ';
                             }else if ($userAdmin==2){ // TIENDA
-                                echo '
-                                <li class="menu-item-has-children dropdown">
-                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
-                                <ul class="sub-menu children dropdown-menu">
-                                  
+
+                                if ( substr($userName, 0, strlen($RL)) === $RL || substr($userName, 0, strlen($OUT)) === $OUT || substr($userName, 0, strlen($YHD)) === $YHD  ) {
+                                    echo '<li class="menu-item-has-children dropdown">
+                                    <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
+                                    <ul class="sub-menu children dropdown-menu">
                                     <li><i class="fa fa-spinner"></i><a href="prevenImpRLt.php">Cargar</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLRLt.php">Revisar Metas</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLRLmDAY.php">Ventas Día/Asesor</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenLRLm.php">Cumplimiento</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="prevenList.php">Maestro Vendedores</a></li>
+                                     </ul>
+                                </li>';
+                                } else   if (substr($userName, 0, strlen($LP)) === $LP  ) {
+                                    echo '<li class="menu-item-has-children dropdown">
+                                    <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
+                                    <ul class="sub-menu children dropdown-menu">
+                                    <li><i class="fa fa-spinner"></i><a href="prevenImpRLt.php">Cargar</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLt.php">Revisar Metas</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLmDAY.php">Ventas Día/Asesor</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLm.php">Cumplimiento</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="prevenList.php">Maestro Vendedores</a></li>       
+                                    </ul>
+                                </li>';
+                                        } else {
+                                            echo '
+                                            <li class="menu-item-has-children dropdown">
+                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
+                                <ul class="sub-menu children dropdown-menu">
+                                <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar COSMEC</a></li>
+                                <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar COSMEC</a></li>
+                                <li><i class="fa fa-h-square"></i><a href="prevenListC.php">Maestro Vendedores COSMEC</a></li>
+                                            </ul>
+                                </li>';
+                                        
+                                }
+                               
 
 
 
-                                    <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar COSMEC</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar COSMEC</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenListC.php">Maestro Vendedores COSMEC</a></li>
-                                </ul>
-                                </li>
-                                ';
+
                             }  else if ($userId==274){ // TIENDA
                                 echo '
                                 <li class="menu-item-has-children dropdown">
@@ -292,27 +320,44 @@
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
+                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
                             </ul>
                             </li>
                             ';
                         } else if ($userAdmin==2){ // TIENDA
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cica.php">Cierre de Caja</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+
+                              if (substr($userName, 0, strlen($LP)) === $LP  ) {
+                                echo ' <li class="menu-item-has-children dropdown">
+                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                <ul class="sub-menu children dropdown-menu">
+    
+                                    <li><i class="fa fa-pencil-square-o"></i><a href="hcica.php">Cierre de Caja H</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="hcicaHu.php">Historial H</a></li>
+ 
+    
+    
+                                </ul>
+                                </li>';
+                                    } else {
+                                        echo '
+                                        <li class="menu-item-has-children dropdown">
+                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                        <ul class="sub-menu children dropdown-menu">
+                                            <li><i class="fa fa-pencil-square-o"></i><a href="cica.php">Cierre de Caja</a></li>
+                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+            
+            
+          
+            
+            
+                                        </ul>
+                                        </li>';
+                                    
+                            }
+                           
 
 
-                              <!--  <li><i class="fa fa-pencil-square-o"></i><a href="hcica.php">Cierre de Caja H</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="hcicaHu.php">Historial H</a></li>
--->
-
-
-                            </ul>
-                            </li>
-                            ';
                        /* } else if ($userName==6  ){ // INVENTARIO
                             echo '
                            
@@ -331,16 +376,11 @@
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
+                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT-SAP)</a></li>
+                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
                             </ul>
                             </li>
 
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
-                            </ul>
-                            </li>
                             
                             ';
                         }else if ($userAdmin==6 && $userName=='CONTABILIDADCE'){ // INVENTARIO

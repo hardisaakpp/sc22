@@ -35,7 +35,7 @@ group by d.fecha, d.whsCode,a.id,a.nombre
                 <div class="col-sm-4">
                     <div class="page-header float-left">
                         <div class="page-title">
-                            <h1>TOMAS FISICAS ALEATORIAS</h1>
+                            <h1>CIERRES DE CAJA</h1>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,40 @@
-<?php include_once "header.php" ?>
+<?php include_once "header.php" ;
+
+
+
+//$pFecha= Date('2023-06-14') ;
+//$pFecha= Date('Y-m-d') ; 
+$pdia = date("j");
+
+//HOY
+
+if ($pdia>10) {
+
+
+    
+?>
+
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-header">
+            <strong class="card-title">Importar Presupuestos Vendedores</strong>
+        </div>
+        <div class="card-body">
+            ✋ Solo puede cargar los primeros 10 días del mes. ✋</br>
+        </div>
+    </div>
+</div>
+
+<?php 
+}else{
+    ?>
+
 
 
 
 <br>
+
+
 
 
 <div class="col-md-6">
@@ -26,7 +58,9 @@
 
 
 
+<?php 
+}
 
 
 
-<?php include_once "footer.php" ?>
+include_once "footer.php" ?>

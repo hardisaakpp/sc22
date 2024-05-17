@@ -139,6 +139,10 @@ $sentencia = $db->query("
                                     onclick="window.open('cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
                                     > 👁️‍🗨️ </button> 
 
+                                    <button type="button" class="btn btn-outline-success" 
+                                    onclick="window.open('cicaRELOAD.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
+                                    > 🔄️ </button> 
+
                                         <?php
                                             if ($citem->cerrado==1) {
                                                 ?>
@@ -155,6 +159,9 @@ $sentencia = $db->query("
                                                 echo "🔓 Cerrar</button> ";
                                             }
                                         ?>
+
+                                           
+
 
                                     </td>
                                 </tr>
@@ -201,40 +208,41 @@ $sentencia = $db->query("
                 uno.innerText = "🔒 Abrir";
                 
             }
-//alert(row.name );
-        // alert(id);
-       //    row.closest('tr').remove();
+                //alert(row.name );
+                // alert(id);
+            //    row.closest('tr').remove();
         }
 
-    function delTD(id,fecha) {
-        
-        var parametros = 
-            {
-                "id" : id,
-                "fecha" : fecha
-            };
+    function delTD(id,fecha) 
+        {
+            
+            var parametros = 
+                {
+                    "id" : id,
+                    "fecha" : fecha
+                };
 
-            $.ajax({
-                data: parametros,
-                url: 'php/cicaUnlock.php',
-                type: 'GET',
-                async: false,
-                success: function(data){
-                    //row.closest('tr').remove();
-                    Swal.fire({
-                    position: 'top-end',
-                    icon: 'info',
-                    title: 'Se actualizo correctamente',
-                    showConfirmButton: false,
-                    timer: 1500
-                    })
+                $.ajax({
+                    data: parametros,
+                    url: 'php/cicaUnlock.php',
+                    type: 'GET',
+                    async: false,
+                    success: function(data){
+                        //row.closest('tr').remove();
+                        Swal.fire({
+                        position: 'top-end',
+                        icon: 'info',
+                        title: 'Se actualizo correctamente',
+                        showConfirmButton: false,
+                        timer: 1500
+                        })
 
-                },
-                error: function(){
-                    console.log('error de conexion - revisa tu red');
-                }
-            });
-    }
+                    },
+                    error: function(){
+                        console.log('error de conexion - revisa tu red');
+                    }
+                });
+        }
 </script>
       
 <?php  

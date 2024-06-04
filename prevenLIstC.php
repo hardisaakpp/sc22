@@ -1,10 +1,10 @@
 <?php
     include_once "header.php";
     //si no es admin no abre
-    if($userAdmin<>0){
+    /*if($userAdmin<>0){
         echo ('ACCESO DENEGADO');
         exit();
-        }
+        }*/
 
 
     $emp='ALL';

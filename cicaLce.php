@@ -136,7 +136,9 @@ $sentencia = $db->query("
                                     <button type="button" class="btn btn-outline-success" 
                                     onclick="window.open('cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
                                     > 👁️‍🗨️ </button>                
-                                        
+                                    <button type="button" class="btn btn-outline-success" 
+                                    onclick="window.open('cicaRELOAD.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
+                                    > 🔄️ </button> 
 
                                         <?php
                                             if ($citem->cerrado==1) {

@@ -140,7 +140,7 @@ $sentencia = $db->query("
                                     > 👁️‍🗨️ </button> 
 
                                     <?php
-                            if ($citem->fecha>date("Y-m-d", strtotime("-15 days"))) {
+                            if ($citem->fecha>date("Y-m-d", strtotime("-30 days"))) {
                                 ?>
                                     <button type="button" class="btn btn-outline-success" 
                                     onclick="window.open('cicaRELOAD.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"

@@ -22,13 +22,14 @@ if($whsCica==0 && $userAdmin==2 ){
        $fk_ID_almacen = $TEMP1->fk_ID_almacen;
         $fecha = $TEMP1->fecha;
 
-        $estado = $TEMP1->status;
-        $cerrado=0;
-if ($estado=='INI') {
+        //$estado = $TEMP1->status;
+        $cerrado = $TEMP1->cerrado;
+        //$cerrado=0;
+/*if ($estado=='INI') {
     $cerrado=0;
 } else {
     $cerrado=1;
-}
+}*/
 
        // $cerrado = $TEMP1->cerrado;
         $responsable = $TEMP1->responsable;
@@ -44,7 +45,7 @@ if ($userAdmin==6) {
 }
 
 
-      echo $caja . $fecha  ;
+    //  echo $caja . $fecha  ;
 
 
     $s1 = $db->query("
@@ -234,9 +235,9 @@ if (observacion.value.trim().length==0) {
         <div class="card-header">
             <strong> <?php 
                 if ($cerrado==1) {
-                    echo $caja."  [".$fecha."] 🔒";
+                    echo "Caja".$caja."  [".$fecha."] 🔒";
                 } else {
-                    echo $caja."  [".$fecha."] 🔓";
+                    echo "Caja".$caja."  [".$fecha."] 🔓";
                 }
                 
             

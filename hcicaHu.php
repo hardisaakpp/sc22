@@ -17,7 +17,7 @@
         WHEN QHI.ValHitell IS NULL THEN 'NULL'
         ELSE c.[status]
     END AS [status]
-    
+    , c.cerrado
 from cica c join Almacen ac on c.fk_ID_almacen=ac.id
 left join (
         select h.fecha, a.id as id_alm, sum(h.Valor) as ValHitell
@@ -104,16 +104,12 @@ AND  aC.id=?
 
                                     <td><?php 
                                     
-                                    if ($citem->status=='INI') {
-                                        echo 'REGISTRADO';
-                                    } else if ($citem->status=='FIN') {
-                                        echo 'ENVIADO 📬';
-                                    }else if ($citem->status=='REV') {
-                                        echo 'REVISADO 👍';
+                                    if ($citem->cerrado==1) {
+                                        echo '🔒 Cerrado';
                                     }else {
-                                        echo 'NULL ❗';
+                                        echo '🔓 Abierto';
                                     }
-                                    
+
                                    ?></td>
 
                                     <td><?php echo $citem->DifTienda  ?></td>

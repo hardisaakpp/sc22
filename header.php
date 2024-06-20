@@ -163,7 +163,7 @@
                         }  
 
                         //PRESUPUESTOS TFA
-                        $LP = "LP";
+                        $LP = "LP"; $SAL = "SAL";
                         $RL = "RL";
                         $OUT = "OUT";
                         $YHD = "YHD";
@@ -341,7 +341,20 @@
     
                                 </ul>
                                 </li>';
-                                    } else {
+                                    } else  if (substr($userName, 0, strlen($SAL)) === $SAL  ) {
+                                        echo ' <li class="menu-item-has-children dropdown">
+                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                        <ul class="sub-menu children dropdown-menu">
+            
+                                            <li><i class="fa fa-pencil-square-o"></i><a href="hcica.php">Cierre de Caja H</a></li>
+                                            <li><i class="fa fa-h-square"></i><a href="hcicaHu.php">Historial H</a></li>
+                                            <li><i class="fa fa-pencil-square-o"></i><a href="cica.php">Cierre de Caja</a></li>
+                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+            
+            
+                                        </ul>
+                                        </li>';
+                                            } else {
                                         echo '
                                         <li class="menu-item-has-children dropdown">
                                         <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
@@ -391,6 +404,7 @@
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
+                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaLhce.php">Cierres de caja (CE-HITELL)</a></li>
                             </ul>
                             </li>
                             ';

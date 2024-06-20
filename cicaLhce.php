@@ -25,8 +25,8 @@ $sentencia = $db->query("
     select a.id, d.fecha, concat(d.whsCode,' - ',a.nombre) as almacen,
     sum(d.valRec+ d.valOnline+ d.valPinpadOn+ d.valPinpadOff - d.Valor) as 'Diferencia',
     (Select top 1 cerrado from CiCa cic where a.id=cic.fk_ID_almacen and d.fecha=cic.fecha) as 'cerrado'
-    from CiCaSAP d join Almacen a on d.whsCode=a.cod_almacen
-    where a.fk_emp='MT' and d.fecha between '".$desde."' and '".$hasta."'
+    from CiCaHitell d join Almacen a on d.whsCode=a.cod_almacen
+    where a.fk_emp='CE' and d.fecha between '".$desde."' and '".$hasta."'
     group by d.fecha, d.whsCode,a.id,a.nombre
      ");
 
@@ -81,7 +81,7 @@ $sentencia = $db->query("
                 Rango fecha
                 <input type="date" name="desde" id="desde" class="form-control" value="<?php echo $desde ?>" required>
                 <input type="date" name="hasta" id="hasta" class="form-control" value="<?php echo $hasta ?>" required>
-                <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="cicaL.php">	
+                <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="cicaLhce.php">	
             </div>
         </form>
 
@@ -135,22 +135,12 @@ $sentencia = $db->query("
                                         onclick="window.location.href='cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>'"
                                         > 👁️‍🗨️ </button>                
                                     -->  
+
+                                   
                                     <button type="button" class="btn btn-outline-success" 
-                                    onclick="window.open('cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
+                                    onclick="window.open('hcica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
                                     > 👁️‍🗨️ </button> 
 
-                                    <?php
-                            if ($citem->fecha>date("Y-m-d", strtotime("-15 days"))) {
-                                ?>
-                                    <button type="button" class="btn btn-outline-success" 
-                                    onclick="window.open('cicaRELOAD.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
-                                    > 🔄️ </button> 
-                            <?php
-                                       
-                                    }
-                                ?>
-
-                                    
                                         <?php
                                             if ($citem->cerrado==1) {
                                                 ?>
@@ -167,9 +157,6 @@ $sentencia = $db->query("
                                                 echo "🔓 Cerrar</button> ";
                                             }
                                         ?>
-
-                                           
-
 
                                     </td>
                                 </tr>
@@ -216,41 +203,40 @@ $sentencia = $db->query("
                 uno.innerText = "🔒 Abrir";
                 
             }
-                //alert(row.name );
-                // alert(id);
-            //    row.closest('tr').remove();
+//alert(row.name );
+        // alert(id);
+       //    row.closest('tr').remove();
         }
 
-    function delTD(id,fecha) 
-        {
-            
-            var parametros = 
-                {
-                    "id" : id,
-                    "fecha" : fecha
-                };
+    function delTD(id,fecha) {
+        
+        var parametros = 
+            {
+                "id" : id,
+                "fecha" : fecha
+            };
 
-                $.ajax({
-                    data: parametros,
-                    url: 'php/cicaUnlock.php',
-                    type: 'GET',
-                    async: false,
-                    success: function(data){
-                        //row.closest('tr').remove();
-                        Swal.fire({
-                        position: 'top-end',
-                        icon: 'info',
-                        title: 'Se actualizo correctamente',
-                        showConfirmButton: false,
-                        timer: 1500
-                        })
+            $.ajax({
+                data: parametros,
+                url: 'php/cicaUnlock.php',
+                type: 'GET',
+                async: false,
+                success: function(data){
+                    //row.closest('tr').remove();
+                    Swal.fire({
+                    position: 'top-end',
+                    icon: 'info',
+                    title: 'Se actualizo correctamente',
+                    showConfirmButton: false,
+                    timer: 1500
+                    })
 
-                    },
-                    error: function(){
-                        console.log('error de conexion - revisa tu red');
-                    }
-                });
-        }
+                },
+                error: function(){
+                    console.log('error de conexion - revisa tu red');
+                }
+            });
+    }
 </script>
       
 <?php  

@@ -7,7 +7,7 @@ $fec = $_GET["fec"];
 
 
 
-$sentencia = $db->prepare("update cica set [status]='FIN' where CiCa.fecha=? and CiCa.fk_ID_almacen=? ;");
+$sentencia = $db->prepare("update cica set [status]='FIN', cerrado=1 where CiCa.fecha=? and CiCa.fk_ID_almacen=? ;");
 $sentencia->execute([$fec, $whsCica ]);
 
 $result = $sentencia->rowCount();

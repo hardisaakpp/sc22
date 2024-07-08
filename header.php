@@ -316,11 +316,31 @@
 
                         }  
                 //CIERRES DE CAJA-->
-                        if ($userAdmin==1) { // ADMIN   
+
+                                         /* <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
+                                <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (MT PRUEBAS)</a></li>*/
+                        
+                        
+                        if ( $userName=='RL-CCI') { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
+        
+
+                                 <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="cicaHu.php">Historial</a></li>
+                        
+                            </ul>
+                            </li>
+                            ';
+                        } else if ($userAdmin==1) { // ADMIN   
+                            echo '
+                            <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                            <ul class="sub-menu children dropdown-menu">
+      
+
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
@@ -361,7 +381,9 @@
                                         <ul class="sub-menu children dropdown-menu">
                                             <li><i class="fa fa-pencil-square-o"></i><a href="cica.php">Cierre de Caja</a></li>
                                             <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+
             
+ 
             
           
             
@@ -372,6 +394,8 @@
                             }
                            
 
+                            /* <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja (PRUEBA)</a></li>
+                             <li><i class="fa fa-h-square"></i><a href="cichu.php">Historial (PRUEBA)</a></li>*/
 
                        /* } else if ($userName==6  ){ // INVENTARIO
                             echo '

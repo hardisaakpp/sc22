@@ -35,7 +35,7 @@ if($whsCica==0){
 }else{
 
     $auxCAJA=0;
-echo $whsCica ."-". $pFecha ;
+//echo $whsCica ."-". $pFecha ;
 //if ($pFecha==date('Y-m-d')) {
   //  date('Y-m-d', strtotime('yesterday'))
     if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {

@@ -179,7 +179,7 @@ on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode
                                     <button type="button" class="btn btn-outline-success" 
                                     onclick="window.open('cic.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
                                     > 👁️‍🗨️ </button> 
-
+<!--
                                     <?php
                             if ($citem->fecha>date("Y-m-d", strtotime("-30 days"))) {
                                 ?>
@@ -191,7 +191,7 @@ on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode
                                     }
                                 ?>
 
-                                    
+                                -->  
                                         <?php
                                             if ($citem->cerrado==1) {
                                                 ?>

@@ -26,7 +26,7 @@ $sentencia = $db->query("
     sum(d.valRec+ d.valOnline+ d.valPinpadOn+ d.valPinpadOff - d.Valor) as 'Diferencia',
     (Select top 1 cerrado from CiCa cic where a.id=cic.fk_ID_almacen and d.fecha=cic.fecha) as 'cerrado'
     from CiCaSAP d join Almacen a on d.whsCode=a.cod_almacen
-    where a.fk_emp='MT' and d.fecha between '".$desde."' and '".$hasta."'
+    where a.fk_emp='MT' and d.fecha between '".$desde."' and '".$hasta."' and d.whsCode <> 'RL-CCI' and d.whsCode not like 'LP-%' and d.whsCode not like 'YHD-%'
     group by d.fecha, d.whsCode,a.id,a.nombre
      ");
 

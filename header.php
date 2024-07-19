@@ -429,7 +429,7 @@
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT-SAP)</a></li>
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
+                                <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (HITELL)</a></li>
                             </ul>
                             </li>
 

@@ -35,8 +35,10 @@ if($whsCica==0){
 }else{
 
     $auxCAJA=0;
-
+echo $whsCica ."-". $pFecha ;
 //if ($pFecha==date('Y-m-d')) {
+  //  date('Y-m-d', strtotime('yesterday'))
+    if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {
    // echo "mismo dia!";  ///solo actualiza si es el mismo dia
     $sentencia = $db->query("
         
@@ -49,7 +51,7 @@ EXEC [sp_cicUs_pass_pinpad] '". $whsCica ."', '". $pFecha ."';
     
     " );
     $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
-//}
+}
 
 
 

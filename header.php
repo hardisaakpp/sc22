@@ -321,7 +321,7 @@
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (MT PRUEBAS)</a></li>*/
                         
                         
-                        if ( $userName=='RL-CCI') { // ADMIN   
+                        if ( $userName=='RL-CCI'  ) { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
@@ -329,7 +329,20 @@
         
 
                                  <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="cicaHu.php">Historial</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial</a></li>
+                        
+                            </ul>
+                            </li>
+                            ';
+                        } else   if ( substr($userName, 0, strlen($LP)) === $LP ) { // ADMIN   
+                            echo '
+                            <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                            <ul class="sub-menu children dropdown-menu">
+        
+
+                                 <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial</a></li>
                         
                             </ul>
                             </li>

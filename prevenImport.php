@@ -107,8 +107,8 @@ if (isset($_POST['submit'])) {
                 elseif (empty($distinctMES[$i])) {
                     echo 'Registro ' . $i+2 . ' - ERROR, MES VACIO <br>';
                     $errors++;
-                }elseif ($distinctMES[$i]<>5) {
-                    echo 'Registro ' . $i+2 . ' - ERROR, EL VALOR MAYO) <br>';
+                }elseif ($distinctMES[$i]<>7) {
+                    echo 'Registro ' . $i+2 . ' - ERROR, EL VALOR (JULIO) <br>';
                     $errors++;
                 }
             }

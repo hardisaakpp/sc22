@@ -321,7 +321,7 @@
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (MT PRUEBAS)</a></li>*/
                         
                         
-                        if ( $userName=='RL-CCI'  ) { // ADMIN   
+                        if ( $userName=='RL-CCI' || $userName=='RL-REC2'  ) { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>

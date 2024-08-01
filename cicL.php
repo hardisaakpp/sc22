@@ -59,7 +59,9 @@ SELECT [fecha]
 ,sum([valPinpadOff]) as [valPinpadOff]
 FROM [dbo].[cicUs]
 
-where fecha between '".$desde."' and '".$hasta."'
+where fecha between '".$desde."' and '".$hasta."'  
+and (whsCode like 'RL-%' OR whsCode like 'OUT-%')
+ and  (whsCode not like 'LP-%' and whsCode not like 'YHD-%')
 group by [fecha]
 ,[whsCode]
 

@@ -321,16 +321,14 @@
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (MT PRUEBAS)</a></li>*/
                         
                         
-                        if ( $userName=='RL-CCI' || $userName=='RL-REC2'  ) { // ADMIN   
+                        //if ( $userName=='RL-CCI' || $userName=='RL-REC2'   || $userName=='RL-QSN' || $userName=='RL-CON') { // ADMIN   
+                        if ( substr($userName, 0, strlen($OUT)) === $OUT  || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
-        
-
                                  <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial</a></li>
-                        
                             </ul>
                             </li>
                             ';
@@ -339,11 +337,8 @@
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
-        
-
                                  <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
                                     <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial</a></li>
-                        
                             </ul>
                             </li>
                             ';
@@ -352,8 +347,6 @@
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
-      
-
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
                                 <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>

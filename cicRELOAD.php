@@ -35,21 +35,21 @@ if($whsCica==0){
 }else{
 
     $auxCAJA=0;
-
+//echo $whsCica ."-". $pFecha ;
 //if ($pFecha==date('Y-m-d')) {
-   // echo "mismo dia!";  ///solo actualiza si es el mismo dia
-  /*  $sentencia = $db->query("
-    EXEC sp_cic_sincSAPSingle_45D '". $whsCica ."', '". $pFecha ."';
-    EXEC sp_cic_createCajas '". $whsCica ."', '". $pFecha ."';
-    " );
-*/
-    $sentencia = $db->query("
-    EXEC sp_cic_sincSAPSingle'". $whsCica ."', '". $pFecha ."';
-    EXEC sp_cic_createCajas '". $whsCica ."', '". $pFecha ."';
-    " );
-
-    $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
-//}
+  //  date('Y-m-d', strtotime('yesterday'))
+  //  if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {
+        // echo "mismo dia!";  ///solo actualiza si es el mismo dia
+        //--delete from cicSAP where caja='NE' and fecha='". $pFecha ."';
+        $sentencia = $db->query("
+        EXEC sp_cic_sincSAPSingle_45D '". $whsCica ."', '". $pFecha ."';
+        
+        EXEC sp_cic_createCajas '". $whsCica ."', '". $pFecha ."';
+        EXEC sp_cicUs_create '". $whsCica ."', '". $pFecha ."';
+        EXEC [sp_cicUs_pass_pinpad] '". $whsCica ."', '". $pFecha ."';  
+        " );
+        $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
+//    }
 
 
 
@@ -66,26 +66,109 @@ if($whsCica==0){
        $almacenCica = $TEMPa1->cod_almacen;
        $nomealmacenCica = $TEMPa1->nombre;
 
+       $s2 = $db->query(" select top 1 status,cerrado from CiC where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."' " );
+       $stat = $s2->fetchObject();
+
+       $estado= $stat->cerrado;  ///seteo estado 66664
+
 
     $s1 = $db->query("
-    select * from CiC 
+    select * from cic 
     where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."'
     " );
     $cajas = $s1->fetchAll(PDO::FETCH_OBJ);   
 
     $sentencia = $db->query("      
+   
+    
+      select q1.id as almacen, q1.fecha, q1.CardName as forPag, Q1.valSAP,  q2.[valRec]
+			  ,q2.[valOnline]
+			  ,q2.[valPinpadOn] as valPinpad
+			  ,q2.[valPinpadOff] as valMedianet 
+			   , ( (valRec) +(valPinpadOff)+ (valPinpadOn)+(valOnline)-(valSAP)) as 'Diferencia'
+			  from
+	(
     select 
-            c.CardName as 'forPag'
+       c.fecha,c.whsCode,a.id,
+           CASE 
+        WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
+        WHEN c.CardName LIKE '%VISA' THEN 'Visa'
+        WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
+        WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
+		WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
+        WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
+        WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
+        WHEN c.CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
+		WHEN c.CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+        ELSE c.CardName
+    END  as CardName
             , sum(Valor) as 'valSAP'
-            , sum(valRec) as 'valRec'
+         /*   , sum(valRec) as 'valRec'
             , sum(valOnline) as 'valOnline'
             , sum(valPinpadOn) as 'valPinpad'
             , sum(valPinpadOff) as 'valMedianet'
             , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
+*/
+        from cicSAP c join Almacen a on a.cod_almacen=c.whsCode
+        where c.origen not like 'H'  and a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
+        group by a.id,
+         (
+		   CASE 
+        WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
+        WHEN c.CardName LIKE '%VISA' THEN 'Visa'
+        WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
+        WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
+		WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
+        WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
+        WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
+        WHEN c.CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
+		WHEN c.CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+        ELSE c.CardName
+    END  
+		 ) , c.fecha,c.whsCode
+	)q1
+	 join
+	(
+		SELECT [fecha]
+			  ,[whsCode]
+			  , CASE 
+				WHEN CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
+				WHEN CardName LIKE '%VISA' THEN 'Visa'
+				WHEN CardName LIKE '%MASTERCARD' THEN 'MasterCard'
+				WHEN CardName LIKE '%DISCOVER' THEN 'Diners'
+				WHEN CardName LIKE '%DINERS' THEN 'Diners'
+				WHEN CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
+				WHEN CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
+				WHEN CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
+				WHEN CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+				ELSE CardName
+			END   as CardName
+			  ,sum([valRec]) as [valRec]
+			  ,sum([valOnline]) as [valOnline]
+			  ,sum([valPinpadOn]) as [valPinpadOn]
+			  ,sum([valPinpadOff]) as [valPinpadOff]
+		  FROM [dbo].[cicUs]
+		  group by [fecha]
+			  ,[whsCode]
+			  , CASE 
+				WHEN CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
+				WHEN CardName LIKE '%VISA' THEN 'Visa'
+				WHEN CardName LIKE '%MASTERCARD' THEN 'MasterCard'
+				WHEN CardName LIKE '%DISCOVER' THEN 'Diners'
+				WHEN CardName LIKE '%DINERS' THEN 'Diners'
+				WHEN CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
+				WHEN CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
+				WHEN CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
+				WHEN CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+				ELSE CardName
+			END 
+		) q2
+		on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode and q1.CardName=q2.CardName
 
-        from CiCSAP c join Almacen a on a.cod_almacen=c.whsCode
-        where a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
-        group by c.CardName" );
+
+
+
+    " );
     $consolidados = $sentencia->fetchAll(PDO::FETCH_OBJ);
        
 ?>
@@ -142,7 +225,7 @@ if($whsCica==0){
             <div class="card-body">
                 <div class="stat-widget-five">
                     <div class="stat-icon dib flat-color-3">
-                    <a href="cicaU.php?id=<?php echo $user->id?>">
+                    <a href="cicU.php?id=<?php echo $user->id?>">
                         <i class="pe-7s-browser"></i>
                         </a>
                     </div>
@@ -158,7 +241,36 @@ if($whsCica==0){
         </div>
     </div>
 
-<?php } ?> 
+<?php } 
+
+//si esta en estado abierto muestra la opcion cargar
+if ($estado==0) {  ?>
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+        
+            <div class="card-body">
+            
+                        
+                            <form method="post" action="hcicImport.php" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input name="tiendaTuremp" value='<?php echo $whsCica; ?>' hidden>
+                                    <input name="pFecha" value='<?php echo $pFecha; ?>' hidden>
+                                    <!-- <label for="exampleInputFile"><h3>Importar turnos</h3></label> -->
+                                    <input type="file" accept=".xlsx" name="file" class="form-control" id="exampleInputFile" required>
+                                
+                                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-secondary btn-lg" >
+                    <i class="fa fa-upload"></i>&nbsp; CARGAR CIERRE HITELL
+                </button>
+            </div>
+            </form>
+        </div>
+    </div>
+<?php }
+
+?> 
 
     
 
@@ -227,7 +339,7 @@ if($whsCica==0){
                 </div>
                 <div class="card-footer">
 
-                    <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "cicaPrint.php?id=" . $auxCAJA ?>","demo","toolbar=0,status=0,")>
+                    <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "cicPrint.php?id=" . $auxCAJA ?>","demo","toolbar=0,status=0,")>
                         <i class="fa fa-print"></i>&nbsp; Imprimir
                     </button>
                 </div>

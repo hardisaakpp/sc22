@@ -41,12 +41,13 @@ if($whsCica==0){
   //  if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {
         // echo "mismo dia!";  ///solo actualiza si es el mismo dia
         //--delete from cicSAP where caja='NE' and fecha='". $pFecha ."';
+        // EXEC [sp_cicUs_pass_pinpad] '". $whsCica ."', '". $pFecha ."';  
         $sentencia = $db->query("
         EXEC sp_cic_sincSAPSingle_45D '". $whsCica ."', '". $pFecha ."';
         
         EXEC sp_cic_createCajas '". $whsCica ."', '". $pFecha ."';
         EXEC sp_cicUs_create '". $whsCica ."', '". $pFecha ."';
-        EXEC [sp_cicUs_pass_pinpad] '". $whsCica ."', '". $pFecha ."';  
+       
         " );
         $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
 //    }

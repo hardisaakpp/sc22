@@ -28,7 +28,7 @@ $sentencia = $db->query("
 
 
 select q1.id , q1.fecha, q1.almacen
-, ( (valRec) +(valPinpadOff)+ (valPinpadOn)+(valOnline)-(valSAP)) as 'Diferencia'
+, ( (valRec) +(valPinpadOff)+ (q1.valPinpadOn)+(valOnline)-(valSAP)) as 'Diferencia'
 ,
 q1.cerrado
 from
@@ -37,6 +37,7 @@ select
 c.fecha,c.whsCode,a.id,concat(a.cod_almacen,'-',a.nombre) as almacen,
 (Select top 1 cerrado from CiC cic where a.id=cic.fk_ID_almacen and c.fecha=cic.fecha) as 'cerrado',
 sum(Valor) as 'valSAP'
+, sum(valPinpadOn) as 'valPinpadOn'
 /*   , sum(valRec) as 'valRec'
 , sum(valOnline) as 'valOnline'
 , sum(valPinpadOn) as 'valPinpad'

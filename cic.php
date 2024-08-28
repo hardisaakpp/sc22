@@ -237,6 +237,7 @@ if($whsCica==0){
                         <div class="text-left dib">
                        
                             <div class="stat-text"><?php echo $user->caja?></div>
+                            <div><?php echo $user->responsable."-".$user->observacion?></div>
                          
                         </div>
                     </div>
@@ -353,7 +354,6 @@ if ($estado==0) {  ?>
 
 
     </div>
-
 
 
 

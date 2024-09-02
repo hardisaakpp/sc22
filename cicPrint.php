@@ -29,52 +29,54 @@
         $sentencia = $db->query("      
         
         
+    
       select q1.id as almacen, q1.fecha, q1.CardName as forPag, Q1.valSAP,  q2.[valRec]
 			  ,q2.[valOnline]
-			  ,q2.[valPinpadOn] as valPinpad
+			  ,q1.[valPinpadOn] as valPinpadOn
 			  ,q2.[valPinpadOff] as valMedianet 
-			   , ( (valRec) +(valPinpadOff)+ (valPinpadOn)+(valOnline)-(valSAP)) as 'Diferencia'
+			   , ( (q2.valRec) +(q2.valPinpadOff)+ (q1.valPinpadOn)+(q2.valOnline)-(q1.valSAP)) as 'Diferencia'
 			  from
-	(
-    select 
-       c.fecha,c.whsCode,a.id,
-           CASE 
-        WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
-        WHEN c.CardName LIKE '%VISA' THEN 'Visa'
-        WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
-        WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
-		WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
-        WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
-        WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-        WHEN c.CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
-		WHEN c.CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
-        ELSE c.CardName
-    END  as CardName
-            , sum(Valor) as 'valSAP'
-         /*   , sum(valRec) as 'valRec'
-            , sum(valOnline) as 'valOnline'
-            , sum(valPinpadOn) as 'valPinpad'
-            , sum(valPinpadOff) as 'valMedianet'
-            , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
-*/
-        from cicSAP c join Almacen a on a.cod_almacen=c.whsCode
-        where c.origen not like 'H'  and a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
-        group by a.id,
-         (
-		   CASE 
-        WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
-        WHEN c.CardName LIKE '%VISA' THEN 'Visa'
-        WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
-        WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
-		WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
-        WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
-        WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-        WHEN c.CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
-		WHEN c.CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
-        ELSE c.CardName
-    END  
-		 ) , c.fecha,c.whsCode
-	)q1
+            (
+            select 
+            c.fecha,c.whsCode,a.id,
+                    CASE 
+                        WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
+                        WHEN c.CardName LIKE '%VISA' THEN 'Visa'
+                        WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
+                        WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
+                        WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
+                        WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
+                        WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
+                        WHEN c.CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
+                        WHEN c.CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+                        ELSE c.CardName
+                    END  as CardName
+                    , sum(Valor) as 'valSAP'
+                    , sum(valPinpadOn) as 'valPinpadOn'
+                /*   , sum(valRec) as 'valRec'
+                    , sum(valOnline) as 'valOnline'
+                    , sum(valPinpadOn) as 'valPinpadOn'
+                    , sum(valPinpadOff) as 'valMedianet'
+                    , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
+        */
+                from cicSAP c join Almacen a on a.cod_almacen=c.whsCode
+                where c.origen not like 'H'  and a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
+                group by a.id,
+                (
+                CASE 
+                WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
+                WHEN c.CardName LIKE '%VISA' THEN 'Visa'
+                WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
+                WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
+                WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
+                WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
+                WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
+                WHEN c.CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
+                WHEN c.CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+                ELSE c.CardName
+            END  
+                ) , c.fecha,c.whsCode
+            )q1
 	 join
 	(
 		SELECT [fecha]
@@ -93,7 +95,7 @@
 			END   as CardName
 			  ,sum([valRec]) as [valRec]
 			  ,sum([valOnline]) as [valOnline]
-			  ,sum([valPinpadOn]) as [valPinpadOn]
+			  ,0 as [valPinpadOn]
 			  ,sum([valPinpadOff]) as [valPinpadOff]
 		  FROM [dbo].[cicUs]
 		  group by [fecha]
@@ -112,6 +114,7 @@
 			END 
 		) q2
 		on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode and q1.CardName=q2.CardName
+
 
         
         " );
@@ -232,7 +235,7 @@
                         <td class="valSAP"><?php echo $forpag->valSAP; ?></td>
                         <td class="valRec"><?php echo $forpag->valRec; ?></td>
                         <td class="valOnline"><?php echo $forpag->valOnline; ?></td>
-                        <td class="valPinpad"><?php echo $forpag->valPinpad; ?></td>
+                        <td class="valPinpad"><?php echo $forpag->valPinpadOn; ?></td>
                         <td class="valMedianet"><?php echo $forpag->valMedianet; ?></td>
                         <td class="Diferencia"><?php echo $forpag->Diferencia; ?></td>
                     </tr>

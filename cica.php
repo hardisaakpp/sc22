@@ -38,10 +38,11 @@ if($whsCica==0){
 
 if ($pFecha==date('Y-m-d')) {
    // echo "mismo dia!";  ///solo actualiza si es el mismo dia
+   // delete from CiCaSAP where caja='NE' and fecha='". $pFecha ."';
     $sentencia = $db->query("
         
     EXEC sp_cica_sincSAPSingle '". $whsCica ."', '". $pFecha ."';
-    delete from CiCaSAP where caja='NE' and fecha='". $pFecha ."';
+   
     EXEC sp_cica_createCajas '". $whsCica ."', '". $pFecha ."';
     
     " );

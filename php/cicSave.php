@@ -4,7 +4,7 @@ include_once "bd_StoreControl.php";
 $id = $_POST['id'];  //ID de cica
 $ccaja = $_POST['ccaja'];  //whscode
 $fec = $_POST['fec'];
-
+$fk_ID_almacen=$_POST['fk_ID_almacen'];
 //parametros CICA
 $cresponsable = $_POST['crespons'];
 $cobservacion = $_POST['cobs'];
@@ -14,7 +14,8 @@ $cobservacion = $_POST['cobs'];
                 SET [responsable] = ?
                 ,[observacion] = ?
                 WHERE [fecha] = '" . $fec . "'
-                and [caja] = '" . $ccaja . "' ");
+                and [caja] = '" . $ccaja . "' 
+                and [fk_ID_almacen] = '" . $fk_ID_almacen . "' ");
     $resultado1 = $sentencia1->execute([$cresponsable,$cobservacion]);
 
 /*

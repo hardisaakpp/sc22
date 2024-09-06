@@ -302,6 +302,7 @@ if (observacion.value.trim().length==0) {
                 <input class="form-control" name='id' type="hidden" value="<?php echo $id; ?>" >        
                 <input class="form-control" name='ccaja' type="hidden" value="<?php echo $caja; ?>" >        
                 <input class="form-control" name='fec' type="hidden" value="<?php echo $fecha; ?>">        
+                <input class="form-control" name='fk_ID_almacen' type="hidden" value="<?php echo $fk_ID_almacen; ?>">        
                 <!---------cabecera------------>
                 
                 <?php
@@ -313,6 +314,12 @@ if (observacion.value.trim().length==0) {
                     <div style="width: 80%; float:right">
                         <input class="form-control" placeholder="Observaciones" id='Observaciones'  name='cobs' maxlength="400" type="text" value="<?php echo $observacion; ?>">
                     </div>
+
+
+
+
+
+
                 <?php
                 }else{
                 ?>

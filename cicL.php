@@ -27,10 +27,10 @@ $sentencia = $db->query("
 
 
 
-select q1.id , q1.fecha, q1.almacen
+select q1.id , q1.fecha, q1.almacen, q4.DifCarga, q4.SAPB1, q4.StoreControl
 , ( (valRec) +(valPinpadOff)+ (q1.valPinpadOn)+(valOnline)-(valSAP)) as 'Diferencia'
 ,
-q1.cerrado
+q1.cerrado, q3.numDif
 from
 (
 select 
@@ -68,9 +68,55 @@ group by [fecha]
 
 ) q2
 on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode 
+join
+	(
+			select  cs.fecha, cs.whsCode,
+		--( ISNULL((cu.valRec), 0 ) +ISNULL((cu.valPinpadOff), 0 )+ ISNULL((cs.valPinpadOn), 0 ) + ISNULL((cu.valOnline), 0 )-ISNULL((cs.Valor), 0 )) as 'Diferencia' ,	
+		 sum(
+			CASE
+				WHEN ((cu.valRec) +(cu.valPinpadOff)+ (cs.valPinpadOn)+(cu.valOnline)-(cs.Valor))<>0 
+				OR ((cu.valRec) +(cu.valPinpadOff)+ (cs.valPinpadOn)+(cu.valOnline)-(cs.Valor)) IS NULL THEN 1
+				ELSE 0
+			END
+			) as numDif
+		FROM [dbo].[cicUs] cu
+			full outer join cicSAP cs on cu.fecha=cs.fecha and cs.whsCode=cu.whsCode and cs.caja=cu.caja and cs.CardName=cu.CardName
+		where  cs.origen<>'H' 
+			and cs.fecha between '".$desde."' and '".$hasta."'  
+			and (cs.whsCode like 'RL-%' OR cs.whsCode like 'OUT-%')
+			and  (cs.whsCode not like 'LP-%' and cs.whsCode not like 'YHD-%')
+		group by  cs.fecha, cs.whsCode
 
+	)q3
+on q1.fecha=q3.fecha and q1.whsCode=q3.whsCode 
+left join
+    (
+        select fecha,whsCode,
+            sum(CASE
+                    WHEN (origen = 'H' or origen = 'S')  THEN Valor
+                    ELSE 0
+                END 
+                -
+                CASE
+                    WHEN (origen = 'M' or origen = 'S')  THEN Valor
+                    ELSE 0
+                END )
+                AS 'DifCarga',
 
-
+            sum(CASE
+                WHEN (origen = 'H' or origen = 'S')  THEN Valor
+                ELSE 0
+            END )
+                AS 'SAPB1',
+            sum(CASE
+                WHEN (origen = 'M' or origen = 'S')  THEN Valor
+                ELSE 0
+            END )
+                AS 'StoreControl'
+        from cicSAP 
+        group by fecha,whsCode
+    )q4
+on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode 
 
      ");
 
@@ -157,8 +203,10 @@ on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode
                                     <th>ID</th>
                                     <th>BODEGA</th>
                                     <th>FECHA</th>
-                                    <th>DIFERENCIA</th>
+                                    <th>DIFERENCIA CARGADA EN SAP</th>
+                                    <th>DIFERENCIA CIERRE</th>
                                     <th></th>
+                                    <th>LINEAS DIF.</th>
                                 </tr>
                 </thead>
                 <tbody>
@@ -169,30 +217,31 @@ on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode
                                     <td><?php echo $citem->id ?></td>
                                     <td><?php echo $citem->almacen ?></td>
                                     <td> <?php echo $citem->fecha ?> </td>
+                                    <td> <?php echo $citem->DifCarga ?> </td>
                                     <td><?php echo $citem->Diferencia ?></td>
                                     
                                     <td>
 
                                            
-                                    <!--  
-                                        <button type="button" class="btn btn-outline-success" 
-                                        onclick="window.location.href='cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>'"
-                                        > 👁️‍🗨️ </button>                
-                                    -->  
-                                    <button type="button" class="btn btn-outline-success" 
-                                    onclick="window.open('cic.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
-                                    > 👁️‍🗨️ </button> 
+                                        <!--  
+                                            <button type="button" class="btn btn-outline-success" 
+                                            onclick="window.location.href='cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>'"
+                                            > 👁️‍🗨️ </button>                
+                                        -->  
+                                                <button type="button" class="btn btn-outline-success" 
+                                                onclick="window.open('cic.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
+                                                > 👁️‍🗨️ </button> 
 
-                                    <?php
-                            if ($citem->fecha>date("Y-m-d", strtotime("-30 days"))) {
-                                ?>
-                                    <button type="button" class="btn btn-outline-success" 
-                                    onclick="window.open('cicRELOAD.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
-                                    > 🔄️ </button> 
-                            <?php
-                                       
-                                    }
-                                ?>
+                                                <?php
+                                        if ($citem->fecha>date("Y-m-d", strtotime("-30 days"))) {
+                                            ?>
+                                                <button type="button" class="btn btn-outline-success" 
+                                                onclick="window.open('cicRELOAD.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
+                                                > 🔄️ </button> 
+                                        <?php
+                                                
+                                                }
+                                            ?>
 
                                 
                                         <?php
@@ -216,6 +265,8 @@ on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode
 
 
                                     </td>
+                                
+                                    <td><?php echo $citem->numDif ?></td>
                                 </tr>
                    
                 <?php } ?>   

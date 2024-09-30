@@ -16,8 +16,13 @@
     $rows = $sentencia->fetchAll();
     
     if (count($rows)==0) {
-        echo ('<h4> ¡No se ha generado toma física para el día de hoy! </h4>');
+        echo ('<h4> ¡No se ha generado toma física para el día de hoy 😱! </h4>');
     } else {
+
+
+   
+
+
 
     //cabecera 
         $sent = $db->prepare("SELECT top 1 s.* , tfa.responsable
@@ -50,6 +55,21 @@
             $s3->execute([$id_cab]);
         $cerrados = $s3->fetchAll(PDO::FETCH_OBJ);           
     
+
+ //log ingreso
+ $sentencia = $db->prepare("
+ INSERT INTO [dbo].[StockLog] ([fk_id_stockCab] ,[id_user] ,[accion])
+     VALUES
+         (?
+         ,?
+         ,'Consulta TFA diaria');");
+//$sentencia->bind_param('is', $userId, $oldPass); 
+$sentencia->execute([$id_cab, $userId]);
+
+
+
+
+
         ?>
 
 <!-- Breadcrumbs-->

@@ -30,20 +30,21 @@ $sentencia = $db->query("
 select q1.id , q1.fecha, q1.almacen, q4.DifCarga, q4.SAPB1, q4.StoreControl
 , ( (valRec) +(valPinpadOff)+ (q1.valPinpadOn)+(valOnline)-(valSAP)) as 'Diferencia'
 ,
-q1.cerrado, q3.numDif
+q1.cerrado, q3.numDif, q1.revisado
 from
 (
 select 
-c.fecha,c.whsCode,a.id,concat(a.cod_almacen,'-',a.nombre) as almacen,
-(Select top 1 cerrado from CiC cic where a.id=cic.fk_ID_almacen and c.fecha=cic.fecha) as 'cerrado',
-sum(Valor) as 'valSAP'
-, sum(valPinpadOn) as 'valPinpadOn'
-/*   , sum(valRec) as 'valRec'
-, sum(valOnline) as 'valOnline'
-, sum(valPinpadOn) as 'valPinpad'
-, sum(valPinpadOff) as 'valMedianet'
-, ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
-*/
+    c.fecha,c.whsCode,a.id,concat(a.cod_almacen,'-',a.nombre) as almacen,
+    (Select top 1 cerrado from CiC cic where a.id=cic.fk_ID_almacen and c.fecha=cic.fecha) as 'cerrado',
+    (Select top 1 revisado from CiC cic where a.id=cic.fk_ID_almacen and c.fecha=cic.fecha) as 'revisado',
+    sum(Valor) as 'valSAP'
+    , sum(valPinpadOn) as 'valPinpadOn'
+    /*   , sum(valRec) as 'valRec'
+    , sum(valOnline) as 'valOnline'
+    , sum(valPinpadOn) as 'valPinpad'
+    , sum(valPinpadOff) as 'valMedianet'
+    , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
+    */
 from cicSAP c join Almacen a on a.cod_almacen=c.whsCode
 where c.fecha > DATEADD(MONTH,-2,GETDATE()) and c.origen not like 'H'  
 group by a.id,
@@ -222,12 +223,6 @@ on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode
                                     
                                     <td>
 
-                                           
-                                        <!--  
-                                            <button type="button" class="btn btn-outline-success" 
-                                            onclick="window.location.href='cica.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>'"
-                                            > 👁️‍🗨️ </button>                
-                                        -->  
                                                 <button type="button" class="btn btn-outline-success" 
                                                 onclick="window.open('cic.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
                                                 > 👁️‍🗨️ </button> 
@@ -261,6 +256,24 @@ on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode
                                             }
                                         ?>
 
+                                        <?php
+                                            if ($citem->Diferencia<>0 || $citem->DifCarga<>0) {
+                                                if ($citem->revisado==1) {
+                                                    ?>
+                                                        <button type="button" class="btn btn-outline-success"  id='<?php echo 'r'.$citem->fecha.$citem->id ?>'
+                                                        onclick ="revisado($(this),<?php echo $citem->id ?>,'<?php echo $citem->fecha ?>',<?php echo $citem->revisado ?>)">
+                                                        
+                                                    <?php
+                                                    echo "✅</button> ";
+                                                } else {
+                                                    ?>
+                                                        <button type="button" class="btn btn-outline-success" id='<?php echo 'r'.$citem->fecha.$citem->id ?>'
+                                                        onclick ="revisado($(this),<?php echo $citem->id ?>,'<?php echo $citem->fecha ?>',<?php echo $citem->revisado ?>)">
+                                                    <?php
+                                                    echo "❌</button> ";
+                                                }
+                                            }
+                                        ?>
                                            
 
 
@@ -315,6 +328,27 @@ on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode
                 // alert(id);
             //    row.closest('tr').remove();
         }
+        function revisado(row,id,fecha,cerrado)
+        { 
+          
+            delCH(id,fecha);
+            //console.log(id + ' -> ', fecha);
+            
+            var uno = document.getElementById('r'+fecha+id);
+           // valor?uno.innerText = "off":uno.innerText = "on";
+           // valor=!valor ;
+           //console.log(uno.innerText);
+            if (uno.innerText=='✅') {
+                uno.innerText = "❌";
+            } else {
+                uno.innerText = "✅";
+                
+            }
+                //alert(row.name );
+                // alert(id);
+            //    row.closest('tr').remove();
+        }
+
 
     function delTD(id,fecha) 
         {
@@ -328,6 +362,37 @@ on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode
                 $.ajax({
                     data: parametros,
                     url: 'php/cicUnlock.php',
+                    type: 'GET',
+                    async: false,
+                    success: function(data){
+                        //row.closest('tr').remove();
+                        Swal.fire({
+                        position: 'top-end',
+                        icon: 'info',
+                        title: 'Se actualizo correctamente',
+                        showConfirmButton: false,
+                        timer: 1500
+                        })
+
+                    },
+                    error: function(){
+                        console.log('error de conexion - revisa tu red');
+                    }
+                });
+        }
+
+        function delCH(id,fecha) 
+        {
+            
+            var parametros = 
+                {
+                    "id" : id,
+                    "fecha" : fecha
+                };
+
+                $.ajax({
+                    data: parametros,
+                    url: 'php/cicCheck.php',
                     type: 'GET',
                     async: false,
                     success: function(data){

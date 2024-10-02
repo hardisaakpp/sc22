@@ -236,6 +236,82 @@ if ($pFecha==date('Y-m-d')) {
 
     </div>
 
+<!------------------>
+<div class="card">
+            <div class="card-header"><strong>ADJUNTOS</strong></div>
+            <div class="card-body card-block">
+ 
+                <!--tabla-->
+                <div class="panel panel-primary">
+                   
+                    <div class="panel-body">
+                
+                <table class="table">
+                <thead>
+                    <tr>
+                    <th width="30%">Caja</th>
+      <th width="60%">Nombre del Archivo</th>
+      <th width="10%">Descargar</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+    <?php   foreach($cajas as $user){ 
+    $auxCAJA=$user->id;
+  
+    ?>
+
+
+
+
+
+
+    <?php 
+         $path = "films/" . $auxCAJA;
+        ?> 
+    
+        
+                <?php
+
+
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+
+                $archivos = scandir($path);
+                $num=0;
+                for ($i=2; $i<count($archivos); $i++)
+                {$num++;
+                ?>
+                <p>  
+                </p>
+                        
+                <tr>
+      <th scope="row"><?php echo $user->caja;?></th>
+      <td><?php echo $archivos[$i]; ?></td>
+      <td><a
+      href="<?php echo $path . "/" . $archivos[$i]; ?>" download="<?php echo $archivos[$i]; ?>"
+      > 💾  </a>  </td>
+      </tr>
+                <?php }?> 
+                <?php } ?> 
+
+                </tbody>
+                </table>
+                </div>
+                </div>
+                <!-- Fin tabla--> 
+            </div>
+        </div>
+
+
+
+
+
+
+
+
 
 
 

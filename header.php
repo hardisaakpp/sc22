@@ -125,11 +125,22 @@
 
                 <!--//INVENTARIOS TFA-->
                     <?php 
-                        if ($userAdmin==1) { // ADMIN   
+                        if ($userAdmin==1 && $userName <> 'SISTEMAS') { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
                             <ul class="sub-menu children dropdown-menu">
+                                <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
+                                <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
+                            </ul>
+                            </li>
+                            ';
+                        } else   if ( $userName === 'SISTEMAS') { // ADMIN   
+                            echo '
+                            <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                <li><i class="fa fa-spinner"></i><a href="tfaRe.php">Log Tomas aleatorias</a></li>
                                 <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
                                 <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
                             </ul>

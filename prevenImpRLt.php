@@ -8,7 +8,7 @@ $pdia = date("j");
 
 //HOY
 
-if ($pdia>20) {
+if ($pdia>30) {
 
 
     
@@ -20,7 +20,7 @@ if ($pdia>20) {
             <strong class="card-title">Importar Presupuestos Vendedores</strong>
         </div>
         <div class="card-body">
-            ✋ Solo puede cargar los primeros 10 días del mes. ✋</br>
+            ✋ Solo puede cargar los  10 días del mes. ✋</br>
         </div>
     </div>
 </div>

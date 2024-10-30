@@ -304,7 +304,7 @@ if ($estado==0) {  ?>
                             <tr>
 
                                 <th>FORMA PAGO</th>
-                                <th id='v1'>VALOR SAP</th>
+                                <th id='v1'>TOTAL CIERRE</th>
                                 <th id='v2'>RECIBIDO</th>
                                 <th id='v3'>ONLINE</th>
                             

@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
                 elseif (empty($distinctMES[$i])) {
                     echo 'Registro ' . $i+2 . ' - ERROR, MES VACIO <br>';
                     $errors++;
-                }elseif ($distinctMES[$i]<>9) {
+                }elseif ($distinctMES[$i]<>10) {
                     echo 'Registro ' . $i+2 . ' - ERROR, EL VALOR MES ESTA FUERA DEL RANGO PERMITIDO (SEPTIEMBRE) <br>';
                     $errors++;
                 }

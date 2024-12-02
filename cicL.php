@@ -228,7 +228,7 @@ on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode
                                                 > 👁️‍🗨️ </button> 
 
                                                 <?php
-                                        if ($citem->fecha>date("Y-m-d", strtotime("-30 days"))) {
+                                        if ($citem->fecha>date("Y-m-d", strtotime("-44 days"))) {
                                             ?>
                                                 <button type="button" class="btn btn-outline-success" 
                                                 onclick="window.open('cicRELOAD.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"

@@ -135,7 +135,7 @@
     </div>
 </div>
 
-<div class="col-md-6">
+<div class="col-md-12">
     <div class="card">
         <div class="card-header">
             <strong class="card-title">GENERADAS LOS ULTIMOS 30 DIAS</strong>
@@ -148,6 +148,7 @@
                         <th>ALMACEN</th>
                         <th>FECHA</th>
                         <th>ITEMS</th>
+                        <th>FUNCIONES</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -159,6 +160,16 @@
                         <td><?php echo $user->cod_almacen ?></td>
                         <td><?php echo $user->fec ?></td>
                         <td><?php echo $user->items ?></td>
+                        <td>
+                            <button type="button" class="btn btn-outline-success" 
+                            onclick="window.open('filTT.php?idcab=<?php echo $user->id ?>','_blank')"
+                            > 🪄Modificar </button> 
+                            <button type="button" class="btn btn-warning delete" 
+                            onclick="delete_user($(this),<?php echo $user->id ?>)"
+                            > ✖️ Eliminar </button> 
+
+                            
+                        </td>
                         
                     </tr>                   
                 <?php } ?>   
@@ -178,6 +189,50 @@
             return false;
             }
     };
+
+    function delete_user(row,id)
+        { 
+            if (confirm("¿Seguro de eliminar?")) {
+           // $(".loader-page").css({visibility:"visible",opacity:"0.8"});
+           // console.log('VERDADERO');
+             delTD(id,row);
+            } else {
+                console.log('FALSO!');
+            }
+
+          //  alert(id);
+        
+            //row.closest('tr').remove();
+        }
+
+    function delTD(id,row) {
+    
+    var parametros = 
+        {
+            "id" : id
+        };
+
+        $.ajax({
+            data: parametros,
+            url: 'php/deleteTFT.php',
+            type: 'GET',
+            async: false,
+            success: function(data){
+                row.closest('tr').remove();
+                Swal.fire({
+                position: 'top-end',
+                icon: 'Eliminado',
+                title: 'Se elimino 1 registro',
+                showConfirmButton: false,
+                timer: 1500
+                })
+
+            },
+            error: function(){
+                console.log('error de conexion - revisa tu red');
+            }
+        });
+}
 </script>
 <!---------------------------------------------->
 <!--------------Fin Content -------------------->

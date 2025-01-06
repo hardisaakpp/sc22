@@ -196,7 +196,13 @@
                                     <td><?php echo $citem->INI ?></td><td><?php echo $citem->REC ?></td><td><?php echo $citem->FIN ?></td>
                                     <td><?php echo (($citem->FIN*100)/($citem->FIN+$citem->INI+$citem->REC)).'%'  ?></td>
                                     <td><?php echo $citem->NOVEDADES ?></td>
-                                    <td><button type="button" class="btn btn-outline-success" onclick=window.open("<?php echo 'tfaDprintAdm.php?idcab=' . $citem->id_cab ?>","demo","toolbar=0,status=0,");> 👁️‍🗨️ </button>  </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-success" onclick=window.open("<?php echo 'tfaDprintAdm.php?idcab=' . $citem->id_cab ?>","demo","toolbar=0,status=0,");> 👁️‍🗨️ </button>  
+                                    
+                                        <button type="button" class="btn btn-warning delete" 
+                                        onclick="delete_user($(this),<?php echo $citem->id_cab ?>)"
+                                        > ✖️ Eliminar </button> 
+                                    </td>
                                 </tr>
                    
                 <?php } ?>   
@@ -209,7 +215,52 @@
 
 
        
+<script> 
 
+    function delete_user(row,id)
+        { 
+            if (confirm("¿Seguro de eliminar?")) {
+           // $(".loader-page").css({visibility:"visible",opacity:"0.8"});
+           // console.log('VERDADERO');
+             delTD(id,row);
+            } else {
+                console.log('FALSO!');
+            }
+
+          //  alert(id);
+        
+            //row.closest('tr').remove();
+        }
+
+    function delTD(id,row) {
+    
+    var parametros = 
+        {
+            "id" : id
+        };
+
+        $.ajax({
+            data: parametros,
+            url: 'php/deleteTFA.php',
+            type: 'GET',
+            async: false,
+            success: function(data){
+                row.closest('tr').remove();
+                Swal.fire({
+                position: 'top-end',
+                icon: 'Eliminado',
+                title: 'Se elimino 1 registro',
+                showConfirmButton: false,
+                timer: 1500
+                })
+
+            },
+            error: function(){
+                console.log('error de conexion - revisa tu red');
+            }
+        });
+}
+</script>
 
 
     <?php

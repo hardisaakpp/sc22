@@ -36,16 +36,19 @@
 
 
         
-        <div class="dropdown">
+                    <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Descargar Xlsx
                         </button>
-                        <td><button type="button" class="btn btn-outline-success" 
+                        <td>
+                            <button type="button" class="btn btn-outline-success" 
                                     onclick="window.location.href='php/tftToINI.php?idcab=<?php echo $idcab ?>'"
-                             > Cerrar Captura </button>  </td>
-                             <td><button type="button" class="btn btn-outline-success" 
+                             > Cerrar Captura </button>  
+                        </td>
+                        <td><button type="button" class="btn btn-outline-success" 
                                     onclick="window.location.href='tftD.php?idcab=<?php echo $idcab ?>'"
-                             > Reconteo </button>  </td>
+                             > Reconteo </button>  
+                        </td>
                      
                             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                            
@@ -62,7 +65,7 @@
                                   <div class="dropdown-divider"></div>
                                   <input type="submit"class="dropdown-item" value="Final Reconteo" onclick=this.form.action="TTreporteSacnsXlsxRec.php?ti=1&idcab=<?php echo $idcab ?>">
                             </div>
-                        </div>
+                    </div>
         
         </form>
 

@@ -14,7 +14,7 @@
 			join Almacen a on c.FK_ID_almacen=a.id
 			left join StockDet d on c.id=d.FK_id_StockCab 
 			left join Articulo ar on d.FK_ID_articulo=ar.id
-        where tipo='TT' and c.id=".$idcab."
+        where (tipo='TT' or tipo='TP') and c.id=".$idcab."
         group by ar.nombreGrupo
 		order by 1
 

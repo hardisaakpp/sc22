@@ -123,8 +123,29 @@
                         <a href="wllcm.php"><i class="menu-icon fa fa-home"></i>Inicio </a>
                     </li>
 
-                <!--//INVENTARIOS TFA-->
+                
                     <?php 
+
+
+                  //CONFIGURACION SOLO SOPORTETI-->
+                  if ($userAdmin==1  && $userName=='SOPORTETI') {   
+                    echo '
+                    <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
+                    <ul class="sub-menu children dropdown-menu">     
+                                <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
+
+                    </ul>
+                    </li>';
+    
+                }  else  {   
+                       
+        
+                    
+
+
+                    //INVENTARIOS TFA-->
+
                         if ($userAdmin==1 && $userName <> 'SISTEMAS') { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
@@ -458,7 +479,7 @@
 
                         }  
                     //CONFIGURACION-->
-                        if ($userAdmin==1) {   
+                    if ($userAdmin==1) {   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
@@ -535,6 +556,7 @@
                         </li>
             <?php 
              }  
+            } 
             ?>
 
                  

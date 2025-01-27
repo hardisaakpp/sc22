@@ -21,17 +21,22 @@ include_once "php/bd_StoreControl.php";
                $xusername = $_POST['iusername'];
 			$xpassword = $_POST['ipassword'];
 
-               $query = "SELECT * FROM users WHERE username = '" . $xusername . "' AND password = '" . $xpassword . "'";  
-              // echo($query);
-               $sentencia = $db->query($query);
-               $quser = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
+               // Preparar la declaración
+               $query = "SELECT * FROM users WHERE username = :username AND password = :password";
+               $sentencia1 = $db->prepare($query);
 
-               $sentencia1 = $db->query("SELECT * FROM users WHERE username = '" . $xusername . "' AND password = '" . $xpassword . "'");
+               // Vincular parámetros
+               $sentencia1->bindParam(':username', $xusername);
+               $sentencia1->bindParam(':password', $xpassword);
+
+               // Ejecutar la declaración
+               $sentencia1->execute();
+
+               // Obtener los resultados
                $IDCONTEO = $sentencia1->fetchObject();
 
-
-               if (count($quser) > 0) {
+               if ($IDCONTEO <> null) {
 
 
                     $_SESSION["perfil"] = $IDCONTEO->perfil;   

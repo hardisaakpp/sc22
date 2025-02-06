@@ -36,7 +36,7 @@ include_once "bd_StoreControl.php";
                         ,[stock])
               select top ".$Quantity." @lastId , ItemCode, Stock 
               from
-              (select top 150 s.*, a.ID_articulo 
+              (select top 65 s.*, a.ID_articulo 
               ,concat(SUBSTRING(a.nombreGrupo, 3, 1),SUBSTRING(a.nombreGrupo, 5, 1), RIGHT(a.nombreGrupo, 1)) as a1 
                 from vw_stockDia_vs_veces  s
                   join Articulo a on s.ItemCode=a.id
@@ -53,7 +53,7 @@ include_once "bd_StoreControl.php";
                         ,[stock])
               select top ".$Quantity." @lastId , ItemCode, Stock 
               from
-              (select top 150 s.*, a.ID_articulo  
+              (select top 65 s.*, a.ID_articulo  
               ,concat(SUBSTRING(a.nombreGrupo, 5, 1), RIGHT(a.nombreGrupo, 1),SUBSTRING(a.nombreGrupo, 3, 1)) as a2
                 from vw_stockDia_vs_veces  s
                   join Articulo a on s.ItemCode=a.id
@@ -70,7 +70,7 @@ include_once "bd_StoreControl.php";
                         ,[stock])
               select top ".$Quantity." @lastId , ItemCode, Stock 
               from
-              (select top 150 s.*, a.ID_articulo 
+              (select top 65 s.*, a.ID_articulo 
               ,concat(RIGHT(a.nombreGrupo, 1),SUBSTRING(a.nombreGrupo, 3, 1),SUBSTRING(a.nombreGrupo, 5, 1)) as a3
                 from vw_stockDia_vs_veces  s
                   join Articulo a on s.ItemCode=a.id
@@ -87,7 +87,7 @@ include_once "bd_StoreControl.php";
                         ,[stock])
               select top ".$Quantity." @lastId , ItemCode, Stock 
               from
-              (select top 150 s.*, a.ID_articulo 
+              (select top 65 s.*, a.ID_articulo 
               ,concat(SUBSTRING(a.nombreGrupo, 2, 1),SUBSTRING(a.nombreGrupo, 1, 1),SUBSTRING(a.nombreGrupo, 5, 1)) as a4
                 --	ItemCode, Stock  ---!!! EL NUMERO DE ITEMS
                 from vw_stockDia_vs_veces  s
@@ -105,7 +105,7 @@ include_once "bd_StoreControl.php";
                         ,[stock])
               select top ".$Quantity." @lastId , ItemCode, Stock 
               from
-              (select top 150 s.*, a.ID_articulo , a.nombreGrupo AS ng
+              (select top 65 s.*, a.ID_articulo , a.nombreGrupo AS ng
                 from vw_stockDia_vs_veces  s
                   join Articulo a on s.ItemCode=a.id
                 where a.fechaCreacion< DATEADD(day,-30,GETDATE()) --no se haya creado en los ultimos 30 dias

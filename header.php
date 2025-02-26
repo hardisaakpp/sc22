@@ -354,7 +354,7 @@
                         
                         
                         //if ( $userName=='RL-CCI' || $userName=='RL-REC2'   || $userName=='RL-QSN' || $userName=='RL-CON') { // ADMIN   
-                        if ( substr($userName, 0, strlen($OUT)) === $OUT  || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
+                        if ( substr($userName, 0, strlen($OUT)) === $OUT  || $userName=='SAL-QN' || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>

@@ -25,8 +25,6 @@ $sentencia = $db->query("
 
 
 
-
-
 select q1.id , q1.fecha, q1.almacen, q4.DifCarga, q4.SAPB1, q4.StoreControl
 , ( (valRec) +(valPinpadOff)+ (q1.valPinpadOn)+(valOnline)-(valSAP)) as 'Diferencia'
 ,
@@ -45,10 +43,13 @@ select
     , sum(valPinpadOff) as 'valMedianet'
     , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
     */
-from cicSAP c join Almacen a on a.cod_almacen=c.whsCode
-where c.fecha > DATEADD(MONTH,-2,GETDATE()) and c.origen not like 'H'  
+from cicSAP c join Almacen a on a.cod_almacen=c.whsCode 
+where c.fecha > DATEADD(MONTH,-2,GETDATE()) and c.origen not like 'H'   
+
 group by a.id,
 c.fecha,c.whsCode, a.cod_almacen,a.nombre
+
+
 )q1
 join
 (
@@ -61,9 +62,9 @@ SELECT [fecha]
 ,sum([valPinpadOff]) as [valPinpadOff]
 FROM [dbo].[cicUs]
 
-where fecha between '".$desde."' and '".$hasta."'  
-and (whsCode like 'RL-%' OR whsCode like 'OUT-%')
- and  (whsCode not like 'LP-%' and whsCode not like 'YHD-%')
+where fecha between '".$desde."' and '".$hasta."'   
+and (whsCode like 'SAL-%' OR whsCode like 'PSY-%')
+
 group by [fecha]
 ,[whsCode]
 
@@ -83,9 +84,9 @@ join
 		FROM [dbo].[cicUs] cu
 			full outer join cicSAP cs on cu.fecha=cs.fecha and cs.whsCode=cu.whsCode and cs.caja=cu.caja and cs.CardName=cu.CardName
 		where  cs.origen<>'H' 
-			and cs.fecha between '".$desde."' and '".$hasta."'  
-			and (cs.whsCode like 'RL-%' OR cs.whsCode like 'OUT-%')
-			and  (cs.whsCode not like 'LP-%' and cs.whsCode not like 'YHD-%')
+			and cs.fecha between '".$desde."' and '".$hasta."'   
+			and (cs.whsCode like 'SAL-%' OR cs.whsCode like 'PSY-%')
+			--and  (cs.whsCode not like 'LP-%' and cs.whsCode not like 'YHD-%')
 		group by  cs.fecha, cs.whsCode
 
 	)q3
@@ -114,12 +115,10 @@ left join
                 ELSE 0
             END )
                 AS 'StoreControl'
-        from cicSAP 
-        WHERE fecha between '".$desde."' and '".$hasta."'  
+        from cicSAP WHERE fecha between '".$desde."' and '".$hasta."'   
         group by fecha,whsCode
     )q4
 on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode 
-
      ");
 
     
@@ -173,7 +172,7 @@ on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode
                 Rango fecha
                 <input type="date" name="desde" id="desde" class="form-control" value="<?php echo $desde ?>" required>
                 <input type="date" name="hasta" id="hasta" class="form-control" value="<?php echo $hasta ?>" required>
-                <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="cicL.php">	
+                <input type="submit" id="find" name="find" value="Buscar 🔎" class="form-control" onclick=this.form.action="cicLce.php">	
             </div>
         </form>
 

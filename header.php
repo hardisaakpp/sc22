@@ -406,7 +406,7 @@
                                         <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                                         <ul class="sub-menu children dropdown-menu">
                                             <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial H</a></li>
+                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
                                             <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
             
             

@@ -354,7 +354,7 @@
                         
                         
                         //if ( $userName=='RL-CCI' || $userName=='RL-REC2'   || $userName=='RL-QSN' || $userName=='RL-CON') { // ADMIN   
-                        if ( substr($userName, 0, strlen($OUT)) === $OUT  || $userName=='SAL-QN' || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
+                        if ( substr($userName, 0, strlen($OUT)) === $OUT  || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
@@ -412,7 +412,51 @@
             
                                         </ul>
                                         </li>';
-                                            } else {
+                                            } else  if ($userName=='PDP-QN'   ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else  if ($userName=='CL-QSN'   ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else  if ($userName=='PSB-QN'   ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else if ($userName=='MC-QSN'  ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else {
                                         echo '
                                         <li class="menu-item-has-children dropdown">
                                         <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>

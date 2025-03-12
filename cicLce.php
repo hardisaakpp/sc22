@@ -25,7 +25,8 @@ $sentencia = $db->query("
 
 
 
-select q1.id , q1.fecha, q1.almacen, q4.DifCarga, q4.SAPB1, q4.StoreControl
+
+select q1.id ,  q1.fecha , q1.almacen, q4.DifCarga, q4.SAPB1, q4.StoreControl
 , ( (valRec) +(valPinpadOff)+ (q1.valPinpadOn)+(valOnline)-(valSAP)) as 'Diferencia'
 ,
 q1.cerrado, q3.numDif, q1.revisado
@@ -37,33 +38,24 @@ select
     (Select top 1 revisado from CiC cic where a.id=cic.fk_ID_almacen and c.fecha=cic.fecha) as 'revisado',
     sum(Valor) as 'valSAP'
     , sum(valPinpadOn) as 'valPinpadOn'
-    /*   , sum(valRec) as 'valRec'
-    , sum(valOnline) as 'valOnline'
-    , sum(valPinpadOn) as 'valPinpad'
-    , sum(valPinpadOff) as 'valMedianet'
-    , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
-    */
 from cicSAP c join Almacen a on a.cod_almacen=c.whsCode 
-where c.fecha > DATEADD(MONTH,-2,GETDATE()) and c.origen not like 'H'   
-
+where c.fecha > DATEADD(MONTH,-2,GETDATE()) and c.origen not like 'H'  and  a.fk_emp = 'CE'
 group by a.id,
-c.fecha,c.whsCode, a.cod_almacen,a.nombre
-
-
+	c.fecha,c.whsCode, a.cod_almacen,a.nombre
 )q1
 join
 (
 SELECT [fecha]
 ,[whsCode]
-
 ,sum([valRec]) as [valRec]
 ,sum([valOnline]) as [valOnline]
 ,sum([valPinpadOn]) as [valPinpadOn]
 ,sum([valPinpadOff]) as [valPinpadOff]
 FROM [dbo].[cicUs]
 
-where fecha between '".$desde."' and '".$hasta."'   
-and (whsCode like 'SAL-%' OR whsCode like 'PSY-%')
+where fecha between '".$desde."' and '".$hasta."'  
+--where fecha between '".$desde."' and '".$hasta."'   
+--and (whsCode like 'SAL-%' OR whsCode like 'PSY-%')
 
 group by [fecha]
 ,[whsCode]
@@ -85,7 +77,7 @@ join
 			full outer join cicSAP cs on cu.fecha=cs.fecha and cs.whsCode=cu.whsCode and cs.caja=cu.caja and cs.CardName=cu.CardName
 		where  cs.origen<>'H' 
 			and cs.fecha between '".$desde."' and '".$hasta."'   
-			and (cs.whsCode like 'SAL-%' OR cs.whsCode like 'PSY-%')
+			--and (cs.whsCode like 'SAL-%' OR cs.whsCode like 'PSY-%')
 			--and  (cs.whsCode not like 'LP-%' and cs.whsCode not like 'YHD-%')
 		group by  cs.fecha, cs.whsCode
 

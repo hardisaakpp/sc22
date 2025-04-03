@@ -241,7 +241,10 @@ switch ($fil) {
                         <td>
                             <button type="button" class="btn btn-outline-success" 
                             onclick="window.open('filTT.php?idcab=<?php echo $user->id ?>','_self')"
-                            > 🪄Modificar </button> 
+                            > 🪄Grupos </button> 
+                            <button type="button" class="btn btn-outline-success" 
+                            onclick="window.open('filTTsubcat.php?idcab=<?php echo $user->id ?>','_self')"
+                            > 🪄SubCategorias </button> 
                             <button type="button" class="btn btn-warning delete" 
                             onclick="delete_user($(this),<?php echo $user->id ?>)"
                             > ✖️ Eliminar </button> 

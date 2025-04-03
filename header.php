@@ -412,7 +412,140 @@
             
                                         </ul>
                                         </li>';
-                                            } else  if ($userName=='PDP-QN'   ) {
+                                            } else  if ($userName=='MC-MSO'   ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else  if ($userName=='CL-SMA'   ) {
+                                                        echo ' <li class="menu-item-has-children dropdown">
+                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                        <ul class="sub-menu children dropdown-menu">
+                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                            
+                            
+                                                        </ul>
+                                                        </li>';
+                                                            } else  if ($userName=='PSB-DOR'   ) {
+                                                                echo ' <li class="menu-item-has-children dropdown">
+                                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                                <ul class="sub-menu children dropdown-menu">
+                                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                                    
+                                    
+                                                                </ul>
+                                                                </li>';
+                                                                
+                                                                    } else  if ($userName=='PSB-MPA'   ) {
+                                                                        echo ' <li class="menu-item-has-children dropdown">
+                                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                                        <ul class="sub-menu children dropdown-menu">
+                                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                                            
+                                            
+                                                                        </ul>
+                                                                        </li>';
+                                                                            } else  if ($userName=='PSB-PSM'   ) {
+                                                                        echo ' <li class="menu-item-has-children dropdown">
+                                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                                        <ul class="sub-menu children dropdown-menu">
+                                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                                            
+                                            
+                                                                        </ul>
+                                                                        </li>';
+                                                                            } else if ($userName=='MC-DOR'   ) {
+                                                                        echo ' <li class="menu-item-has-children dropdown">
+                                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                                        <ul class="sub-menu children dropdown-menu">
+                                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                                            
+                                            
+                                                                        </ul>
+                                                                        </li>';
+                                                                            } else  if ($userName=='MC-SMA'   ) {
+                                                                echo ' <li class="menu-item-has-children dropdown">
+                                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                                <ul class="sub-menu children dropdown-menu">
+                                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                                    
+                                    
+                                                                </ul>
+                                                                </li>';
+                                                                    } else  if ($userName=='PSB-MSO'   ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else  if ($userName=='PSB-SMA'   ) {
+                                                        echo ' <li class="menu-item-has-children dropdown">
+                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                        <ul class="sub-menu children dropdown-menu">
+                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                            
+                            
+                                                        </ul>
+                                                        </li>';
+                                                            } else  if ($userName=='MC-ISL'   ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else  if ($userName=='MC-SCA'   ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else  if ($userName=='PDP-QN'   ) {
+                                                echo ' <li class="menu-item-has-children dropdown">
+                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                                                <ul class="sub-menu children dropdown-menu">
+                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
+                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
+                    
+                    
+                                                </ul>
+                                                </li>';
+                                                    } else  if ($userName=='MC-JAR'   ) {
                                                 echo ' <li class="menu-item-has-children dropdown">
                                                 <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                                                 <ul class="sub-menu children dropdown-menu">

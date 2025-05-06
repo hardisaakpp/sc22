@@ -1,8 +1,5 @@
 <!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+ <html class="no-js" lang=""> 
 <!--/*-----------------------------------------------------------
 ------------------- PERFILES ------------    $userAdmin = $_SESSION["perfil"];--------------------
 -------------------0->DESACTIVADO----------------------------
@@ -20,8 +17,7 @@
     <title>StoreControl22</title>
     <link rel="icon" type="image/png" href="images/favicon.png"/>
     <meta name="description" content="StoreControl22">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
@@ -31,12 +27,7 @@
     <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="assets/css/lib/datatable/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
-    
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-   
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
-
 </head>
 <body>
 
@@ -59,6 +50,75 @@
     $whsInvs = $_SESSION["whsInvs"];
     $whsTurem = $_SESSION["whsTurem"];
     $whsCica= $_SESSION["whsCica"];  //tambien para preven
+
+/*
+    // Definir roles y permisos
+$roles = [
+    'SOPORTETI' => [
+        'configuracion' => true,
+        'inventarios' => false,
+        'contabilidad' => false,
+    ],
+    'SISTEMAS' => [
+        'configuracion' => false,
+        'inventarios' => true,
+        'contabilidad' => false,
+    ],
+    'MC-SMA' => [
+        'configuracion' => false,
+        'inventarios' => false,
+        'contabilidad' => true,
+    ],
+    // Agrega más roles según sea necesario
+];
+
+// Obtener el rol actual del usuario
+$currentRole = $roles[$userName] ?? null;
+
+
+// Verificar permisos y mostrar menús
+if ($currentRole) {
+    if ($currentRole['configuracion']) {
+        echo '
+        <li class="menu-item-has-children dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="menu-icon fa fa-cogs"></i>Configuración
+            </a>
+            <ul class="sub-menu children dropdown-menu">
+                <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
+            </ul>
+        </li>';
+    }
+
+    if ($currentRole['inventarios']) {
+        echo '
+        <li class="menu-item-has-children dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="menu-icon fa fa-check-square"></i>Inventarios
+            </a>
+            <ul class="sub-menu children dropdown-menu">
+                <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
+                <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
+            </ul>
+        </li>';
+    }
+
+    if ($currentRole['contabilidad']) {
+        echo '
+        <li class="menu-item-has-children dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="menu-icon fa fa-money"></i>Contabilidad
+            </a>
+            <ul class="sub-menu children dropdown-menu">
+                <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
+                <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial</a></li>
+            </ul>
+        </li>';
+    }
+} else {
+    echo '<li><a href="#"><i class="menu-icon fa fa-ban"></i>Sin permisos</a></li>';
+}
+*/
 
 ?>
 
@@ -107,10 +167,7 @@
     transform: rotate(0deg);
   }
 </style>
-    <!-- Left Panel -->
-
-
-
+ 
 
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
@@ -349,11 +406,6 @@
                         }  
                 //CIERRES DE CAJA-->
 
-                                         /* <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (MT PRUEBAS)</a></li>*/
-                        
-                        
-                        //if ( $userName=='RL-CCI' || $userName=='RL-REC2'   || $userName=='RL-QSN' || $userName=='RL-CON') { // ADMIN   
                         if ( substr($userName, 0, strlen($OUT)) === $OUT  || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
@@ -597,34 +649,11 @@
                                             <li><i class="fa fa-pencil-square-o"></i><a href="cica.php">Cierre de Caja</a></li>
                                             <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
 
-            
- 
-            
-          
-            
-            
                                         </ul>
                                         </li>';
                                     
                             }
                            
-
-                            /* <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja (PRUEBA)</a></li>
-                             <li><i class="fa fa-h-square"></i><a href="cichu.php">Historial (PRUEBA)</a></li>*/
-
-                       /* } else if ($userName==6  ){ // INVENTARIO
-                            echo '
-                           
-
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-pencil-square-o"></i><a href="hcicaL.php">Cierres de caja </a></li>
-                            </ul>
-                            </li>
-                            
-                     <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT-SAP)</a></li>
-                            ';*/
 
                         } else if ($userAdmin==6 && $userName=='CONTABILIDADMT'){ // INVENTARIO
                             echo '
@@ -774,22 +803,15 @@
                         </a>
 
                         <div class="user-menu dropdown-menu">
-                          <!--   <a class="nav-link" href="#"><i class="fa fa-user"></i>My Profile</a>
-
-                           <a class="nav-link" href="#"><i class="fa fa-bell-o"></i>Notifications <span class="count">13</span></a> -->
-
-                            <a class="nav-link" href="psswrd.php"><i class="fa fa-key"></i>Cambiar clave</a>
+                         <a class="nav-link" href="psswrd.php"><i class="fa fa-key"></i>Cambiar clave</a>
 
                             <a class="nav-link" href="php/logout.php"><i class="fa fa-power-off"></i>Cerrar Sesión</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </header><!-- /header -->
-        <!-- Header-->
-
- 
-<!-- .content -->   
-
-<div class="loader-page"></div>
+        </header>
+   
+        <!-- .content -->   
+        <div class="loader-page"></div>
       

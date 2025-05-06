@@ -43,7 +43,7 @@ if($whsCica==0){
    //-- delete from cicSAP where caja='NE' and fecha='". $pFecha ."';
    //EXEC [sp_cicUs_pass_pinpad] '". $whsCica ."', '". $pFecha ."';
     $sentencia = $db->query("
-    DELETE from cicsap where caja='NE' AND whsCode='RL-PSC';
+
     EXEC sp_cic_sincSAPSingle '". $whsCica ."', '". $pFecha ."';
     EXEC sp_cic_createCajas '". $whsCica ."', '". $pFecha ."';
     EXEC sp_cicUs_create '". $whsCica ."', '". $pFecha ."';

@@ -1,14 +1,11 @@
 <?php
     include_once "header.php";
-    //si no es admin no abre
 
     if (!isset($_GET["idcab"])) {
         exit();
     }
     $idcab = $_GET["idcab"];
-   
 ?>
-
 
 <!-- Breadcrumbs-->
     <div class="breadcrumbs">
@@ -34,10 +31,6 @@
                         <button type="button" class="dropdown-item" onclick="window.location.href='wllcm.php'">X</button>
                     </div>
                     </div>
-
-
-
-                       
                     </div>
                 </div>  
             </div>
@@ -45,13 +38,8 @@
     </div>
 <!-- /.breadcrumbs-->
   
-
-
 <div class="content">
-<!---------------------------------------------->
 <!----------------- Content -------------------->
-<!---------------------------------------------->
-
 <div class="row">
     <div class="col-lg-6">
         <div class="card">
@@ -65,9 +53,7 @@
                         <input type="text" placeholder="Codigo de barras" required class="form-control"  jsname="YPqjbf" autocomplete="off" tabindex="0" aria-label="Nombre" value="" 
                         maxlength="30" dir="ltr" autofocus="" id="searchInput" onkeypress="clickPress(event)">
                     </div>
-
                     <ul id="lsTemp">
-                     
                     </ul>
             </div>
         </div>
@@ -100,126 +86,123 @@
     </div>
 
 
-<script type="text/javascript"> 
-       function chargeErrors() {
+    <script type="text/javascript"> 
+        function chargeErrors() {
+            
+            const origen = document.getElementById("lsError");
+            const destino = document.getElementById("lsTemp");
+
+                Array.from(origen.children).forEach(
+                    (item) => mover(item, destino)
+                );
+            }
+
+            function mover(item, destino) {
+            destino.appendChild(item);
+            }
+
+        function indexesLX(){
+
+            try {
+                setInterval('contador()',500);
+            }
+                catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
+                //document.getElementById("ejemplo").innerHTML = x.message;
+            }
+
+                
+            // setInterval('contadoradd()',2000);
+            }
+
+            function contador(){
+
+
+                var node = document.getElementById("lsTemp").firstChild;
+            // document.getElementById("lsSaved").appendChild(node);
+                
+            // insertCodeBar(node.innerText);
+            let codebar=node.innerText;
+                document.getElementById("lsTemp").removeChild(node);
+                insertCodeBar(codebar);
+
+            }
+            function contadoradd(barcode){
+                var node = document.createElement('li');
+                node.appendChild(document.createTextNode(barcode));
+                //var node = document.getElementById("myList2").lastChild;
+                document.getElementById("lsTemp").appendChild(node);
+
+            }
+
+        function clickPress(event) {
+            if (event.keyCode == 13 && !((document.getElementById("searchInput").value).trim()==="")) {
+            // console.log(<?php echo $userId ; ?>+ '  ' +((document.getElementById("searchInput")).value).replaceAll("'", "-").trim() + '  ' + <?php echo $idcab; ?>);
+                
+            let ivez= (document.getElementById("quantity")).value;
+            for (let index = 0; index < ivez; index++) {
+                contadoradd((document.getElementById("searchInput").value).replaceAll("'", "-").trim());   
+                }
+
+
+
+                document.getElementById("quantity").value = 1;
+                document.getElementById("searchInput").value = "";
+                document.getElementById("searchInput").focus();
+            }
+        }
+
+        var boton = document.getElementById("boton");
+
+            boton.addEventListener("click", () => {
+                
+                var input = document.getElementById("searchInput").replaceAll("'", "-").replaceAll("'", "-").trim();
+                var valor = input.value;
+
+                alert("El valor del campo es:"+ valor);
+                
+            });
+
+        function insertCodeBar(codebar)
+            { 
+            var parametros = 
+            {
+                "id_user" : "<?php echo $userId ; ?>" ,
+                "barcode" : codebar ,
+                "ID_CONTEO" : "<?php echo $idcab; ?>" 
+            };
+
+            $.ajax({
+                data: parametros,
+                url: 'php/barcode_insert.php',
+                type: 'POST',
+                timeout: 3000,
+                
         
-        const origen = document.getElementById("lsError");
-        const destino = document.getElementById("lsTemp");
 
-            Array.from(origen.children).forEach(
-                (item) => mover(item, destino)
-            );
-        }
-
-        function mover(item, destino) {
-        destino.appendChild(item);
-        }
-
-       function indexesLX(){
-
-        try {
-            setInterval('contador()',500);
-        }
-            catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
-            //document.getElementById("ejemplo").innerHTML = x.message;
-        }
-
-            
-           // setInterval('contadoradd()',2000);
-        }
-
-        function contador(){
-
-
-            var node = document.getElementById("lsTemp").firstChild;
-           // document.getElementById("lsSaved").appendChild(node);
-            
-           // insertCodeBar(node.innerText);
-           let codebar=node.innerText;
-            document.getElementById("lsTemp").removeChild(node);
-            insertCodeBar(codebar);
-
-        }
-        function contadoradd(barcode){
-            var node = document.createElement('li');
-            node.appendChild(document.createTextNode(barcode));
-            //var node = document.getElementById("myList2").lastChild;
-            document.getElementById("lsTemp").appendChild(node);
-
-        }
-
-     function clickPress(event) {
-        if (event.keyCode == 13 && !((document.getElementById("searchInput").value).trim()==="")) {
-           // console.log(<?php echo $userId ; ?>+ '  ' +((document.getElementById("searchInput")).value).replaceAll("'", "-").trim() + '  ' + <?php echo $idcab; ?>);
-            
-           let ivez= (document.getElementById("quantity")).value;
-           for (let index = 0; index < ivez; index++) {
-            contadoradd((document.getElementById("searchInput").value).replaceAll("'", "-").trim());   
+                success: function()
+                {
+                    var node = document.createElement('li');
+                    node.appendChild(document.createTextNode(codebar));
+                    //var node = document.getElementById("myList2").lastChild;
+                    document.getElementById("lsSaved").appendChild(node);
+                    conta = document.getElementById("ItmsSav");
+                    conta.value = parseInt(conta.value,10) + 1;
+                },
+                error: function(){
+                    var node = document.createElement('li');
+                    node.appendChild(document.createTextNode(codebar));
+                    //var node = document.getElementById("myList2").lastChild;
+                    document.getElementById("lsError").appendChild(node);
+                    console.log('error:'+codebar);
+                }
+            });
             }
+    </script>
 
 
-
-            document.getElementById("quantity").value = 1;
-            document.getElementById("searchInput").value = "";
-            document.getElementById("searchInput").focus();
-        }
-      }
-
-      var boton = document.getElementById("boton");
-
-          boton.addEventListener("click", () => {
-            
-            var input = document.getElementById("searchInput").replaceAll("'", "-").replaceAll("'", "-").trim();
-            var valor = input.value;
-
-            alert("El valor del campo es:"+ valor);
-            
-          });
-
-      function insertCodeBar(codebar)
-        { 
-          var parametros = 
-          {
-            "id_user" : "<?php echo $userId ; ?>" ,
-            "barcode" : codebar ,
-            "ID_CONTEO" : "<?php echo $idcab; ?>" 
-          };
-
-          $.ajax({
-            data: parametros,
-            url: 'php/barcode_insert.php',
-            type: 'POST',
-            timeout: 3000,
-            
-          /*  beforesend: function()
-            {
-              $('#mostrar_mensaje').html("Mensaje antes de Enviar");
-            },*/
-
-            success: function()
-            {
-                var node = document.createElement('li');
-                node.appendChild(document.createTextNode(codebar));
-                //var node = document.getElementById("myList2").lastChild;
-                document.getElementById("lsSaved").appendChild(node);
-                conta = document.getElementById("ItmsSav");
-                conta.value = parseInt(conta.value,10) + 1;
-            },
-             error: function(){
-                var node = document.createElement('li');
-                node.appendChild(document.createTextNode(codebar));
-                //var node = document.getElementById("myList2").lastChild;
-                document.getElementById("lsError").appendChild(node);
-                console.log('error:'+codebar);
-            }
-          });
-        }
-</script>
-<!---------------------------------------------->
-<!--------------Fin Content -------------------->
-<!---------------------------------------------->
 </div>
-      
+<!--------------Fin Content --------------------> 
+
 <?php   
 include_once "footer.php";
  ?>

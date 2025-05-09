@@ -1,3 +1,4 @@
+
 <?php
 include_once "header.php";
 
@@ -52,8 +53,7 @@ $scans = $s1->fetchAll(PDO::FETCH_OBJ);
                 <strong class="card-title">50 ULTIMOS CODIGOS INGRESADOS </strong>
             </div>
             <div class="card-body">
-            <button class="btn btn-primary" onclick="toggle_select_all()">Seleccionar Todos</button>
-            
+                <button class="btn btn-primary" onclick="toggle_select_all()">Seleccionar Todos</button>
                 <button class="btn btn-danger" onclick="delete_selected()">Eliminar Seleccionados</button>
                 <table class="table table-striped table-bordered">
                     <thead>
@@ -70,7 +70,7 @@ $scans = $s1->fetchAll(PDO::FETCH_OBJ);
                     <?php  
                     foreach($scans as $user){ ?>
                         <tr>
-                            <td><input type="checkbox" class="delete-checkbox" value="<?php echo $user->id ?>"></td>
+                            <td><input type="checkbox" class="delete-checkbox" id="<?php echo $user->id ?>"></td>
                             <td><?php echo $user->fecScan ?></td>
                             <td><?php echo $user->barcode ?></td>
                             <td><?php echo $user->ID_articulo ?></td>
@@ -104,6 +104,7 @@ function delTD(id, row) {
         async: false,
         success: function(data){
             row.closest('tr').remove();
+            console.log('Eliminado ID: ' + id); // Mostrar el ID eliminado en la consola
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -120,36 +121,55 @@ function delTD(id, row) {
 
 function delete_selected() {
     var selectedIds = [];
-    $('.delete-checkbox:checked').each(function() {
-        selectedIds.push($(this).val());
+    $('.delete-checkbox').each(function() {
+        var id = $(this).attr('id');
+        var isChecked = $(this).is(':checked');
+        console.log('ID: ' + id + ', Marcado: ' + isChecked);
+        if (isChecked) {
+            selectedIds.push(id);
+        }
     });
 
     if (selectedIds.length > 0) {
-        selectedIds.forEach(function(id) {
-            var parametros = {
-                "id": id
-            };
-
-            $.ajax({
-                data: parametros,
-                url: 'php/scanDelete.php',
-                type: 'GET',
-                async: false,
-                success: function(data){
-                    $('.delete-checkbox[value="' + id + '"]').closest('tr').remove();
-                },
-                error: function(){
-                    console.log('error de conexión - revisa tu red');
-                }
-            });
-        });
-
         Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Se eliminaron ' + selectedIds.length + ' registros',
-            showConfirmButton: false,
-            timer: 1500
+            title: '¿Estás seguro?',
+            text: "Se eliminarán " + selectedIds.length + " registros.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                selectedIds.forEach(function(id) {
+                    console.log('Eliminando ID: ' + id); // Mostrar el ID que se va a eliminar en la consola
+                    var parametros = {
+                        "id": id
+                    };
+
+                    $.ajax({
+                        data: parametros,
+                        url: 'php/scanDelete.php',
+                        type: 'GET',
+                        async: false,
+                        success: function(data){
+                            $('.delete-checkbox[id="' + id + '"]').closest('tr').remove();
+                            console.log('Eliminado ID: ' + id); // Mostrar el ID eliminado en la consola
+                        },
+                        error: function(){
+                            console.log('error de conexión - revisa tu red');
+                        }
+                    });
+                });
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Se eliminaron ' + selectedIds.length + ' registros',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
         });
     } else {
         Swal.fire({
@@ -168,6 +188,8 @@ function toggle_select_all() {
 }
 </script>
 
+
 <?php   
 include_once "footer.php";
 ?>
+

@@ -23,12 +23,12 @@ switch ($fil) {
     case 'AL':
         $s1 = $db->query("
         select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items
-        ,c.tipo
+        ,c.tipo, c.locked
         from StockCab c
         join Almacen a on c.FK_ID_almacen=a.id
         left join StockDet d on c.id=d.FK_id_StockCab 
         where (tipo='TT' or tipo='TP') and [date]>DATEADD(MONTH,-1,getdate())
-        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo
+        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo, c.locked
         order by CONCAT(date,' ',left(time,5)) desc
         " );
         $users = $s1->fetchAll(PDO::FETCH_OBJ); 
@@ -36,12 +36,12 @@ switch ($fil) {
     case 'TT':
         $s1 = $db->query("
         select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items
-        ,c.tipo
+        ,c.tipo, c.locked
         from StockCab c
         join Almacen a on c.FK_ID_almacen=a.id
         left join StockDet d on c.id=d.FK_id_StockCab 
         where (tipo='TT') and [date]>DATEADD(MONTH,-1,getdate())
-        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo
+        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo, c.locked
         order by CONCAT(date,' ',left(time,5)) desc
         " );
         $users = $s1->fetchAll(PDO::FETCH_OBJ); 
@@ -50,12 +50,12 @@ switch ($fil) {
     case 'TP':
         $s1 = $db->query("
         select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items
-        ,c.tipo
+        ,c.tipo, c.locked
         from StockCab c
         join Almacen a on c.FK_ID_almacen=a.id
         left join StockDet d on c.id=d.FK_id_StockCab 
         where (tipo='TP') and [date]>DATEADD(MONTH,-1,getdate())
-        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo
+        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo, c.locked
         order by CONCAT(date,' ',left(time,5)) desc
         " );
         $users = $s1->fetchAll(PDO::FETCH_OBJ); 
@@ -239,6 +239,9 @@ switch ($fil) {
                             ?>
                         </td>
                         <td>
+                            <?php
+                                if ($user->locked==0) {
+                            ?>
                             <button type="button" class="btn btn-outline-success" 
                             onclick="window.open('filTT.php?idcab=<?php echo $user->id ?>','_self')"
                             > 🪄Grupos </button> 
@@ -248,7 +251,9 @@ switch ($fil) {
                             <button type="button" class="btn btn-warning delete" 
                             onclick="delete_user($(this),<?php echo $user->id ?>)"
                             > ✖️ Eliminar </button> 
-
+                            <?php
+                                } 
+                            ?>
                             
                         </td>
                         

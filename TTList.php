@@ -4,12 +4,12 @@
     
             
         $s1 = $db->query("
-        select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items
+        select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items, c.locked
         from StockCab c
         join Almacen a on c.FK_ID_almacen=a.id
         left join StockDet d on c.id=d.FK_id_StockCab 
-        where (tipo='TT' or tipo='TP') and [date]>DATEADD(MONTH,-1,getdate())
-        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) 
+        where (tipo='TT' or tipo='TP') and [date]>DATEADD(MONTH,-1,getdate()) and c.locked=0
+        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.locked
         order by CONCAT(date,' ',left(time,5)) desc
         " );
         $users = $s1->fetchAll(PDO::FETCH_OBJ);   

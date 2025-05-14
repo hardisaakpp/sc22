@@ -1,0 +1,11 @@
+<?php
+	//enlaces
+	define("APILOGIN","https://e-proxy.hitellcorp.com/apilogin/external");
+	define("STORES","https://e-proxy.hitellcorp.com/external/stores");
+	define("ARQUEO","https://e-proxy.hitellcorp.com/external/arqueo-caja");
+	//Credenciales
+	define("US_MABEL","mabel");
+	define("PS_MABEL","QvfebKX*GsI#k9y9");
+	define("US_COSMEC","cosmec");
+	define("PS_COSMEC","93s@BV470MWe");
+?>

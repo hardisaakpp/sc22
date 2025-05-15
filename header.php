@@ -405,8 +405,17 @@ if ($currentRole) {
 
                         }  
                 //CIERRES DE CAJA-->
-
-                        if ( substr($userName, 0, strlen($OUT)) === $OUT  || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
+                        if ( $userName=='MC-SCA'  || $userName=='RL-REC2' )  { // ADMIN   
+                            echo '
+                            <li class="menu-item-has-children dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                 <li><i class="fa fa-pencil-square-o"></i><a href="cic2.php">Cierre de Caja</a></li>
+                                 <li><i class="fa fa-h-square"></i><a href="cic2H.php">Historial</a></li>
+                            </ul>
+                            </li>
+                            ';
+                        } else  if ( substr($userName, 0, strlen($OUT)) === $OUT  || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>

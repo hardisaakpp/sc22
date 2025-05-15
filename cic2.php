@@ -1,91 +1,63 @@
 <?php
     include_once "header.php";
-    
-
-  
+    include_once "php/f_consumo.php";
     /*Si viene por parametro se coge sino nada */
     $tiendaCica=0;
     if (isset($_GET["pIdAlmacen"])) {
         $tiendaCica = $_GET["pIdAlmacen"];
-    }else {
-        # code...
+    }else if (isset($_SESSION["whsCica"])) {
         $tiendaCica=$_SESSION["whsCica"];
-    }
- //  echo $tiendaCica;
+    }else {
+        exit('NO TIENE UNA TIENDA ASIGNADA PARA CIERRE DE CAJA O PERMISOS');
+    }   
     
-    //$pFecha= Date('2023-06-14') ;
+    //Si existe Get se coge la fecha
+    //sino se coge la fecha de hoy
     $pFecha= Date('Y-m-d') ;
     if (isset($_GET["pFecha"])) {
         $pFecha = $_GET["pFecha"];
     }
-
-    //echo "   ".$pFecha;
-    require_once ('php/dat_cws.php');
-    require_once ('php/f_consumo.php');
-    if(!isset($_SESSION['token'])){ $_SESSION['token']=consumir_token(US_MABEL,PS_MABEL); }   //obtener token
     
+    //obtener token
+    $token=get_token($tiendaCica, $db, $userName);    
 
+		$sentencia2 = $db->query("select * from almacen where id=".$tiendaCica."  "  );
+		$TEMP1 = $sentencia2->fetchObject();
+			$h_cod_neg = $TEMP1->hit_cod_neg;
+			$h_cod_local = $TEMP1->hit_cod_local;
+			$emp=$TEMP1->fk_emp;
 
-
-    //parametros
-        //fecha
-            //$fechaActual = date('d-m-Y');
-        
-          //  $fecAz =  explode("-",$pFecha);
-           // $fecha = $fecAz[2].'-'.$fecAz[1].'-'.$fecAz[0];
-        //almacen para cierre
-        // $almacen =$_SESSION["whsCica"] ;// no del header xq puede actualizar un  administrador
-         
-        //caja
-            //hay q recorrer almenos 7 cajas, actualmente llegan a 6
-        
-        //codigos Hitell
-                $sentencia2 = $db->query("select * from almacen where id=".$tiendaCica."  "  );
-                $TEMP1 = $sentencia2->fetchObject();
-            $h_cod_neg = $TEMP1->hit_cod_neg;
-            $h_cod_local = $TEMP1->hit_cod_local;
-
-          //  echo   "<br>".$h_cod_neg."  ". $h_cod_local;
     //proceso
         //encerar formas de pago
             for ($i=1; $i < 8; $i++) { 
                 $sentencia1 = $db->prepare("exec sp_cicH_clearCaja  ?, ?, ?;" );
                 $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i]);
-/*              
-    if ($resultado1) {
-    echo "La ejecución fue exitosa.";
-    } else {
-    echo "Hubo un error en la ejecución.";
-    }
-*/
             }
         //registros de arqueo de caja
             //importo de hitell
             for ($i=1; $i < 8; $i++) { 
-
-                $data2=consumo_arqueo($_SESSION['token'],$h_cod_neg,$h_cod_local,$i,$pFecha);
-                /*  echo '<pre>';
-                print_r($data2);
-                echo '</pre>';
-                */
-//echo "<br>".$_SESSION['token']." ".$h_cod_neg." ".$h_cod_local." ".$i." ".$pFecha;
-
+                // arqueo de formas de pago  
+                $data2=consumo_arqueo($token,$h_cod_neg,$h_cod_local,$i,$pFecha);
+                // arqueo de abonos
+                $data3=consumo_arqueo_abonos($token,$h_cod_neg,$h_cod_local,$i,$pFecha);
+              //  echo '<pre>';
+              //  print_r($data3["total_amount"]);
+              //  echo '</pre>';
                 if (($data2)<>null) {
-    
                     foreach ($data2 as $key => $value) {
-/*echo "Método de pago: " . $key . "\n";
-echo "Monto total: " . $value["total_amount"] . "\n";
-echo "Cantidad: " . $value["count"] . "\n";
-echo "\n";*/
-                    
-                        $sentencia1 = $db->prepare("exec sp_cicH_insertLine  ?, ?, ?, ?,?, ?;" );
+                        $sentencia1 = $db->prepare("exec sp_cic2_insertLine  ?, ?, ?, ?,?, ?;" );
                         $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i, $key, $value["total_amount"], $value["count"]]);
-
+                       // echo $tiendaCica." - ".$pFecha." - " .$i." - " .$key." - " .$value["total_amount"]." - " .$value["count"]."</br> ";
                     }
                 }
-        
-                
-
+                if (($data3)<>null and $data3["total_amount"]>0) {
+                        $sentencia1 = $db->prepare("exec sp_cic2_insertLine  ?, ?, ?, ?,?, ?;" );
+                        $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i, 'Crédito directo - Pago de abono', $data3["total_amount"], $data3["count"]]);
+                }
+                //pasa los pinpads online de hitell a la columna de pinpad
+                $sentencia31 = $db->prepare("exec sp_cicH_updateLine_pinpad  ?, ?, ?;" );
+                $resultado31x = $sentencia31->execute([$tiendaCica, $pFecha, $i]);
+              // echo $tiendaCica." - ". $pFecha." - ". $i;
             }
 
 
@@ -114,14 +86,6 @@ if($whsCica==0){
     $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
 }
 
-
-
-
-
-
-  //  echo $whsCica;
-   // echo $pFecha;
-
    $senten2 = $db->query("
    select * from almacen where id=".$whsCica."  "  );
    $TEMPa1 = $senten2->fetchObject();
@@ -132,7 +96,13 @@ if($whsCica==0){
        $s2 = $db->query(" select top 1 status,cerrado from CiC where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."' " );
        $stat = $s2->fetchObject();
 
-       $estado= $stat->cerrado;  ///seteo estado 66664
+       if ($stat) {
+        $estado= $stat->cerrado;  ///seteo estado 66664
+       }else {
+        $estado= null;  
+        error_log("Error: No se encontró el estado de la caja para la fecha $pFecha y el almacén $whsCica");
+       }
+       
 
 
     $s1 = $db->query("
@@ -161,32 +131,29 @@ if($whsCica==0){
                         WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
                         WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
                         WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-                        WHEN c.CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
-                        WHEN c.CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+                        WHEN c.CardName LIKE 'Efectivo' THEN 'EFECTIVO'
+                        WHEN c.CardName LIKE 'Crédito directo' THEN 'CREDITO DIRECTO CREDICORP'
+                        WHEN c.CardName LIKE '%Pago de abono' THEN 'EFECTIVO'
                         ELSE c.CardName
                     END  as CardName
                     , sum(Valor) as 'valSAP'
                     , sum(valPinpadOn) as 'valPinpadOn'
-                /*   , sum(valRec) as 'valRec'
-                    , sum(valOnline) as 'valOnline'
-                    , sum(valPinpadOn) as 'valPinpadOn'
-                    , sum(valPinpadOff) as 'valMedianet'
-                    , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
-        */
+               
                 from cicSAP c join Almacen a on a.cod_almacen=c.whsCode
                 where c.origen not like 'H'  and a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
                 group by a.id,
                 (
                 CASE 
-                WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
-                WHEN c.CardName LIKE '%VISA' THEN 'Visa'
-                WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
-                WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
-                WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
-                WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
-                WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-                WHEN c.CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
-                WHEN c.CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+                        WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
+                        WHEN c.CardName LIKE '%VISA' THEN 'Visa'
+                        WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
+                        WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
+                        WHEN c.CardName LIKE '%DINERS' THEN 'Diners'
+                        WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
+                        WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
+                        WHEN c.CardName LIKE 'Efectivo' THEN 'EFECTIVO'
+                        WHEN c.CardName LIKE 'Crédito directo' THEN 'CREDITO DIRECTO CREDICORP'
+                        WHEN c.CardName LIKE '%Pago de abono' THEN 'EFECTIVO'
                 ELSE c.CardName
             END  
                 ) , c.fecha,c.whsCode
@@ -203,8 +170,9 @@ if($whsCica==0){
 				WHEN CardName LIKE '%DINERS' THEN 'Diners'
 				WHEN CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
 				WHEN CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-				WHEN CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
-				WHEN CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+                WHEN CardName LIKE 'Efectivo' THEN 'EFECTIVO'
+                WHEN CardName LIKE 'Crédito directo' THEN 'CREDITO DIRECTO CREDICORP'
+                WHEN CardName LIKE '%Pago de abono' THEN 'EFECTIVO'
 				ELSE CardName
 			END   as CardName
 			  ,sum([valRec]) as [valRec]
@@ -222,8 +190,9 @@ if($whsCica==0){
 				WHEN CardName LIKE '%DINERS' THEN 'Diners'
 				WHEN CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
 				WHEN CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-				WHEN CardName LIKE 'Crédito directo - Venta' THEN 'CREDITO DIRECTO CREDICORP'
-				WHEN CardName LIKE 'Crédito directo - Pago de abono' THEN 'EFECTIVO'
+                WHEN CardName LIKE 'Efectivo' THEN 'EFECTIVO'
+                WHEN CardName LIKE 'Crédito directo' THEN 'CREDITO DIRECTO CREDICORP'
+                WHEN CardName LIKE '%Pago de abono' THEN 'EFECTIVO'
 				ELSE CardName
 			END 
 		) q2
@@ -236,38 +205,6 @@ if($whsCica==0){
     $consolidados = $sentencia->fetchAll(PDO::FETCH_OBJ);
        
 ?>
-
-<!-- Breadcrumbs-->
-   <!-- <div class="breadcrumbs">
-        <div class="breadcrumbs-inner">
-            <div class="row m-0">
-                <div class="col-sm-4">
-                    <div class="page-header float-left">
-                        <div class="page-title">
-                            <h1>CAMBIO DE CLAVE</h1>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="page-header float-right">
-                        <div class="page-title">
-                            <ol class="breadcrumb text-right">
-                                 <li>
-                                <button type="button" class="btn btn-outline-success" onclick="chargeTFA();">►</button>
-                                <button type="button" class="btn btn-outline-warning" onclick="location.reload();">F5</button>
-                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='wllcm.php'">X</button>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>  
-            </div>
-        </div>
-    </div>-->
-<!-- /.breadcrumbs-->
-
-
-
 
 <div class="content">
 <!---------------------------------------------->
@@ -289,7 +226,7 @@ if($whsCica==0){
             <div class="card-body">
                 <div class="stat-widget-five">
                     <div class="stat-icon dib flat-color-3">
-                    <a href="cicU.php?id=<?php echo $user->id?>">
+                    <a href="cic2U.php?id=<?php echo $user->id?>">
                         <i class="pe-7s-browser"></i>
                         </a>
                     </div>
@@ -307,34 +244,7 @@ if($whsCica==0){
     </div>
 
 <?php } 
-/*
-//si esta en estado abierto muestra la opcion cargar
-if ($estado==0) {  ?>
-    <div class="col-lg-3 col-md-6">
-        <div class="card">
-        
-            <div class="card-body">
-            
-                        
-                            <form method="post" action="hcicImport.php" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <input name="tiendaTuremp" value='<?php echo $whsCica; ?>' hidden>
-                                    <input name="pFecha" value='<?php echo $pFecha; ?>' hidden>
-                                    <!-- <label for="exampleInputFile"><h3>Importar turnos</h3></label> -->
-                                    <input type="file" accept=".xlsx" name="file" class="form-control" id="exampleInputFile" required>
-                                
-                                </div>
-            </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-secondary btn-lg" >
-                    <i class="fa fa-upload"></i>&nbsp; CARGAR CIERRE HITELL
-                </button>
-            </div>
-            </form>
-        </div>
-    </div>
-<?php }
-*/
+
 ?> 
 
     
@@ -404,7 +314,7 @@ if ($estado==0) {  ?>
                 </div>
                 <div class="card-footer">
 
-                    <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "cicPrint.php?id=" . $auxCAJA ?>","demo","toolbar=0,status=0,")>
+                    <button type="button" class="btn btn-secondary btn-lg" onClick=window.open("<?php echo "cic2P.php?id=" . $auxCAJA ?>","demo","toolbar=0,status=0,")>
                         <i class="fa fa-print"></i>&nbsp; Imprimir
                     </button>
                 </div>
@@ -415,6 +325,61 @@ if ($estado==0) {  ?>
 
     </div>
 
+<!---------ADJUNTOS--------->
+    <div class="card">
+            <div class="card-header"><strong>ADJUNTOS</strong></div>
+            <div class="card-body card-block">
+ 
+                <!--tabla-->
+                <div class="panel panel-primary">
+                   
+                    <div class="panel-body">
+                
+                <table class="table">
+                <thead>
+                    <tr>
+                    <th width="30%">Caja</th>
+      <th width="60%">Nombre del Archivo</th>
+      <th width="10%">Descargar</th>
+                    </tr>
+                </thead>
+                <tbody>
+    <?php   foreach($cajas as $user){ 
+    $auxCAJA=$user->id;
+    ?>
+    <?php 
+         $path = "films/" . $auxCAJA;
+        ?> 
+    
+                <?php
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $archivos = scandir($path);
+                $num=0;
+                for ($i=2; $i<count($archivos); $i++)
+                {$num++;
+                ?>
+                <p>  
+                </p> 
+                <tr>
+      <th scope="row"><?php echo $user->caja;?></th>
+      <td><?php echo $archivos[$i]; ?></td>
+      <td><a
+      href="<?php echo $path . "/" . $archivos[$i]; ?>" download="<?php echo $archivos[$i]; ?>"
+      > 💾  </a>  </td>
+      </tr>
+                <?php }?> 
+                <?php } ?> 
+                </tbody>
+                </table>
+                </div>
+                </div>
+             
+            </div>
+        </div>
+
+<!-- Fin Adjuntos--> 
 
 
     <script language="javascript" type="text/javascript">
@@ -444,15 +409,10 @@ if ($estado==0) {  ?>
         '</td><td>' +  svalMedianet.toFixed(2) +'</td></tr>';
     </script>
 
-
-
-
         <?php
     
 ?>
 
-
-  
 <!---------------------------------------------->
 <!--------------Fin Content -------------------->
 <!---------------------------------------------->

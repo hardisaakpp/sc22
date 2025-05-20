@@ -12,7 +12,8 @@
     FROM StockCab s 
         join vw_stockDet_pivotStatus p on s.id=p.FK_id_StockCab
         left join StockCab_TFA da on s.id=da.fk_id_StockCab
-    WHERE tipo='TF' AND [date]> DATEADD(MONTH,-2,GETDATE()) AND FK_ID_almacen= ? ");
+    WHERE tipo='TF' AND [date]> DATEADD(MONTH,-2,GETDATE()) AND FK_ID_almacen= ? 
+    ORDER BY s.id desc");
     $sentencia->execute([$whsInvs]);
     
     $rows = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -78,8 +79,6 @@
                 </thead>
                 <tbody>
                 <?php   foreach($rows as $citem){ ?>
-
-
                     <tr>
                                     <td><?php echo $citem->id_cab ?></td>
                                     <td><?php echo $citem->fec ?></td>
@@ -94,12 +93,6 @@
         </div>
     </div>
 </div>
-
-
-
-       
-
-
 
     <?php
         }

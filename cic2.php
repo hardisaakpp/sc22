@@ -18,6 +18,8 @@
         $pFecha = $_GET["pFecha"];
     }
     
+
+   
     //obtener token
     $token=get_token($tiendaCica, $db, $userName);    
 
@@ -26,42 +28,13 @@
 			$h_cod_neg = $TEMP1->hit_cod_neg;
 			$h_cod_local = $TEMP1->hit_cod_local;
 			$emp=$TEMP1->fk_emp;
-
-    //proceso
-        //encerar formas de pago
-            for ($i=1; $i < 8; $i++) { 
-                $sentencia1 = $db->prepare("exec sp_cicH_clearCaja  ?, ?, ?;" );
-                $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i]);
-            }
-        //registros de arqueo de caja
-            //importo de hitell
-            for ($i=1; $i < 8; $i++) { 
-                // arqueo de formas de pago  
-                $data2=consumo_arqueo($token,$h_cod_neg,$h_cod_local,$i,$pFecha);
-                // arqueo de abonos
-                $data3=consumo_arqueo_abonos($token,$h_cod_neg,$h_cod_local,$i,$pFecha);
-              //  echo '<pre>';
-              //  print_r($data3["total_amount"]);
-              //  echo '</pre>';
-                if (($data2)<>null) {
-                    foreach ($data2 as $key => $value) {
-                        $sentencia1 = $db->prepare("exec sp_cic2_insertLine  ?, ?, ?, ?,?, ?;" );
-                        $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i, $key, $value["total_amount"], $value["count"]]);
-                       // echo $tiendaCica." - ".$pFecha." - " .$i." - " .$key." - " .$value["total_amount"]." - " .$value["count"]."</br> ";
-                    }
-                }
-                if (($data3)<>null and $data3["total_amount"]>0) {
-                        $sentencia1 = $db->prepare("exec sp_cic2_insertLine  ?, ?, ?, ?,?, ?;" );
-                        $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i, 'Crédito directo - Pago de abono', $data3["total_amount"], $data3["count"]]);
-                }
-                //pasa los pinpads online de hitell a la columna de pinpad
-                $sentencia31 = $db->prepare("exec sp_cicH_updateLine_pinpad  ?, ?, ?;" );
-                $resultado31x = $sentencia31->execute([$tiendaCica, $pFecha, $i]);
-              // echo $tiendaCica." - ". $pFecha." - ". $i;
-            }
+    
 
 
-    //si no es ADMIN o no se  no abre
+  
+  
+  
+//si no es ADMIN o no se  no abre
 if($whsCica==0){  
     echo ('NO TIENE UNA TIENDA ASIGNADA PARA CIERRE DE CAJA');
     //echo $whsCica;
@@ -69,22 +42,60 @@ if($whsCica==0){
     //exit();
 }else{
 
-    $auxCAJA=0;
-    ///solo actualiza si es el mismo dia
-    if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {
-    // echo "mismo dia!";  
-    //-- delete from cicSAP where caja='NE' and fecha='". $pFecha ."';
-    //EXEC [sp_cicUs_pass_pinpad] '". $whsCica ."', '". $pFecha ."';
-    $sentencia = $db->query("
-    EXEC sp_cic_sincSAPSingle '". $whsCica ."', '". $pFecha ."';
-    EXEC sp_cic_createCajas '". $whsCica ."', '". $pFecha ."';
-    EXEC sp_cicUs_create '". $whsCica ."', '". $pFecha ."';
+
+    //SI ES HOY ACTUALIZA 
+    if ($pFecha == date('Y-m-d')) {
+        //proceso
+            //encerar formas de pago
+                for ($i=1; $i < 8; $i++) { 
+                    $sentencia1 = $db->prepare("exec sp_cicH_clearCaja  ?, ?, ?;" );
+                    $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i]);
+                }
+            //registros de arqueo de caja
+                //importo de hitell
+                for ($i=1; $i < 8; $i++) { 
+                    // arqueo de formas de pago  
+                    $data2=consumo_arqueo($token,$h_cod_neg,$h_cod_local,$i,$pFecha);
+                    // arqueo de abonos
+                    $data3=consumo_arqueo_abonos($token,$h_cod_neg,$h_cod_local,$i,$pFecha);
+                //  echo '<pre>';
+                //  print_r($data3["total_amount"]);
+                //  echo '</pre>';
+                    if (($data2)<>null) {
+                        foreach ($data2 as $key => $value) {
+                            $sentencia1 = $db->prepare("exec sp_cic2_insertLine  ?, ?, ?, ?,?, ?;" );
+                            $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i, $key, $value["total_amount"], $value["count"]]);
+                        // echo $tiendaCica." - ".$pFecha." - " .$i." - " .$key." - " .$value["total_amount"]." - " .$value["count"]."</br> ";
+                        }
+                    }
+                    if (($data3)<>null and $data3["total_amount"]>0) {
+                            $sentencia1 = $db->prepare("exec sp_cic2_insertLine  ?, ?, ?, ?,?, ?;" );
+                            $resultado1 = $sentencia1->execute([$tiendaCica, $pFecha, $i, 'Crédito directo - Pago de abono', $data3["total_amount"], $data3["count"]]);
+                    }
+                    //pasa los pinpads online de hitell a la columna de pinpad
+                    $sentencia31 = $db->prepare("exec sp_cicH_updateLine_pinpad  ?, ?, ?;" );
+                    $resultado31x = $sentencia31->execute([$tiendaCica, $pFecha, $i]);
+                // echo $tiendaCica." - ". $pFecha." - ". $i;
+                }
+            
+
+                $auxCAJA=0;
+                ///solo actualiza si es el mismo dia
+                if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {
+                // echo "mismo dia!";  
+                //-- delete from cicSAP where caja='NE' and fecha='". $pFecha ."';
+                //EXEC [sp_cicUs_pass_pinpad] '". $whsCica ."', '". $pFecha ."';
+                $sentencia = $db->query("
+                EXEC sp_cic_sincSAPSingle '". $whsCica ."', '". $pFecha ."';
+                EXEC sp_cic_createCajas '". $whsCica ."', '". $pFecha ."';
+                EXEC sp_cicUs_create '". $whsCica ."', '". $pFecha ."';
 
 
-    
-    " );
-    $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
-}
+                
+                " );
+                $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
+                }
+    }
 
    $senten2 = $db->query("
    select * from almacen where id=".$whsCica."  "  );

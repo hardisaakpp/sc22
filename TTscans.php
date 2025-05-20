@@ -6,18 +6,13 @@
     }
     $idcab = $_GET["idcab"];
 
-    $s1 = $db->query("
-	declare @marca nvarchar(2);
-	set @marca=(select a.fk_emp from StockCab s join Almacen a on s.FK_ID_almacen=a.id where s.id=".$idcab.");
-	  select codigoBarras --,descripcion
-	  from articulo  x
-		inner join (	SELECT distinct a.ItemCode
-				  from stockSAP a 
-					join Almacen b on a.WhsCode=b.id 
-				  where b.fk_emp=@marca and a.StockDate > DATEADD(DAY, -1, CONVERT(DATE, GETDATE()))) y on x.id=y.ItemCode
-		where inventariable=1 and fk_emp=@marca and codigoBarras is not null and codigoBarras<>'0' ;
-    " );
-    $lsArts = $s1->fetchAll(PDO::FETCH_OBJ);   
+    $s1 = $db->query("EXEC sp_getCodBarEnabled '$idcab';");
+    $lsArts = $s1->fetchAll(PDO::FETCH_OBJ);
+
+    // Extraer solo los códigos de barra
+    $barcodes = array_map(fn($item) => $item->codigoBarras, $lsArts);
+
+
 ?>
 
 <!-- Breadcrumbs-->
@@ -99,97 +94,100 @@
     </div>
 
 
-    <script type="text/javascript"> 
-    
-function playSound() {
-     // Crear el contexto de audio
-     var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-     
-     // Crear un oscilador
-     var oscillator = audioContext.createOscillator();
-     oscillator.type = 'sine'; // Tipo de onda (puede ser 'sine', 'square', 'sawtooth', 'triangle')
-     oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // Frecuencia en Hz (440 Hz es la nota A)
+<script type="text/javascript"> 
+     // Crear un Set para búsquedas rápidas
+    const codigosSet = new Set(<?php echo json_encode($barcodes); ?>);
 
-     // Conectar el oscilador al destino (altavoces)
-     oscillator.connect(audioContext.destination);
 
-     // Iniciar el oscilador
-     oscillator.start();
+    function playSound() {
+        // Crear el contexto de audio
+        var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Crear un oscilador
+        var oscillator = audioContext.createOscillator();
+        oscillator.type = 'sine'; // Tipo de onda (puede ser 'sine', 'square', 'sawtooth', 'triangle')
+        oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // Frecuencia en Hz (440 Hz es la nota A)
 
-     // Detener el oscilador después de 1 segundo
-     setTimeout(function() {
-     oscillator.stop();
-     }, 1000);
-     }
+        // Conectar el oscilador al destino (altavoces)
+        oscillator.connect(audioContext.destination);
+
+        // Iniciar el oscilador
+        oscillator.start();
+
+        // Detener el oscilador después de 1 segundo
+        setTimeout(function() {
+        oscillator.stop();
+        }, 1000);
+    }
 
      // Ejemplo de uso: Llamar a la función para emitir un sonido
      document.getElementById("boton").addEventListener("click", () => {
-     playSound();
+        playSound();
      });
 
-        function chargeErrors() {
-            
-            const origen = document.getElementById("lsError");
-            const destino = document.getElementById("lsTemp");
+    function chargeErrors() {
+        
+        const origen = document.getElementById("lsError");
+        const destino = document.getElementById("lsTemp");
 
-                Array.from(origen.children).forEach(
-                    (item) => mover(item, destino)
-                );
-            }
+            Array.from(origen.children).forEach(
+                (item) => mover(item, destino)
+            );
+        }
 
-            function mover(item, destino) {
-            destino.appendChild(item);
-            }
+        function mover(item, destino) {
+        destino.appendChild(item);
+    }
 
-        function indexesLX(){
+    function indexesLX(){
 
-            try {
-                setInterval('contador()',500);
-            }
-                catch(x) { 
-            }
-            }
+        try {
+            setInterval('contador()',500);
+        }
+            catch(x) { 
+        }
+    }
 
-            function contador(){
-                var node = document.getElementById("lsTemp").firstChild;
-                let codebar=node.innerText;
-                document.getElementById("lsTemp").removeChild(node);
-                insertCodeBar(codebar);
+    function contador(){
+        var node = document.getElementById("lsTemp").firstChild;
+        let codebar=node.innerText;
+        document.getElementById("lsTemp").removeChild(node);
+        insertCodeBar(codebar);
 
-            }
-            function contadoradd(barcode, description = '', isManual = false){
-                var node = document.createElement('li');
-                if (isManual) {
-                    //node.appendChild(document.createTextNode(barcode + " (NUEVO)"));
-                    node.appendChild(document.createTextNode(barcode));
-                } else {
-                    node.appendChild(document.createTextNode(barcode));
-                    //node.appendChild(document.createTextNode(barcode + " - " + description));
-                }
-                document.getElementById("lsTemp").appendChild(node);
-            }
+    }
 
-        function clickPress(event) {
-            
-            if (event.keyCode == 13 && !((document.getElementById("searchInput").value).trim()==="")) {
-                let barcode = (document.getElementById("searchInput").value).replaceAll("'", "-").trim();
-                let item = existsInLsArts(barcode);
-                
-                if (item) {
-                    addBarcodeToList(barcode, item.descripcion);
-                } else {
-                    playSound();
-                    if (confirm("El código de barras no existe. ¿Desea agregarlo?")) {
-                        addBarcodeToList(barcode, '', true);
-                    }
+    function contadoradd(barcode, description = '', isManual = false){
+        var node = document.createElement('li');
+        if (isManual) {
+            node.appendChild(document.createTextNode(barcode));
+        } else {
+            node.appendChild(document.createTextNode(barcode));
+        }
+        document.getElementById("lsTemp").appendChild(node);
+    }
+
+    
+    function clickPress(event) {
+        if (event.key === "Enter") {
+            const barcode = document.getElementById("searchInput").value.trim().replaceAll("'", "-");
+            if (!barcode) return;
+
+            if (codigosSet.has(barcode)) {
+                addBarcodeToList(barcode);
+            } else {
+                playSound();
+                if (confirm("El código de barras no existe. ¿Desea agregarlo?")) {
+                    addBarcodeToList(barcode, '', true);
                 }
             }
         }
+    }
 
-        function existsInLsArts(barcode) {
-            let lsArts = <?php echo json_encode($lsArts); ?>;
-            return lsArts.find(item => item.codigoBarras === barcode);
-        }
+
+
+
+
+
 
         function addBarcodeToList(barcode, description = '', isManual = false) {
             let ivez = (document.getElementById("quantity")).value;
@@ -246,7 +244,6 @@ function playSound() {
             });
             }
     </script>
-
 
 </div>
 

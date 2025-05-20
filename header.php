@@ -1,15 +1,5 @@
 <!doctype html>
  <html class="no-js" lang=""> 
-<!--/*-----------------------------------------------------------
-------------------- PERFILES ------------    $userAdmin = $_SESSION["perfil"];--------------------
--------------------0->DESACTIVADO----------------------------
--------------------1->ADMIN----------------------------------
--------------------2->TIENDA---------------------------------
--------------------3->INVENTARIOS----------------------------
--------------------4->ASISTENTE PARA CONTEOS TFT-------------
--------------------5->BODEGA---------------------------------
--------------------6->CONTABILIDAD---------------------------
-------------------------------------------------------------->
 
 <head>
     <meta charset="utf-8">
@@ -32,7 +22,6 @@
 <body>
 
 <?php
-    // Validating Session
     session_start();
     if(strlen($_SESSION['username'])==0)
     {
@@ -49,77 +38,7 @@
     $userAdmin = $_SESSION["perfil"];
     $whsInvs = $_SESSION["whsInvs"];
     $whsTurem = $_SESSION["whsTurem"];
-    $whsCica= $_SESSION["whsCica"];  //tambien para preven
-
-/*
-    // Definir roles y permisos
-$roles = [
-    'SOPORTETI' => [
-        'configuracion' => true,
-        'inventarios' => false,
-        'contabilidad' => false,
-    ],
-    'SISTEMAS' => [
-        'configuracion' => false,
-        'inventarios' => true,
-        'contabilidad' => false,
-    ],
-    'MC-SMA' => [
-        'configuracion' => false,
-        'inventarios' => false,
-        'contabilidad' => true,
-    ],
-    // Agrega más roles según sea necesario
-];
-
-// Obtener el rol actual del usuario
-$currentRole = $roles[$userName] ?? null;
-
-
-// Verificar permisos y mostrar menús
-if ($currentRole) {
-    if ($currentRole['configuracion']) {
-        echo '
-        <li class="menu-item-has-children dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="menu-icon fa fa-cogs"></i>Configuración
-            </a>
-            <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
-            </ul>
-        </li>';
-    }
-
-    if ($currentRole['inventarios']) {
-        echo '
-        <li class="menu-item-has-children dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="menu-icon fa fa-check-square"></i>Inventarios
-            </a>
-            <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
-                <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
-            </ul>
-        </li>';
-    }
-
-    if ($currentRole['contabilidad']) {
-        echo '
-        <li class="menu-item-has-children dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="menu-icon fa fa-money"></i>Contabilidad
-            </a>
-            <ul class="sub-menu children dropdown-menu">
-                <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial</a></li>
-            </ul>
-        </li>';
-    }
-} else {
-    echo '<li><a href="#"><i class="menu-icon fa fa-ban"></i>Sin permisos</a></li>';
-}
-*/
-
+    $whsCica= $_SESSION["whsCica"];  
 ?>
 
 <style>
@@ -166,6 +85,8 @@ if ($currentRole) {
     animation: rotarload 1s ease-out infinite;
     transform: rotate(0deg);
   }
+ 
+
 </style>
  
 
@@ -193,6 +114,8 @@ if ($currentRole) {
                         <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
 
             </ul>
+
+
             </li>';
 
         }  else  {     

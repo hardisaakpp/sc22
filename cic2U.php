@@ -339,7 +339,7 @@ if (observacion.value.trim().length==0) {
                         <tr>
                             <th id='idcicasap' style='display: none;'>idcicasap</th>
                             <th>FORMA PAGO</th>
-                            <th id='v1'>VALOR.SAP</th>
+                            <th id='v1'>VALOR</th>
                             <th id='v2'>RECIBIDO</th>
                             <th id='v3'>ONLINE <i id='n1' aria-hidden="true" class="fa fa-comment"></i></th>
                             <th id='n1' style='display: none;'>NOTA</th>

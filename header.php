@@ -184,74 +184,63 @@ if ($currentRole) {
                     <?php 
 
 
-                  //CONFIGURACION SOLO SOPORTETI-->
-                  if ($userAdmin==1  && $userName=='SOPORTETI') {   
-                    echo '
-                    <li class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
-                    <ul class="sub-menu children dropdown-menu">     
-                                <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
+    //CONFIGURACION SOLO SOPORTETI-->
+        if ($userAdmin==1  && $userName=='SOPORTETI') {   
+            echo '
+            <li class="menu-item-has-children dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
+            <ul class="sub-menu children dropdown-menu">     
+                        <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
 
-                    </ul>
-                    </li>';
-    
-                }  else  {   
-                       
-        
-                    
+            </ul>
+            </li>';
 
+        }  else  {     
+        //INVENTARIOS TFA
+                    if ($userAdmin==1 && $userName <> 'SISTEMAS') { // ADMIN   
+                        echo '
+                        <li class="menu-item-has-children dropdown">
+                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
+                            <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
+                        </ul>
+                        </li>
+                        ';
+                    } else   if ( $userName === 'SISTEMAS') { // ADMIN   
+                        echo '
+                        <li class="menu-item-has-children dropdown">
+                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-spinner"></i><a href="tfaRe.php">Log Tomas aleatorias</a></li>
+                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
+                            <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
+                        </ul>
+                        </li>
+                        ';
+                    } else if ($userAdmin==2){ // TIENDA
+                        echo '
+                        <li class="menu-item-has-children dropdown">
+                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-pencil-square-o"></i><a href="tfaD.php">Toma aleatoria</a></li>
+                            <li><i class="fa fa-h-square"></i><a href="tfaHu.php">Historial</a></li>
+                        </ul>
+                        </li>
+                        ';
+                    } else if ($userAdmin==3){ // INVENTARIO
+                        echo '
+                        <li class="menu-item-has-children dropdown">
+                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
+                            <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
+                        </ul>
+                        </li>
+                        ';
+                    }
 
-                    //INVENTARIOS TFA-->
-
-                        if ($userAdmin==1 && $userName <> 'SISTEMAS') { // ADMIN   
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
-                            </ul>
-                            </li>
-                            ';
-                        } else   if ( $userName === 'SISTEMAS') { // ADMIN   
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-spinner"></i><a href="tfaRe.php">Log Tomas aleatorias</a></li>
-                                <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
-                            </ul>
-                            </li>
-                            ';
-                        } else if ($userAdmin==2){ // TIENDA
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-pencil-square-o"></i><a href="tfaD.php">Toma aleatoria</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="tfaHu.php">Historial</a></li>
-                            </ul>
-                            </li>
-                            ';
-                        } else if ($userAdmin==3){ // INVENTARIO
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
-                            </ul>
-                            </li>
-                                
-                            ';
-                        }else if ($userAdmin==4){ // cuentaInventarios
-                            # code...
-                        }else if ($userAdmin==5){ // bodega
-
-                        }  
-
-                        //PRESUPUESTOS TFA
+        //PRESUPUESTOS - METAS
                         $LP = "LP"; $SAL = "SAL";
                         $RL = "RL";
                         $OUT = "OUT";
@@ -353,27 +342,9 @@ if ($currentRole) {
                                 </ul>
                                 </li>
                                 ';
-                            } else if ($userAdmin==2){ // TIENDA
-                                echo '
-                              
-                                ';
-                            
-                            } else if ($userAdmin==2){ // TIENDA
-                                echo '
-                              
-                                ';
-                            } else if ($userAdmin==3){ // INVENTARIO
-                                echo '
-                               
-                                    
-                                ';
-                            }else if ($userAdmin==4){ // cuentaInventarios
-                                # code...
-                            }else if ($userAdmin==5){ // bodega
-    
-                            }  
-                //HORARIOS-->
-                        if ($userAdmin==1) { // ADMIN   
+                            } 
+        //HORARIOS-->
+                      /*  if ($userAdmin==1) { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Horarios</a>
@@ -395,18 +366,22 @@ if ($currentRole) {
                             </ul>
                             </li>
                             ';
-                        } else if ($userAdmin==3){ // INVENTARIO
-                            echo '
-                                
-                            ';
-                        }else if ($userAdmin==4){ // cuentaInventarios
-                            # code...
-                        }else if ($userAdmin==5){ // bodega
-
-                        }  
-                //CIERRES DE CAJA-->
-                        if ( $userName=='MC-SCA'  || $userName=='RL-REC2' )  { // ADMIN   
-                            echo '
+                        } */
+        //CIERRES DE CAJA-->
+                    if ($userAdmin==1) { // ADMIN   
+                        echo '
+                        <li class="menu-item-has-children dropdown">
+                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (HITELL)</a></li>
+                            <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
+                            <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
+                            <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
+                        </ul>
+                        </li>
+                        ';
+                    } else if ($userAdmin==2){ // TIENDA
+                        echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                             <ul class="sub-menu children dropdown-menu">
@@ -415,283 +390,33 @@ if ($currentRole) {
                             </ul>
                             </li>
                             ';
-                        } else  if ( substr($userName, 0, strlen($OUT)) === $OUT  || substr($userName, 0, strlen($RL)) === $RL )  { // ADMIN   
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                 <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-<!--                                 <li><i class="fa fa-pencil-square-o"></i><a href="cic.php?pFecha=2024-10-29&pIdAlmacen='.$whsCica.'">Cierre de Caja (AYER)</a></li> -->
-                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial</a></li>
-                            </ul>
-                            </li>
-                            ';
-                        } else   if ( substr($userName, 0, strlen($LP)) === $LP ) { // ADMIN   
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                 <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial</a></li>
-                            </ul>
-                            </li>
-                            ';
-                        } else if ($userAdmin==1) { // ADMIN   
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                             <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (HITELL)</a></li>
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
-                            </ul>
-                            </li>
-                            ';
-                        } else if ($userAdmin==2){ // TIENDA
+                    }
+                        
+        // CIERRES DE CAJA PARA CONTABILIDAD               
+                if ($userAdmin==6 && $userName=='CONTABILIDADMT'){ 
+                    echo '
+                    <li class="menu-item-has-children dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                    <ul class="sub-menu children dropdown-menu">
+                    
+                        <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (HITELL)</a></li>
+                    </ul>
+                    </li>
 
-                              if (substr($userName, 0, strlen($LP)) === $LP  ) {
-                                echo ' <li class="menu-item-has-children dropdown">
-                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                <ul class="sub-menu children dropdown-menu">
-    
-                                    <li><i class="fa fa-pencil-square-o"></i><a href="hcica.php">Cierre de Caja H</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="hcicaHu.php">Historial H</a></li>
- 
-    
-    
-                                </ul>
-                                </li>';
-                                    } else  if (substr($userName, 0, strlen($SAL)) === $SAL  ) {
-                                        echo ' <li class="menu-item-has-children dropdown">
-                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                        <ul class="sub-menu children dropdown-menu">
-                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-            
-            
-                                        </ul>
-                                        </li>';
-                                            } else  if ($userName=='MC-MSO'   ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
                     
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else  if ($userName=='CL-SMA'   ) {
-                                                        echo ' <li class="menu-item-has-children dropdown">
-                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                        <ul class="sub-menu children dropdown-menu">
-                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                            
-                            
-                                                        </ul>
-                                                        </li>';
-                                                            } else  if ($userName=='PSB-DOR'   ) {
-                                                                echo ' <li class="menu-item-has-children dropdown">
-                                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                                <ul class="sub-menu children dropdown-menu">
-                                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                                    
-                                    
-                                                                </ul>
-                                                                </li>';
-                                                                
-                                                                    } else  if ($userName=='PSB-MPA'   ) {
-                                                                        echo ' <li class="menu-item-has-children dropdown">
-                                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                                        <ul class="sub-menu children dropdown-menu">
-                                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                                            
-                                            
-                                                                        </ul>
-                                                                        </li>';
-                                                                            } else  if ($userName=='PSB-PSM'   ) {
-                                                                        echo ' <li class="menu-item-has-children dropdown">
-                                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                                        <ul class="sub-menu children dropdown-menu">
-                                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                                            
-                                            
-                                                                        </ul>
-                                                                        </li>';
-                                                                            } else if ($userName=='MC-DOR'   ) {
-                                                                        echo ' <li class="menu-item-has-children dropdown">
-                                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                                        <ul class="sub-menu children dropdown-menu">
-                                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                                            
-                                            
-                                                                        </ul>
-                                                                        </li>';
-                                                                            } else  if ($userName=='MC-SMA'   ) {
-                                                                echo ' <li class="menu-item-has-children dropdown">
-                                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                                <ul class="sub-menu children dropdown-menu">
-                                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                                    
-                                    
-                                                                </ul>
-                                                                </li>';
-                                                                    } else  if ($userName=='PSB-MSO'   ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                    
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else  if ($userName=='PSB-SMA'   ) {
-                                                        echo ' <li class="menu-item-has-children dropdown">
-                                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                        <ul class="sub-menu children dropdown-menu">
-                                                            <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                            <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                            
-                            
-                                                        </ul>
-                                                        </li>';
-                                                            } else  if ($userName=='MC-ISL'   ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                    
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else  if ($userName=='MC-SCA'   ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                    
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else  if ($userName=='PDP-QN'   ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                    
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else  if ($userName=='MC-JAR'   ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                    
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else  if ($userName=='CL-QSN'   ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                    
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else  if ($userName=='PSB-QN'   ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                    
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else if ($userName=='MC-QSN'  ) {
-                                                echo ' <li class="menu-item-has-children dropdown">
-                                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                                <ul class="sub-menu children dropdown-menu">
-                                                    <li><i class="fa fa-pencil-square-o"></i><a href="cic.php">Cierre de Caja</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicHu.php">Historial (H)</a></li>
-                                                    <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-                    
-                    
-                                                </ul>
-                                                </li>';
-                                                    } else {
-                                        echo '
-                                        <li class="menu-item-has-children dropdown">
-                                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                                        <ul class="sub-menu children dropdown-menu">
-                                            <li><i class="fa fa-pencil-square-o"></i><a href="cica.php">Cierre de Caja</a></li>
-                                            <li><i class="fa fa-h-square"></i><a href="cicahu.php">Historial</a></li>
-
-                                        </ul>
-                                        </li>';
-                                    
-                            }
-                           
-
-                        } else if ($userAdmin==6 && $userName=='CONTABILIDADMT'){ // INVENTARIO
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                            
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (HITELL)</a></li>
-                            </ul>
-                            </li>
-
-                            
-                            ';
-                        }else if ($userAdmin==6 && $userName=='CONTABILIDADCE'){ // INVENTARIO
-                            echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
-                                <li><i class="fa fa-pencil-square-o"></i><a href="cicLce.php">Cierres de caja (CE-HITELL)</a></li>
-                            </ul>
-                            </li>
-                            ';
-                        }else if ($userAdmin==4){ // cuentaInventarios
-                            # code...
-                        }else if ($userAdmin==5){ // bodega
-
-                        }  
-                    //CONFIGURACION-->
+                    ';
+                }else if ($userAdmin==6 && $userName=='CONTABILIDADCE'){ // INVENTARIO
+                    echo '
+                    <li class="menu-item-has-children dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
+                        <li><i class="fa fa-pencil-square-o"></i><a href="cicLce.php">Cierres de caja (CE-HITELL)</a></li>
+                    </ul>
+                    </li>
+                    ';
+                }
+        //CONFIGURACION-->
                     if ($userAdmin==1) {   
                             echo '
                             <li class="menu-item-has-children dropdown">
@@ -703,29 +428,29 @@ if ($currentRole) {
                             </li>';
             
                         }  
-            
-            if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
-            ?>
+ 
+        //Bodegas
 
-                        <!--//Reportes-->
+                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
+                        
+                        
+                        echo '                       
+                            <li class="menu-item-has-children dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
+                                <ul class="sub-menu children dropdown-menu">     
+                                    <li><i class="ti ti-dropbox"></i><a href="soltr.php">Solicitud Translado</a></li>
+                                    <li><i class="fa fa-print"></i><a href="soltrL.php">Etiquetas</a></li>
+                                    <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
+                                    <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
+                                    <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
+                                </ul>
+                            </li>
+                        ';
+                        }
 
-                        <li class="menu-item-has-children dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
-                            <ul class="sub-menu children dropdown-menu">     
-                                <li><i class="ti ti-dropbox"></i><a href="soltr.php">Solicitud Translado</a></li>
-                                <li><i class="fa fa-print"></i><a href="soltrL.php">Etiquetas</a></li>
-                                <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
-                                <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
-                                <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
-
-
-                            </ul>
-                        </li>
-                        <?php 
-            }
-            if ($userAdmin==1 || $userAdmin==3) {   ?>
-
-
+        //Toma Fisica Total
+            if ($userAdmin==1 || $userAdmin==3) { 
+                echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti ti-check-box"></i>Toma Fisica Total</a>
                             <ul class="sub-menu children dropdown-menu">     
@@ -737,23 +462,15 @@ if ($currentRole) {
 
                             </ul>
                         </li>
-            <?php 
-             }  
-            
- if ($userAdmin==4) {   
-            ?>
-
-                        <!--//Reportes-->
-
+                    ';
+            }else if ($userAdmin==4) {   
+                echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
                             <ul class="sub-menu children dropdown-menu">     
                                         <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
                                         <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
                                         <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
-                            
-
-
                             </ul>
                         </li>
 
@@ -767,25 +484,17 @@ if ($currentRole) {
 
                             </ul>
                         </li>
-            <?php 
-             }  
-            } 
+                    ';
+            }  
+    } 
             ?>
 
                  
                 </ul>
-            </div><!-- /.navbar-collapse -->
-           
+            </div>
         </nav>
     
-    
-       
-    </aside><!-- /#left-panel -->
- 
-    <!-- Left Panel -->
-
-    <!-- TOP Right Panel -->
-
+    </aside>
     <div id="right-panel" class="right-panel">
 
         <!-- Header-->

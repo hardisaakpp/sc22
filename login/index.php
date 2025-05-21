@@ -84,7 +84,7 @@
                $ps = $_POST['ipassword'] ?? '';
                if(empty($us) || empty($ps)){ session_unset(); session_destroy(); $message = '<label>Los campos son requeridos</label>'; }  
                else{
-                    include_once "../cx/bd_scs.php";
+                    include_once "../../cx/bd_scs.php";
                     $message = '';
                     $q="SELECT count(*) FROM STORECONTROL.dbo.users WHERE username = '$us' AND password = '$ps'";
                     $r=resp_oneval($q);
@@ -101,7 +101,7 @@
                          $_SESSION["username"]=$us;
                          $_SESSION['logged_in'] = TRUE;
                          if(empty($_SESSION['csrf_token'])){ $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); }
-                         header("location:wllcm.php");
+                         header("location:../wllcm.php");
                          exit();
                     }
                }  

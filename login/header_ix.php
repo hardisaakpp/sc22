@@ -4,12 +4,12 @@
         <meta charset="UTF-8">
         <title>Acceso Inventarios</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="assets/dist/js/color-modes.js"></script>
-        <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <script src="assets/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <link rel="icon" href="assets/img/store_control/favicon.ico" type="image/x-icon">
-        <link href="assets/dist/css/checkout.css" rel="stylesheet">
-        <script src="assets/dist/js/jquery-3.6.0.min.js"></script>  
+        <script src="../../assets/dist/js/color-modes.js"></script>
+        <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="../../assets/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <link rel="icon" href="../../assets/img/store_control/favicon.ico" type="image/x-icon">
+        <link href="../../assets/dist/css/checkout.css" rel="stylesheet">
+        <script src="../../assets/dist/js/jquery-3.6.0.min.js"></script>  
         <style>
             body {
             background-color: var(--bs-body-bg);

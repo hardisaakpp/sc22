@@ -39,14 +39,10 @@ select
     (Select top 1 revisado from CiC cic where a.id=cic.fk_ID_almacen and c.fecha=cic.fecha) as 'revisado',
     sum(Valor) as 'valSAP'
     , sum(valPinpadOn) as 'valPinpadOn'
-    /*   , sum(valRec) as 'valRec'
-    , sum(valOnline) as 'valOnline'
-    , sum(valPinpadOn) as 'valPinpad'
-    , sum(valPinpadOff) as 'valMedianet'
-    , ( sum(valRec) +sum(valPinpadOff)+ sum(valPinpadOn)+sum(valOnline)-sum(Valor)) as 'Diferencia'
-    */
+
 from cicSAP c join Almacen a on a.cod_almacen=c.whsCode
 where c.fecha > DATEADD(MONTH,-2,GETDATE()) and c.origen not like 'H'  
+AND A.fk_emp='MT'
 group by a.id,
 c.fecha,c.whsCode, a.cod_almacen,a.nombre
 )q1
@@ -62,8 +58,7 @@ SELECT [fecha]
 FROM [dbo].[cicUs]
 
 where fecha between '".$desde."' and '".$hasta."'  
-and (whsCode like 'RL-%' OR whsCode like 'OUT-%')
- and  (whsCode not like 'LP-%' and whsCode not like 'YHD-%')
+--and (whsCode like 'RL-%' OR whsCode like 'OUT-%' OR whsCode  like 'LP-%' OR whsCode  like 'YHD-%')
 group by [fecha]
 ,[whsCode]
 
@@ -84,8 +79,7 @@ join
 			full outer join cicSAP cs on cu.fecha=cs.fecha and cs.whsCode=cu.whsCode and cs.caja=cu.caja and cs.CardName=cu.CardName
 		where  cs.origen<>'H' 
 			and cs.fecha between '".$desde."' and '".$hasta."'  
-			and (cs.whsCode like 'RL-%' OR cs.whsCode like 'OUT-%')
-			and  (cs.whsCode not like 'LP-%' and cs.whsCode not like 'YHD-%')
+--and (whsCode like 'RL-%' OR whsCode like 'OUT-%' OR whsCode  like 'LP-%' OR whsCode  like 'YHD-%')
 		group by  cs.fecha, cs.whsCode
 
 	)q3

@@ -5,10 +5,12 @@
     $tiendaCica=0;
     if (isset($_GET["pIdAlmacen"])) {
         $tiendaCica = $_GET["pIdAlmacen"];
-    }else if (isset($_SESSION["whsCica"])) {
+    }else if (isset($_SESSION["whsCica"]) && $_SESSION["whsCica"]>0) {
         $tiendaCica=$_SESSION["whsCica"];
     }else {
-        exit('NO TIENE UNA TIENDA ASIGNADA PARA CIERRE DE CAJA O PERMISOS');
+         echo "<div class='alert alert-danger' role='alert'>No tiene una tienda asignada.</div>";
+           
+        
     }   
     
     //Si existe Get se coge la fecha
@@ -18,9 +20,12 @@
         $pFecha = $_GET["pFecha"];
     }
     
+  
+    
+//si no es ADMIN o no se  no abre
+if($userAdmin==1 || $userAdmin==6){  
 
-   
-    //obtener token
+  //obtener token
     $token=get_token($tiendaCica, $db, $userName);    
 
 		$sentencia2 = $db->query("select * from almacen where id=".$tiendaCica."  "  );
@@ -28,20 +33,6 @@
 			$h_cod_neg = $TEMP1->hit_cod_neg;
 			$h_cod_local = $TEMP1->hit_cod_local;
 			$emp=$TEMP1->fk_emp;
-    
-
-
-  
-  
-  
-//si no es ADMIN o no se  no abre
-if($whsCica==0){  
-    echo ('NO TIENE UNA TIENDA ASIGNADA PARA CIERRE DE CAJA');
-    //echo $whsCica;
-   // echo $pFecha;
-    //exit();
-}else{
-
 
     //SI ES HOY ACTUALIZA 
     if ($pFecha == date('Y-m-d')) {  
@@ -80,141 +71,43 @@ if($whsCica==0){
                 // echo $tiendaCica." - ". $pFecha." - ". $i;
                 }
             
-
                 $auxCAJA=0;
                 ///solo actualiza si es el mismo dia
                 if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {
-                // echo "mismo dia!";  
-                //-- delete from cicSAP where caja='NE' and fecha='". $pFecha ."';
-                //EXEC [sp_cicUs_pass_pinpad] '". $whsCica ."', '". $pFecha ."';
+
                 $sentencia = $db->query("
-                EXEC sp_cic_sincSAPSingle '". $whsCica ."', '". $pFecha ."';
-                EXEC sp_cic_createCajas '". $whsCica ."', '". $pFecha ."';
-                EXEC sp_cicUs_create '". $whsCica ."', '". $pFecha ."';
-
-
-                
+                EXEC sp_cic_sincSAPSingle '". $tiendaCica ."', '". $pFecha ."';
+                EXEC sp_cic_createCajas '". $tiendaCica ."', '". $pFecha ."';
+                EXEC sp_cicUs_create '". $tiendaCica ."', '". $pFecha ."';
                 " );
                 $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
                 }
     }
 
    $senten2 = $db->query("
-   select * from almacen where id=".$whsCica."  "  );
+   select * from almacen where id=".$tiendaCica."  "  );
    $TEMPa1 = $senten2->fetchObject();
 
        $almacenCica = $TEMPa1->cod_almacen;
        $nomealmacenCica = $TEMPa1->nombre;
 
-       $s2 = $db->query(" select top 1 status,cerrado from CiC where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."' " );
+       $s2 = $db->query(" select top 1 status,cerrado from CiC where fk_ID_almacen=".$tiendaCica."	and fecha= '".$pFecha."' " );
        $stat = $s2->fetchObject();
 
        if ($stat) {
         $estado= $stat->cerrado;  ///seteo estado 66664
        }else {
         $estado= null;  
-        error_log("Error: No se encontró el estado de la caja para la fecha $pFecha y el almacén $whsCica");
+        error_log("Error: No se encontró el estado de la caja para la fecha $pFecha y el almacén $tiendaCica");
        }
        
-
-
     $s1 = $db->query("
     select * from cic 
-    where fk_ID_almacen=".$whsCica."	and fecha= '".$pFecha."'
+    where fk_ID_almacen=".$tiendaCica."	and fecha= '".$pFecha."'
     " );
     $cajas = $s1->fetchAll(PDO::FETCH_OBJ);   
 
-    $sentencia = $db->query("      
-   
-    
-      select q1.id as almacen, q1.fecha, q1.CardName as forPag, Q1.valSAP,  q2.[valRec]
-			  ,q2.[valOnline]
-			  ,q1.[valPinpadOn] as valPinpadOn
-			  ,q2.[valPinpadOff] as valMedianet 
-			   , ( (q2.valRec) +(q2.valPinpadOff)+ (q1.valPinpadOn)+(q2.valOnline)-(q1.valSAP)) as 'Diferencia'
-			  from
-            (
-            select 
-            c.fecha,c.whsCode,a.id,
-                    CASE 
-                        WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
-                        WHEN c.CardName LIKE '%VISA' THEN 'Visa'
-                        WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
-                        WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
-                        WHEN c.CardName LIKE '%DINERS%' THEN 'Diners'
-                        WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
-                        WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-                        WHEN c.CardName LIKE 'Efectivo' THEN 'EFECTIVO'
-                        WHEN c.CardName LIKE 'Crédito directo' THEN 'CREDITO DIRECTO CREDICORP'
-                        WHEN c.CardName LIKE '%Pago de abono' THEN 'EFECTIVO'
-                        ELSE c.CardName
-                    END  as CardName
-                    , sum(Valor) as 'valSAP'
-                    , sum(valPinpadOn) as 'valPinpadOn'
-               
-                from cicSAP c join Almacen a on a.cod_almacen=c.whsCode
-                where c.origen not like 'H'  and a.id='". $whsCica ."' and c.fecha='". $pFecha ."'
-                group by a.id,
-                (
-                CASE 
-                        WHEN c.CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
-                        WHEN c.CardName LIKE '%VISA' THEN 'Visa'
-                        WHEN c.CardName LIKE '%MASTERCARD' THEN 'MasterCard'
-                        WHEN c.CardName LIKE '%DISCOVER' THEN 'Diners'
-                        WHEN c.CardName LIKE '%DINERS%' THEN 'Diners'
-                        WHEN c.CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
-                        WHEN c.CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-                        WHEN c.CardName LIKE 'Efectivo' THEN 'EFECTIVO'
-                        WHEN c.CardName LIKE 'Crédito directo' THEN 'CREDITO DIRECTO CREDICORP'
-                        WHEN c.CardName LIKE '%Pago de abono' THEN 'EFECTIVO'
-                ELSE c.CardName
-            END  
-                ) , c.fecha,c.whsCode
-            )q1
-	 join
-	(
-		SELECT [fecha]
-			  ,[whsCode]
-			  , CASE 
-				WHEN CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
-				WHEN CardName LIKE '%VISA' THEN 'Visa'
-				WHEN CardName LIKE '%MASTERCARD' THEN 'MasterCard'
-				WHEN CardName LIKE '%DISCOVER' THEN 'Diners'
-				WHEN CardName LIKE '%DINERS%' THEN 'Diners'
-				WHEN CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
-				WHEN CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-                WHEN CardName LIKE 'Efectivo' THEN 'EFECTIVO'
-                WHEN CardName LIKE 'Crédito directo' THEN 'CREDITO DIRECTO CREDICORP'
-                WHEN CardName LIKE '%Pago de abono' THEN 'EFECTIVO'
-				ELSE CardName
-			END   as CardName
-			  ,sum([valRec]) as [valRec]
-			  ,sum([valOnline]) as [valOnline]
-			  ,0 as [valPinpadOn]
-			  ,sum([valPinpadOff]) as [valPinpadOff]
-		  FROM [dbo].[cicUs]
-		  group by [fecha]
-			  ,[whsCode]
-			  , CASE 
-				WHEN CardName LIKE 'Nota de crédito' THEN 'Nota de Crédito'
-				WHEN CardName LIKE '%VISA' THEN 'Visa'
-				WHEN CardName LIKE '%MASTERCARD' THEN 'MasterCard'
-				WHEN CardName LIKE '%DISCOVER' THEN 'Diners'
-				WHEN CardName LIKE '%DINERS%' THEN 'Diners'
-				WHEN CardName LIKE '%AMERICAN EXPRESS' THEN 'American Express'
-				WHEN CardName LIKE 'Efectivo - Venta' THEN 'EFECTIVO'
-                WHEN CardName LIKE 'Efectivo' THEN 'EFECTIVO'
-                WHEN CardName LIKE 'Crédito directo' THEN 'CREDITO DIRECTO CREDICORP'
-                WHEN CardName LIKE '%Pago de abono' THEN 'EFECTIVO'
-				ELSE CardName
-			END 
-		) q2
-		on q1.fecha=q2.fecha and q1.whsCode=q2.whsCode and q1.CardName=q2.CardName
-
-
-
-
-    " );
+    $sentencia = $db->query(" EXEC sp_ResumenMediosPago  '".$tiendaCica."','".$pFecha."' " );
     $consolidados = $sentencia->fetchAll(PDO::FETCH_OBJ);
        
 ?>
@@ -340,7 +233,7 @@ if($whsCica==0){
 
 <!---------ADJUNTOS--------->
     <div class="card">
-            <div class="card-header"><strong>ADJUNTOS</strong></div>
+            <div class="card-header"><strong>📎 ADJUNTOS</strong></div>
             <div class="card-body card-block">
  
                 <!--tabla-->
@@ -414,14 +307,12 @@ if($whsCica==0){
             }else if(tds[i].className == 'valMedianet') {
                 svalMedianet += isNaN(tds[i].innerHTML) ? 0 : parseFloat(tds[i].innerHTML);
             }
-
         }
         document.getElementById('resumentbl').innerHTML += '<tr class="table-secondary"><td>TOTAL:</td><td>' + sum.toFixed(2) + '</td><td>' +  svalRec.toFixed(2) +
         '</td><td>' +  svalOnline.toFixed(2) +
         '</td><td>' +  svalPinpad.toFixed(2) +
         '</td><td>' +  svalMedianet.toFixed(2) +'</td></tr>';
     </script>
-
         <?php
     
 ?>
@@ -432,4 +323,11 @@ if($whsCica==0){
 </div>
       
 <?php  
-}  include_once "footer.php"; ?>
+} else
+{
+    echo "<div class='alert alert-danger' role='alert'>No tiene permisos para acceder a esta sección</div>";
+}
+
+
+
+include_once "footer.php"; ?>

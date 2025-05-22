@@ -35,9 +35,9 @@ if($userAdmin==1 || $userAdmin==6 || $userAdmin==2){
 			$emp=$TEMP1->fk_emp;
 
     //SI ES HOY ACTUALIZA 
-    if ($pFecha == date('Y-m-d')) {  
+    //if ($pFecha == date('Y-m-d')) {  
     //SI ES AYER U POSTERIOR
-    //if ($pFecha == date('Y-m-d') || $pFecha == date('Y-m-d', strtotime('-1 day'))) { 
+    if ($pFecha == date('Y-m-d') || $pFecha == date('Y-m-d', strtotime('-1 day'))) { 
         //proceso
             //encerar formas de pago
                 for ($i=1; $i < 8; $i++) { 

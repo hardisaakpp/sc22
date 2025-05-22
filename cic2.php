@@ -23,7 +23,7 @@
   
     
 //si no es ADMIN o no se  no abre
-if($userAdmin==1 || $userAdmin==6 || $userAdmin==2){  
+if($userAdmin>0){  
 
   //obtener token
     $token=get_token($tiendaCica, $db, $userName);    

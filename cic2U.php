@@ -404,7 +404,7 @@ if (observacion.value.trim().length==0) {
         }
         ?>
             
-            <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='cic2.php?pFecha=<?php echo $fecha ?>&pIdAlmacen=<?php echo $fk_ID_almacen ?>'">
+            <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='cic2.php?pFecha=<?php echo $fecha ?>&pIdAlmacen=<?php echo $fk_ID_almacen ?>&pFlag=true'">
                 <i class="fa fa-sign-out"></i>&nbsp; REGRESAR
             </button>
         </div>

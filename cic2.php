@@ -37,6 +37,20 @@ if($userAdmin==1 || $userAdmin==6 || $userAdmin==2){
     //SI ES HOY ACTUALIZA 
     //if ($pFecha == date('Y-m-d')) {  
     //SI ES AYER U POSTERIOR
+$pFlag = isset($_GET['pFlag']) && $_GET['pFlag'] === 'true';
+
+// Acción según el valor de pFlag
+if ($pFlag) {
+
+    
+echo "<script>console.log('flagTrue');</script>";
+
+    // Aquí va tu lógica específica
+} else {
+    // Acción si no se recibió o no es true
+    //echo "No se recibió pFlag o no es true.";
+    // Otra lógica alternativa
+
     if ($pFecha == date('Y-m-d') || $pFecha == date('Y-m-d', strtotime('-1 day'))) { 
         //proceso
             //encerar formas de pago
@@ -83,7 +97,7 @@ if($userAdmin==1 || $userAdmin==6 || $userAdmin==2){
                 $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
                 }
     }
-
+}  
    $senten2 = $db->query("
    select * from almacen where id=".$tiendaCica."  "  );
    $TEMPa1 = $senten2->fetchObject();
@@ -109,7 +123,7 @@ if($userAdmin==1 || $userAdmin==6 || $userAdmin==2){
 
     $sentencia = $db->query(" EXEC sp_ResumenMediosPago  '".$tiendaCica."','".$pFecha."' " );
     $consolidados = $sentencia->fetchAll(PDO::FETCH_OBJ);
-       
+   
 ?>
 
 <div class="content">

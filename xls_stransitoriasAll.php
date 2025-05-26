@@ -10,9 +10,9 @@ session_start();
     $regs = $sentencia2->fetchAll(PDO::FETCH_OBJ);
 
 //use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\SpreadSheet;
-use PhpOffice\PhpSpreadsheet\IOfactory;
-use \PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 $spreadsheet = new SpreadSheet();

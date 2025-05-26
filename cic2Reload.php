@@ -51,7 +51,7 @@ echo "<script>console.log('flagTrue');</script>";
     //echo "No se recibió pFlag o no es true.";
     // Otra lógica alternativa
 
-    if ($pFecha == date('Y-m-d') || $pFecha == date('Y-m-d', strtotime('-1 day'))) { 
+   
         //proceso
             //encerar formas de pago
                 for ($i=1; $i < 8; $i++) { 
@@ -96,7 +96,7 @@ echo "<script>console.log('flagTrue');</script>";
                 " );
                 $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
                 }
-    }
+    
 }  
    $senten2 = $db->query("
    select * from almacen where id=".$tiendaCica."  "  );

@@ -216,7 +216,7 @@ on q1.fecha=q4.fecha and q1.whsCode=q4.whsCode
                                     <td>
 
                                                 <button type="button" class="btn btn-outline-success" 
-                                                onclick="window.open('cic.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
+                                                onclick="window.open('cic2.php?pFecha=<?php echo $citem->fecha ?>&pIdAlmacen=<?php echo $citem->id ?>','_blank')"
                                                 > 👁️‍🗨️ </button> 
 
                                                 <?php

@@ -75,19 +75,6 @@ document.getElementById("frmConteo").addEventListener('submit', validarFormulari
 
 function validarFormulario(evento) {
   evento.preventDefault();
-  
-  /*var usuario = document.getElementById('usuario').value;
-  if(usuario.length == 0) {
-    alert('No has escrito nada en el usuario');
-    return;
-  }
-  var clave = document.getElementById('clave').value;
-  if (clave.length < 6) {
-    alert('La clave no es válida');
-    return;
-  }
-  this.submit();
-  */
 
   var observacion = document.getElementById("Observaciones");
   observacion.value = observacion.value.trim();
@@ -116,58 +103,11 @@ if (observacion.value.trim().length==0) {
 
     this.submit();
 
-
-
-
 } else {
     this.submit();
 }
-
-
-
-   /*
-    const resume_table = document.getElementById("resumentbl");
-    var filas = $("#ajuste").find("tr"); //devulve las filas del body de tu tabla segun el ejemplo que brindaste
-	  var resultado = 0;
-	for(i=0; i<filas.length; i++){ //Recorre las filas 1 a 1
-		var celdas = $(filas[i]).find("td"); //devolverá las celdas de una fila
-		//codigo = $(celdas[0]).text();
-		//descripcion= $(celdas[1]).text();
-		//valorsap = $($(celdas[8]).children("input")[0]).val();
-       // diferencia = $($(celdas[9]).children("input")[0]).val();
-        impuesto = $($(celdas[10]).children("input")[0]).val();
-            
-        if (impuesto!=0) {
-            resultado=resultado+1;
-            //console.log(impuesto);
-        }
-	}
-	
-	alert(resultado);
-
-*/
-
-
-
-
-
-
-  //alert('La clave no es válida');
     return;
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
     function indexesLX(){
         try {
                 $('#n1').click(function() {
@@ -182,10 +122,8 @@ if (observacion.value.trim().length==0) {
                     $('td:nth-child(10),th:nth-child(10)').toggle();
                 });
         }
-            catch(x) { /* puede usarse cualquier otro nombre en lugar de 'x' */
-            //document.getElementById("ejemplo").innerHTML = x.message;
+            catch(x) { 
         }
-    // setInterval('contadoradd()',2000);
     }
 
 
@@ -197,20 +135,13 @@ if (observacion.value.trim().length==0) {
 
     function calc(id) {
         var row=id.parentNode.parentNode;
-        //alert("Cell index is: " + ( document.getElementById('valSAP')).cellIndex);
-        
+
         var valSAP=row.cells[( document.getElementById('v1')).cellIndex].getElementsByTagName('input')[0].value;
         var recibido=row.cells[( document.getElementById('v2')).cellIndex].getElementsByTagName('input')[0].value;
         var online=row.cells[( document.getElementById('v3')).cellIndex].getElementsByTagName('input')[0].value;
         var pinpad=row.cells[( document.getElementById('v4')).cellIndex].getElementsByTagName('input')[0].value;
         var dataf=row.cells[( document.getElementById('v5')).cellIndex].getElementsByTagName('input')[0].value;
-        
-        //encerando
-       /* if (recibido == null || recibido == '') { row.cells[( document.getElementById('v2')).cellIndex].getElementsByTagName('input')[0].value=0.00; recibido = 0.00;}
-        if (online == null || online == '') { row.cells[( document.getElementById('v3')).cellIndex].getElementsByTagName('input')[0].value=0.00;online =0.00; }
-        if (dataf == null || dataf == '') { row.cells[( document.getElementById('v5')).cellIndex].getElementsByTagName('input')[0].value=0.00; dataf=0.00;}
-
-        */
+     
         
         if(online==null || online=='') {
         res=parseFloat(valSAP)*parseFloat(recibido);
@@ -223,19 +154,6 @@ if (observacion.value.trim().length==0) {
         } else {
             row.cells[( document.getElementById('v6')).cellIndex].getElementsByTagName('input')[0].style.color='green';
         }
-
-       // document.getElementById("ttRec").value="HOLA";
-       // <!--alex-->
-           
-       /*
-       $ttValSap = $ttValSap + $forpag->Valor;
-            $ttvRec = $ttvRec+ $forpag->valRec; 
-            $ttvOnline = $ttvOnline $forpag->valOnline; 
-            $ttPinPad = $ttPinPad + $forpag->valPinpadOn;
-            $ttvDatfast = $ttvDatfast +$forpag->valPinpadOff ; 
-
-*/
-
 
        var tabla = document.getElementById("resumentbl");
         var filas = tabla.getElementsByTagName("tr");
@@ -288,9 +206,9 @@ if (observacion.value.trim().length==0) {
         <div class="card-header">
             <strong> <?php 
                 if ($cerrado==1) {
-                    echo $caja."  [".$fecha."] 🔒";
+                    echo "🔒 [".$fecha."] - Caja ". $caja;
                 } else {
-                    echo $caja."  [".$fecha."] 🔓";
+                    echo "🔓 [".$fecha."] - Caja ".$caja;
                 }
                 
             
@@ -423,15 +341,6 @@ if (observacion.value.trim().length==0) {
                             }
                             ?>
                            
-
-                            
-
-
-
-
-
-
-
                             <td class="Diferencia"> 
                             <?php 
                                 
@@ -450,13 +359,6 @@ if (observacion.value.trim().length==0) {
                         </tr>
                         <?php } ?>
 
-
-                        <!--  $ttvValSap = $ttvValSap + $forpag->Valor;
-                                    $ttvRec = $ttvRec+ $forpag->valRec; 
-                                    $ttvOnline = $ttvOnline + $forpag->valOnline; 
-                                    $ttvPinPad = $ttvPinPad + $forpag->valPinpadOn;
-                                    $ttvDatfast = $ttvDatfast +$forpag->valPinpadOff ; 
-                            -->
                         <tr class="table-secondary"><td>TOTAL:</td>
                             
                             <td>
@@ -479,12 +381,6 @@ if (observacion.value.trim().length==0) {
 
                         </tr>
 
-                      <!--      <td>' +  svalRec.toFixed(2) +
-        '</td><td>' +  svalOnline.toFixed(2) +
-        '</td><td>' +  svalPinpad.toFixed(2) +
-        '</td><td>' +  svalMedianet.toFixed(2) +'</td></tr>';-->
-
-                        
                     </tbody>
                 </table>
              
@@ -508,10 +404,7 @@ if (observacion.value.trim().length==0) {
         }
         ?>
             
-
-
-
-            <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='cic2.php?pFecha=<?php echo $fecha ?>&pIdAlmacen=<?php echo $fk_ID_almacen ?>'">
+            <button type="button" class="btn btn-secondary btn-lg" onclick="window.location.href='cic2.php?pFecha=<?php echo $fecha ?>&pIdAlmacen=<?php echo $fk_ID_almacen ?>&pFlag=true'">
                 <i class="fa fa-sign-out"></i>&nbsp; REGRESAR
             </button>
         </div>
@@ -525,7 +418,7 @@ if (observacion.value.trim().length==0) {
         ?> 
     
         <div class="card">
-            <div class="card-header"><strong>ADJUNTOS</strong></div>
+            <div class="card-header"><strong>📎 ADJUNTOS</strong></div>
             <div class="card-body card-block">
  
                 <!--tabla-->

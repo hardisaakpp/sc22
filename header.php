@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>StoreControl22</title>
+    <title>StoreControl|22</title>
     <link rel="icon" type="image/png" href="images/favicon.png"/>
     <meta name="description" content="StoreControl22">
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -89,7 +89,6 @@
 
 </style>
  
-
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
 
@@ -321,8 +320,8 @@
                     <li class="menu-item-has-children dropdown">
                     <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
                     <ul class="sub-menu children dropdown-menu">
-                    
-                        <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (HITELL)</a></li>
+                        <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja</a></li>
+                        <li><i class="fa fa-refresh"></i><a href="cic2f5.php">Actualiza cajas por día [SAP]</a></li>
                     </ul>
                     </li>
 
@@ -335,6 +334,7 @@
                     <ul class="sub-menu children dropdown-menu">
                         <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
                         <li><i class="fa fa-pencil-square-o"></i><a href="cicLce.php">Cierres de caja (CE-HITELL)</a></li>
+                        <li><i class="fa fa-refresh"></i><a href="cic2f5.php">Actualiza cajas por día [SAP]</a></li>
                     </ul>
                     </li>
                     ';

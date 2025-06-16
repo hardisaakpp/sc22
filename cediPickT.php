@@ -108,6 +108,12 @@ function sendStockTransfer($jsonPayload) {
                     </div>
                 </div>
             </form>
+<div id="loader" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); z-index:9999; text-align:center; padding-top:20%;">
+  <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+    <span class="sr-only">Cargando...</span>
+  </div>
+  <p>Procesando, por favor espera...</p>
+</div>
 
             <table id="tabla">
                 <thead>
@@ -122,7 +128,7 @@ function sendStockTransfer($jsonPayload) {
                     <?php foreach ($scans as $item): ?>
                         <tr data-codigo="<?= $item->codigoBarras ?>" data-id="<?= $item->ID ?>" data-itemcode="<?= $item->ItemCode ?>" data-docentry="<?= $item->DocEntry_Sot ?>" data-linenum="<?= $item->LineNum ?>" data-id="<?= $item->ID ?>">
                             <td class="col-barcodes"><?= $item->codigoBarras ?></td>
-                            <td class="col-nombre"><?= $item->descripcion ?></td>
+                            <td class="col-nombre"><?= $item->ItemCode."- ".$item->descripcion ?></td>
                             <td><?= $item->stock ?></td>
                             <td class="escaneados"><?= $item->Scan ?></td>
                         </tr>
@@ -132,6 +138,9 @@ function sendStockTransfer($jsonPayload) {
 
             <div class="mt-3">
                 <button id="btnTransferencia" class="btn btn-warning">Crear Transferencia</button>
+                
+                <button id="btnDescargar" class="btn btn-info mt-2">⬇️ Descargar Tabla</button>
+
             </div>
         </div>
     </div>
@@ -177,56 +186,136 @@ function sendStockTransfer($jsonPayload) {
         document.getElementById('codigo').value = '';
         document.getElementById('codigo').focus();
     });
+function mostrarLoader(mostrar) {
+  document.getElementById('loader').style.display = mostrar ? 'block' : 'none';
+}
+document.getElementById('btnDescargar').addEventListener('click', function () {
+    const filas = document.querySelectorAll('#tabla tbody tr');
+    let csv = "Código,Artículo,Solicitado,Escaneado\n";
+
+    filas.forEach(fila => {
+        const columnas = fila.querySelectorAll('td');
+        const filaCSV = Array.from(columnas).map(col => `"${col.textContent.trim()}"`).join(",");
+        csv += filaCSV + "\n";
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tabla_scans.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+});
 
     document.getElementById('btnGuardar').addEventListener('click', function () {
-        const filas = document.querySelectorAll('#tabla tbody tr');
-        let errorCritico = false;
-        const datos = [];
+    mostrarLoader(true); // Mostrar loader
 
-        filas.forEach(fila => {
-            const solicitado = parseInt(fila.cells[2].textContent);
-            const escaneado = parseInt(fila.cells[3].textContent);
-            if (escaneado > solicitado) {
-                errorCritico = true;
-            }
+    const filas = document.querySelectorAll('#tabla tbody tr');
+    let errorCritico = false;
+    const datos = [];
 
-            datos.push({
-                id: fila.getAttribute('data-id'),
-                scan: escaneado
-            });
-        });
-
-        if (errorCritico) {
-            alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");
-            return;
+    filas.forEach(fila => {
+        const solicitado = parseInt(fila.cells[2].textContent);
+        const escaneado = parseInt(fila.cells[3].textContent);
+        if (escaneado > solicitado) {
+            errorCritico = true;
         }
 
-        fetch('php/guardar_scans.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                alert("✅ Datos guardados correctamente.");
-            } else {
-                alert("❌ Error al guardar los datos.");
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("❌ Error en la comunicación con el servidor.");
+        datos.push({
+            id: fila.getAttribute('data-id'),
+            scan: escaneado
         });
     });
 
-    document.getElementById('btnTransferencia').addEventListener('click', function () {
-        const filas = document.querySelectorAll('#tabla tbody tr');
+    if (errorCritico) {
+        mostrarLoader(false);
+        alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");
+        return;
+    }
+
+    fetch('php/guardar_scans.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+    })
+    .then(response => response.json())
+    .then(data => {
+        mostrarLoader(false);
+        if (data.status === "success") {
+            alert("✅ Datos guardados correctamente.");
+        } else {
+            alert("❌ Error al guardar los datos.");
+        }
+    })
+    .catch(error => {
+        mostrarLoader(false);
+        console.error("Error:", error);
+        alert("❌ Error en la comunicación con el servidor.");
+    });
+});
+
+
+    
+document.getElementById('btnTransferencia').addEventListener('click', async function () {
+
+mostrarLoader(true); // Mostrar loader
+
+//guardar
+
+     // Ejecutar el mismo código de guardar
+     const filas = document.querySelectorAll('#tabla tbody tr');
+     let errorCritico = false;
+     const datos = [];
+
+     filas.forEach(fila => {
+     const solicitado = parseInt(fila.cells[2].textContent);
+     const escaneado = parseInt(fila.cells[3].textContent);
+     if (escaneado > solicitado) {
+     errorCritico = true;
+     }
+     datos.push({
+     id: fila.getAttribute('data-id'),
+     scan: escaneado
+     });
+     });
+
+     if (errorCritico) {
+     mostrarLoader(false);
+     alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");
+     return;
+     }
+
+     try {
+     const response = await fetch('php/guardar_scans.php', {
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: JSON.stringify(datos)
+     });
+     const data = await response.json();
+     if (data.status !== "success") {
+     mostrarLoader(false);
+     alert("❌ Error al guardar los datos.");
+     return;
+     }
+     } catch (error) {
+     mostrarLoader(false);
+     alert("❌ Error en la comunicación con el servidor.");
+     return;
+     }
+
+
+//transferencia
+
+
+
+       // const filas = document.querySelectorAll('#tabla tbody tr');
         let incompletos = 0;
         let totalEscaneado = 0;
-        let errorCritico = false;
+       // let errorCritico = false;
 
         filas.forEach(fila => {
             const solicitado = parseInt(fila.cells[2].textContent);
@@ -244,6 +333,7 @@ function sendStockTransfer($jsonPayload) {
 
         if (errorCritico) {
             alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");
+                 mostrarLoader(false);
             return;
         }
 
@@ -276,6 +366,7 @@ filas.forEach(fila => {
 
         if (totalEscaneado === 0) {
             alert("⚠️ No se ha escaneado ningún producto. No se puede crear la transferencia.");
+                 mostrarLoader(false);
             return;
         }
 
@@ -325,9 +416,32 @@ filas.forEach(fila => {
                 
 
                     const jsonPayload = JSON.stringify(stockTransfer);
-                    const response = sendStockTransfer(jsonPayload);
+                    fetch("php/enviar_transferencia.php", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: jsonPayload
+})
+.then(async response => {
+  const text = await response.text();
+       mostrarLoader(false);
+  try {
+    const data = JSON.parse(text);
+    console.log("✅ Respuesta del servidor:", data);
+    //alert("✅ Transferencia enviada correctamente.");
+  } catch (e) {
+    console.warn("⚠️ Respuesta no JSON:", text);
+    alert("⚠️ Respuesta inesperada del servidor:\\n" + text);
+  }
+})
+.catch(error => {
+  console.error("❌ Error al enviar:", error);
+  alert("❌ Error al enviar la transferencia.");
+});
+
                     console.log("📦 Respuesta del servidor:", response);
-                    alert("✅ Transferencia creada correctamente.");    
+                   // alert("✅ Transferencia creada correctamente.");    
 
 console.log("📦 JSON generado:", stockTransfer);
 alert("📦 JSON generado. Revisa la consola para ver el contenido.");
@@ -339,6 +453,10 @@ alert("📦 JSON generado. Revisa la consola para ver el contenido.");
                 }
             }
         }
+        
+     // Al final de todo:
+     mostrarLoader(false);
+
     });
 
     // Pintar filas al cargar la página según el estado del escaneo

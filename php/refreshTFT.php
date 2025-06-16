@@ -13,4 +13,4 @@ $result = $sentencia->rowCount();
 
 //echo $result ;
 
-header("Location: ../TTrefresh.php");
+header("Location: ../loadTT.php");

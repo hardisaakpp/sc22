@@ -30,14 +30,12 @@ if($whsCica==0 && $userAdmin==2 ){
 //creo cicUSER
        
 //if ($pFecha==date('Y-m-d')) {
-   // echo "mismo dia!";  ///solo actualiza si es el mismo dia
     $sentencia = $db->query("
     EXEC sp_cicUs_create '". $fk_ID_almacen ."', '". $fecha ."';
     " );
     $cajas = $sentencia->fetchAll(PDO::FETCH_OBJ);
 //}
 
-//SI ES ADMIN SIEMPRE DESBLOQUEADO
 if ($userAdmin==1) {
     $cerrado=0;
 }
@@ -45,27 +43,17 @@ if ($userAdmin==1) {
 if ($userAdmin==6) {
     $cerrado=0;
 }
-
-
-     //   echo $caja . $fecha  . $Cerrado;
-
-
     $s1 = $db->query("
     select  *
     from vw_cicCaja where caja='". $caja ."' and fecha='".$fecha."' and whsCode='".$whsCode."' " );
     $consolidados = $s1->fetchAll(PDO::FETCH_OBJ);   
 
-       
-
-    $ttvValSap =0; //variable para total
+    $ttvValSap =0; 
     $ttvRec =0; 
     $ttvOnline =0; 
     $ttvPinPad =0; 
     $ttvDatfast =0; 
-
 ?>
-
-
 
 <script type="text/javascript">
 
@@ -78,20 +66,14 @@ function validarFormulario(evento) {
 
   var observacion = document.getElementById("Observaciones");
   observacion.value = observacion.value.trim();
-  // console.log (observacion.value.trim().length);
 
 if (observacion.value.trim().length==0) {
-    //console.log ('vacio');
 
     const resume_table = document.getElementById("resumentbl");
-    var filas = $("#ajuste").find("tr"); //devulve las filas del body de tu tabla segun el ejemplo que brindaste
+    var filas = $("#ajuste").find("tr"); 
 	
-	for(i=0; i<filas.length; i++){ //Recorre las filas 1 a 1
-		var celdas = $(filas[i]).find("td"); //devolverá las celdas de una fila
-		//codigo = $(celdas[0]).text();
-		//descripcion= $(celdas[1]).text();
-		//valorsap = $($(celdas[8]).children("input")[0]).val();
-       // diferencia = $($(celdas[9]).children("input")[0]).val();
+	for(i=0; i<filas.length; i++){ 
+		var celdas = $(filas[i]).find("td"); 
         impuesto = $($(celdas[10]).children("input")[0]).val();
             
         if (impuesto!=0) {
@@ -359,27 +341,29 @@ if (observacion.value.trim().length==0) {
                         </tr>
                         <?php } ?>
 
-                        <tr class="table-secondary"><td>TOTAL:</td>
-                            
-                            <td>
-                                <input type="text"  value="<?php echo $ttvValSap ?>" readonly>
-                            </td>
-                            <td>
-                                <input type="text" value="<?php echo $ttvRec ?>" name="ttvRec" id="ttvRec" readonly>
-                            </td>
-                            <td>
-                                <input type="text" value="<?php echo $ttvOnline ?>" name="ttvOnline" id="ttvOnline" readonly>
-                            </td>
-                            <td>
-                                <input type="text"  value="<?php echo $ttvPinPad ?>" readonly>
-                            </td>
-                            <td>
-                                <input type="text" value="<?php echo $ttvDatfast ?>" name="ttvDatfast" id="ttvDatfast" readonly>
-                            </td>
-                            <td></td>
-                            <td></td>
+                       <tr class="table-secondary">
+                        <td><strong>TOTAL:</strong></td>
+                        
+                        <td>
+                            <input type="text" value="<?php echo number_format($ttvValSap, 2, '.', '') ?>" readonly>
+                        </td>
+                        <td>
+                            <input type="text" value="<?php echo number_format($ttvRec, 2, '.', '') ?>" name="ttvRec" id="ttvRec" readonly>
+                        </td>
+                        <td>
+                            <input type="text" value="<?php echo number_format($ttvOnline, 2, '.', '') ?>" name="ttvOnline" id="ttvOnline" readonly>
+                        </td>
+                        <td>
+                            <input type="text" value="<?php echo number_format($ttvPinPad, 2, '.', '') ?>" readonly>
+                        </td>
+                        <td>
+                            <input type="text" value="<?php echo number_format($ttvDatfast, 2, '.', '') ?>" name="ttvDatfast" id="ttvDatfast" readonly>
+                        </td>
+                        
+                        <td></td>
+                        <td></td>
+                    </tr>
 
-                        </tr>
 
                     </tbody>
                 </table>

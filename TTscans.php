@@ -5,12 +5,7 @@
         exit();
     }
     $idcab = $_GET["idcab"];
-
-    $s1 = $db->query("EXEC sp_getCodBarEnabled '$idcab';");
-    $lsArts = $s1->fetchAll(PDO::FETCH_OBJ);
-
-    // Extraer solo los códigos de barra
-    $barcodes = array_map(fn($item) => $item->codigoBarras, $lsArts);
+    $barcodes = null;//array_map(fn($item) => $item->codigoBarras, $lsArts);
 
 
 ?>
@@ -44,10 +39,8 @@
             </div>
         </div>
     </div>
-<!-- /.breadcrumbs-->
   
 <div class="content">
-<!----------------- Content -------------------->
 <div class="row">
     <div class="col-lg-6">
         <div class="card">
@@ -95,48 +88,35 @@
 
 
 <script type="text/javascript"> 
-     // Crear un Set para búsquedas rápidas
     const codigosSet = new Set(<?php echo json_encode($barcodes); ?>);
 
-
     function playSound() {
-        // Crear el contexto de audio
         var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // Crear un oscilador
         var oscillator = audioContext.createOscillator();
-        oscillator.type = 'sine'; // Tipo de onda (puede ser 'sine', 'square', 'sawtooth', 'triangle')
-        oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // Frecuencia en Hz (440 Hz es la nota A)
-
-        // Conectar el oscilador al destino (altavoces)
+        oscillator.type = 'sine'; 
+        oscillator.frequency.setValueAtTime(440, audioContext.currentTime); 
         oscillator.connect(audioContext.destination);
-
-        // Iniciar el oscilador
         oscillator.start();
-
-        // Detener el oscilador después de 1 segundo
         setTimeout(function() {
         oscillator.stop();
         }, 1000);
     }
 
-     // Ejemplo de uso: Llamar a la función para emitir un sonido
      document.getElementById("boton").addEventListener("click", () => {
         playSound();
      });
 
     function chargeErrors() {
-        
-        const origen = document.getElementById("lsError");
-        const destino = document.getElementById("lsTemp");
+        const listaErrores = document.getElementById("lsError");
+        const errores = Array.from(listaErrores.children);
 
-            Array.from(origen.children).forEach(
-                (item) => mover(item, destino)
-            );
-        }
+        errores.forEach((item) => {
+            const codebar = item.getAttribute("data-barcode");
+            const quantity = parseInt(item.getAttribute("data-quantity"), 10) || 1;
 
-        function mover(item, destino) {
-        destino.appendChild(item);
+            insertCodeBar(codebar, quantity);
+            listaErrores.removeChild(item);
+        });
     }
 
     function indexesLX(){
@@ -147,7 +127,6 @@
             catch(x) { 
         }
     }
-
     function contador(){
         var node = document.getElementById("lsTemp").firstChild;
         let codebar=node.innerText;
@@ -155,7 +134,6 @@
         insertCodeBar(codebar);
 
     }
-
     function contadoradd(barcode, description = '', isManual = false){
         var node = document.createElement('li');
         if (isManual) {
@@ -165,29 +143,18 @@
         }
         document.getElementById("lsTemp").appendChild(node);
     }
+ function clickPress(event) {
+    if (event.key === "Enter") {
+        const barcode = document.getElementById("searchInput").value.trim().replaceAll("'", "-");
+        const quantity = parseInt(document.getElementById("quantity").value, 10);
+        if (!barcode || quantity <= 0) return;
 
-    
-    function clickPress(event) {
-        if (event.key === "Enter") {
-            const barcode = document.getElementById("searchInput").value.trim().replaceAll("'", "-");
-            if (!barcode) return;
-
-            if (codigosSet.has(barcode)) {
-                addBarcodeToList(barcode);
-            } else {
-                playSound();
-                if (confirm("El código de barras no existe. ¿Desea agregarlo?")) {
-                    addBarcodeToList(barcode, '', true);
-                }
-            }
-        }
+        insertCodeBar(barcode, quantity);
+        document.getElementById("quantity").value = 1;
+        document.getElementById("searchInput").value = "";
+        document.getElementById("searchInput").focus();
     }
-
-
-
-
-
-
+}
 
         function addBarcodeToList(barcode, description = '', isManual = false) {
             let ivez = (document.getElementById("quantity")).value;
@@ -210,13 +177,12 @@
                 
             });
 
-        function insertCodeBar(codebar)
-            { 
-            var parametros = 
-            {
-                "id_user" : "<?php echo $userId ; ?>" ,
-                "barcode" : codebar ,
-                "ID_CONTEO" : "<?php echo $idcab; ?>" 
+        function insertCodeBar(codebar, quantity = 1) {
+            var parametros = {
+                "id_user": "<?php echo $userId; ?>",
+                "barcode": codebar,
+                "ID_CONTEO": "<?php echo $idcab; ?>",
+                "cantidad": quantity
             };
 
             $.ajax({
@@ -224,25 +190,46 @@
                 url: 'php/barcode_insert.php',
                 type: 'POST',
                 timeout: 3000,
-                
-        
+                success: function () {
+                    const lista = document.getElementById("lsSaved");
+                    const items = lista.getElementsByTagName("li");
+                    let encontrado = false;
 
-                success: function()
-                {
-                    var node = document.createElement('li');
-                    node.appendChild(document.createTextNode(codebar));
-                    document.getElementById("lsSaved").appendChild(node);
-                    conta = document.getElementById("ItmsSav");
-                    conta.value = parseInt(conta.value,10) + 1;
+                    for (let i = 0; i < items.length; i++) {
+                        let texto = items[i].innerText;
+                        if (texto.startsWith(codebar + " (x")) {
+                            // Extraer cantidad actual y sumarle la nueva
+                            let cantidadActual = parseInt(texto.match(/\(x(\d+)\)/)[1]);
+                            let nuevaCantidad = cantidadActual + parseInt(quantity);
+                            items[i].innerText = `${codebar} (x${nuevaCantidad})`;
+                            encontrado = true;
+                            break;
+                        }
+                    }
+
+                    if (!encontrado) {
+                        let node = document.createElement('li');
+                        node.appendChild(document.createTextNode(`${codebar} (x${quantity})`));
+                        lista.appendChild(node);
+                    }
+
+                    let conta = document.getElementById("ItmsSav");
+                    conta.value = parseInt(conta.value, 10) + parseInt(quantity, 10);
                 },
-                error: function(){
-                    var node = document.createElement('li');
-                    node.appendChild(document.createTextNode(codebar));
-                    document.getElementById("lsError").appendChild(node);
-                    console.log('error:'+codebar);
+                error: function () {
+                    const lista = document.getElementById("lsError");
+                    const node = document.createElement('li');
+                    node.setAttribute("data-barcode", codebar);
+                    node.setAttribute("data-quantity", quantity);
+                    node.appendChild(document.createTextNode(`${codebar} (x${quantity})`));
+                    lista.appendChild(node);
+                    console.log('error:' + codebar);
                 }
+
             });
-            }
+        }
+
+
     </script>
 
 </div>

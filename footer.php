@@ -7,7 +7,7 @@
                 <div class="row">
                     
                     <div class="col-sm-6">
-                    .
+                         <img src="images/favicon.png" alt="Icono" style="width: 24px; height:24px; vertical-align:middle;">
                     </div>
                     
                     <div class="col-sm-6 text-right">

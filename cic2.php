@@ -51,7 +51,11 @@ echo "<script>console.log('flagTrue');</script>";
     //echo "No se recibió pFlag o no es true.";
     // Otra lógica alternativa
 
-    if ($pFecha == date('Y-m-d') || $pFecha == date('Y-m-d', strtotime('-20 day'))) { 
+    if ($pFecha > date('Y-m-d', strtotime('-8 day'))) { 
+      //   if ($pFecha == date('Y-m-d') || $pFecha == date('Y-m-d', strtotime('-1 day'))) { 
+       echo 'true';
+ //   if (strtotime($pFecha) >= strtotime('-7 days')) {
+
         //proceso
             //encerar formas de pago
                 for ($i=1; $i < 8; $i++) { 

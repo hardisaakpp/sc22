@@ -3,9 +3,7 @@ require_once 'vendor/autoload.php';
 
 include_once "header.php";
 
-//echo $userName;
 
-//$conn = mysqli_connect("localhost","root","","mbsgn");
 date_default_timezone_set('America/Bogota');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;

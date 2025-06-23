@@ -19,7 +19,7 @@
 
         //recupero codigo almacen
         $sentencia2 = $db->query(" select c.*, a.cod_almacen, a.nombre from cic c join Almacen a on c.fk_ID_almacen=a.id where c.id='". $_GET["id"] ."' " );
-        $regCodCierre = $sentencia2->fetchObject();
+        $regCodCierre = $sentencia2->Object();
 
         $whsCica = $regCodCierre->fk_ID_almacen;
         $pFecha =$regCodCierre->fecha;

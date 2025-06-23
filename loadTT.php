@@ -3,78 +3,22 @@
     //si no es admin no abre
     if($userAdmin<>1){
         echo ('ACCESO DENEGADO');
-    
         }else {
-
             $fil = 'AL';
-
-            
             if (isset($_GET["fil"])) {
                 $fil = $_GET["fil"];
             }
-          
-
-        $s1 = $db->query("select * from Almacen" );
+        $s1 = $db->query("select * from Almacen where inactivo=0" );
         $whs = $s1->fetchAll(PDO::FETCH_OBJ);   
-        
 
+ $sentencia = $db->query("
 
-switch ($fil) {
-    case 'AL':
-        $s1 = $db->query("
-        select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items
-        ,c.tipo, c.locked
-        from StockCab c
-        join Almacen a on c.FK_ID_almacen=a.id
-        left join StockDet d on c.id=d.FK_id_StockCab 
-        where (tipo='TT' or tipo='TP') and [date]>DATEADD(MONTH,-1,getdate())
-        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo, c.locked
-        order by CONCAT(date,' ',left(time,5)) desc
-        " );
-        $users = $s1->fetchAll(PDO::FETCH_OBJ); 
-        break;
-    case 'TT':
-        $s1 = $db->query("
-        select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items
-        ,c.tipo, c.locked
-        from StockCab c
-        join Almacen a on c.FK_ID_almacen=a.id
-        left join StockDet d on c.id=d.FK_id_StockCab 
-        where (tipo='TT') and [date]>DATEADD(MONTH,-1,getdate())
-        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo, c.locked
-        order by CONCAT(date,' ',left(time,5)) desc
-        " );
-        $users = $s1->fetchAll(PDO::FETCH_OBJ); 
-        break;
-    
-    case 'TP':
-        $s1 = $db->query("
-        select c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) as fec, count(d.id) as items
-        ,c.tipo, c.locked
-        from StockCab c
-        join Almacen a on c.FK_ID_almacen=a.id
-        left join StockDet d on c.id=d.FK_id_StockCab 
-        where (tipo='TP') and [date]>DATEADD(MONTH,-1,getdate())
-        group by c.id, a.cod_almacen, CONCAT(date,' ',left(time,5)) , c.tipo, c.locked
-        order by CONCAT(date,' ',left(time,5)) desc
-        " );
-        $users = $s1->fetchAll(PDO::FETCH_OBJ); 
-        break;
+    EXEC sp_GetTTStockData '". $fil ."' ;    
+    " );
+    $users = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
-    default:
-        # code...
-        break;
-}
-
-
-
-
-         
+     
 ?>
-
-
-
-  
 
 <!-- Breadcrumbs-->
     <div class="breadcrumbs">
@@ -131,25 +75,9 @@ switch ($fil) {
                 data: parametros,
                 url: 'php/loadTomaFisicaAleatoria.php',
                 type: 'POST',
-                //    timeout: 3000,
                 success: function(data){
-                    //console.log(data);
                     es=document.getElementById("tc"+WhsCode );
                     es.innerText = '✔️';
-                //$("#find").click();
-                   /* if (data==1) {
-                        Swal.fire({
-                        icon: 'success',
-                        title: '👌😀',
-                        text: 'Clave actualizada correctamente!'
-                        })
-                    } else {
-                        Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'La clave actual es incorrecta!'
-                        })
-                    }*/
                 },
                 error: function(){
                     console.log('error de conexion - revisa tu red');
@@ -167,7 +95,7 @@ switch ($fil) {
             <form id="frmLoad" method="post" enctype="multipart/form-data" class="form-horizontal">
                 
                 <div class="form-group">
-                <label for="idalm" class=" form-control-label" >Almacen</label>
+                <label for="idalm" class="form-control-label" >Almacen</label>
                         <select name='idalm'  data-placeholder='Selecciona el almacen' class='js-example-basic-single form-control' id='idalm'  Size='Number_of_options'>
                         
                             <?php   foreach($whs as $wh){ ?>
@@ -212,60 +140,75 @@ switch ($fil) {
                         <td><?php echo $user->fec ?></td>
                         <td><?php echo $user->items ?></td>
                         <td>
-                       
-                        
-                      
-                        
-                        
-                        <?php
-                                if ($user->tipo=="TT") {
-                                    ?>
-
-
-                                <button type="button" class="btn btn-outline-primary"  id='<?php echo $user->fec.$user->id ?>'
-                                        onclick ="tip_user($(this),<?php echo $user->id ?>,'<?php echo $user->fec ?>','<?php echo $user->tipo ?>')">
-                                    
-                                    <?php
-                                    
-                                    echo "TOTAL</button> ";
-                                } else {
-                                    ?>
-                                     <button type="button" class="btn btn-outline-primary"  id='<?php echo $user->fec.$user->id ?>'
-                                        onclick ="tip_user($(this),<?php echo $user->id ?>,'<?php echo $user->fec ?>','<?php echo $user->tipo ?>')">
-                                    
-                                        <?php
-                                    echo "PARCIAL</button> ";
-                                }
-                            ?>
-                        </td>
-                        <td>
                             <?php
                                 if ($user->locked==0) {
-                            ?>
-                            <button type="button" class="btn btn-outline-success" 
-                            onclick="window.open('filTT.php?idcab=<?php echo $user->id ?>','_self')"
-                            > 🪄Grupos </button> 
-                            <button type="button" class="btn btn-outline-success" 
-                            onclick="window.open('filTTsubcat.php?idcab=<?php echo $user->id ?>','_self')"
-                            > 🪄SubCategorias </button> 
-                            <button type="button" class="btn btn-warning delete" 
-                            onclick="delete_user($(this),<?php echo $user->id ?>)"
-                            > ✖️ Eliminar </button> 
-                            <?php
-                                } 
-                            ?>
+                                       
+                                        if ($user->tipo=="TT") {
+                                            ?>
+
+
+                                        <button type="button" class="btn btn-outline-primary"  id='<?php echo $user->fec.$user->id ?>'
+                                                onclick ="tip_user($(this),<?php echo $user->id ?>,'<?php echo $user->fec ?>','<?php echo $user->tipo ?>')">
+                                            
+                                            <?php
+                                            
+                                            echo "TOTAL</button> </td>";
+                                        } else {
+                                            ?>
+                                            <button type="button" class="btn btn-outline-primary"  id='<?php echo $user->fec.$user->id ?>'
+                                                onclick ="tip_user($(this),<?php echo $user->id ?>,'<?php echo $user->fec ?>','<?php echo $user->tipo ?>')">
+                                            
+                                                <?php
+                                            echo "PARCIAL</button> </td>";
+                                        }
+                                        ?>
+                                        <td>
+
+                                            <button type="button" class="btn btn-outline-success" 
+                                            onclick="window.open('filTT.php?idcab=<?php echo $user->id ?>','_self')"
+                                            > 🪄Grupos </button> 
+                                            <button type="button" class="btn btn-outline-success" 
+                                            onclick="window.open('filTTsubcat.php?idcab=<?php echo $user->id ?>','_self')"
+                                            > 🪄SubCategorias </button> 
+                                            <button type="button" class="btn btn-warning delete" 
+                                            onclick="delete_user($(this),<?php echo $user->id ?>)"
+                                            > ✖️Eliminar </button> 
+
+                                            <button type="button" class="btn btn-outline-success" onclick="confirmar('<?php echo $user->id ?>')">
+                                            🔃Actualizar </button>
+                                        </td>
+                                <?php
+                                    } else {
+                                         if ($user->tipo=="TT") {
+                                            echo "TOTAL </td>";
+
+                                        } else {
+                                            echo "PARCIAL </td>";
+                                        }
+                                    }
+                                ?>
+                                    
                             
-                        </td>
+
                         
                     </tr>                   
                 <?php } ?>   
                 </tbody>
             </table>
         </div>
+        
     </div>
 </div>
 
 <script> 
+
+   function confirmar(idcab) {
+            if (confirm("¿Seguro de actualizar?")) {
+                $(".loader-page").css({ visibility: "visible", opacity: "0.8" });
+                window.location.href = 'php/refreshTFT.php?idcab=' + idcab;
+            }
+        };
+        
     document.getElementById("frmLoad").onsubmit = function() {
     
         if (confirm("¿Seguro de enviar?")) {
@@ -280,36 +223,22 @@ switch ($fil) {
         { 
           
             tipTD(id,fecha);
-            //console.log(id + ' -> ', fecha);
-            
             var uno = document.getElementById(fecha+id);
-           // valor?uno.innerText = "off":uno.innerText = "on";
-           // valor=!valor ;
-           //console.log(uno.innerText);
             if (uno.innerText=='TOTAL') {
                 uno.innerText = "PARCIAL";
             } else {
                 uno.innerText = "TOTAL";
                 
             }
-                //alert(row.name );
-                // alert(id);
-            //    row.closest('tr').remove();
         };
 
     function delete_user(row,id)
         { 
             if (confirm("¿Seguro de eliminar?")) {
-           // $(".loader-page").css({visibility:"visible",opacity:"0.8"});
-           // console.log('VERDADERO');
              delTD(id,row);
             } else {
                 console.log('FALSO!');
             }
-
-          //  alert(id);
-        
-            //row.closest('tr').remove();
         };
 
         function tipTD(id,fecha) 

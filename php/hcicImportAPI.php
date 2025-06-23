@@ -4,7 +4,6 @@ require_once 'vendor/autoload.php';
 require ('f_consumo.php');
 require ('dat_cws.php');
 
-//$conn = mysqli_connect("localhost","root","","mbsgn");
 date_default_timezone_set('America/Bogota');
 
 //parametros

@@ -371,6 +371,23 @@
                         ';
                         }
 
+            //Bodegas 2.0                
+                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
+                        
+                        
+                        echo '                       
+                            <li class="menu-item-has-children dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega ii</a>
+                                <ul class="sub-menu children dropdown-menu">     
+                                    <li><i class="ti ti-dropbox"></i><a href="cediSot.php">Solicitud Translado</a></li>
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpL.php">Grupos Recoleccion</a></li>
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpD.php">Grupos Eliminar</a></li>
+                                    <li><i class="ti ti-package"></i><a href="cediGrpLdis.php">Grupos Distribucion</a></li>
+                                </ul>
+                            </li>
+                        ';
+                        }
+
         //Toma Fisica Total
             if ($userAdmin==1 || $userAdmin==3) { 
                 echo '
@@ -379,7 +396,6 @@
                             <ul class="sub-menu children dropdown-menu">     
                                         <li><i class="fa fa-file-o"></i><a href="loadTT.php">Generar</a></li>
                                         <li><i class="fa fa-barcode"></i><a href="TTList.php">Scanear</a></li>
-                                        <li><i class="ti ti-reload"></i><a href="TTrefresh.php">Actualizar Stock</a></li>
                                         <li><i class="fa fa-hospital-o"></i><a href="TTListR.php">Reportes</a></li>
 
 

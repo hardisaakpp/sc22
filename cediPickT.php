@@ -10,7 +10,7 @@ $s11 = $db->query("SELECT g.[id]
       ,g.[fk_idgroup]
       ,g.[estado]
       ,g.[fk_docnumsotcab]
-      ,g.[activo]
+      ,g.[enabled] as Enabledx
 	  ,c.ToWhsCode
 	  ,c.DocDate , c.Filler
   FROM [dbo].[ced_groupsot] g 
@@ -18,6 +18,8 @@ $s11 = $db->query("SELECT g.[id]
             WHERE g.id = ".$idcab." ");
 $TEMPa1 = $s11->fetchObject();
        $ToWhsCode = $TEMPa1->ToWhsCode;
+       $Enable = $TEMPa1->Enabledx;
+       $idgrupo = $TEMPa1->fk_idgroup;
       // $nomealmacenCica = $TEMPa1->nombre;
 
 $s1 = $db->query("SELECT [ID]
@@ -96,7 +98,9 @@ function sendStockTransfer($jsonPayload) {
             <div class="card-header">
                 <strong class="card-title">SOLICITUD N°<?php echo $idcab." a ".$ToWhsCode ?> </strong>  
             </div>
-            <form id="form-codigo">
+<?php
+    if ($Enable == 1) {
+        echo ' <form id="form-codigo">
                 <div class="input-group mb-3 flex-nowrap">
                     <input type="number" class="form-control" id="txtu" placeholder="U" value="1" min="1">   
                     <input type="text" class="form-control" id="codigo" placeholder="Escanea o escribe el código" autofocus>
@@ -108,6 +112,14 @@ function sendStockTransfer($jsonPayload) {
                     </div>
                 </div>
             </form>
+            ';
+    }
+?>
+           
+
+
+
+
 <div id="loader" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); z-index:9999; text-align:center; padding-top:20%;">
   <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
     <span class="sr-only">Cargando...</span>
@@ -137,9 +149,23 @@ function sendStockTransfer($jsonPayload) {
             </table>
 
             <div class="mt-3">
-                <button id="btnTransferencia" class="btn btn-warning">Crear Transferencia</button>
+
+<?php
+    if ($Enable == 1) {
+        echo ' <button id="btnTransferencia" class="btn btn-warning">Crear Transferencia</button>';
+    }
+?>
+
+               
                 
-                <button id="btnDescargar" class="btn btn-info mt-2">⬇️ Descargar Tabla</button>
+               
+
+<button id="btnDescargarCSV" class="btn btn-outline-info mt-2">📥 Exportar</button>
+<a href="cediGrpLdid.php?idcab=<?= $idgrupo ?>" class="btn btn-secondary mt-2">⬅️ Volver</a>
+
+
+
+
 
             </div>
         </div>
@@ -147,67 +173,76 @@ function sendStockTransfer($jsonPayload) {
 </div>
 
 <script>
-    document.getElementById('form-codigo').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const codigoIngresado = document.getElementById('codigo').value.trim();
-        const unidades = parseInt(document.getElementById('txtu').value) || 1;
-        if (!codigoIngresado || unidades < 1) return;
+    document.getElementById('btnDescargarCSV').addEventListener('click', function () {
+    const tabla = document.querySelector('#tabla');
+    if (!tabla) {
+        alert("❌ No se encontró la tabla.");
+        return;
+    }
 
-        const tabla = document.querySelector('#tabla tbody');
-        let fila = document.querySelector(`tr[data-codigo="${codigoIngresado}"]`);
-
-        if (fila) {
-            const escaneadosCelda = fila.querySelector('.escaneados');
-            const cantidadActual = parseInt(escaneadosCelda.textContent) || 0;
-            const stockCelda = fila.children[2];
-            const stock = parseInt(stockCelda.textContent) || 0;
-
-            if (cantidadActual + unidades > stock) {
-                alert("Este producto "+document.getElementById('codigo').value+" ya ha sido completado. No se puede escanear más.");
-                document.getElementById('txtu').value = 1;    
-                document.getElementById('codigo').value = '';
-                document.getElementById('codigo').focus();
-                return;
-            }
-
-            const nuevaCantidad = cantidadActual + unidades;
-            escaneadosCelda.textContent = nuevaCantidad;
-            fila.classList.remove('fila-completa', 'fila-parcial');
-            if (nuevaCantidad === stock) {
-                fila.classList.add('fila-completa');
-            } else if (nuevaCantidad > 0 && nuevaCantidad < stock) {
-                fila.classList.add('fila-parcial');
-            }
-            tabla.prepend(fila);
-        } else {
-            alert("El código "+document.getElementById('codigo').value+" no existe en la lista. Verifica e intenta nuevamente.");
-        }
-        document.getElementById('txtu').value = 1;
-        document.getElementById('codigo').value = '';
-        document.getElementById('codigo').focus();
+    let csv = [];
+    const filas = tabla.querySelectorAll('tr');
+    filas.forEach(fila => {
+        const columnas = fila.querySelectorAll('th, td');
+        const filaCSV = Array.from(columnas).map(col => `"${col.textContent.trim()}"`).join(',');
+        csv.push(filaCSV);
     });
+
+    const contenidoCSV = csv.join('\n');
+    const blob = new Blob([contenidoCSV], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const enlace = document.createElement('a');
+    enlace.href = url;
+    enlace.download = 'exportado_tabla.csv';
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+});
+
+    document.getElementById('form-codigo').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const codigoIngresado = document.getElementById('codigo').value.trim();
+  const unidades = parseInt(document.getElementById('txtu').value) || 1;
+  if (!codigoIngresado || unidades < 1) return;
+
+  const filas = document.querySelectorAll(`tr[data-codigo="${codigoIngresado}"]`);
+  let escaneado = false;
+
+  for (let fila of filas) {
+    const escaneadosCelda = fila.querySelector('.escaneados');
+    const cantidadActual = parseInt(escaneadosCelda.textContent) || 0;
+    const stock = parseInt(fila.children[2].textContent) || 0;
+
+    if (cantidadActual < stock) {
+      const nuevaCantidad = Math.min(cantidadActual + unidades, stock);
+      escaneadosCelda.textContent = nuevaCantidad;
+
+      fila.classList.remove('fila-completa', 'fila-parcial');
+      if (nuevaCantidad === stock) {
+        fila.classList.add('fila-completa');
+      } else {
+        fila.classList.add('fila-parcial');
+      }
+
+      document.querySelector('#tabla tbody').prepend(fila);
+      escaneado = true;
+      break; // ✅ Solo escanea una línea por vez
+    }
+  }
+
+  if (!escaneado) {
+    alert(`El código ${codigoIngresado} ya ha sido completado en todas sus líneas.`);
+  }
+
+  document.getElementById('txtu').value = 1;
+  document.getElementById('codigo').value = '';
+  document.getElementById('codigo').focus();
+});
+
 function mostrarLoader(mostrar) {
   document.getElementById('loader').style.display = mostrar ? 'block' : 'none';
 }
-document.getElementById('btnDescargar').addEventListener('click', function () {
-    const filas = document.querySelectorAll('#tabla tbody tr');
-    let csv = "Código,Artículo,Solicitado,Escaneado\n";
 
-    filas.forEach(fila => {
-        const columnas = fila.querySelectorAll('td');
-        const filaCSV = Array.from(columnas).map(col => `"${col.textContent.trim()}"`).join(",");
-        csv += filaCSV + "\n";
-    });
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "tabla_scans.csv";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-});
 
     document.getElementById('btnGuardar').addEventListener('click', function () {
     mostrarLoader(true); // Mostrar loader
@@ -244,17 +279,20 @@ document.getElementById('btnDescargar').addEventListener('click', function () {
     })
     .then(response => response.json())
     .then(data => {
-        mostrarLoader(false);
+       
         if (data.status === "success") {
             alert("✅ Datos guardados correctamente.");
+             mostrarLoader(false);
         } else {
             alert("❌ Error al guardar los datos.");
+             mostrarLoader(false);
         }
     })
     .catch(error => {
-        mostrarLoader(false);
+        
         console.error("Error:", error);
         alert("❌ Error en la comunicación con el servidor.");
+        mostrarLoader(false);
     });
 });
 
@@ -309,13 +347,9 @@ mostrarLoader(true); // Mostrar loader
 
 
 //transferencia
-
-
-
-       // const filas = document.querySelectorAll('#tabla tbody tr');
+     // Verificar si hay productos escaneados
         let incompletos = 0;
         let totalEscaneado = 0;
-       // let errorCritico = false;
 
         filas.forEach(fila => {
             const solicitado = parseInt(fila.cells[2].textContent);
@@ -336,125 +370,117 @@ mostrarLoader(true); // Mostrar loader
                  mostrarLoader(false);
             return;
         }
-
-// Generar JSON de transferencia
-const stockTransfer = {
-    cardCode: "",
-    comments: "sc22",
-    fromWarehouse: "<?= $TEMPa1->Filler ?>",
-    toWarehouse: "<?= $TEMPa1->ToWhsCode ?>",
-    priceList: -2,
-    stockTransferLines: []
-};
-
-filas.forEach(fila => {
-    const escaneado = parseInt(fila.cells[3].textContent);
-    if (escaneado > 0) {
-        const item = {
-            itemCode: fila.getAttribute('data-itemcode'),
-            quantity: escaneado,
-            warehouseCode: "<?= $TEMPa1->ToWhsCode ?>",
-            baseEntry: parseInt(fila.getAttribute('data-docentry')),
-            baseLine: parseInt(fila.getAttribute('data-linenum')),
-            baseType: 1250000001
-        };
-        stockTransfer.stockTransferLines.push(item);
-    }
-});
-
-
-
         if (totalEscaneado === 0) {
             alert("⚠️ No se ha escaneado ningún producto. No se puede crear la transferencia.");
                  mostrarLoader(false);
             return;
         }
 
-        if (incompletos === 0) {
-            alert("✅ Todos los productos están completos. Transferencia creada.");
-        } else {
-            const confirmar = confirm("⚠️ Hay productos incompletos. ¿Deseas continuar?");
-            if (confirmar) {
-                const clave = prompt("🔐 Ingresa la clave para continuar:");
-                if (clave === "12345") {
-                    alert("🔓 Clave correcta. Transferencia creada con productos incompletos.");
+    // Generar JSON de transferencia
+        const stockTransfer = {
+            cardCode: "",
+            comments: "sc22",
+            fromWarehouse: "<?= $TEMPa1->Filler ?>",
+            toWarehouse: "<?= $TEMPa1->ToWhsCode ?>",
+            priceList: -2,
+            stockTransferLines: []
+        };
 
-                // Construir JSON de transferencia
-                const stockTransfer = {
-                    cardCode: "",
-                    comments: "sc22",
-                    fromWarehouse: "<?= $TEMPa1->Filler ?>",
-                    toWarehouse: "<?= $TEMPa1->ToWhsCode ?>",
-                    priceList: -2,
-                    stockTransferLines: []
+        filas.forEach(fila => {
+            const escaneado = parseInt(fila.cells[3].textContent);
+            if (escaneado > 0) {
+                const item = {
+                    itemCode: fila.getAttribute('data-itemcode'),
+                    quantity: escaneado,
+                    warehouseCode: "<?= $TEMPa1->ToWhsCode ?>",
+                    baseEntry: parseInt(fila.getAttribute('data-docentry')),
+                    baseLine: parseInt(fila.getAttribute('data-linenum')),
+                    baseType: 1250000001
                 };
-
-                filas.forEach(fila => {
-                    const escaneado = parseInt(fila.cells[3].textContent);
-                    if (escaneado > 0) {
-                        stockTransfer.stockTransferLines.push({
-                            itemCode: fila.getAttribute("data-itemcode"),
-                            quantity: escaneado,
-                            warehouseCode: "<?= $TEMPa1->ToWhsCode ?>",
-                            baseEntry: parseInt(fila.getAttribute("data-docentry")),
-                            baseLine: parseInt(fila.getAttribute("data-linenum")),
-                            baseType: 1250000001
-                        });
-                    }
-                });
-                 const jsonBlob = new Blob([JSON.stringify(stockTransfer, null, 2)], { type: "application/json" });
-                const url = URL.createObjectURL(jsonBlob);
-                const a = document.createElement("a");
-                 console.log("ap"),
-                a.href = url;
-                a.download = "transferencia.json";
-           /*     document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);*/
-
-                
-
-                    const jsonPayload = JSON.stringify(stockTransfer);
-                    fetch("php/enviar_transferencia.php", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: jsonPayload
-})
-.then(async response => {
-  const text = await response.text();
-       mostrarLoader(false);
-  try {
-    const data = JSON.parse(text);
-    console.log("✅ Respuesta del servidor:", data);
-    //alert("✅ Transferencia enviada correctamente.");
-  } catch (e) {
-    console.warn("⚠️ Respuesta no JSON:", text);
-    alert("⚠️ Respuesta inesperada del servidor:\\n" + text);
-  }
-})
-.catch(error => {
-  console.error("❌ Error al enviar:", error);
-  alert("❌ Error al enviar la transferencia.");
-});
-
-                    console.log("📦 Respuesta del servidor:", response);
-                   // alert("✅ Transferencia creada correctamente.");    
-
-console.log("📦 JSON generado:", stockTransfer);
-alert("📦 JSON generado. Revisa la consola para ver el contenido.");
-                
-
-
-                } else {
-                    alert("❌ Clave incorrecta. Operación cancelada.");
-                }
+                stockTransfer.stockTransferLines.push(item);
             }
-        }
-        
-     // Al final de todo:
+        });
+
+    // Crear transferencia 
+
+
+            let continuar = false;
+
+
+                if (incompletos === 0) {
+                    continuar = true;
+                    console.log("✅ Todos los productos están completos. Continuando con la transferencia...");
+                }else if ((incompletos > 0 && confirm("⚠️ Hay productos incompletos. ¿Deseas continuar?"))) {                     
+                    const clave = prompt("🔐 Ingresa la clave para continuar:");
+                    if (clave !== "12345") {
+                        alert("❌ Clave incorrecta. Operación cancelada.");
+                        mostrarLoader(false);
+                        return;
+                    }else {
+                        console.log("🔓 Clave correcta. Continuando con la transferencia...");
+                        continuar = true;
+                    }
+                }else{
+                    alert("⚠️ Transferencia cancelada por el usuario.");
+                    mostrarLoader(false);
+                    return;
+                }
+
+                if(continuar){
+                        const jsonPayload = JSON.stringify(stockTransfer);
+                        fetch("php/enviar_transferencia.php", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: jsonPayload
+                        })
+                        .then(async response => {
+                            const text = await response.text();
+                            mostrarLoader(false);
+                            try {
+                                const jsonMatch = text.match(/{[\s\S]*}/);
+                                const data = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+                                const mensaje = data?.error?.message?.value || data?.message?.value || text;
+                                console.log("📦 Mensaje recibido:", mensaje);
+                                if (mensaje.includes("Transferencia creada")) {
+                                      // Actualizar estado en base de datos
+                                        fetch("php/actualizar_estado.php", {
+                                            method: "POST",
+                                            headers: {
+                                            "Content-Type": "application/x-www-form-urlencoded"
+                                            },
+                                            body: new URLSearchParams({
+                                            fk_idgroup: "<?= $TEMPa1->fk_idgroup ?>",
+                                            docnum_sot: "<?= $TEMPa1->id ?>"
+                                            })
+                                        })
+                                        .then(res => res.json())
+                                        .then(data => {
+                                            console.log("📝 Estado actualizado:", data.message);
+                                        })
+                                        .catch(err => {
+                                            console.error("❌ Error al actualizar estado:", err);
+                                        });
+
+                                    console.log("✅ Transferencia creada correctamente.");
+                                    window.location.href = "cediGrpLdid.php?idcab=<?= $TEMPa1->id ?>";
+                                } else {
+                                    console.log("⚠️ Algo ocurrió: " + mensaje);
+                                }
+                            } catch (e) {
+                                console.warn("⚠️ Respuesta no JSON:", text);
+                                alert("⚠️ Respuesta inesperada del servidor:\n" + text);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("❌ Error al enviar:", error);
+                            alert("❌ Error al enviar la transferencia.");
+                            mostrarLoader(false);
+                        });
+                        console.log("📦 JSON generado:", stockTransfer);
+                }
+ 
      mostrarLoader(false);
 
     });

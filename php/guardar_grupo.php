@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nuevoId = $result['new_id'] ?? 0;
 
         // Redirigir con el ID del grupo
-        header("Location: ../cediPickR.php?idcab=$nuevoId");
+        header("Location: ../cediGrpLdid.php?idcab=$nuevoId");
         exit;
     } catch (PDOException $e) {
         echo "Error al guardar el grupo: " . $e->getMessage();

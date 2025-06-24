@@ -43,7 +43,7 @@ $pFlag = isset($_GET['pFlag']) && $_GET['pFlag'] === 'true';
 if ($pFlag) {
 
     
-echo "<script>console.log('flagTrue');</script>";
+//echo "<script>console.log('flagTrue');</script>";
 
     // Aquí va tu lógica específica
 } else {

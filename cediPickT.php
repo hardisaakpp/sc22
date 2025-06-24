@@ -6,15 +6,15 @@ if (!isset($_GET["idcab"])) {
 }
 $idcab = $_GET["idcab"];
 
-$s11 = $db->query("SELECT g.[id]
+$s11 = $db->query("
+	SELECT g.[id]
       ,g.[fk_idgroup]
       ,g.[estado]
       ,g.[fk_docnumsotcab]
       ,g.[enabled] as Enabledx
-	  ,c.ToWhsCode
-	  ,c.DocDate , c.Filler
+	  ,g.ToWhsCode
+	  ,g.DocDate , g.Filler
   FROM [dbo].[ced_groupsot] g 
-	join SotCab_MT c on g.fk_docnumsotcab=c.DocNum
             WHERE g.id = ".$idcab." ");
 $TEMPa1 = $s11->fetchObject();
        $ToWhsCode = $TEMPa1->ToWhsCode;
@@ -444,7 +444,6 @@ mostrarLoader(true); // Mostrar loader
                                 const mensaje = data?.error?.message?.value || data?.message?.value || text;
                                 console.log("📦 Mensaje recibido:", mensaje);
                                 if (mensaje.includes("Transferencia creada")) {
-                                      // Actualizar estado en base de datos
                                         fetch("php/actualizar_estado.php", {
                                             method: "POST",
                                             headers: {
@@ -463,10 +462,13 @@ mostrarLoader(true); // Mostrar loader
                                             console.error("❌ Error al actualizar estado:", err);
                                         });
 
-                                    console.log("✅ Transferencia creada correctamente.");
-                                    window.location.href = "cediGrpLdid.php?idcab=<?= $TEMPa1->id ?>";
+                                    alert("✅ Transferencia creada correctamente.");
+                                    //window.location.href = "cediGrpLdid.php?idcab=<?= $TEMPa1->fk_idgroup ?>";
+                                         mostrarLoader(false);
+                                         window.location.href = "cediGrpLdis.php";
                                 } else {
-                                    console.log("⚠️ Algo ocurrió: " + mensaje);
+                                    alert("⚠️ Algo ocurrió: " + mensaje);
+                                         mostrarLoader(false);
                                 }
                             } catch (e) {
                                 console.warn("⚠️ Respuesta no JSON:", text);
@@ -481,7 +483,7 @@ mostrarLoader(true); // Mostrar loader
                         console.log("📦 JSON generado:", stockTransfer);
                 }
  
-     mostrarLoader(false);
+
 
     });
 

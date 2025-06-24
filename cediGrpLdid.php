@@ -13,10 +13,9 @@
             ,g.[estado]
             ,g.[fk_docnumsotcab]
 
-            ,c.ToWhsCode
-            ,c.DocDate
+            ,g.ToWhsCode
+            ,g.DocDate
         FROM [dbo].[ced_groupsot] g 
-            join SotCab_MT c on g.fk_docnumsotcab=c.DocNum
         where [fk_idgroup]=".$idcab." and estado<>2
         " );
         $users = $s1->fetchAll(PDO::FETCH_OBJ);  
@@ -26,10 +25,9 @@
             ,g.[estado]
             ,g.[fk_docnumsotcab]
 
-            ,c.ToWhsCode
-            ,c.DocDate
+            ,g.ToWhsCode
+            ,g.DocDate
         FROM [dbo].[ced_groupsot] g 
-            join SotCab_MT c on g.fk_docnumsotcab=c.DocNum
         where [fk_idgroup]=".$idcab." and estado=2
         " );
         $users2 = $s2->fetchAll(PDO::FETCH_OBJ);  
@@ -146,6 +144,14 @@
                     </div>
         <?php } ?> 
     </div>
+
+
+    <div class="text-center">
+
+        <a href="cediGrpLdis.php" class="btn btn-secondary mt-2">⬅️ Volver</a>
+
+    </div>
+
 </div>
 <?php   
 include_once "footer.php";

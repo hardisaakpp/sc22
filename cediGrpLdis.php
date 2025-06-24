@@ -8,28 +8,28 @@
 
 if ($estado==5) {
       $s1 = $db->prepare("
-        select * from ced_group where (estado<2)
+        select * from ced_group where (estado<2) and [open]=1
         AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
         " );
       $s1->execute([':desde' => $desde, ':hasta' => $hasta]);
         $users = $s1->fetchAll(PDO::FETCH_OBJ);   
 
         $s2 = $db->prepare("
-        select * from ced_group where (estado>=2 )
+        select * from ced_group where (estado>=2 ) and [open]=1
         AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
         " );
        $s2->execute([':desde' => $desde, ':hasta' => $hasta]);
         $users2 = $s2->fetchAll(PDO::FETCH_OBJ);   
 } else {
       $s1 = $db->prepare("
-        select * from ced_group where (estado<2  and estado=:estado)
+        select * from ced_group where (estado<2  and estado=:estado) and [open]=1
         AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
         " );
       $s1->execute([':desde' => $desde, ':hasta' => $hasta, ':estado' => $estado]);
         $users = $s1->fetchAll(PDO::FETCH_OBJ);   
 
         $s2 = $db->prepare("
-        select * from ced_group where (estado>=2 and estado=:estado)
+        select * from ced_group where (estado>=2 and estado=:estado) and [open]=1
         AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
         " );
        $s2->execute([':desde' => $desde, ':hasta' => $hasta, ':estado' => $estado]);
@@ -55,7 +55,7 @@ if ($estado==5) {
         <option value="0" <?php if($estado === '0') echo 'selected'; ?>>Nuevo</option>
         <option value="1" <?php if($estado === '1') echo 'selected'; ?>>En proceso</option>
         <option value="2" <?php if($estado === '2') echo 'selected'; ?>>Finalizado</option>
-        <option value="3" <?php if($estado === '3') echo 'selected'; ?>>Cerrado</option>
+      
   
      </select>
 

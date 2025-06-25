@@ -152,7 +152,9 @@ function sendStockTransfer($jsonPayload) {
 
 <?php
     if ($Enable == 1) {
-        echo ' <button id="btnTransferencia" class="btn btn-warning">Crear Transferencia</button>';
+        echo ' <button id="btnTransferencia" class="btn btn-warning">Crear Transferencia</button>
+             <button id="btnActualizarSolicitud" class="btn btn-info">Actualizar Solicitud</button>
+            ';
     }
 ?>
 
@@ -506,6 +508,36 @@ mostrarLoader(true); // Mostrar loader
             }
         });
     });
+
+document.getElementById('btnActualizarSolicitud').addEventListener('click', function () {
+    if (!confirm("¿Estás seguro de que deseas actualizar la solicitud?")) return;
+
+    mostrarLoader(true);
+
+    fetch('php/actualizar_solicitud.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            fk_docnumsotcab: '<?= $TEMPa1->fk_docnumsotcab ?>',
+            fk_idgroup: '<?= $TEMPa1->fk_idgroup ?>'
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        mostrarLoader(false);
+        alert(data.message || "✅ Solicitud actualizada correctamente.");
+        location.reload();
+    })
+    .catch(err => {
+        mostrarLoader(false);
+        console.error("❌ Error al actualizar solicitud:", err);
+        alert("❌ Error al actualizar la solicitud.");
+    });
+});
+
+
 
 </script>
 

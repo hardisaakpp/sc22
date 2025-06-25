@@ -3,45 +3,42 @@
 if (!isset($_GET["idcab"])) {
     echo "Falta el parámetro id.";
     exit;
-  }
-  
-  
-$Username = $_POST["username"];
-$password = $_POST["password"];
-$items = $_POST["items"];
-if (isset($_POST["conteo"])) {
-    $conteo = $_POST["conteo"];
-}else{
-    $conteo = 0;
 }
-$whsCierre = $_POST["whsCierre"];
-$whsInvs = $_POST["whsInvs"];
-$whsHorario = $_POST["whsHorario"];
-$whsTransitorio = $_POST["whsTransitorio"];
-$codTimeSoft = $_POST["codTimeSoft"];
-$perfil = $_POST["radios"];
-$email1 = $_POST["Email1"];
-$email2 = $_POST["Email2"];
+
+$Username = isset($_POST["username"]) ? $_POST["username"] : '';
+$password = isset($_POST["password"]) ? $_POST["password"] : '';
+$items = isset($_POST["items"]) ? $_POST["items"] : '';
+$conteo = isset($_POST["conteo"]) ? 1 : 0; // Convert checkbox to bit-compatible value
+$whsCierre = isset($_POST["whsCierre"]) ? $_POST["whsCierre"] : 0;
+$whsInvs = isset($_POST["whsInvs"]) ? $_POST["whsInvs"] : 0;
+$whsHorario = isset($_POST["whsHorario"]) ? $_POST["whsHorario"] : 0;
+$whsTransitorio = isset($_POST["whsTransitorio"]) ? $_POST["whsTransitorio"] : 0;
+$codTimeSoft = isset($_POST["codTimeSoft"]) ? $_POST["codTimeSoft"] : '';
+$perfil = isset($_POST["radios"]) ? $_POST["radios"] : '';
+$email1 = isset($_POST["Email1"]) ? $_POST["Email1"] : '';
+$email2 = isset($_POST["Email2"]) ? $_POST["Email2"] : '';
 $id = $_GET["idcab"];
+
 include_once "bd_StoreControl.php";
+
 $sentencia = $db->prepare("
-UPDATE [dbo].[users]
-        SET [username] = ?, 
+    UPDATE [dbo].[users]
+    SET [username] = ?, 
         [password] = ?,
         [articulosContar] = ?,
-    [realizaConteo] = ?,
-    [fk_ID_almacen_cierre] = ?,
-    [fk_ID_almacen_invs] = ?,
-    [fk_ID_almacen_turemp] = ?,
-    [fk_ID_almacen_transitorio] = ?,
-    [Timesoft_CentroCosto] = ?,
-    [perfil] = ?,
-    [email] = ?,
-    [emailSuper] = ?
-        
-    where [id] = ?");
+        [realizaConteo] = ?,
+        [fk_ID_almacen_cierre] = ?,
+        [fk_ID_almacen_invs] = ?,
+        [fk_ID_almacen_turemp] = ?,
+        [fk_ID_almacen_transitorio] = ?,
+        [Timesoft_CentroCosto] = ?,
+        [perfil] = ?,
+        [email] = ?,
+        [emailSuper] = ?
+    WHERE [id] = ?
+");
 
-$resultado = $sentencia ->execute([
+$resultado = $sentencia->execute([
     $Username, 
     $password,
     $items,
@@ -54,10 +51,12 @@ $resultado = $sentencia ->execute([
     $perfil,
     $email1,
     $email2,
-    $id]);
-if ($resultado == true){
+    $id
+]);
+
+if ($resultado === true) {
     header("Location: ../userL.php");
-}
-else {
+} else {
     echo "Algo salió mal. Por favor verifica que la tabla exista, así como el ID del usuario";
 }
+?>

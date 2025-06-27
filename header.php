@@ -353,7 +353,7 @@
                         }  
  
         //Bodegas
-
+/*
                         if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
                         
                         
@@ -361,7 +361,7 @@
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-dropbox"></i><a href="soltr.php">Solicitud Translado</a></li>
+                                    <li><i class="ti ti-dropbox"></i><a href="soltr.php">Lista</a></li>
                                     <li><i class="fa fa-print"></i><a href="soltrL.php">Etiquetas</a></li>
                                     <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
                                     <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
@@ -370,19 +370,21 @@
                             </li>
                         ';
                         }
-
+*/
             //Bodegas 2.0                
                         if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
                         
                         
                         echo '                       
                             <li class="menu-item-has-children dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega ii</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-dropbox"></i><a href="cediSot.php">Solicitud Translado</a></li>
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpL.php">Grupos Recoleccion</a></li>
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpD.php">Grupos Eliminar</a></li>
-                                    <li><i class="ti ti-package"></i><a href="cediGrpLdis.php">Grupos Distribucion</a></li>
+                                    <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
+
+                                    <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
+                                    <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recoleccion</a></li>
+
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribucion</a></li>
                                 </ul>
                             </li>
                         ';

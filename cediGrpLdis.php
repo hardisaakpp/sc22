@@ -46,7 +46,7 @@ if ($estado==5) {
                 <div class="col-sm-12">
                     <div class="page-header float-left">
                         <div class="page-title">
-                            <h1>GRUPOS</h1>
+                            <h1>Listas de Distribución</h1>
                             <form method="GET" class="form-inline mb-3">
 
 <label for="estado">Estado:</label>
@@ -105,9 +105,9 @@ if ($estado==5) {
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">Grupo #<span class="count"><?php echo $user->id ?></span></div>
-                                    <div class="stat-text"><?php echo 'Ref.:'.$user->comentario?></div>
-                                    <div class="stat-heading"><?php echo $user->fecha_creacion ?></div>
+                                    <div class="stat-text"># <span class="count"><?php echo $user->id ?></span></div>
+                                    <div class="stat-text"><?php echo ''.$user->comentario?></div>
+                                    <div class="stat-heading"><?php echo 'Gen.'.$user->fecha_creacion ?></div>
                                 </div>
                             </div>
                         </div>

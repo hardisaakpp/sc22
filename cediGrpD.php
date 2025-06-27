@@ -14,7 +14,7 @@
                 <div class="col-sm-4">
                     <div class="page-header float-left">
                         <div class="page-title">
-                            <h1>GRUPOS PARA RECOLECCION</h1>
+                            <h1>Listas de Distribución</h1>
                         </div>
                     </div>
                 </div>
@@ -56,8 +56,8 @@
                         <div class="stat-content">
                             <div class="text-left dib">
                                 <div class="stat-text"><span class="count"><?php echo $user->id ?></span> #</div>
-                                <div class="stat-text"><?php echo 'Conteo N°.'.$user->id?></div>
-                                <div class="stat-heading"><?php echo $user->comentario .' al '.$user->fecha_creacion ?></div>
+                                <div class="stat-text"><?php echo ''.$user->comentario?></div>
+                                <div class="stat-heading"><?php echo 'Gen.:'.$user->fecha_creacion ?></div>
                             </div>
                         </div>
                     </div>

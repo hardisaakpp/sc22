@@ -16,13 +16,13 @@ if ($userAdmin != 1 && $userAdmin != 3 && $userAdmin != 6) {
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header">
-                    <strong class="card-title">RECOLECCIÓN</strong>
+                    <strong class="card-title">Crear Lista de Distribución</strong>
                 </div>
                 <div class="card-body">
                     <form id="form-fechas" class="form-inline mb-3">
-                        <label for="desde">Desde:</label>
+                        <label for="desde">Solicitudes desde:</label>
                         <input type="date" name="desde" id="desde" class="form-control mx-2" value="<?php echo $desde ?>" required>
-                        <label for="hasta">Hasta:</label>
+                        <label for="hasta">hasta:</label>
                         <input type="date" name="hasta" id="hasta" class="form-control mx-2" value="<?php echo $hasta ?>" required>
                         <button type="submit" class="btn btn-primary me-2">Buscar 🔎</button>
                     </form>

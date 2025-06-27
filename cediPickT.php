@@ -96,7 +96,7 @@ function sendStockTransfer($jsonPayload) {
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">SOLICITUD N°<?php echo $idcab." a ".$ToWhsCode ?> </strong>  
+                <strong class="card-title">Solicitud N°<?php echo $TEMPa1->fk_docnumsotcab." a ".$ToWhsCode ?> </strong>  
             </div>
 <?php
     if ($Enable == 1) {

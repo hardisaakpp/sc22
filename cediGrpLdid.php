@@ -12,7 +12,7 @@
             ,g.[fk_idgroup]
             ,g.[estado]
             ,g.[fk_docnumsotcab]
-
+,g.Filler
             ,g.ToWhsCode
             ,g.DocDate
         FROM [dbo].[ced_groupsot] g 
@@ -24,7 +24,7 @@
             ,g.[fk_idgroup]
             ,g.[estado]
             ,g.[fk_docnumsotcab]
-
+,g.Filler
             ,g.ToWhsCode
             ,g.DocDate
         FROM [dbo].[ced_groupsot] g 
@@ -39,7 +39,7 @@
                 <div class="col-sm-4">
                     <div class="page-header float-left">
                         <div class="page-title">
-                            <h1>Solicitudes de Grupo <?php echo $idcab; ?></h1>
+                            <h1>Solicitudes de Lista <?php echo $idcab; ?></h1>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             <div class="stat-content">
                                 <div class="text-left dib">
                                     <div class="stat-text">#<span class="count"><?php echo $user->fk_docnumsotcab ?></span></div>
-                                    <div class="stat-text"><?php echo 'Destino:'.$user->ToWhsCode?></div>
+                                    <div class="stat-text"><?php echo '->'.$user->ToWhsCode?></div>
                                     <div class="stat-heading"><?php echo $user->DocDate ?></div>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                             <div class="stat-content">
                                 <div class="text-left dib">
                                     <div class="stat-text">#<span class="count"><?php echo $user->fk_docnumsotcab ?></span></div>
-                                    <div class="stat-text"><?php echo 'Destino:'.$user->ToWhsCode?></div>
+                                    <div class="stat-text"><?php echo '->'.$user->ToWhsCode?></div>
                                     <div class="stat-heading"><?php echo $user->DocDate ?></div>
                                 </div>
                             </div>

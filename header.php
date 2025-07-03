@@ -353,13 +353,13 @@
                         }  
  
         //Bodegas
-/*
+
                         if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
                         
                         
                         echo '                       
                             <li class="menu-item-has-children dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Reportes</a>
                                 <ul class="sub-menu children dropdown-menu">     
                                     <li><i class="ti ti-dropbox"></i><a href="soltr.php">Lista</a></li>
                                     <li><i class="fa fa-print"></i><a href="soltrL.php">Etiquetas</a></li>
@@ -370,7 +370,7 @@
                             </li>
                         ';
                         }
-*/
+
             //Bodegas 2.0                
                         if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
                         

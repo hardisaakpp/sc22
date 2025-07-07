@@ -5,7 +5,14 @@ $fichero = $_FILES["file"];
 $id = $_POST["id"];
 
 // Cargando el fichero en la carpeta "subidas"
-move_uploaded_file($fichero["tmp_name"], "films/".$id."/". $fichero["name"]);
+$destino = "films/" . $id . "/";
+if (!is_dir($destino)) {
+    mkdir($destino, 0775, true);
+}
+if (!is_writable($destino)) {
+    chmod($destino, 0775);
+}
+move_uploaded_file($fichero["tmp_name"], $destino . $fichero["name"]);
 
 // Redirigiendo hacia atrás
 header("Location: " . $_SERVER["HTTP_REFERER"]);

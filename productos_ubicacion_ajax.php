@@ -1,6 +1,6 @@
 <?php
 // productos_ubicacion_ajax.php
-include_once "bd_StoreControl.php";
+include_once "php/bd_StoreControl.php";
 session_start();
 
 header('Content-Type: application/json');

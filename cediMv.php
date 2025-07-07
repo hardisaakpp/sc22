@@ -167,6 +167,7 @@
         });
     }
 
+    let escaneoEnCurso = false;
     window.onload = function() {
         cargarUbicaciones();
         setScanFields(false);
@@ -176,7 +177,9 @@
         document.getElementById('origen').focus();
         renderTabla();
         function habilitarEscaneo() {
+            if (escaneoEnCurso) return;
             if (document.getElementById('origen').value.trim() !== '') {
+                escaneoEnCurso = true;
                 // Consultar artículos de la ubicación origen y mostrarlos en consola
                 const origenVal = document.getElementById('origen').value.trim();
                 const origenObj = ubicacionesData.find(u => u.BinCode === origenVal);
@@ -186,7 +189,11 @@
                         .then(r => r.json())
                         .then(data => {
                             console.log('Artículos en ubicación origen:', data);
-                        });
+                            escaneoEnCurso = false;
+                        })
+                        .catch(() => { escaneoEnCurso = false; });
+                } else {
+                    escaneoEnCurso = false;
                 }
                 setScanFields(true);
                 document.getElementById('codigo').focus();

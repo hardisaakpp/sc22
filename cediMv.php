@@ -57,7 +57,10 @@
 
 
                                 <div class="row form-group">
-                                    <div class="col-12"><input type="text" placeholder="Ubicación Destino" class="form-control" id="destino" required></div>
+                                    <div class="col-12">
+                                        <input list="destinoList" type="text" placeholder="Ubicación Destino" class="form-control" id="destino" required disabled autocomplete="off">
+                                        <datalist id="destinoList"></datalist>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -133,19 +136,35 @@
     }
 
     // Al cargar, solo habilitado origen
-    // Cargar ubicaciones para el datalist de origen
+    // Cargar ubicaciones para el datalist de origen y destino
+    let ubicacionesData = [];
     function cargarUbicaciones() {
         fetch('php/ubicaciones_ajax.php')
             .then(response => response.json())
             .then(data => {
-                const datalist = document.getElementById('origenList');
-                datalist.innerHTML = '';
+                ubicacionesData = data;
+                const datalistOrigen = document.getElementById('origenList');
+                datalistOrigen.innerHTML = '';
                 data.forEach(u => {
                     const option = document.createElement('option');
                     option.value = u.BinCode;
-                    datalist.appendChild(option);
+                    datalistOrigen.appendChild(option);
                 });
+                cargarDestinoList();
             });
+    }
+
+    function cargarDestinoList() {
+        const datalistDestino = document.getElementById('destinoList');
+        datalistDestino.innerHTML = '';
+        const origenVal = document.getElementById('origen').value.trim();
+        ubicacionesData.forEach(u => {
+            if (u.BinCode !== origenVal) {
+                const option = document.createElement('option');
+                option.value = u.BinCode;
+                datalistDestino.appendChild(option);
+            }
+        });
     }
 
     window.onload = function() {
@@ -163,6 +182,7 @@
                 document.getElementById('origen').disabled = true;
                 document.getElementById('destino').disabled = false;
                 document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
+                cargarDestinoList();
             }
         }
         document.getElementById('origen').addEventListener('keydown', function(e) {
@@ -203,6 +223,7 @@
             document.querySelector('.btn.btn-primary.btn-sm').disabled = true;
             productos.length = 0;
             renderTabla();
+            cargarUbicaciones();
             document.getElementById('origen').focus();
         });
     };

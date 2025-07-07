@@ -16,7 +16,7 @@
     $rows = $sentencia->fetchAll();
     
     if (count($rows)==0) {
-        echo ('<h4> ¡No se ha generado toma física para el día de hoy 😱! </h4>');
+        echo ('<div class="alert alert-danger" role="alert"> ¡No se ha generado toma física para el día de hoy 😱! </div>');
     } else {
 
 

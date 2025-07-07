@@ -328,7 +328,7 @@ mostrarLoader(true); // Mostrar loader
      alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");
      return;
      }
-
+/*
      try {
      const response = await fetch('php/guardar_scans.php', {
      method: 'POST',
@@ -346,7 +346,7 @@ mostrarLoader(true); // Mostrar loader
      alert("❌ Error en la comunicación con el servidor.");
      return;
      }
-
+*/
 
 //transferencia
      // Verificar si hay productos escaneados

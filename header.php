@@ -38,6 +38,7 @@
     $userAdmin = $_SESSION["perfil"];
     $whsInvs = $_SESSION["whsInvs"];
     $whsTurem = $_SESSION["whsTurem"];
+    $whsBodega = $_SESSION["whsBodeg"];
     $whsCica= $_SESSION["whsCica"];  
 ?>
 
@@ -382,9 +383,10 @@
                                     <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
 
                                     <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
-                                    <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recoleccion</a></li>
+                                    <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recolección</a></li>
 
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribucion</a></li>
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
+                                    <li><i class="ti ti-control-shuffle"></i><a href="cediMv.php">Reubicación</a></li>
                                 </ul>
                             </li>
                         ';

@@ -133,7 +133,7 @@
                                 <?php } ?>
                             </select>
                     </div>
-                    <div class="form-group">
+                    <!--<div class="form-group">
                     <label for="whsHorario" class=" form-control-label" class="standardSelect">Almacen para Horarios de Personal</label>
                             <select name='whsHorario'  data-placeholder='Selecciona el almacen' class='js-example-basic-single form-control' id='whsHorario'  Size='Number_of_options'>
                             <option value="0">Ninguno</option>
@@ -141,9 +141,9 @@
                                     <option value="<?php echo $wh->id ?>"><?php echo $wh->cod_almacen . ' '.$wh->nombre  ?></option>
                                 <?php } ?>
                             </select>
-                    </div>
+                    </div>-->
                     <div class="form-group">
-                    <label for="whsTransitorio" class=" form-control-label" class="standardSelect">Almacen Transitorio asociado</label>
+                    <label for="whsTransitorio" class=" form-control-label" class="standardSelect">Almacen para bodega</label>
                             <select name='whsTransitorio'  data-placeholder='Selecciona el almacen' class='js-example-basic-single js-states form-control' id='whsTransitorio'  Size='Number_of_options'>
                             <option value="0">Ninguno</option>
                                 <?php   foreach($whs as $wh){ ?>
@@ -151,12 +151,22 @@
                                 <?php } ?>
                             </select>
                     </div>
-    
                     <div class="form-group">
+                    <label for="whsBodega" class=" form-control-label" class="standardSelect">Almacen Transitorio asociado</label>
+                            <select name='whsBodega'  data-placeholder='Selecciona el almacen' class='js-example-basic-single js-states form-control' id='whsBodega'  Size='Number_of_options'>
+                            <option value="0">Ninguno</option>
+                                <?php   foreach($whs as $wh){ ?>
+                                    <option value="<?php echo $wh->id ?>"><?php echo $wh->cod_almacen . ' '.$wh->nombre  ?></option>
+                                <?php } ?>
+                            </select>
+                    </div>
+
+
+                    <!--<div class="form-group">
                         <label for="codTimeSoft" class=" form-control-label">Cod. Centro de Costos TimeSoft</label>
                         <input type="number" id="codTimeSoft" name="codTimeSoft" placeholder="Enter code" class="form-control" value='0' required>
                     </div>
-        
+                                -->
                   
 
                     <div class="form-group">

@@ -11,9 +11,9 @@ if (isset($_POST["conteo"])) {
 $items = $_POST["items"];
 $whsCierre = $_POST["whsCierre"];
 $whsInvs = $_POST["whsInvs"];
-$whsHorario = $_POST["whsHorario"];
+$whsBodega = $_POST["whsBodega"];
 $whsTransitorio = $_POST["whsTransitorio"];
-$codTimeSoft = $_POST["codTimeSoft"];
+//$codTimeSoft = $_POST["codTimeSoft"];
 $perfil = $_POST["radios"];
 $email1 = $_POST["Email1"];
 $email2 = $_POST["Email2"];
@@ -34,9 +34,9 @@ $sentencia = $db->prepare("
             ,[realizaConteo]
             ,[fk_ID_almacen_cierre]
             ,[fk_ID_almacen_invs]
-            ,[fk_ID_almacen_turemp]
+            ,[fk_ID_almacen_bodeg]
             ,[fk_ID_almacen_transitorio]
-            ,[Timesoft_CentroCosto]
+
             ,[perfil]
             ,[email]
             ,[emailSuper]
@@ -50,13 +50,13 @@ $sentencia = $db->prepare("
             ,?
             ,?
             ,?
-            ,?
+            
             ,?
             ,?
             ,?
         );");
 //$sentencia->bind_param('is', $userId, $oldPass); 
-$sentencia->execute([$Username, $password, $items, $conteo,$whsCierre, $whsInvs, $whsHorario, $whsTransitorio,$codTimeSoft,  $perfil ,$email1, $email2]);
+$sentencia->execute([$Username, $password, $items, $conteo,$whsCierre, $whsInvs, $whsBodega, $whsTransitorio,  $perfil ,$email1, $email2]);
 
 $result = $sentencia->rowCount();
 

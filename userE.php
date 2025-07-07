@@ -2,19 +2,7 @@
     include_once "header.php";
     $id = $_GET["idcab"];
     include_once "./php/bd_StoreControl.php";
-    $sentencia = $db->prepare("SELECT id, 
-    username,
-    password,
-    articulosContar,
-    realizaConteo,
-    fk_ID_almacen_cierre,
-    fk_ID_almacen_invs,
-    fk_ID_almacen_turemp,
-    fk_ID_almacen_transitorio,
-    Timesoft_CentroCosto,
-    perfil,
-    email,
-    emailSuper
+    $sentencia = $db->prepare("SELECT *
      FROM users WHERE id = ?;");
     $sentencia->execute([$id]);
     $usuarios = $sentencia->fetchObject();
@@ -142,11 +130,11 @@
                             </select>
                     </div>
                     <div class="form-group">
-                    <label for="whsHorario" class=" form-control-label" class="standardSelect">Almacen para Horarios de Personal</label>
-                            <select name='whsHorario'  data-placeholder='Selecciona el almacen' class='js-example-basic-single form-control' id='whsHorario'  Size='Number_of_options'>
+                    <label for="whsBodega" class=" form-control-label" class="standardSelect">Almacen para Bodega</label>
+                            <select name='whsBodega'  data-placeholder='Selecciona el almacen' class='js-example-basic-single form-control' id='whsBodega'  Size='Number_of_options'>
                             <option value="0">Ninguno</option>
                             <?php foreach($whs as $wh) { ?>
-                                <option value="<?php echo $wh->id ?>" <?php if ($wh->id == $usuarios->fk_ID_almacen_turemp) echo 'selected' ?>>
+                                <option value="<?php echo $wh->id ?>" <?php if ($wh->id == $usuarios->fk_ID_almacen_bodeg) echo 'selected' ?>>
                                     <?php echo $wh->cod_almacen . ' ' . $wh->nombre ?>
                                 </option>
                                 <?php } ?>

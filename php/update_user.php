@@ -11,7 +11,7 @@ $items = isset($_POST["items"]) ? $_POST["items"] : '';
 $conteo = isset($_POST["conteo"]) ? 1 : 0; // Convert checkbox to bit-compatible value
 $whsCierre = isset($_POST["whsCierre"]) ? $_POST["whsCierre"] : 0;
 $whsInvs = isset($_POST["whsInvs"]) ? $_POST["whsInvs"] : 0;
-$whsHorario = isset($_POST["whsHorario"]) ? $_POST["whsHorario"] : 0;
+$whsBodega = isset($_POST["whsBodega"]) ? $_POST["whsBodega"] : 0;
 $whsTransitorio = isset($_POST["whsTransitorio"]) ? $_POST["whsTransitorio"] : 0;
 $codTimeSoft = isset($_POST["codTimeSoft"]) ? $_POST["codTimeSoft"] : '';
 $perfil = isset($_POST["radios"]) ? $_POST["radios"] : '';
@@ -29,7 +29,7 @@ $sentencia = $db->prepare("
         [realizaConteo] = ?,
         [fk_ID_almacen_cierre] = ?,
         [fk_ID_almacen_invs] = ?,
-        [fk_ID_almacen_turemp] = ?,
+        [fk_ID_almacen_bodeg] = ?,
         [fk_ID_almacen_transitorio] = ?,
         [Timesoft_CentroCosto] = ?,
         [perfil] = ?,
@@ -45,7 +45,7 @@ $resultado = $sentencia->execute([
     $conteo,
     $whsCierre,
     $whsInvs,
-    $whsHorario,
+    $whsBodega,
     $whsTransitorio,
     $codTimeSoft,
     $perfil,

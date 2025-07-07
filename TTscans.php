@@ -129,12 +129,17 @@
     }
     function contador(){
         var node = document.getElementById("lsTemp").firstChild;
-        let codebar=node.innerText;
+        if (!node) return;
+        let codebar = node.innerText;
+        if (!codebar || codebar === 'undefined') {
+            document.getElementById("lsTemp").removeChild(node);
+            return;
+        }
         document.getElementById("lsTemp").removeChild(node);
         insertCodeBar(codebar);
-
     }
     function contadoradd(barcode, description = '', isManual = false){
+        if (!barcode || barcode === 'undefined') return;
         var node = document.createElement('li');
         if (isManual) {
             node.appendChild(document.createTextNode(barcode));
@@ -236,4 +241,4 @@
 
 <?php   
 include_once "footer.php";
-?> 
+?>

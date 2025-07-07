@@ -177,6 +177,16 @@
         renderTabla();
         function habilitarEscaneo() {
             if (document.getElementById('origen').value.trim() !== '') {
+                // Consultar artículos de la ubicación origen y mostrarlos en consola
+                const origenVal = document.getElementById('origen').value.trim();
+                const origenObj = ubicacionesData.find(u => u.BinCode === origenVal);
+                if (origenObj) {
+                    fetch('php/productos_ubicacion_ajax.php?absEntry=' + encodeURIComponent(origenObj.AbsEntry))
+                        .then(r => r.json())
+                        .then(data => {
+                            console.log('Artículos en ubicación origen:', data);
+                        });
+                }
                 setScanFields(true);
                 document.getElementById('codigo').focus();
                 document.getElementById('origen').disabled = true;

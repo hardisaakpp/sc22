@@ -316,7 +316,7 @@
         document.getElementById('codigo').focus();
     }
 
-    function aceptar() {
+    async function aceptar() {
         const origen = document.getElementById('origen').value.trim();
         const destino = document.getElementById('destino').value.trim();
 
@@ -337,11 +337,67 @@
             return;
         }
 
-        // Aquí podrías enviar los datos al servidor con fetch/AJAX
-        console.log("Origen:", origen);
-        console.log("Productos:", productos);
-        console.log("Destino:", destino);
-        alert("Datos enviados correctamente.");
+        // Obtener el WarehouseCode (ej: RL-SJ) desde el backend usando el id PHP $whsBodega
+        let warehouseCode = '';
+        try {
+            const resp = await fetch('get_warehouse_code.php?id=<?php echo $whsBodega; ?>');
+            if (resp.ok) {
+                const data = await resp.json();
+                warehouseCode = data.cod_almacen || '';
+            }
+        } catch (e) {}
+        if (!warehouseCode) {
+            alert('No se pudo obtener el WarehouseCode.');
+            return;
+        }
+
+        // Buscar AbsEntry de origen y destino
+        const origenObj = ubicacionesData.find(u => u.BinCode === origen);
+        const destinoObj = ubicacionesData.find(u => u.BinCode === destino);
+        if (!origenObj || !destinoObj) {
+            alert('No se pudo obtener la ubicación origen o destino.');
+            return;
+        }
+        const absEntryOrigen = origenObj.AbsEntry;
+        const absEntryDestino = destinoObj.AbsEntry;
+
+        // Construir StockTransferLines
+        const StockTransferLines = productos.map(prod => {
+            // Buscar el ItemCode real
+            let itemCode = '';
+            const prodOrigen = productosOrigen.find(p => p.CodeBars === prod.codigo || p.ItemCode === prod.codigo);
+            if (prodOrigen) {
+                itemCode = prodOrigen.ItemCode;
+            }
+            return {
+                ItemCode: itemCode,
+                Quantity: parseFloat(prod.cantidad),
+                WarehouseCode: warehouseCode,
+                StockTransferLinesBinAllocations: [
+                    {
+                        BinAbsEntry: absEntryOrigen,
+                        Quantity: parseFloat(prod.cantidad),
+                        BinActionType: 2 // Salida
+                    },
+                    {
+                        BinAbsEntry: absEntryDestino,
+                        Quantity: parseFloat(prod.cantidad),
+                        BinActionType: 1 // Entrada
+                    }
+                ]
+            };
+        });
+
+        const json = {
+            Comments: 'sc22',
+            FromWarehouse: warehouseCode,
+            ToWarehouse: warehouseCode,
+            StockTransferLines
+        };
+
+        // Mostrar el JSON generado en consola
+        console.log('JSON generado para envío:', json);
+        alert('JSON generado. Ver consola para detalles.');
     }
 </script>
 

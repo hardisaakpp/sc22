@@ -47,8 +47,9 @@
                                         <table class="table mb-0" id="tablaProductos" style="table-layout: fixed;">
                                             <thead>
                                                 <tr>
-                                                    <th style="width:70%">Código de Barras</th>
-                                                    <th style="width:30%">Cantidad</th>
+                                                    <th style="width:45%">Código de Barras</th>
+                                                    <th style="width:35%">ItemCode</th>
+                                                    <th style="width:20%">Cantidad</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -80,7 +81,9 @@
 
 </div>
 <script>
+
     const productos = [];
+    let productosOrigen = []; // Lista de productos válidos para la ubicación origen
 
     // Habilita/deshabilita campos según el flujo
     function setScanFields(enabled) {
@@ -95,8 +98,15 @@
         tabla.innerHTML = '';
         productos.forEach((prod, idx) => {
             const fila = tabla.insertRow();
+            // Buscar el producto en productosOrigen para mostrar el ItemCode
+            let itemCode = '';
+            const prodOrigen = productosOrigen.find(p => p.CodeBars === prod.codigo || p.ItemCode === prod.codigo);
+            if (prodOrigen) {
+                itemCode = prodOrigen.ItemCode;
+            }
             fila.insertCell(0).textContent = prod.codigo;
-            const cellCantidad = fila.insertCell(1);
+            fila.insertCell(1).textContent = itemCode;
+            const cellCantidad = fila.insertCell(2);
             cellCantidad.textContent = prod.cantidad;
             // Permitir edición con doble clic
             cellCantidad.ondblclick = function() {
@@ -154,6 +164,20 @@
             });
     }
 
+    // Cargar productos de la ubicación origen y guardarlos en productosOrigen
+    function cargarProductosOrigen(absEntry) {
+        return fetch('productos_ubicacion_ajax.php?absEntry=' + encodeURIComponent(absEntry))
+            .then(r => r.json())
+            .then(data => {
+                productosOrigen = Array.isArray(data) ? data : [];
+                // Opcional: mostrar en consola para debug
+                console.log('Productos válidos para escaneo:', productosOrigen);
+            })
+            .catch(() => {
+                productosOrigen = [];
+            });
+    }
+
     function cargarDestinoList() {
         const datalistDestino = document.getElementById('destinoList');
         datalistDestino.innerHTML = '';
@@ -176,28 +200,27 @@
         document.querySelector('.btn.btn-primary.btn-sm').disabled = true;
         document.getElementById('origen').focus();
         renderTabla();
+        // Referencia al botón de visto (✔️) al lado de origen
+        const btnVisto = document.querySelector('.row.form-group .col-2 button');
         function habilitarEscaneo() {
             if (escaneoEnCurso) return;
             if (document.getElementById('origen').value.trim() !== '') {
                 escaneoEnCurso = true;
-                // Consultar artículos de la ubicación origen y mostrarlos en consola
                 const origenVal = document.getElementById('origen').value.trim();
                 const origenObj = ubicacionesData.find(u => u.BinCode === origenVal);
                 if (origenObj) {
                     console.log('ID (AbsEntry) de ubicación origen:', origenObj.AbsEntry);
-                    fetch('productos_ubicacion_ajax.php?absEntry=' + encodeURIComponent(origenObj.AbsEntry))
-                        .then(r => r.json())
-                        .then(data => {
-                            console.log('Artículos en ubicación origen:', data);
-                            escaneoEnCurso = false;
-                        })
-                        .catch(() => { escaneoEnCurso = false; });
+                    cargarProductosOrigen(origenObj.AbsEntry).then(() => {
+                        escaneoEnCurso = false;
+                    });
                 } else {
+                    productosOrigen = [];
                     escaneoEnCurso = false;
                 }
                 setScanFields(true);
                 document.getElementById('codigo').focus();
                 document.getElementById('origen').disabled = true;
+                btnVisto.disabled = true;
                 document.getElementById('destino').disabled = false;
                 document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
                 cargarDestinoList();
@@ -209,7 +232,7 @@
             }
         });
         // Botón ✔️ al lado de origen
-        document.querySelector('.row.form-group .col-2 button').addEventListener('click', function(e) {
+        btnVisto.addEventListener('click', function(e) {
             e.preventDefault();
             habilitarEscaneo();
         });
@@ -249,27 +272,48 @@
     function agregarProducto() {
         if (document.getElementById('cantidad').disabled || document.getElementById('codigo').disabled) return;
         const codigo = document.getElementById('codigo').value.trim();
-        const cantidad = parseInt(document.getElementById('cantidad').value);
+        let cantidad = parseInt(document.getElementById('cantidad').value);
 
-        if (codigo && cantidad > 0) {
-            // Buscar si el producto ya existe
-            const idx = productos.findIndex(p => p.codigo === codigo);
-            if (idx !== -1) {
-                // Sumar cantidad si ya existe
-                productos[idx].cantidad += cantidad;
-                // Mover a primer lugar
-                const prod = productos.splice(idx, 1)[0];
-                productos.unshift(prod);
-            } else {
-                productos.unshift({ codigo, cantidad });
-            }
-            renderTabla();
-            document.getElementById('codigo').value = '';
-            document.getElementById('cantidad').value = '1';
+        // Validar que el código esté en la lista de productosOrigen
+        const prodValido = productosOrigen.find(p => p.CodeBars === codigo);
+        if (!prodValido) {
+            alert('El código de barras ingresado no está en la ubicación origen.');
             document.getElementById('codigo').focus();
-        } else {
-            alert("Ingrese un código y una cantidad válida.");
+            return;
         }
+
+        // Calcular la cantidad ya agregada de este código
+        const cantidadYaAgregada = productos
+            .filter(p => p.codigo === codigo)
+            .reduce((sum, p) => sum + p.cantidad, 0);
+
+        // Validar cantidad máxima
+        const maxCantidad = parseInt(prodValido.OnHandQty);
+        if (isNaN(cantidad) || cantidad <= 0) {
+            alert('Ingrese una cantidad válida.');
+            document.getElementById('cantidad').focus();
+            return;
+        }
+        if (cantidadYaAgregada + cantidad > maxCantidad) {
+            alert('La cantidad total para este código no puede superar el stock disponible (' + maxCantidad + ').');
+            document.getElementById('cantidad').focus();
+            return;
+        }
+
+        // Agregar o actualizar producto
+        const idx = productos.findIndex(p => p.codigo === codigo);
+        if (idx !== -1) {
+            productos[idx].cantidad += cantidad;
+            // Mover a primer lugar
+            const prod = productos.splice(idx, 1)[0];
+            productos.unshift(prod);
+        } else {
+            productos.unshift({ codigo, cantidad });
+        }
+        renderTabla();
+        document.getElementById('codigo').value = '';
+        document.getElementById('cantidad').value = '1';
+        document.getElementById('codigo').focus();
     }
 
     function aceptar() {

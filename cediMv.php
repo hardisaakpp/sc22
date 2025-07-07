@@ -410,7 +410,30 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }, 100);
-        alert('JSON generado y descargado.');
+
+        // Enviar el JSON por API (PHP backend) y mostrar la respuesta en consola
+        try {
+            const resp = await fetch('php/enviar_transferencia_stock.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(json)
+            });
+            const text = await resp.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                data = text;
+            }
+            console.log('Respuesta API StockTransfer:', data);
+            alert('JSON generado, descargado y enviado. Ver consola para respuesta de API.');
+        } catch (e) {
+            console.error('Error al enviar a la API:', e);
+            alert('Error al enviar a la API. Ver consola para detalles.');
+        }
     }
 </script>
 

@@ -1,7 +1,9 @@
 <?php
 // productos_ubicacion_ajax.php
+include_once "bd_StoreControl.php";
+session_start();
+
 header('Content-Type: application/json');
-include_once '../config.php'; // Ajusta el path según tu estructura
 
 if (!isset($_GET['absEntry'])) {
     echo json_encode(['error' => 'Falta parámetro absEntry']);
@@ -10,7 +12,8 @@ if (!isset($_GET['absEntry'])) {
 $absEntry = intval($_GET['absEntry']);
 
 try {
-    $pdo = new PDO($dsn, $dbuser, $dbpass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    // Usa la variable $db de bd_StoreControl.php si existe, si no crea PDO
+    $pdo = isset($db) ? $db : new PDO($dsn, $dbuser, $dbpass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $stmt = $pdo->prepare("EXEC sp_sap_ConsultarProductosUbicacion @AbsEntry = :absEntry");
     $stmt->bindParam(':absEntry', $absEntry, PDO::PARAM_INT);
     $stmt->execute();

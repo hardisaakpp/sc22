@@ -75,7 +75,7 @@
         <div class="card">
             <div class="card-header">
                 <strong class="card-title">ENVIADOS</strong>
-                <input type='number' value=-1 id='ItmsSav' style='border:0; text-align:center;' readonly>
+                <input type='number' value=0 id='ItmsSav' style='border:0; text-align:center;' readonly>
             </div>
             <div style="overflow-x: hidden; overflow-y: scroll;">
             <ul id="lsSaved">

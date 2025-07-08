@@ -84,6 +84,7 @@
 
     const productos = [];
     let productosOrigen = []; // Lista de productos válidos para la ubicación origen
+    let productosOrigenAbsEntry = null; // Para saber si ya se consultó para este AbsEntry
 
     // Habilita/deshabilita campos según el flujo
     function setScanFields(enabled) {
@@ -164,8 +165,36 @@
             });
     }
 
+    // Mostrar/ocultar loader
+    function mostrarLoader(mostrar) {
+        let loader = document.getElementById('loader-ubicacion');
+        if (!loader) {
+            loader = document.createElement('div');
+            loader.id = 'loader-ubicacion';
+            loader.style.position = 'fixed';
+            loader.style.top = 0;
+            loader.style.left = 0;
+            loader.style.width = '100vw';
+            loader.style.height = '100vh';
+            loader.style.background = 'rgba(255,255,255,0.7)';
+            loader.style.zIndex = 9999;
+            loader.style.display = 'flex';
+            loader.style.alignItems = 'center';
+            loader.style.justifyContent = 'center';
+            loader.innerHTML = '<div id="loader-ubicacion-msg" style="background:#fff;padding:30px 50px;border-radius:10px;box-shadow:0 0 10px #aaa;font-size:1.2em;display:flex;align-items:center;"><span class="spinner-border text-primary" style="margin-right:15px;width:2rem;height:2rem;"></span> <span id="loader-ubicacion-text">Consultando productos de la ubicación origen...</span></div>';
+            document.body.appendChild(loader);
+        }
+        // Permitir mensaje custom
+        let text = 'Consultando productos de la ubicación origen...';
+        if (typeof mostrar === 'string') text = mostrar;
+        if (typeof mostrar === 'boolean' && mostrar) text = 'Consultando productos de la ubicación origen...';
+        if (loader.querySelector('#loader-ubicacion-text')) loader.querySelector('#loader-ubicacion-text').textContent = text;
+        loader.style.display = mostrar ? 'flex' : 'none';
+    }
+
     // Cargar productos de la ubicación origen y guardarlos en productosOrigen
     function cargarProductosOrigen(absEntry) {
+        mostrarLoader(true);
         return fetch('productos_ubicacion_ajax.php?absEntry=' + encodeURIComponent(absEntry))
             .then(r => r.json())
             .then(data => {
@@ -175,6 +204,9 @@
             })
             .catch(() => {
                 productosOrigen = [];
+            })
+            .finally(() => {
+                mostrarLoader(false);
             });
     }
 
@@ -204,26 +236,55 @@
         const btnVisto = document.querySelector('.row.form-group .col-2 button');
         function habilitarEscaneo() {
             if (escaneoEnCurso) return;
-            if (document.getElementById('origen').value.trim() !== '') {
+            const origenVal = document.getElementById('origen').value.trim();
+            if (origenVal !== '') {
                 escaneoEnCurso = true;
-                const origenVal = document.getElementById('origen').value.trim();
                 const origenObj = ubicacionesData.find(u => u.BinCode === origenVal);
                 if (origenObj) {
-                    console.log('ID (AbsEntry) de ubicación origen:', origenObj.AbsEntry);
+                    // Si ya se consultó productosOrigen para este AbsEntry, usarlo
+                    if (productosOrigen && productosOrigen.length > 0 && productosOrigenAbsEntry === origenObj.AbsEntry) {
+                        // Ya consultado y no vacío
+                        setScanFields(true);
+                        document.getElementById('codigo').focus();
+                        document.getElementById('origen').disabled = true;
+                        btnVisto.disabled = true;
+                        document.getElementById('destino').disabled = false;
+                        document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
+                        cargarDestinoList();
+                        escaneoEnCurso = false;
+                        return;
+                    }
                     cargarProductosOrigen(origenObj.AbsEntry).then(() => {
+                        productosOrigenAbsEntry = origenObj.AbsEntry;
+                        if (!productosOrigen || productosOrigen.length === 0) {
+                            // Ubicación origen vacía
+                            alert('La ubicación de origen está vacía. Seleccione otra ubicación.');
+                            // Resetear el formulario
+                            document.querySelector('.btn.btn-warning.btn-sm').click();
+                            escaneoEnCurso = false;
+                            return;
+                        }
+                        setScanFields(true);
+                        document.getElementById('codigo').focus();
+                        document.getElementById('origen').disabled = true;
+                        btnVisto.disabled = true;
+                        document.getElementById('destino').disabled = false;
+                        document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
+                        cargarDestinoList();
                         escaneoEnCurso = false;
                     });
                 } else {
                     productosOrigen = [];
+                    productosOrigenAbsEntry = null;
                     escaneoEnCurso = false;
+                    setScanFields(true);
+                    document.getElementById('codigo').focus();
+                    document.getElementById('origen').disabled = true;
+                    btnVisto.disabled = true;
+                    document.getElementById('destino').disabled = false;
+                    document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
+                    cargarDestinoList();
                 }
-                setScanFields(true);
-                document.getElementById('codigo').focus();
-                document.getElementById('origen').disabled = true;
-                btnVisto.disabled = true;
-                document.getElementById('destino').disabled = false;
-                document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
-                cargarDestinoList();
             }
         }
         document.getElementById('origen').addEventListener('keydown', function(e) {
@@ -412,6 +473,7 @@
         }, 100);
 
         // Enviar el JSON por API (PHP backend) y mostrar la respuesta en consola
+        mostrarLoader('Espere mientras se procesa');
         try {
             const resp = await fetch('php/enviar_transferencia_stock.php', {
                 method: 'POST',
@@ -429,11 +491,82 @@
                 data = text;
             }
             console.log('Respuesta API StockTransfer:', data);
-            alert('JSON generado, descargado y enviado. Ver consola para respuesta de API.');
+            let msg = typeof data === 'string' ? data : (data && data.message ? data.message : JSON.stringify(data));
+            if (msg && msg.includes('Transferencia creada exitosamente')) {
+                // Oculta alerta roja si está visible
+                let alertaRoja = document.getElementById('alerta-roja-api');
+                if (alertaRoja) alertaRoja.style.display = 'none';
+                mostrarAlertaVerde('Transferencia creada exitosamente.');
+                setTimeout(() => {
+                    document.querySelector('.btn.btn-warning.btn-sm').click();
+                }, 1500);
+            } else {
+                mostrarAlertaRoja(msg || 'Error desconocido al crear la transferencia.');
+            }
         } catch (e) {
             console.error('Error al enviar a la API:', e);
-            alert('Error al enviar a la API. Ver consola para detalles.');
+            mostrarAlertaRoja('Error al enviar a la API. Ver consola para detalles.');
+        } finally {
+            mostrarLoader(false);
         }
+
+    // Alerta roja flotante para errores
+    function mostrarAlertaRoja(mensaje) {
+        let alerta = document.getElementById('alerta-roja-api');
+        if (!alerta) {
+            alerta = document.createElement('div');
+            alerta.id = 'alerta-roja-api';
+            alerta.style.position = 'fixed';
+            alerta.style.top = '30px';
+            alerta.style.left = '50%';
+            alerta.style.transform = 'translateX(-50%)';
+            alerta.style.background = '#dc3545';
+            alerta.style.color = '#fff';
+            alerta.style.padding = '16px 32px';
+            alerta.style.borderRadius = '8px';
+            alerta.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+            alerta.style.fontSize = '1.1em';
+            alerta.style.zIndex = 10000;
+            alerta.style.display = 'none';
+            alerta.style.fontWeight = 'bold';
+            alerta.innerHTML = '';
+            document.body.appendChild(alerta);
+        }
+        alerta.innerHTML = '<span style="margin-right:10px;">&#9888;</span>' + mensaje;
+        alerta.style.display = 'block';
+        setTimeout(() => {
+            alerta.style.display = 'none';
+        }, 5000);
+    }
+
+    // Alerta verde flotante para éxito
+    function mostrarAlertaVerde(mensaje) {
+        let alerta = document.getElementById('alerta-verde-api');
+        if (!alerta) {
+            alerta = document.createElement('div');
+            alerta.id = 'alerta-verde-api';
+            alerta.style.position = 'fixed';
+            alerta.style.top = '30px';
+            alerta.style.left = '50%';
+            alerta.style.transform = 'translateX(-50%)';
+            alerta.style.background = '#28a745';
+            alerta.style.color = '#fff';
+            alerta.style.padding = '16px 32px';
+            alerta.style.borderRadius = '8px';
+            alerta.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+            alerta.style.fontSize = '1.1em';
+            alerta.style.zIndex = 10000;
+            alerta.style.display = 'none';
+            alerta.style.fontWeight = 'bold';
+            alerta.innerHTML = '';
+            document.body.appendChild(alerta);
+        }
+        alerta.innerHTML = '<span style="margin-right:10px;">&#10004;</span>' + mensaje;
+        alerta.style.display = 'block';
+        setTimeout(() => {
+            alerta.style.display = 'none';
+        }, 2000);
+    }
     }
 </script>
 

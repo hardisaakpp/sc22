@@ -346,45 +346,18 @@
             if (escaneoEnCurso) return;
             const origenVal = document.getElementById('origen').value.trim();
             if (origenVal !== '') {
-                escaneoEnCurso = true;
+                // Validar que la ubicación origen exista en la lista
                 const origenObj = ubicacionesData.find(u => u.BinCode === origenVal);
-                if (origenObj) {
-                    // Si ya se consultó productosOrigen para este AbsEntry, usarlo
-                    if (productosOrigen && productosOrigen.length > 0 && productosOrigenAbsEntry === origenObj.AbsEntry) {
-                        // Ya consultado y no vacío
-                        setScanFields(true);
-                        document.getElementById('codigo').focus();
-                        document.getElementById('origen').disabled = true;
-                        btnVisto.disabled = true;
-                        document.getElementById('destino').disabled = false;
-                        document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = false;
-                        cargarDestinoList();
-                        escaneoEnCurso = false;
-                        return;
-                    }
-                    cargarProductosOrigen(origenObj.AbsEntry).then(() => {
-                        productosOrigenAbsEntry = origenObj.AbsEntry;
-                        if (!productosOrigen || productosOrigen.length === 0) {
-                            // Ubicación origen vacía
-                            alert('La ubicación de origen está vacía. Seleccione otra ubicación.');
-                            // Resetear el formulario
-                            document.querySelector('.btn.btn-warning.btn-sm').click();
-                            escaneoEnCurso = false;
-                            return;
-                        }
-                        setScanFields(true);
-                        document.getElementById('codigo').focus();
-                        document.getElementById('origen').disabled = true;
-                        btnVisto.disabled = true;
-                        document.getElementById('destino').disabled = false;
-                        document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = false;
-                        cargarDestinoList();
-                        escaneoEnCurso = false;
-                    });
-                } else {
-                    productosOrigen = [];
-                    productosOrigenAbsEntry = null;
-                    escaneoEnCurso = false;
+                if (!origenObj) {
+                    alert('Debe elegir una ubicación de origen válida de la lista.');
+                    document.getElementById('origen').value = '';
+                    document.getElementById('origen').focus();
+                    return;
+                }
+                escaneoEnCurso = true;
+                // Si ya se consultó productosOrigen para este AbsEntry, usarlo
+                if (productosOrigen && productosOrigen.length > 0 && productosOrigenAbsEntry === origenObj.AbsEntry) {
+                    // Ya consultado y no vacío
                     setScanFields(true);
                     document.getElementById('codigo').focus();
                     document.getElementById('origen').disabled = true;
@@ -392,7 +365,28 @@
                     document.getElementById('destino').disabled = false;
                     document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = false;
                     cargarDestinoList();
+                    escaneoEnCurso = false;
+                    return;
                 }
+                cargarProductosOrigen(origenObj.AbsEntry).then(() => {
+                    productosOrigenAbsEntry = origenObj.AbsEntry;
+                    if (!productosOrigen || productosOrigen.length === 0) {
+                        // Ubicación origen vacía
+                        alert('La ubicación de origen está vacía. Seleccione otra ubicación.');
+                        // Resetear el formulario
+                        document.querySelector('.btn.btn-warning.btn-sm').click();
+                        escaneoEnCurso = false;
+                        return;
+                    }
+                    setScanFields(true);
+                    document.getElementById('codigo').focus();
+                    document.getElementById('origen').disabled = true;
+                    btnVisto.disabled = true;
+                    document.getElementById('destino').disabled = false;
+                    document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = false;
+                    cargarDestinoList();
+                    escaneoEnCurso = false;
+                });
             }
         }
         document.getElementById('origen').addEventListener('keydown', function(e) {
@@ -689,5 +683,9 @@
     }
     }
 </script>
+
+<?php include_once "footer.php"; ?>
+           
+
 
 <?php include_once "footer.php"; ?>

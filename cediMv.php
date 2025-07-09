@@ -215,8 +215,15 @@
 
     function guardarCantidad(idx, input, cell) {
         let val = parseInt(input.value);
-        if (isNaN(val) || val <= 0) {
-            alert('La cantidad debe ser mayor a 0.');
+        // Buscar el OnHandQty del producto correspondiente
+        let maxCantidad = 0;
+        const prod = productos[idx];
+        const prodOrigen = productosOrigen.find(p => p.CodeBars === prod.codigo || p.ItemCode === prod.codigo);
+        if (prodOrigen) {
+            maxCantidad = parseInt(prodOrigen.OnHandQty);
+        }
+        if (isNaN(val) || val <= 0 || (maxCantidad > 0 && val > maxCantidad)) {
+            alert('La cantidad debe ser mayor a 0 y menor o igual al stock disponible (' + maxCantidad + ').');
             // Restaurar el valor anterior y salir del modo edición
             cell.textContent = productos[idx].cantidad;
             cell.ondblclick = function() {
@@ -611,8 +618,8 @@
                 let alertaRoja = document.getElementById('alerta-roja-api');
                 if (alertaRoja) alertaRoja.style.display = 'none';
                 mostrarAlertaVerde('Transferencia creada exitosamente.');
-                setTimeout(() => {
-                    document.getElementById('btnReset').click();
+                setTimeout(function() {
+                    window.location.href = window.location.href;
                 }, 1500);
             } else {
                 mostrarAlertaRoja(msg || 'Error desconocido al crear la transferencia.');
@@ -685,6 +692,6 @@
 </script>
 
 <?php include_once "footer.php"; ?>
-           
+
 
 

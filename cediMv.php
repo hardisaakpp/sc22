@@ -215,7 +215,15 @@
 
     function guardarCantidad(idx, input, cell) {
         let val = parseInt(input.value);
-        if (isNaN(val) || val < 0) val = 0;
+        if (isNaN(val) || val <= 0) {
+            alert('La cantidad debe ser mayor a 0.');
+            // Restaurar el valor anterior y salir del modo edición
+            cell.textContent = productos[idx].cantidad;
+            cell.ondblclick = function() {
+                editarCantidad(idx, cell);
+            };
+            return;
+        }
         productos[idx].cantidad = val;
         cell.textContent = val;
         cell.ondblclick = function() {

@@ -20,8 +20,9 @@
    
   <div class="col-lg-6">
                     <div class="card">
-                        <div class="card-header">
-                           <strong>Reubicación</strong> artículos<small><code><?php echo $whsBodega; ?></code></small>
+                        <div class="card-header" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0;overflow:hidden;">
+                            <strong>Reubicación</strong> artículos
+                            <span id="warehouseCodeHeader"> </span>
                         </div>
                         <div class="card-body card-block">
                             <form action="#" method="post" class="form-horizontal" id="scanForm" onsubmit="return false;">
@@ -35,8 +36,8 @@
                                     </div>
                                 </div>
                                 <div class="row form-group">
-                                    <div class="col-2"><input type="text" placeholder="cantidad" class="form-control" id="cantidad" min="1" value="1" disabled></div>
-                                    <div class="col-8"><input type="text" id="codigo" placeholder="Cod. Barras" class="form-control" disabled></div>
+                                    <div class="col-3"><input type="text" placeholder="cantidad" class="form-control" id="cantidad" min="1" value="1" disabled></div>
+                                    <div class="col-7"><input type="text" id="codigo" placeholder="Cod. Barras" class="form-control" disabled></div>
                                     <div class="col-2">
                                         <button onclick="agregarProducto()">▶️</button>
                                     </div>
@@ -63,15 +64,13 @@
                                         <datalist id="destinoList"></datalist>
                                     </div>
                                 </div>
+                                <div class="form-group" style="display:flex; gap:10px; justify-content:flex-end;">
+                                    <button type="submit" onclick="aceptar()" class="btn btn-outline-success btn-sm">Enviar</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btnReset">Reset</button>
+                                </div>
                             </form>
                         </div>
-                        <div class="card-footer">
-                            <button type="submit" onclick="aceptar()" class="btn btn-primary btn-sm">Enviar</button>
-
-                            <button class="btn btn-warning btn-sm">Reset</button>
-                            <button class="btn btn-danger btn-sm">Salir</button>
-
-                        </div>
+                        <!--<div class="card-footer"></div>-->
                     </div>
                 </div>
 
@@ -91,7 +90,7 @@
         document.getElementById('cantidad').disabled = !enabled;
         document.getElementById('codigo').disabled = !enabled;
         document.getElementById('destino').disabled = !enabled;
-        document.querySelector('.btn.btn-primary.btn-sm').disabled = !enabled;
+        document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = !enabled;
     }
 
     function renderTabla() {
@@ -229,11 +228,34 @@
         setScanFields(false);
         document.getElementById('origen').disabled = false;
         document.getElementById('destino').disabled = true;
-        document.querySelector('.btn.btn-primary.btn-sm').disabled = true;
+        document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = true;
         document.getElementById('origen').focus();
         renderTabla();
+        // Mostrar WarehouseCode en el header
+        fetch('get_warehouse_code.php?id=<?php echo $whsBodega; ?>')
+            .then(resp => resp.json())
+            .then(data => {
+                if (data && data.cod_almacen) {
+                    document.getElementById('warehouseCodeHeader').textContent = '(' + data.cod_almacen + ')';
+                }
+            });
         // Referencia al botón de visto (✔️) al lado de origen
         const btnVisto = document.querySelector('.row.form-group .col-2 button');
+        // Validar destino al salir del campo o cambiar
+        document.getElementById('destino').addEventListener('blur', function() {
+            if (this.value && !validarDestino()) {
+                alert('Debe elegir una ubicación de destino válida de la lista.');
+                this.value = '';
+                this.focus();
+            }
+        });
+        document.getElementById('destino').addEventListener('change', function() {
+            if (this.value && !validarDestino()) {
+                alert('Debe elegir una ubicación de destino válida de la lista.');
+                this.value = '';
+                this.focus();
+            }
+        });
         function habilitarEscaneo() {
             if (escaneoEnCurso) return;
             const origenVal = document.getElementById('origen').value.trim();
@@ -249,7 +271,7 @@
                         document.getElementById('origen').disabled = true;
                         btnVisto.disabled = true;
                         document.getElementById('destino').disabled = false;
-                        document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
+                        document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = false;
                         cargarDestinoList();
                         escaneoEnCurso = false;
                         return;
@@ -269,7 +291,7 @@
                         document.getElementById('origen').disabled = true;
                         btnVisto.disabled = true;
                         document.getElementById('destino').disabled = false;
-                        document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
+                        document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = false;
                         cargarDestinoList();
                         escaneoEnCurso = false;
                     });
@@ -282,7 +304,7 @@
                     document.getElementById('origen').disabled = true;
                     btnVisto.disabled = true;
                     document.getElementById('destino').disabled = false;
-                    document.querySelector('.btn.btn-primary.btn-sm').disabled = false;
+                    document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = false;
                     cargarDestinoList();
                 }
             }
@@ -311,7 +333,7 @@
             // No deshabilitar campos al cambiar destino
         });
         // Reset button
-        document.querySelector('.btn.btn-warning.btn-sm').addEventListener('click', function(e) {
+        document.getElementById('btnReset').addEventListener('click', function(e) {
             e.preventDefault();
             // Limpiar todos los campos y productos
             document.getElementById('origen').value = '';
@@ -322,13 +344,20 @@
             document.getElementById('codigo').disabled = true;
             document.getElementById('destino').value = '';
             document.getElementById('destino').disabled = true;
-            document.querySelector('.btn.btn-primary.btn-sm').disabled = true;
+            document.querySelector('.btn.btn-outline-success.btn-sm[type="submit"]').disabled = true;
             productos.length = 0;
             renderTabla();
             cargarUbicaciones();
             document.getElementById('origen').focus();
         });
     };
+
+    // Validar que el destino exista en la lista
+    function validarDestino() {
+        const destinoVal = document.getElementById('destino').value.trim();
+        if (!destinoVal) return false;
+        return ubicacionesData.some(u => u.BinCode === destinoVal);
+    }
 
     function agregarProducto() {
         if (document.getElementById('cantidad').disabled || document.getElementById('codigo').disabled) return;
@@ -388,6 +417,11 @@
         }
         if (!destino) {
             alert("Ingrese la ubicación de destino.");
+            document.getElementById('destino').focus();
+            return;
+        }
+        if (!validarDestino()) {
+            alert('Debe elegir una ubicación de destino válida de la lista.');
             document.getElementById('destino').focus();
             return;
         }
@@ -459,18 +493,18 @@
         // Mostrar el JSON generado en consola
         console.log('JSON generado para envío:', json);
 
-        // Descargar el JSON como archivo
-        const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'stock_transfer.json';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 100);
+        // Descargar el JSON como archivo (omitido por requerimiento)
+        // const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+        // const url = URL.createObjectURL(blob);
+        // const a = document.createElement('a');
+        // a.href = url;
+        // a.download = 'stock_transfer.json';
+        // document.body.appendChild(a);
+        // a.click();
+        // setTimeout(() => {
+        //     document.body.removeChild(a);
+        //     URL.revokeObjectURL(url);
+        // }, 100);
 
         // Enviar el JSON por API (PHP backend) y mostrar la respuesta en consola
         mostrarLoader('Espere mientras se procesa');
@@ -498,7 +532,7 @@
                 if (alertaRoja) alertaRoja.style.display = 'none';
                 mostrarAlertaVerde('Transferencia creada exitosamente.');
                 setTimeout(() => {
-                    document.querySelector('.btn.btn-warning.btn-sm').click();
+                    document.getElementById('btnReset').click();
                 }, 1500);
             } else {
                 mostrarAlertaRoja(msg || 'Error desconocido al crear la transferencia.');

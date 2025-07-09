@@ -464,8 +464,8 @@
                         </a>
 
                         <div class="user-menu dropdown-menu">
-                         <a class="nav-link" href="psswrd.php"><i class="fa fa-key"></i>Cambiar clave</a>
-
+                            <a class="nav-link" href="#"><i class="fa fa- user"></i>Mi perfil</a>
+                            <a class="nav-link" href="psswrd.php"><i class="fa fa-key"></i>Cambiar clave</a>   
                             <a class="nav-link" href="php/logout.php"><i class="fa fa-power-off"></i>Cerrar Sesión</a>
                         </div>
                     </div>

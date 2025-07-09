@@ -116,23 +116,101 @@
     }
 
     function editarCantidad(idx, cell) {
-        const input = document.createElement('input');
-        input.type = 'number';
-        input.min = '0';
-        input.value = productos[idx].cantidad;
-        input.style.width = '60px';
-        input.onblur = function() {
-            guardarCantidad(idx, input, cell);
+        mostrarModalAccion(idx, cell);
+    }
+
+    // Modal reutilizable para contraseña y acción
+    function mostrarModalAccion(idx, cell) {
+        let modal = document.getElementById('modalAccionLinea');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'modalAccionLinea';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.background = 'rgba(0,0,0,0.3)';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.zIndex = 10001;
+            modal.innerHTML = `
+                <div style="background:#fff;padding:30px 30px 20px 30px;border-radius:10px;min-width:320px;box-shadow:0 0 20px #0003;display:flex;flex-direction:column;align-items:center;">
+                    <div style='font-weight:bold;font-size:1.1em;margin-bottom:10px;'>Acción sobre la línea</div>
+                    <input type="password" id="modalPass" class="form-control" placeholder="Contraseña" style="margin-bottom:10px;width:200px;">
+                    <div id="modalError" style="color:#c00;font-size:0.95em;display:none;margin-bottom:10px;"></div>
+                    <div style="display:flex;gap:10px;">
+                        <button id="btnEditarLinea" class="btn btn-primary btn-sm">Editar</button>
+                        <button id="btnBorrarLinea" class="btn btn-danger btn-sm">Borrar</button>
+                        <button id="btnCancelarLinea" class="btn btn-secondary btn-sm">Cancelar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        modal.style.display = 'flex';
+        document.getElementById('modalPass').value = '';
+        document.getElementById('modalError').style.display = 'none';
+
+        // Botones
+        const btnEditar = document.getElementById('btnEditarLinea');
+        const btnBorrar = document.getElementById('btnBorrarLinea');
+        const btnCancelar = document.getElementById('btnCancelarLinea');
+        // Limpiar listeners previos
+        btnEditar.onclick = btnBorrar.onclick = btnCancelar.onclick = null;
+
+        // Contraseña
+        const PASSWORD_CORRECTA = '12345';
+        function validarPass() {
+            const pass = document.getElementById('modalPass').value;
+            if (pass !== PASSWORD_CORRECTA) {
+                document.getElementById('modalError').textContent = 'Contraseña incorrecta.';
+                document.getElementById('modalError').style.display = 'block';
+                return false;
+            }
+            document.getElementById('modalError').style.display = 'none';
+            return true;
+        }
+
+        btnEditar.onclick = function() {
+            if (!validarPass()) return;
+            modal.style.display = 'none';
+            // Editar cantidad
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.min = '0';
+            input.value = productos[idx].cantidad;
+            input.style.width = '60px';
+            input.onblur = function() {
+                guardarCantidad(idx, input, cell);
+            };
+            input.onkeydown = function(e) {
+                if (e.key === 'Enter') {
+                    input.blur();
+                }
+            };
+            cell.textContent = '';
+            cell.appendChild(input);
+            input.focus();
+            input.select();
         };
-        input.onkeydown = function(e) {
-            if (e.key === 'Enter') {
-                input.blur();
+        btnBorrar.onclick = function() {
+            if (!validarPass()) return;
+            if (confirm('¿Está seguro de que desea eliminar esta línea?')) {
+                productos.splice(idx, 1);
+                renderTabla();
+                modal.style.display = 'none';
             }
         };
-        cell.textContent = '';
-        cell.appendChild(input);
-        input.focus();
-        input.select();
+        btnCancelar.onclick = function() {
+            modal.style.display = 'none';
+        };
+        // Enter en input ejecuta editar
+        document.getElementById('modalPass').onkeydown = function(e) {
+            if (e.key === 'Enter') btnEditar.click();
+        };
+        setTimeout(() => { document.getElementById('modalPass').focus(); }, 100);
     }
 
     function guardarCantidad(idx, input, cell) {

@@ -14,8 +14,9 @@ $sentencia = $db->query("
                         T1.DocDate BETWEEN '$desde' AND '$hasta' 
                         AND T1.Filler <> 'RL-SJ'
                         AND T1.DocStatus = 'O'
-                    AND DocNum_Tr=0
-                        AND NOT EXISTS (
+                    AND --DocNum_Tr=0 AND
+                        
+                         NOT EXISTS (
                             SELECT 1
                             FROM [STORECONTROL].[dbo].[ced_groupsot] AS G
                             WHERE G.fk_docnumsotcab = T1.DocNum and [enabled] = 1)

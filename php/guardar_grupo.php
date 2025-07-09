@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 ,@new_id   
                                             FROM SotDet_MT sd 
                                                 join SotCab_MT sc on sd.DocNum_Sot =sc.DocNum
-                                            WHERE sc.DocStatus = 'O' and DocNum_Tr=0 and DocNum_Sot IN (
+                                            WHERE sc.DocStatus = 'O' and DocNum_Sot IN (
                                                 SELECT fk_docnumsotcab 
                                                 FROM ced_groupsot
                                                 WHERE fk_idgroup = @new_id);

@@ -3,14 +3,12 @@
        <div class="clearfix"></div>
         <!-- Footer -->
         <footer class="site-footer">
-            <div class="footer-inner bg-white">
-                <div class="row">
-                    
-                    <div class="col-sm-6">
-                         <img src="images/favicon.png" alt="Icono" style="width: 24px; height:24px; vertical-align:middle;">
+            <div class="footer-inner bg-white" style="padding:6px 0; min-height:unset;">
+                <div class="row" style="display:flex;align-items:center;flex-wrap:nowrap;">
+                    <div class="col-sm-6" style="flex:1 1 50%;max-width:50%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        <img src="images/favicon.png" alt="Icono" style="width: 24px; height:24px; vertical-align:middle;">
                     </div>
-                    
-                    <div class="col-sm-6 text-right">
+                    <div class="col-sm-6 text-right" style="flex:1 1 50%;max-width:50%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                         By <a href="mailto:sistemas@sunsetcorpholding.com">Alex T[SIS-SUN]</a>
                     </div>
                 </div>

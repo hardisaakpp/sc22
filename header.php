@@ -348,6 +348,7 @@
                             <ul class="sub-menu children dropdown-menu">     
                                         <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
                                         <li><i class="fa fa-home"></i><a href="whsL.php">Almacenes</a></li>
+                                        <li><i class="fa fa-refresh"></i><a href="confMerg.php">Actualiza SAP->SC </a></li>
                             </ul>
                             </li>';
             

@@ -209,8 +209,10 @@ function sendStockTransfer($jsonPayload) {
 
   const filas = document.querySelectorAll(`tr[data-codigo="${codigoIngresado}"]`);
   let escaneado = false;
+  let encontrado = false;
 
   for (let fila of filas) {
+    encontrado = true;
     const escaneadosCelda = fila.querySelector('.escaneados');
     const cantidadActual = parseInt(escaneadosCelda.textContent) || 0;
     const stock = parseInt(fila.children[2].textContent) || 0;
@@ -233,7 +235,11 @@ function sendStockTransfer($jsonPayload) {
   }
 
   if (!escaneado) {
-    alert(`El código ${codigoIngresado} ya ha sido completado en todas sus líneas.`);
+    if (encontrado) {
+      alert(`Ya se escanearon todos los artículos ${codigoIngresado} listados.`);
+    } else {
+      alert(`El código ${codigoIngresado} no existe en este documento.`);
+    }
   }
 
   document.getElementById('txtu').value = 1;
@@ -328,28 +334,6 @@ mostrarLoader(true); // Mostrar loader
      alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");
      return;
      }
-/*
-     try {
-     const response = await fetch('php/guardar_scans.php', {
-     method: 'POST',
-     headers: { 'Content-Type': 'application/json' },
-     body: JSON.stringify(datos)
-     });
-     const data = await response.json();
-     if (data.status !== "success") {
-     mostrarLoader(false);
-     alert("❌ Error al guardar los datos.");
-     return;
-     }
-     } catch (error) {
-     mostrarLoader(false);
-     alert("❌ Error en la comunicación con el servidor.");
-     return;
-     }
-*/
-
-//transferencia
-     // Verificar si hay productos escaneados
         let incompletos = 0;
         let totalEscaneado = 0;
 
@@ -405,24 +389,30 @@ mostrarLoader(true); // Mostrar loader
 
     // Crear transferencia 
 
-
             let continuar = false;
 
-
                 if (incompletos === 0) {
-                    continuar = true;
-                    console.log("✅ Todos los productos están completos. Continuando con la transferencia...");
-                }else if ((incompletos > 0 && confirm("⚠️ Hay productos incompletos. ¿Deseas continuar?"))) {                     
+                    // Todos completos, preguntar confirmación antes de continuar
+                    mostrarLoader(false);
+                    if (confirm("¿Está seguro de crear la transferencia?")) {
+                        mostrarLoader(true);
+                        continuar = true;
+                    } else {
+                        mostrarLoader(false);
+                        alert("⚠️ Transferencia cancelada por el usuario.");
+                        return;
+                    }
+                } else if ((incompletos > 0 && confirm("⚠️ Hay productos incompletos. ¿Deseas continuar?"))) {                     
                     const clave = prompt("🔐 Ingresa la clave para continuar:");
                     if (clave !== "12345") {
                         alert("❌ Clave incorrecta. Operación cancelada.");
                         mostrarLoader(false);
                         return;
-                    }else {
+                    } else {
                         console.log("🔓 Clave correcta. Continuando con la transferencia...");
                         continuar = true;
                     }
-                }else{
+                } else {
                     alert("⚠️ Transferencia cancelada por el usuario.");
                     mostrarLoader(false);
                     return;
@@ -536,6 +526,8 @@ document.getElementById('btnActualizarSolicitud').addEventListener('click', func
         alert("❌ Error al actualizar la solicitud.");
     });
 });
+
+
 
 
 

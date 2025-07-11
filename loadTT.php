@@ -1,6 +1,5 @@
 <?php
     include_once "header.php";
-    //si no es admin no abre
     if($userAdmin<>1){
         echo ('ACCESO DENEGADO');
         }else {
@@ -11,14 +10,13 @@
         $s1 = $db->query("select * from Almacen where inactivo=0" );
         $whs = $s1->fetchAll(PDO::FETCH_OBJ);   
 
- $sentencia = $db->query("
-
-    EXEC sp_GetTTStockData '". $fil ."' ;    
-    " );
+ $sentencia = $db->query("EXEC sp_GetTTStockData '". $fil ."'; " );
     $users = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
      
 ?>
+   
+
 
 <div class="content">
 <!---------------------------------------------->
@@ -92,7 +90,7 @@
             <strong class="card-title">GENERADAS LOS ULTIMOS 30 DIAS</strong>
         </div>
         <div class="card-body">
-            <table class="table" id='tblBodegas'>
+            <table id="bootstrap-data-table" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>CODIGO</th>
@@ -175,6 +173,19 @@
 
 <script> 
 
+    
+
+  $(document).ready(function() {
+    if (!$.fn.DataTable.isDataTable('#bootstrap-data-table')) {
+      $('#bootstrap-data-table').DataTable({
+        "order": [[2, "desc"]] // Cambia el índice si quieres otra columna
+      });
+    }
+  });
+
+
+
+
    function confirmar(idcab) {
             if (confirm("¿Seguro de actualizar?")) {
                 $(".loader-page").css({ visibility: "visible", opacity: "0.8" });
@@ -247,34 +258,34 @@
 
     function delTD(id,row) {
     
-    var parametros = 
-        {
-            "id" : id
-        };
+        var parametros = 
+            {
+                "id" : id
+            };
 
-        $.ajax({
-            data: parametros,
-            url: 'php/deleteTFT.php',
-            type: 'GET',
-            async: false,
-            success: function(data){
-                row.closest('tr').remove();
-                Swal.fire({
-                position: 'top-end',
-                icon: 'Eliminado',
-                title: 'Se elimino 1 registro',
-                showConfirmButton: false,
-                timer: 1500
-                })
+            $.ajax({
+                data: parametros,
+                url: 'php/deleteTFT.php',
+                type: 'GET',
+                async: false,
+                success: function(data){
+                    row.closest('tr').remove();
+                    Swal.fire({
+                    position: 'top-end',
+                    icon: 'Eliminado',
+                    title: 'Se elimino 1 registro',
+                    showConfirmButton: false,
+                    timer: 1500
+                    })
 
-            },
-            error: function(){
-                console.log('error de conexion - revisa tu red');
-            }
-        });
+                },
+                error: function(){
+                    console.log('error de conexion - revisa tu red');
+                }
+            });
 
-       
-}
+        
+    }
 </script>
 <!---------------------------------------------->
 <!--------------Fin Content -------------------->

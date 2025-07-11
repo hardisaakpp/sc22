@@ -99,21 +99,18 @@ switch ($fil) {
                                 <li>
                                 <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Descargar Xlsx
+                            Filtro Tipo
                         </button>
            
                      
                             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                            
-                                  <input type="submit"class="dropdown-item" value="Todos" onclick="window.location.href='TTListR.php'">
+                                  <input type="submit"class="dropdown-item" value="Ver Todos" onclick="window.location.href='TTListR.php'">
                                   <div class="dropdown-divider"></div>
                                   <input type="submit"class="dropdown-item" value="Totales" onclick="window.location.href='TTListR.php?id=TT'" >
                                   <input type="submit" class="dropdown-item" value="Parcial" onclick="window.location.href='TTListR.php?id=TP'">
                                   
                             </div>
-
-                            <button type="button" class="btn btn-outline-warning" onclick="location.reload();">F5</button>
-                            <button type="button" class="btn btn-outline-danger" onclick="window.location.href='wllcm.php'">X</button>
                     </div>
 
                                 </li>

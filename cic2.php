@@ -51,7 +51,7 @@ if ($pFlag) {
     //echo "No se recibió pFlag o no es true.";
     // Otra lógica alternativa
 
-    if ($pFecha > date('Y-m-d', strtotime('-8 day'))) { 
+    if ($pFecha > date('Y-m-d', strtotime('-15 day'))) { 
       //   if ($pFecha == date('Y-m-d') || $pFecha == date('Y-m-d', strtotime('-1 day'))) { 
      //  echo 'true';
  //   if (strtotime($pFecha) >= strtotime('-7 days')) {

@@ -354,20 +354,20 @@
             
                         }  
  
-        //Bodegas
+        //Reportes
 
                         if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
                         
                         
                         echo '                       
                             <li class="menu-item-has-children dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Reportes</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                                    <i class="menu-icon fa fa-list-alt"></i>Reportes
+                                </a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-dropbox"></i><a href="soltr.php">Lista</a></li>
-                                    <li><i class="fa fa-print"></i><a href="soltrL.php">Etiquetas</a></li>
-                                    <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
-                                    <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
-                                    <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
+                                    <li><i class="ti ti-layout-grid2-alt"></i><a href="stTrMT.php">Transitorias (MT)</a></li>
+                                    <li><i class="ti ti-layout-grid2-alt"></i><a href="stTrCE.php">Transitorias (CE)</a></li>
+                                    <li><i class="ti ti-view-grid"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
                                 </ul>
                             </li>
                         ';
@@ -379,7 +379,46 @@
                         
                         echo '                       
                             <li class="menu-item-has-children dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega Demo</a>
+                                <ul class="sub-menu children dropdown-menu">     
+                                    <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
+
+                                    <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
+                                   
+
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
+                                
+                                </ul>
+                            </li>
+                        ';
+                        }
+
+            //MIGRACION       
+                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
+                        
+                        
+                        echo '                       
+                            <li class="menu-item-has-children dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>MIGRACION</a>
+                                <ul class="sub-menu children dropdown-menu">     
+                                    <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
+
+                                    <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
+                                    <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recolección</a></li>
+
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
+                                    
+                                </ul>
+                            </li>
+                        ';
+                        }
+            //CEDI                
+                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
+                        
+                        
+                        echo '                       
+                            <li class="menu-item-has-children dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI</a>
                                 <ul class="sub-menu children dropdown-menu">     
                                     <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
 
@@ -392,7 +431,25 @@
                             </li>
                         ';
                         }
+        //CEDI 2.0                
+                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
+                        
+                        
+                        echo '                       
+                            <li class="menu-item-has-children dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI 2</a>
+                                <ul class="sub-menu children dropdown-menu">     
+                                    <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
 
+                                    <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
+                                    <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recolección</a></li>
+
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
+                                    <li><i class="ti ti-control-shuffle"></i><a href="cediMv.php">Reubicación</a></li>
+                                </ul>
+                            </li>
+                        ';
+                        }
         //Toma Fisica Total
             if ($userAdmin==1 || $userAdmin==3) { 
                 echo '
@@ -465,7 +522,7 @@
                         </a>
 
                         <div class="user-menu dropdown-menu">
-                            <a class="nav-link" href="#"><i class="fa fa- user"></i>Mi perfil</a>
+                            <a class="nav-link" href="perfil.php"><i class="fa fa-user"></i>Mi perfil</a>
                             <a class="nav-link" href="psswrd.php"><i class="fa fa-key"></i>Cambiar clave</a>   
                             <a class="nav-link" href="php/logout.php"><i class="fa fa-power-off"></i>Cerrar Sesión</a>
                         </div>

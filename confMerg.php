@@ -10,7 +10,8 @@
     <div class="card mt-4">
         <div class="card-header"><strong>Herramientas de Mantenimiento</strong></div>
         <div class="card-body">
-            <button id="btnActualizarArticulos" class="btn btn-primary">Actualizar artículos</button>
+            <button id="btnActualizarArticulos" class="btn btn-primary">Actualizar Artículos</button>
+             <button id="btnActualizarAlmacenes" class="btn btn-primary">Actualizar Almacenes</button>
             <button id="btnActualizarSolicitudes" class="btn btn-secondary ml-2">Actualizar Solicitudes</button>
             <div id="loader" style="display:none;margin-top:15px;">
                 <span class="spinner-border text-primary" style="width:2rem;height:2rem;"></span> Procesando...
@@ -25,6 +26,24 @@
         document.getElementById('loader').style.display = 'block';
         document.getElementById('resultado').innerHTML = '';
         fetch('php/ejecutar_sp.php?sp=sp_sot_merge')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('loader').style.display = 'none';
+                if(data.success) {
+                    document.getElementById('resultado').innerHTML = '<div class="alert alert-success">' + data.mensaje + '</div>';
+                } else {
+                    document.getElementById('resultado').innerHTML = '<div class="alert alert-danger">' + (data.error || 'Error al ejecutar el procedimiento.') + '</div>';
+                }
+            })
+            .catch(err => {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('resultado').innerHTML = '<div class="alert alert-danger">Error de red o servidor.</div>';
+            });
+    };
+        document.getElementById('btnActualizarAlmacenes').onclick = function() {
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('resultado').innerHTML = '';
+        fetch('php/ejecutar_sp.php?sp=sp_almacenF5')
             .then(r => r.json())
             .then(data => {
                 document.getElementById('loader').style.display = 'none';

@@ -6,7 +6,12 @@
         exit();
         }
 
-        $s1 = $db->query("select * from Almacen" );
+        $s1 = $db->query("select [id]
+      ,[fk_emp]
+      ,[cod_almacen]
+      ,[nombre]
+      ,[BinActivat]
+      ,[DftBinAbs] from Almacen" );
         $whs = $s1->fetchAll(PDO::FETCH_OBJ);       
        
 ?>
@@ -28,6 +33,8 @@
                         <th>Empresa</th>
                         <th>Cod.Almacen</th>
                         <th>Nombre</th>
+                        <th>Ubic.</th>
+                        <th>Ubic.Dft.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +44,8 @@
                         <td><?php echo $wh->fk_emp ?></td>
                         <td><?php echo $wh->cod_almacen ?></td>
                         <td><?php echo $wh->nombre ?></td>
+                        <td><?php echo $wh->BinActivat ?></td>
+                        <td><?php echo $wh->DftBinAbs ?></td>
                     </tr>
                 <?php } ?>   
                 </tbody>

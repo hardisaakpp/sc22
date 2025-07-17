@@ -36,6 +36,22 @@ if ($sp === 'sp_articuloF5') {
             "error" => "❌ Error al ejecutar sp_sot_merge: " . $e->getMessage()
         ]);
     }
+} else if ($sp === 'sp_almacenF5') {
+    try {
+        $sql = "EXEC sp_almacenF5";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        echo json_encode([
+            "success" => true,
+            "mensaje" => "✔️ Procedimiento sp_almacenF5 ejecutado correctamente"
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            "success" => false,
+            "error" => "❌ Error al ejecutar sp_almacenF5: " . $e->getMessage()
+        ]);
+    }
 } else {
     echo json_encode([
         "success" => false,

@@ -348,6 +348,7 @@
                             <ul class="sub-menu children dropdown-menu">     
                                         <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
                                         <li><i class="fa fa-home"></i><a href="whsL.php">Almacenes</a></li>
+                                        <li><i class="fa fa-home"></i><a href="depbankL.php">Cuenta Financiera</a></li>
                                         <li><i class="fa fa-refresh"></i><a href="confMerg.php">Actualiza SAP->SC </a></li>
                             </ul>
                             </li>';
@@ -426,7 +427,7 @@
                                     <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recolección</a></li>
 
                                     <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
-                                    <li><i class="ti ti-control-shuffle"></i><a href="cediMv.php">Reubicación</a></li>
+                                    
                                 </ul>
                             </li>
                         ';

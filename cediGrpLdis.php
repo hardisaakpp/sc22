@@ -1,7 +1,7 @@
 <?php
     include_once "header.php";
 
-    $desde = isset($_GET['desde']) ? $_GET['desde'] : date('Y-m-d', strtotime('-2 days'));
+    $desde = isset($_GET['desde']) ? $_GET['desde'] : date('Y-m-d', strtotime('-7 days'));
     $hasta = isset($_GET['hasta']) ? $_GET['hasta'] : date('Y-m-d');
     $estado = isset($_GET['estado']) ? $_GET['estado'] : '5';
 

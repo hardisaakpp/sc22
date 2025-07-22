@@ -39,7 +39,7 @@
                                     <div class="col-3"><input type="text" placeholder="cantidad" class="form-control" id="cantidad" min="1" value="1" disabled></div>
                                     <div class="col-7"><input type="text" id="codigo" placeholder="Cod. Barras" class="form-control" disabled></div>
                                     <div class="col-2">
-                                        <button onclick="agregarProducto()">▶️</button>
+                                        <button onclick="agregarProducto()">➕</button>
                                     </div>
                                 </div>
                             

@@ -38,7 +38,12 @@ if ($accion === "guardar_local") {
     ]);
 
     if ($ok) {
-        echo "<script>alert('Depósito guardado localmente.'); window.location.href='form_deposito.php';</script>";
+      
+       echo "<script>
+    alert('Depósito guardado localmente.');
+    window.location.href = '../depD.php?fecha=" . urlencode($U_Fecha) . "&whsCode=" . urlencode($U_WhsCode) . "';
+</script>";
+
     } else {
         echo "<h4>Error al guardar localmente.</h4>";
     }
@@ -76,7 +81,12 @@ if ($accion === "enviar_sap") {
     curl_close($ch);
 
     if ($httpCode == 201 || $httpCode == 200) {
-        echo "<script>alert('Depósito enviado a SAP correctamente.'); window.location.href='form_deposito.php';</script>";
+       echo "<script>
+    alert('Depósito guardado localmente.');
+    window.location.href = '../depD.php?fecha=" . urlencode($U_Fecha) . "&whsCode=" . urlencode($U_WhsCode) . "';
+</script>";
+
+
     } else {
         echo "<h4>Error al enviar a SAP</h4>";
         echo "<pre>" . htmlspecialchars($response) . "</pre>";

@@ -5,33 +5,44 @@ include_once "php/bd_StoreControl.php";
 
 $whsCica = $_SESSION["whsCica"] ?? null;
 
+
+// Obtener nombre del almacén
+$alm = $db->prepare("SELECT cod_almacen FROM almacen WHERE id = ?");
+$alm->execute([$whsCica]);
+$almacen = $alm->fetch(PDO::FETCH_OBJ);
+
 $fechaInicio = $_GET["fechaInicio"] ?? date('Y-m-01');
 $fechaFin = $_GET["fechaFin"] ?? date('Y-m-t');
 
 // Consulta resumen por fecha
 $sql = "
-SELECT 
-    c.fecha,
-    c.whsCode,
-    SUM(c.valRec) AS Efectivo,
-    ISNULL(SUM(d.TotalLC), 0) AS Depositado,
-    SUM(c.valRec) - ISNULL(SUM(d.TotalLC), 0) AS Diferencia,
-    (
-        SELECT ISNULL(SUM(TotalLC), 0)
-        FROM DepositosTiendas dt
-        WHERE dt.U_WhsCode = c.whsCode AND dt.U_Fecha = c.fecha AND dt.creadoSAP = 0
-    ) AS PendienteSAP
-FROM cicUs c
-JOIN Almacen a ON c.whsCode =  a.cod_almacen
-LEFT JOIN DepositosTiendas d
-    ON c.whsCode = d.U_WhsCode AND c.fecha = d.U_Fecha
-WHERE a.id = ? AND c.fecha BETWEEN ? AND ?
-GROUP BY c.fecha, c.whsCode
-ORDER BY c.fecha DESC
+
+select q1.fecha, q1.whsCode, q1.Efectivo, q2.Efectivo as Depositado,
+       (q1.Efectivo - ISNULL(q2.Efectivo,0)) as Diferencia,
+       (q2.PendienteSAP) as PendienteSAP
+from
+	(
+	SELECT c.fecha, c.whsCode, sum(c.valRec) AS Efectivo
+	FROM cicUs c
+	WHERE c.whsCode = ?  AND c.fecha BETWEEN ? AND ?
+		AND
+		  ( c.CardName COLLATE Latin1_General_CI_AI LIKE '%Efectivo%'
+		  or c.CardName COLLATE Latin1_General_CI_AI LIKE '%Abono%')
+	GROUP BY c.fecha, c.whsCode
+	) q1
+	left join
+	(
+	select U_Fecha,U_WhsCode, sum(TotalLC) AS Efectivo, 
+           sum(CASE WHEN creadoSAP = 0 THEN 1 ELSE 0 END) as PendienteSAP
+	from DepositosTiendas d
+	where U_WhsCode = ?  AND d.U_Fecha BETWEEN ? AND ?
+	GROUP BY d.U_Fecha, d.U_WhsCode
+	) q2 on q1.whsCode=q2.U_WhsCode and q1.fecha=q2.U_Fecha
+
 ";
 
 $stmt = $db->prepare($sql);
-$stmt->execute([$whsCica, $fechaInicio, $fechaFin]);
+$stmt->execute([$almacen->cod_almacen, $fechaInicio, $fechaFin,$almacen->cod_almacen, $fechaInicio, $fechaFin]);
 $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 ?>
 
@@ -54,10 +65,10 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                         <tr>
                             <th>Fecha</th>
                             <th>WhsCode</th>
-                            <th>Efectivo (cicUs)</th>
+                            <th>Efectivo (Cierre)</th>
                             <th>Depositado</th>
                             <th>Diferencia</th>
-                            <th></th>
+                            <th>Por Integrar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,11 +77,31 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                                 <td><?= $r->fecha ?></td>
                                 <td><?= $r->whsCode ?></td>
                                 <td><?= number_format($r->Efectivo, 2) ?></td>
-                                <td><?= number_format($r->Depositado, 2) ?></td>
-                                <td><?= number_format($r->Diferencia, 2) ?></td>
+                                <td>
+                                    <a href="depD.php?fecha=<?= urlencode($r->fecha) ?>&whsCode=<?= urlencode($r->whsCode) ?>" class="btn btn-sm btn-info">    
+                                        <?= number_format($r->Depositado, 2) ?>
+                                    </a> 
+                                </td>
+                                
+                                <td>
+                                    
+
+
+                                    
+                                    <?php 
+                                    if ($r->Diferencia <> 0) {
+                                        echo "<span class='text-danger'>" . number_format($r->Diferencia, 2) . "</span>";
+                                    } else {
+                                        echo "<span class='text-success'>" . number_format($r->Diferencia, 2) . "</span>" ;
+                                    };
+                                 ?>
+                               
+                                </td>
+
+
                                 <td><?php 
                                 if ($r->PendienteSAP > 0) {
-                                     echo "<span class='text-danger'>" . number_format($r->PendienteSAP, 2) . "</span>";
+                                     echo "<span class='text-danger'>" . number_format($r->PendienteSAP, 0) . "</span>";
                                 } ;
                                  ?></td>
                             </tr>

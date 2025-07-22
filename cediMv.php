@@ -580,20 +580,6 @@
         // Mostrar el JSON generado en consola
         console.log('JSON generado para envío:', json);
 
-        // Descargar el JSON como archivo (omitido por requerimiento)
-        // const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
-        // const url = URL.createObjectURL(blob);
-        // const a = document.createElement('a');
-        // a.href = url;
-        // a.download = 'stock_transfer.json';
-        // document.body.appendChild(a);
-        // a.click();
-        // setTimeout(() => {
-        //     document.body.removeChild(a);
-        //     URL.revokeObjectURL(url);
-        // }, 100);
-
-        // Enviar el JSON por API (PHP backend) y mostrar la respuesta en consola
         mostrarLoader('Espere mientras se procesa');
         try {
             const resp = await fetch('php/enviar_transferencia_stock.php', {

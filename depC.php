@@ -15,11 +15,11 @@ $alm->execute([$whsCica]);
 $almacen = $alm->fetch(PDO::FETCH_OBJ);
 
 // Obtener cuentas para el select
-$s1 = $db->query("SELECT AcctCode, AcctName, FormatCode FROM CuentaFinanciera");
+$s1 = $db->query("SELECT AcctCode, AcctName, FormatCode FROM CuentaFinanciera where DepositTiendas = 1");
 $cuentas = $s1->fetchAll(PDO::FETCH_OBJ);
 
 // Obtener fecha desde POST o usar actual
-$fecha = $_POST["U_Fecha"] ?? date('Y-m-d');
+$fecha = $_GET["U_Fecha"] ?? date('Y-m-d');
 ?>
 
 <div class="content">
@@ -59,7 +59,7 @@ $fecha = $_POST["U_Fecha"] ?? date('Y-m-d');
                     <div class="form-group">
                         <label>Almacén</label>
                         <input type="text" class="form-control" value="<?= $almacen->cod_almacen ?? 'No definido' ?>" disabled>
-                        <input type="hidden" name="U_WhsCode" value="<?= $whsCica ?>">
+                        <input type="hidden" name="U_WhsCode" value="<?= $almacen->cod_almacen ?>">
                     </div>
 
                     <!-- TotalLC -->

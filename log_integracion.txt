@@ -1,0 +1,168 @@
+[2025-07-22 19:25:36] ===> Script iniciado. Método: POST
+[2025-07-22 19:25:36] Procesando integración para ID: 8
+[2025-07-22 19:25:36] Datos preparados para enviar: {"DepositDate":"2025-07-21","DepositAccount":"_SYS00000001157","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":1000,"U_Fecha":"2025-07-01","U_WhsCode":"RL-SMA","U_Ref_Bancar":"wqertyuio"}
+[2025-07-22 19:25:48] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:25:48] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:33:42] ===> Script iniciado. Método: POST
+[2025-07-22 19:33:42] Procesando integración para ID: 9
+[2025-07-22 19:33:42] Datos preparados para enviar: {"DepositDate":"2025-07-21","DepositAccount":"_SYS00000001442","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":710.13,"U_Fecha":"2025-07-01","U_WhsCode":"RL-SMA","U_Ref_Bancar":"fvnm,l"}
+[2025-07-22 19:33:52] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-22 19:33:52] ✅ Depósito ID 9 marcado como integrado.
+[2025-07-22 19:47:01] ===> Script iniciado. Método: POST
+[2025-07-22 19:47:01] Procesando integración para ID: 8
+[2025-07-22 19:47:01] Datos preparados para enviar: {"DepositDate":"2025-07-21","DepositAccount":"_SYS00000001157","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":1000,"U_Fecha":"2025-07-01","U_WhsCode":"RL-SMA","U_Ref_Bancar":"wqertyuio"}
+[2025-07-22 19:47:07] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:47:07] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:48:02] ===> Script iniciado. Método: POST
+[2025-07-22 19:48:02] Procesando integración para ID: 8
+[2025-07-22 19:48:02] Datos preparados para enviar: {"DepositDate":"2025-07-21","DepositAccount":"_SYS00000001157","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":1000,"U_Fecha":"2025-07-01","U_WhsCode":"RL-SMA","U_Ref_Bancar":"wqertyuio"}
+[2025-07-22 19:48:09] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:48:09] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:48:31] ===> Script iniciado. Método: POST
+[2025-07-22 19:48:31] Procesando integración para ID: 8
+[2025-07-22 19:48:31] Datos preparados para enviar: {"DepositDate":"2025-07-21","DepositAccount":"_SYS00000001157","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":1000,"U_Fecha":"2025-07-01","U_WhsCode":"RL-SMA","U_Ref_Bancar":"wqertyuio"}
+[2025-07-22 19:48:35] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:48:35] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:52:21] ===> Script iniciado. Método: POST
+[2025-07-22 19:52:21] Procesando integración para ID: 15
+[2025-07-22 19:52:21] Datos preparados para enviar: {"DepositDate":"2025-07-22","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":123,"U_Fecha":"2025-07-18","U_WhsCode":"RL-SMA","U_Ref_Bancar":"123"}
+[2025-07-22 19:52:28] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-22 19:52:28] ✅ Depósito ID 15 marcado como integrado.
+[2025-07-22 19:52:35] ===> Script iniciado. Método: POST
+[2025-07-22 19:52:35] Procesando integración para ID: 14
+[2025-07-22 19:52:35] Datos preparados para enviar: {"DepositDate":"2025-07-22","DepositAccount":"_SYS00000001158","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":123,"U_Fecha":"2025-07-18","U_WhsCode":"RL-SMA","U_Ref_Bancar":"123"}
+[2025-07-22 19:52:41] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-22 19:52:41] ✅ Depósito ID 14 marcado como integrado.
+[2025-07-22 19:52:49] ===> Script iniciado. Método: POST
+[2025-07-22 19:52:49] Procesando integración para ID: 13
+[2025-07-22 19:52:49] Datos preparados para enviar: {"DepositDate":"2025-07-22","DepositAccount":"_SYS00000001155","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":123,"U_Fecha":"2025-07-18","U_WhsCode":"RL-SMA","U_Ref_Bancar":"123"}
+[2025-07-22 19:52:54] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-22 19:52:54] ✅ Depósito ID 13 marcado como integrado.
+[2025-07-22 19:53:06] ===> Script iniciado. Método: POST
+[2025-07-22 19:53:06] Procesando integración para ID: 12
+[2025-07-22 19:53:06] Datos preparados para enviar: {"DepositDate":"2025-07-22","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":123,"U_Fecha":"2025-07-18","U_WhsCode":"RL-SMA","U_Ref_Bancar":"123"}
+[2025-07-22 19:53:12] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-22 19:53:12] ✅ Depósito ID 12 marcado como integrado.
+[2025-07-22 19:53:19] ===> Script iniciado. Método: POST
+[2025-07-22 19:53:19] Procesando integración para ID: 11
+[2025-07-22 19:53:19] Datos preparados para enviar: {"DepositDate":"2025-07-22","DepositAccount":"_SYS00000001445","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":123,"U_Fecha":"2025-07-18","U_WhsCode":"RL-SMA","U_Ref_Bancar":"123"}
+[2025-07-22 19:53:24] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-22 19:53:24] ✅ Depósito ID 11 marcado como integrado.
+[2025-07-22 19:54:12] ===> Script iniciado. Método: POST
+[2025-07-22 19:54:12] Procesando integración para ID: 5
+[2025-07-22 19:54:12] Datos preparados para enviar: {"DepositDate":"2025-07-02","DepositAccount":"_SYS00000001157","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":11,"U_Fecha":"2025-07-15","U_WhsCode":"RL-SMA","U_Ref_Bancar":"num100555"}
+[2025-07-22 19:54:17] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:54:17] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:54:38] ===> Script iniciado. Método: POST
+[2025-07-22 19:54:38] Procesando integración para ID: 5
+[2025-07-22 19:54:38] Datos preparados para enviar: {"DepositDate":"2025-07-02","DepositAccount":"_SYS00000001157","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":11,"U_Fecha":"2025-07-15","U_WhsCode":"RL-SMA","U_Ref_Bancar":"num100555"}
+[2025-07-22 19:54:41] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+
+[2025-07-22 19:54:41] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "10001072 - Account 1.01.01.07 is inactive "
+      }
+   }
+}
+

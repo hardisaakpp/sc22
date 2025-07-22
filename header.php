@@ -300,6 +300,7 @@
                             <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
                             <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
                             <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
+                            <li><i class="fa fa-pencil-square-o"></i><a href="depL.php">DEPOSITOS</a></li>
                         </ul>
                         </li>
                         ';

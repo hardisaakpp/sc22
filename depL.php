@@ -22,9 +22,10 @@ SELECT
         WHERE dt.U_WhsCode = c.whsCode AND dt.U_Fecha = c.fecha AND dt.creadoSAP = 0
     ) AS PendienteSAP
 FROM cicUs c
+JOIN Almacen a ON c.whsCode =  a.cod_almacen
 LEFT JOIN DepositosTiendas d
     ON c.whsCode = d.U_WhsCode AND c.fecha = d.U_Fecha
-WHERE c.whsCode = ? AND c.fecha BETWEEN ? AND ?
+WHERE a.id = ? AND c.fecha BETWEEN ? AND ?
 GROUP BY c.fecha, c.whsCode
 ORDER BY c.fecha DESC
 ";
@@ -56,7 +57,7 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                             <th>Efectivo (cicUs)</th>
                             <th>Depositado</th>
                             <th>Diferencia</th>
-                            <th>Pendiente SAP</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,7 +68,11 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                                 <td><?= number_format($r->Efectivo, 2) ?></td>
                                 <td><?= number_format($r->Depositado, 2) ?></td>
                                 <td><?= number_format($r->Diferencia, 2) ?></td>
-                                <td><?= number_format($r->PendienteSAP, 2) ?></td>
+                                <td><?php 
+                                if ($r->PendienteSAP > 0) {
+                                     echo "<span class='text-danger'>" . number_format($r->PendienteSAP, 2) . "</span>";
+                                } ;
+                                 ?></td>
                             </tr>
                         <?php endforeach; ?>
                         <?php if (empty($resumen)): ?>

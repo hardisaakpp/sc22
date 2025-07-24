@@ -114,10 +114,14 @@ $clase = ($diferencia == 0) ? 'success' : 'danger';
                         </tr>
                     </tfoot>
                 </table>
-                <a href="depL.php" class="btn btn-secondary mt-3">← Volver al resumen</a>
-                <a href="depC.php?U_Fecha=<?php echo $fecha; ?>"  class="btn btn-primary mt-3">    
-                                        Nuevo
-                                    </a> 
+                   <?php if ((isset($_GET['pflag']) && $_GET['pflag'] == 1)): ?>
+                        <button class="btn btn-success mt-3" onclick="window.close()">OK</button>
+                    <?php else: ?>
+                        <a href="depL.php" class="btn btn-secondary mt-3">← Volver al resumen</a>
+                        <a href="depC.php?U_Fecha=<?= $fecha ?>" class="btn btn-primary mt-3">Nuevo</a>
+                    <?php endif; ?>
+
+
             </div>
         </div>
     </div>

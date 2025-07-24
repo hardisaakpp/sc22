@@ -64,9 +64,9 @@ $data = [
     "DepositType"       => $deposito["DepositType"],
     "AllocationAccount" => $deposito["AllocationAccount"],
     "TotalLC"           => floatval($deposito["TotalLC"]),
-    "U_Fecha"           => $deposito["U_Fecha"],
-    "U_WhsCode"         => $deposito["U_WhsCode"],
-    "U_Ref_Bancar"      => $deposito["U_Ref_Bancar"]
+    "JournalRemarks"    => "CIERRE CAJA ".$deposito["U_Fecha"],
+    "BankReference"     => $deposito["U_Ref_Bancar"],
+    "U_IXX_REF_BANCARIA"=> $deposito["U_WhsCode"]
 ];
 
 logError("Datos preparados para enviar: " . json_encode($data));

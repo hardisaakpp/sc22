@@ -1,4 +1,4 @@
-<?php
+<?php 
 include_once "bd_StoreControl.php";
 session_start();
 
@@ -20,30 +20,43 @@ $U_WhsCode         = $_POST["U_WhsCode"];
 $U_Ref_Bancar      = $_POST["U_Ref_Bancar"];
 $Responsable       = $_POST["Responsable"];
 $accion            = $_POST["accion"];
+$Marca             = $_POST["Marca"];
 
 // Guardar en tabla local
 if ($accion === "guardar_local") {
+
+    // ❗ Verificar duplicado
+    $verificar = $db->prepare("SELECT COUNT(*) FROM DepositosTiendas WHERE DepositAccount = ? AND U_Ref_Bancar = ?");
+    $verificar->execute([$DepositAccount, $U_Ref_Bancar]);
+    $existe = $verificar->fetchColumn();
+
+    if ($existe > 0) {
+        echo "<script>
+            alert('❌ Ya existe un depósito registrado con el mismo número de comprobante y banco.');
+            window.history.back();
+        </script>";
+        exit();
+    }
+
     $stmt = $db->prepare("
         INSERT INTO DepositosTiendas (
             DepositDate, DepositAccount, DepositCurrency, DepositType,
             AllocationAccount, TotalLC, U_Fecha, U_WhsCode,
-            U_Ref_Bancar, Responsable, fk_id_user, creadoSAP
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+            U_Ref_Bancar, Responsable, fk_id_user, creadoSAP, Marca
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
     ");
 
     $ok = $stmt->execute([
         $DepositDate, $DepositAccount, $DepositCurrency, $DepositType,
         $AllocationAccount, $TotalLC, $U_Fecha, $U_WhsCode,
-        $U_Ref_Bancar, $Responsable, $idUsuario
+        $U_Ref_Bancar, $Responsable, $idUsuario, $Marca
     ]);
 
     if ($ok) {
-      
-       echo "<script>
-    alert('Depósito guardado localmente.');
-    window.location.href = '../depD.php?fecha=" . urlencode($U_Fecha) . "&whsCode=" . urlencode($U_WhsCode) . "';
-</script>";
-
+        echo "<script>
+            alert('Depósito guardado localmente.');
+            window.location.href = '../depD.php?fecha=" . urlencode($U_Fecha) . "&whsCode=" . urlencode($U_WhsCode) . "';
+        </script>";
     } else {
         echo "<h4>Error al guardar localmente.</h4>";
     }
@@ -81,12 +94,10 @@ if ($accion === "enviar_sap") {
     curl_close($ch);
 
     if ($httpCode == 201 || $httpCode == 200) {
-       echo "<script>
-    alert('Depósito guardado localmente.');
-    window.location.href = '../depD.php?fecha=" . urlencode($U_Fecha) . "&whsCode=" . urlencode($U_WhsCode) . "';
-</script>";
-
-
+        echo "<script>
+            alert('Depósito guardado localmente.');
+            window.location.href = '../depD.php?fecha=" . urlencode($U_Fecha) . "&whsCode=" . urlencode($U_WhsCode) . "';
+        </script>";
     } else {
         echo "<h4>Error al enviar a SAP</h4>";
         echo "<pre>" . htmlspecialchars($response) . "</pre>";

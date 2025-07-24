@@ -60,7 +60,7 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                 </form>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-striped">
+                <table id="bootstrap-data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Fecha</th>

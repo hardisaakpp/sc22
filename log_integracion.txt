@@ -166,3 +166,33 @@
    }
 }
 
+[2025-07-22 22:28:25] ===> Script iniciado. Método: POST
+[2025-07-22 22:28:25] Procesando integración para ID: 18
+[2025-07-22 22:28:25] Datos preparados para enviar: {"DepositDate":"2025-07-05","DepositAccount":"_SYS00000001158","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":2000,"U_Fecha":"2025-07-02","U_WhsCode":"RL-SMA","U_Ref_Bancar":"123"}
+[2025-07-22 22:28:32] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-22 22:28:32] ✅ Depósito ID 18 marcado como integrado.
+[2025-07-23 00:56:35] ===> Script iniciado. Método: POST
+[2025-07-23 00:56:35] Procesando integración para ID: 19
+[2025-07-23 00:56:35] Datos preparados para enviar: {"DepositDate":"2025-07-23","DepositAccount":"_SYS00000001442","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":1112,"JournalRemarks":"CIERRE CAJA 2025-07-15","BankReference":"RL-SMA","U_IXX_REF_BANCARIA":"1234567890"}
+[2025-07-23 00:56:42] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-23 00:56:43] ✅ Depósito ID 19 marcado como integrado.
+[2025-07-23 00:58:55] ===> Script iniciado. Método: POST
+[2025-07-23 00:58:55] Procesando integración para ID: 20
+[2025-07-23 00:58:55] Datos preparados para enviar: {"DepositDate":"2025-07-16","DepositAccount":"_SYS00000001442","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":123.03,"JournalRemarks":"CIERRE CAJA 2025-07-15","BankReference":"1111111111","U_IXX_REF_BANCARIA":"RL-SMA"}
+[2025-07-23 00:59:02] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-23 00:59:02] ✅ Depósito ID 20 marcado como integrado.
+[2025-07-23 22:16:47] ===> Script iniciado. Método: POST
+[2025-07-23 22:16:47] Procesando integración para ID: 24
+[2025-07-23 22:16:47] Datos preparados para enviar: {"DepositDate":"2025-07-23","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":170.01,"JournalRemarks":"CIERRE CAJA 2025-07-22","BankReference":"1114","U_IXX_REF_BANCARIA":"RL-SMA"}
+[2025-07-23 22:17:01] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-23 22:17:01] ✅ Depósito ID 24 marcado como integrado.
+[2025-07-23 22:53:45] ===> Script iniciado. Método: POST
+[2025-07-23 22:53:45] Procesando integración para ID: 16
+[2025-07-23 22:53:45] Datos preparados para enviar: {"DepositDate":"2025-07-22","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":490,"JournalRemarks":"CIERRE CAJA 2025-07-18","BankReference":"num100555","U_IXX_REF_BANCARIA":"RL-SMA"}
+[2025-07-23 22:53:51] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-23 22:53:51] ✅ Depósito ID 16 marcado como integrado.
+[2025-07-23 23:07:29] ===> Script iniciado. Método: POST
+[2025-07-23 23:07:29] Procesando integración para ID: 21
+[2025-07-23 23:07:29] Datos preparados para enviar: {"DepositDate":"2025-07-18","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":11,"JournalRemarks":"CIERRE CAJA 2025-07-15","BankReference":"7894","U_IXX_REF_BANCARIA":"RL-SMA"}
+[2025-07-23 23:07:37] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-23 23:07:37] ✅ Depósito ID 21 marcado como integrado.

@@ -64,7 +64,7 @@ $data = [
     "DepositType"       => $deposito["DepositType"],
     "AllocationAccount" => $deposito["AllocationAccount"],
     "TotalLC"           => floatval($deposito["TotalLC"]),
-    "JournalRemarks"    => "CIERRE CAJA ".$deposito["U_Fecha"],
+    "JournalRemarks"    => "CIERRE CAJA ".$deposito["U_Fecha"]." ".$deposito["U_WhsCode"],
     "BankReference"     => $deposito["U_Ref_Bancar"],
     "U_IXX_REF_BANCARIA"=> $deposito["U_WhsCode"]
 ];

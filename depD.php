@@ -1,58 +1,94 @@
 <?php
+
+// Ahora sí es seguro incluir headers porque no hemos enviado salida aún
 include_once "header.php";
-include_once "php/bd_StoreControl.php";
 
-$fecha = $_GET["fecha"] ?? $_POST["fecha"] ?? null;
-$whsCode = $_GET["whsCode"] ?? $_POST["whsCode"] ?? null;
 
-if (!$fecha || !$whsCode) {
-    echo "<h4>Parámetros incompletos.</h4>";
-    exit();
-}
+    $fecha = $_GET["fecha"] ?? $_POST["fecha"] ?? null;
+    $whsCode = $_GET["whsCode"] ?? $_POST["whsCode"] ?? null;
 
-// 1. Obtener depósitos
-$sql1 = "
-    SELECT d.Id,
-        d.U_WhsCode,
-        d.U_Fecha AS FechaCierre,
-        d.DepositDate,
-        c.FormatCode,
-        c.AcctName,
-        d.U_Ref_Bancar,
-        d.TotalLC,
-        d.creadoSAP AS integrado
-    FROM DepositosTiendas d
-    JOIN CuentaFinanciera c ON d.DepositAccount = c.AcctCode
-    WHERE d.U_WhsCode = ? AND d.U_Fecha = ?
-";
-$stmt1 = $db->prepare($sql1);
-$stmt1->execute([$whsCode, $fecha]);
-$depositos = $stmt1->fetchAll(PDO::FETCH_OBJ);
 
-// 2. Total de depósitos
-$totalDepositos = 0;
-foreach ($depositos as $d) {
-    $totalDepositos += $d->TotalLC;
-}
 
-// 3. Obtener efectivo desde cicUs
-$sql2 = "
-    SELECT SUM(c.valRec) AS Efectivo
-    FROM cicUs c
-    WHERE c.whsCode = ? AND c.fecha = ?
-      AND (c.CardName COLLATE Latin1_General_CI_AI LIKE '%Efectivo%'
-           OR c.CardName COLLATE Latin1_General_CI_AI LIKE '%Abono%')
-";
-$stmt2 = $db->prepare($sql2);
-$stmt2->execute([$whsCode, $fecha]);
-$efectivo = $stmt2->fetch(PDO::FETCH_OBJ)->Efectivo ?? 0;
+    // 1. Obtener depósitos
+    $sql1 = "
+        SELECT d.Id,
+            d.U_WhsCode,
+            d.U_Fecha AS FechaCierre,
+            d.DepositDate,
+            c.FormatCode,
+            c.AcctName,
+            d.U_Ref_Bancar,
+            d.TotalLC,
+            d.creadoSAP AS integrado
+        FROM DepositosTiendas d
+        JOIN CuentaFinanciera c ON d.DepositAccount = c.AcctCode
+        WHERE d.U_WhsCode = ? AND d.U_Fecha = ?
+    ";
+    $stmt1 = $db->prepare($sql1);
+    $stmt1->execute([$whsCode, $fecha]);
+    $depositos = $stmt1->fetchAll(PDO::FETCH_OBJ);
 
-// 4. Calcular diferencia
-$diferencia = $totalDepositos - $efectivo;
-$clase = ($diferencia == 0) ? 'success' : 'danger';
+    // 2. Total de depósitos
+    $totalDepositos = 0;
+    foreach ($depositos as $d) {
+        $totalDepositos += $d->TotalLC;
+    }
+
+    // 3. Obtener efectivo desde cicUs
+    $sql2 = "
+        SELECT SUM(c.valRec) AS Efectivo
+        FROM cicUs c
+        WHERE c.whsCode = ? AND c.fecha = ?
+        AND (c.CardName COLLATE Latin1_General_CI_AI LIKE '%Efectivo%'
+            OR c.CardName COLLATE Latin1_General_CI_AI LIKE '%Abono%')
+    ";
+    $stmt2 = $db->prepare($sql2);
+    $stmt2->execute([$whsCode, $fecha]);
+    $efectivo = $stmt2->fetch(PDO::FETCH_OBJ)->Efectivo ?? 0;
+
+    // 4. Calcular diferencia
+    $diferencia = $totalDepositos - $efectivo;
+    $clase = ($diferencia == 0) ? 'success' : 'danger';
 ?>
+<style>
+   
+    @media screen {
+        .solo-impresion {
+            display: none;
+        }
+    }
+    @media print {
+        body * {
+            visibility: hidden;
+        }
 
-<div class="content">
+        #areaImprimir, #areaImprimir * {
+            visibility: visible;
+        }
+
+        #areaImprimir {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .no-imprimir {
+            display: none !important;
+        }
+        .solo-impresion {
+        display: block;
+        text-align: right;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+    }
+</style>
+
+<div class="content"> <div id="areaImprimir">
+<div class="solo-impresion" id="fechaImpresion">
+    Fecha de impresión: <span id="fechaActual"></span>
+</div>
     <div class="col-md-10 offset-md-1">
         <div class="card">
             <div class="card-header">
@@ -87,7 +123,16 @@ $clase = ($diferencia == 0) ? 'success' : 'danger';
                                 <td><?= $d->integrado ? 'Sí' : 'No' ?></td>
                                 <td>
                                     <?php if (!$d->integrado): ?>
-                                        <button class="btn btn-sm btn-warning" onclick="integrarDepositoPorId(<?= $d->Id ?>)">Integrar</button>
+                                        <button class="btn btn-sm btn-warning" onclick="integrarDepositoPorId(<?= $d->Id ?>)">
+                                            Integrar
+                                        </button>
+                                    <a href="php/eliminar_deposito.php?id=<?= $d->Id ?>&U_Fecha=<?= urlencode($fecha) ?>&U_WhsCode=<?= urlencode($whsCode) ?>"
+   onclick="return confirm('¿Estás seguro de eliminar este registro?')"
+   class="btn btn-danger btn-sm">
+   Eliminar
+</a>
+
+
                                     <?php else: ?>
                                         <span class="text-success">✔</span>
                                     <?php endif; ?>
@@ -119,6 +164,8 @@ $clase = ($diferencia == 0) ? 'success' : 'danger';
                     <?php else: ?>
                         <a href="depL.php" class="btn btn-secondary mt-3">← Volver al resumen</a>
                         <a href="depC.php?U_Fecha=<?= $fecha ?>" class="btn btn-primary mt-3">Nuevo</a>
+                        <button onclick="imprimirContenido()" class="btn btn-primary mt-3">🖨️ Imprimir</button>
+
                     <?php endif; ?>
 
 
@@ -126,48 +173,80 @@ $clase = ($diferencia == 0) ? 'success' : 'danger';
         </div>
     </div>
 </div>
-
+</div>
 <script>
-function integrarDeposito(whsCode, fecha, total) {
-    if (confirm(`¿Estás seguro de integrar el depósito del ${fecha} (${whsCode}) por $${total}?`)) {
-        fetch('enviar_deposito_sap.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ whsCode, fecha })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert('Depósito integrado correctamente.');
-                location.reload();
-            } else {
-                alert('Error al integrar: ' + (data.error || 'Respuesta inesperada'));
-            }
-        })
-        .catch(err => alert('Error de red: ' + err));
+
+
+function eliminarRegistro(id) {
+    if (confirm("¿Está seguro de eliminar este registro?")) {
+        window.location.href = "depD.php?eliminar=" + id;
     }
 }
 
 
-function integrarDepositoPorId(id) {
-    if (confirm("¿Estás seguro de integrar este depósito?")) {
-        fetch('enviar_deposito_sap.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert('Depósito integrado correctamente.');
-                location.reload();
-            } else {
-                alert('Error al integrar: ' + (data.error || 'Respuesta inesperada'));
-            }
-        })
-        .catch(err => alert('Error de red: ' + err));
+
+document.addEventListener("DOMContentLoaded", function () {
+    const fecha = new Date();
+    const opciones = { year: 'numeric', month: '2-digit', day: '2-digit', 
+                       hour: '2-digit', minute: '2-digit' };
+    document.getElementById("fechaActual").textContent = fecha.toLocaleString('es-EC', opciones);
+});
+
+    function imprimirContenido() {
+        var contenido = document.getElementById('areaImprimir').innerHTML;
+        var ventana = window.open('', '', 'height=800,width=1000');
+        ventana.document.write('<html><head><title>Imprimir</title>');
+        ventana.document.write('<style>');
+        ventana.document.write('table { border-collapse: collapse; width: 100%; font-family: Arial; }');
+        ventana.document.write('th, td { border: 1px solid #333; padding: 6px 8px; text-align: center; }');
+        ventana.document.write('th { background-color: #f0f0f0; }');
+        ventana.document.write('</style></head><body>');
+        ventana.document.write(contenido);
+        ventana.document.write('</body></html>');
+        ventana.document.close();
+        ventana.print();
     }
-}
+
+    function integrarDeposito(whsCode, fecha, total) {
+        if (confirm(`¿Estás seguro de integrar el depósito del ${fecha} (${whsCode}) por $${total}?`)) {
+            fetch('enviar_deposito_sap.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ whsCode, fecha })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Depósito integrado correctamente.');
+                    location.reload();
+                } else {
+                    alert('Error al integrar: ' + (data.error || 'Respuesta inesperada'));
+                }
+            })
+            .catch(err => alert('Error de red: ' + err));
+        }
+    }
+
+
+    function integrarDepositoPorId(id) {
+        if (confirm("¿Estás seguro de integrar este depósito?")) {
+            fetch('enviar_deposito_sap.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Depósito integrado correctamente.');
+                    location.reload();
+                } else {
+                    alert('Error al integrar: ' + (data.error || 'Respuesta inesperada'));
+                }
+            })
+            .catch(err => alert('Error de red: ' + err));
+        }
+    }
 
 
 </script>

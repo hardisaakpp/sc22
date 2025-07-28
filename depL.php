@@ -101,7 +101,11 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 
                                 <td><?php 
                                 if ($r->PendienteSAP > 0) {
-                                     echo "<span class='text-danger'>" . number_format($r->PendienteSAP, 0) . "</span>";
+                                      echo '
+                                      <a href="#" class="btn btn-sm btn-warning"> 
+                                      '. number_format($r->PendienteSAP ?? 0, 0) .'
+                                        </a>
+                                    ';
                                 } ;
                                  ?></td>
                             </tr>

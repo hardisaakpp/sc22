@@ -174,23 +174,47 @@ include_once "header.php";
     </div>
 </div>
 </div>
+<!-- Modal de Confirmación de Integración (Bootstrap 4.3) -->
+<div class="modal fade" id="modalIntegracion" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content border border-warning">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="modalLabel">Confirmar Integración</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-dark">
+        ¿Estás seguro que deseas integrar este depósito?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success">✅ Sí, integrar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <script>
 
 
-function eliminarRegistro(id) {
-    if (confirm("¿Está seguro de eliminar este registro?")) {
-        window.location.href = "depD.php?eliminar=" + id;
+    function eliminarRegistro(id) {
+        if (confirm("¿Está seguro de eliminar este registro?")) {
+            window.location.href = "depD.php?eliminar=" + id;
+        }
     }
-}
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const fecha = new Date();
-    const opciones = { year: 'numeric', month: '2-digit', day: '2-digit', 
-                       hour: '2-digit', minute: '2-digit' };
-    document.getElementById("fechaActual").textContent = fecha.toLocaleString('es-EC', opciones);
-});
+    document.addEventListener("DOMContentLoaded", function () {
+        const fecha = new Date();
+        const opciones = { year: 'numeric', month: '2-digit', day: '2-digit', 
+                        hour: '2-digit', minute: '2-digit' };
+        document.getElementById("fechaActual").textContent = fecha.toLocaleString('es-EC', opciones);
+    });
 
     function imprimirContenido() {
         var contenido = document.getElementById('areaImprimir').innerHTML;

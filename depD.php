@@ -50,6 +50,8 @@ include_once "header.php";
     $diferencia = $totalDepositos - $efectivo;
     $clase = ($diferencia == 0) ? 'success' : 'danger';
 ?>
+
+
 <style>
    
     @media screen {
@@ -84,6 +86,9 @@ include_once "header.php";
     }
     }
 </style>
+
+
+
 
 <div class="content"> <div id="areaImprimir">
 <div class="solo-impresion" id="fechaImpresion">
@@ -123,9 +128,13 @@ include_once "header.php";
                                 <td><?= $d->integrado ? 'Sí' : 'No' ?></td>
                                 <td>
                                     <?php if (!$d->integrado): ?>
-                                        <button class="btn btn-sm btn-warning" onclick="integrarDepositoPorId(<?= $d->Id ?>)">
+
+
+                                        <button class="btn btn-sm btn-success" onclick='mostrarModalIntegracion(<?= json_encode($d) ?>)'>
                                             Integrar
                                         </button>
+
+
                                     <a href="php/eliminar_deposito.php?id=<?= $d->Id ?>&U_Fecha=<?= urlencode($fecha) ?>&U_WhsCode=<?= urlencode($whsCode) ?>"
    onclick="return confirm('¿Estás seguro de eliminar este registro?')"
    class="btn btn-danger btn-sm">
@@ -175,30 +184,61 @@ include_once "header.php";
 </div>
 </div>
 <!-- Modal de Confirmación de Integración (Bootstrap 4.3) -->
-<div class="modal fade" id="modalIntegracion" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content border border-warning">
-      <div class="modal-header bg-warning text-dark">
-        <h5 class="modal-title" id="modalLabel">Confirmar Integración</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body text-dark">
-        ¿Estás seguro que deseas integrar este depósito?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success">✅ Sí, integrar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-      </div>
+<div id="modalIntegracion" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1050;">
+  <div style="background:#fff; margin:5% auto; padding:25px 30px; width:500px; border-radius:10px; box-shadow: 0 0 10px #888;">
+    <h5 style="text-align:center; font-weight:bold; margin-bottom:15px;">🧾 Confirmación de Integración</h5>
+    <p style="font-size:16px;">¿Está seguro que desea integrar este depósito con los siguientes datos?</p>
+    <table class="table table-bordered" style="font-size:15px;">
+      <tr><th>Fecha de Depósito</th><td id="datoDepositDate" class="font-weight-bold text-primary"></td></tr>
+      <tr><th>Cuenta</th><td><span id="datoFormatCode" class="font-weight-bold text-dark"></span> - <span id="datoAcctName" class="font-weight-bold text-dark"></span></td></tr>
+      <tr><th>N° Comprobante</th><td id="datoRefBancar" class="font-weight-bold text-danger"></td></tr>
+      <tr><th>Valor</th><td id="datoTotalLC" class="font-weight-bold text-success"></td></tr>
+    </table>
+
+    <div class="text-right mt-3">
+      <button type="button" class="btn btn-secondary" onclick="cerrarModalIntegracion()">Cancelar</button>
+      <button type="button" class="btn btn-success" id="btnConfirmarIntegrar">✅ Confirmar e Integrar</button>
     </div>
   </div>
 </div>
 
 
 
+<!-- Loading Overlay -->
+<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.8); z-index:2000; align-items:center; justify-content:center; font-size:1.2rem;">
+    <div style="text-align:center;">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <div class="mt-3 font-weight-bold">Espere... se está integrando el depósito</div>
+    </div>
+</div>
+
 
 <script>
+
+
+function mostrarModalIntegracion(d) {
+    document.getElementById('datoDepositDate').innerText = d.DepositDate;
+    document.getElementById('datoFormatCode').innerText = d.FormatCode;
+    document.getElementById('datoAcctName').innerText = d.AcctName;
+    document.getElementById('datoRefBancar').innerText = d.U_Ref_Bancar;
+    document.getElementById('datoTotalLC').innerText = Number(d.TotalLC).toLocaleString('es-EC', { minimumFractionDigits: 2 });
+
+    // Puedes usar estos datos para después enviar por POST o AJAX
+document.getElementById('btnConfirmarIntegrar').onclick = function () {
+    cerrarModalIntegracion(); // Opcional: cerrar modal al confirmar
+    integrarDepositoPorId(d.Id);
+};
+
+
+    document.getElementById('modalIntegracion').style.display = 'block';
+}
+
+function cerrarModalIntegracion() {
+    document.getElementById('modalIntegracion').style.display = 'none';
+}
+
 
 
     function eliminarRegistro(id) {
@@ -252,25 +292,30 @@ include_once "header.php";
     }
 
 
-    function integrarDepositoPorId(id) {
-        if (confirm("¿Estás seguro de integrar este depósito?")) {
-            fetch('enviar_deposito_sap.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Depósito integrado correctamente.');
-                    location.reload();
-                } else {
-                    alert('Error al integrar: ' + (data.error || 'Respuesta inesperada'));
-                }
-            })
-            .catch(err => alert('Error de red: ' + err));
+function integrarDepositoPorId(id) {
+    document.getElementById('loadingOverlay').style.display = 'flex'; // Mostrar overlay
+
+    fetch('enviar_deposito_sap.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('loadingOverlay').style.display = 'none'; // Ocultar overlay
+        if (data.success) {
+            alert('Depósito integrado correctamente.');
+            location.reload();
+        } else {
+            alert('Error al integrar: ' + (data.error || 'Respuesta inesperada'));
         }
-    }
+    })
+    .catch(err => {
+        document.getElementById('loadingOverlay').style.display = 'none'; // Ocultar overlay
+        alert('Error de red: ' + err);
+    });
+}
+
 
 
 </script>

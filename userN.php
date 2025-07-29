@@ -99,11 +99,6 @@
 
 
                     <div class="form-check">
-                        <!--<div class="checkbox">
-                            <label for="checkbox1" class="form-check-label ">
-                                <input type="checkbox" id="admin" name="admin" value="0" class="form-check-input">Administrador
-                            </label>
-                        </div>-->
                         <div class="checkbox">
                             <label for="checkbox2" class="form-check-label ">
                                 <input type="checkbox" id="conteo" name="conteo" value="0" class="form-check-input"> Realiza Conteo Aleatorio
@@ -133,26 +128,10 @@
                                 <?php } ?>
                             </select>
                     </div>
-                    <!--<div class="form-group">
-                    <label for="whsHorario" class=" form-control-label" class="standardSelect">Almacen para Horarios de Personal</label>
-                            <select name='whsHorario'  data-placeholder='Selecciona el almacen' class='js-example-basic-single form-control' id='whsHorario'  Size='Number_of_options'>
-                            <option value="0">Ninguno</option>
-                                <?php   foreach($whs as $wh){ ?>
-                                    <option value="<?php echo $wh->id ?>"><?php echo $wh->cod_almacen . ' '.$wh->nombre  ?></option>
-                                <?php } ?>
-                            </select>
-                    </div>-->
+
+
                     <div class="form-group">
-                    <label for="whsTransitorio" class=" form-control-label" class="standardSelect">Almacen para bodega</label>
-                            <select name='whsTransitorio'  data-placeholder='Selecciona el almacen' class='js-example-basic-single js-states form-control' id='whsTransitorio'  Size='Number_of_options'>
-                            <option value="0">Ninguno</option>
-                                <?php   foreach($whs as $wh){ ?>
-                                    <option value="<?php echo $wh->id ?>"><?php echo $wh->cod_almacen . ' '.$wh->nombre  ?></option>
-                                <?php } ?>
-                            </select>
-                    </div>
-                    <div class="form-group">
-                    <label for="whsBodega" class=" form-control-label" class="standardSelect">Almacen Transitorio asociado</label>
+                    <label for="whsBodega" class=" form-control-label" class="standardSelect">Almacen para Bodega</label>
                             <select name='whsBodega'  data-placeholder='Selecciona el almacen' class='js-example-basic-single js-states form-control' id='whsBodega'  Size='Number_of_options'>
                             <option value="0">Ninguno</option>
                                 <?php   foreach($whs as $wh){ ?>
@@ -160,7 +139,15 @@
                                 <?php } ?>
                             </select>
                     </div>
-
+                    <div class="form-group">
+                    <label for="whsTransitorio" class=" form-control-label" class="standardSelect">Almacen Transitorio</label>
+                            <select name='whsTransitorio'  data-placeholder='Selecciona el almacen' class='js-example-basic-single js-states form-control' id='whsTransitorio'  Size='Number_of_options'>
+                            <option value="0">Ninguno</option>
+                                <?php   foreach($whs as $wh){ ?>
+                                    <option value="<?php echo $wh->id ?>"><?php echo $wh->cod_almacen . ' '.$wh->nombre  ?></option>
+                                <?php } ?>
+                            </select>
+                    </div>
 
                     <!--<div class="form-group">
                         <label for="codTimeSoft" class=" form-control-label">Cod. Centro de Costos TimeSoft</label>

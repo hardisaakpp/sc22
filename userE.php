@@ -129,7 +129,7 @@
                                 <?php } ?>
                             </select>
                     </div>
-                    <div class="form-group">
+                                        <div class="form-group">
                     <label for="whsBodega" class=" form-control-label" class="standardSelect">Almacen para Bodega</label>
                             <select name='whsBodega'  data-placeholder='Selecciona el almacen' class='js-example-basic-single form-control' id='whsBodega'  Size='Number_of_options'>
                             <option value="0">Ninguno</option>
@@ -151,12 +151,12 @@
                             <?php } ?>
                             </select>
                     </div>
-    
-                    <div class="form-group">
+
+      <!--<div class="form-group">
                         <label for="codTimeSoft" class=" form-control-label">Cod. Centro de Costos TimeSoft</label>
-                        <input type="number" id="codTimeSoft" name="codTimeSoft" placeholder="Enter code" class="form-control" value="<?php echo $usuarios->Timesoft_CentroCosto ?>" required>
+                        <input type="number" id="codTimeSoft" name="codTimeSoft" placeholder="Enter code" class="form-control" value='0' required>
                     </div>
-        
+                                -->
                   
 
                     <div class="form-group">

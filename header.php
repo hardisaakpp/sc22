@@ -313,7 +313,7 @@
                             <ul class="sub-menu children dropdown-menu">
                                  <li><i class="fa fa-pencil-square-o"></i><a href="cic2.php">Cierre de Caja</a></li>
                                  <li><i class="fa fa-h-square"></i><a href="cic2H.php">Historial</a></li>
-                                 <li><i class="fa fa-money"></i><a href="#">Depositos</a></li>
+                                 <li><i class="fa fa-money"></i><a href="depL.php">Depositos</a></li>
                             </ul>
                             </li>
                             ';

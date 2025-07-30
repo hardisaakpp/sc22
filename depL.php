@@ -64,7 +64,7 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                     <thead>
                         <tr>
                             <th>Fecha</th>
-                            <th>WhsCode</th>
+                            <th>Almacen</th>
                             <th>Efectivo (Cierre)</th>
                             <th>Depositado</th>
                             <th>Diferencia</th>

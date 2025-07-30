@@ -139,9 +139,7 @@
 <?php
 if($userAdmin==2) // si es TIENDA
 {
-  try {
-    //code...
-
+        
         $sentencia = $db->query("exec sp_getStockTotalXAlm ". $_SESSION['idU'] ." " );
         $quser = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
@@ -205,14 +203,7 @@ if($userAdmin==2) // si es TIENDA
           </div>
         </div>
       </div>
-    
-<?php 
-    }
-} catch (\Throwable $th) {
-  //throw $th;
-}
-
-}else {   ?> 
+<?php }else {   ?> 
     <div class="card">
     <div class="box">
       <div class="content">
@@ -278,7 +269,7 @@ if($userAdmin==2) // si es TIENDA
     </div>
 
     <?php    
- ?>
+}  ?>
 
 <!---------------------------------------------->
 <!--------------Fin Content -------------------->

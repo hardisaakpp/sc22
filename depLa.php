@@ -90,9 +90,15 @@ $totalPendienteSAP = 0;
                             </option>
                         <?php endforeach; ?>
                     </select>
-
+ 
                     <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
+                                    <a href="exportar_csv.php?fechaInicio=<?= urlencode($fechaInicio) ?>&fechaFin=<?= urlencode($fechaFin) ?>&marca=<?= urlencode($marcaSeleccionada) ?>" 
+   class="btn btn-sm btn-success" target="_blank">
+   ⬇ Descargar CSV
+</a>
                 </form>
+
+
             </div>
 
             <div class="card-body">

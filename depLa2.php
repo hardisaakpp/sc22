@@ -8,8 +8,9 @@ $fechaFin = $_GET["fechaFin"] ?? date('Y-m-t');
 $sql = "
 SELECT TOP (1000) d.Id, d.DepositDate AS FechaDeposito, c.AcctName, d.TotalLC,
        d.U_Fecha AS FechaCierre, d.U_WhsCode, d.U_Ref_Bancar AS NumeroDeposito,
-       d.Responsable, d.creadoSAP, d.Marca
+       d.Responsable, d.creadoSAP, a.marca
 FROM DepositosTiendas d
+JOIN almacen a on d.U_WhsCode = a.cod_almacen
 JOIN CuentaFinanciera c ON d.DepositAccount = c.AcctCode
 WHERE d.U_Fecha BETWEEN ? AND ?
 ";
@@ -32,11 +33,12 @@ $totalDepositado = 0;
                     <label class="mr-2">Hasta:</label>
                     <input type="date" name="fechaFin" value="<?= $fechaFin ?>" class="form-control mr-2">
                     <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
-                    <a href="exportar_detalle.php?fechaInicio=<?= $fechaInicio ?>&fechaFin=<?= $fechaFin ?>" 
-                    class="btn btn-sm btn-success" 
-                    target="_blank">
-                    Descargar Excel
-                    </a>
+<a href="exportar_detalle_csv.php?fechaInicio=<?= urlencode($fechaInicio) ?>&fechaFin=<?= urlencode($fechaFin) ?>" 
+   class="btn btn-sm btn-success" target="_blank">
+   ⬇ Descargar CSV
+</a>
+
+
                 </form>
             </div>
             <div class="card-body">
@@ -66,7 +68,7 @@ $totalDepositado = 0;
                             <td><?= $r->NumeroDeposito ?></td>
                             <td><?= $r->Responsable ?></td>
                             <td><?= $r->creadoSAP ? 'Sí' : 'No' ?></td>
-                            <td><?= $r->Marca ?></td>
+                            <td><?= $r->marca ?></td>
                         </tr>
                         <?php endforeach; ?>
 

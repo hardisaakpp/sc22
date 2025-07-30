@@ -327,6 +327,8 @@
                     <ul class="sub-menu children dropdown-menu">
                         <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja</a></li>
                         <li><i class="fa fa-refresh"></i><a href="cic2f5.php">Actualiza cajas por día [SAP]</a></li>
+                        <li><i class="fa fa-money"></i><a href="depLa.php">Dépositos Día-Tienda</a></li>
+                        <li><i class="fa fa-money"></i><a href="depLa2.php">Dépositos Detalle</a></li>
                     </ul>
                     </li>
 

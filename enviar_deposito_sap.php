@@ -57,17 +57,18 @@ if ($deposito['creadoSAP']) {
 }
 
 // Armar datos a enviar
-$data = [
-    "DepositDate"       => $deposito["DepositDate"],
-    "DepositAccount"    => $deposito["DepositAccount"],
-    "DepositCurrency"   => $deposito["DepositCurrency"],
-    "DepositType"       => $deposito["DepositType"],
-    "AllocationAccount" => $deposito["AllocationAccount"],
-    "TotalLC"           => floatval($deposito["TotalLC"]),
-    "JournalRemarks"    => "CIERRE CAJA ".$deposito["U_Fecha"]." ".$deposito["U_WhsCode"],
-    "BankReference"     => $deposito["U_Ref_Bancar"],
-    "U_IXX_REF_BANCARIA"=> $deposito["U_WhsCode"]
-];
+
+    $data = [
+        "DepositDate"        => $deposito["DepositDate"],
+        "DepositAccount"     => $deposito["DepositAccount"],
+        "DepositCurrency"    => $deposito["DepositCurrency"],
+        "DepositType"        => $deposito["DepositType"],
+        "AllocationAccount"  => $deposito["AllocationAccount"],
+        "TotalLC"            => floatval($deposito["TotalLC"]),
+        "JournalRemarks"     => "CIERRE CAJA " . $deposito["U_Fecha"] . " " . $deposito["U_WhsCode"],
+        "BankReference"      => $deposito["U_Ref_Bancar"],
+        "U_IXX_REF_BANCARIA" => $deposito["U_WhsCode"]
+    ];
 
 logError("Datos preparados para enviar: " . json_encode($data));
 

@@ -251,3 +251,168 @@
 [2025-07-30 17:31:02] Datos preparados para enviar: {"DepositDate":"2025-07-05","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":2010.75,"JournalRemarks":"CIERRE CAJA 2025-07-04 RL-SMA","BankReference":"11120","U_IXX_REF_BANCARIA":"RL-SMA"}
 [2025-07-30 17:31:10] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
 [2025-07-30 17:31:10] ✅ Depósito ID 43 marcado como integrado.
+[2025-07-31 21:22:31] ===> Script iniciado. Método: POST
+[2025-07-31 21:22:31] Procesando integración para ID: 50
+[2025-07-31 21:22:31] 📦 Es SOBRANTE. Cuenta destino forzada a _SYS00000001307.
+[2025-07-31 21:22:31] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001307","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001444","TotalLC":12,"JournalRemarks":"CIERRE CAJA 2025-07-30 RL-MNO","BankReference":"1213","U_IXX_REF_BANCARIA":"RL-MNO"}
+[2025-07-31 21:22:39] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -4013,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Posting period locked; specify an alternative date"
+      }
+   }
+}
+
+[2025-07-31 21:22:39] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -4013,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Posting period locked; specify an alternative date"
+      }
+   }
+}
+
+[2025-07-31 21:24:40] ===> Script iniciado. Método: POST
+[2025-07-31 21:24:40] Procesando integración para ID: 50
+[2025-07-31 21:24:40] 📦 Es SOBRANTE. Cuenta destino forzada a _SYS00000001307.
+[2025-07-31 21:24:40] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001307","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001444","TotalLC":12,"JournalRemarks":"CIERRE CAJA 2025-07-30 RL-MNO","BankReference":"1213","U_IXX_REF_BANCARIA":"RL-MNO"}
+[2025-07-31 21:24:47] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-31 21:24:47] ✅ Depósito ID 50 marcado como integrado.
+[2025-07-31 21:52:48] ===> Script iniciado. Método: POST
+[2025-07-31 21:52:48] Procesando integración para ID: 51
+[2025-07-31 21:52:48] 📦 Es SOBRANTE. Cuenta destino forzada a _SYS00000001307.
+[2025-07-31 21:52:48] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001307","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001154","TotalLC":92.37,"JournalRemarks":"CIERRE CAJA 2025-07-31 LP-CTM","BankReference":"001","U_IXX_REF_BANCARIA":"LP-CTM"}
+[2025-07-31 21:52:55] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 21:52:55] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 21:53:05] ===> Script iniciado. Método: POST
+[2025-07-31 21:53:05] Procesando integración para ID: 52
+[2025-07-31 21:53:05] 📦 Es SOBRANTE. Cuenta destino forzada a _SYS00000001307.
+[2025-07-31 21:53:05] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001307","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001154","TotalLC":1.1,"JournalRemarks":"CIERRE CAJA 2025-07-31 LP-CTM","BankReference":"002","U_IXX_REF_BANCARIA":"LP-CTM"}
+[2025-07-31 21:53:08] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 21:53:08] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 21:53:21] ===> Script iniciado. Método: POST
+[2025-07-31 21:53:21] Procesando integración para ID: 52
+[2025-07-31 21:53:21] 📦 Es SOBRANTE. Cuenta destino forzada a _SYS00000001307.
+[2025-07-31 21:53:21] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001307","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001154","TotalLC":1.1,"JournalRemarks":"CIERRE CAJA 2025-07-31 LP-CTM","BankReference":"002","U_IXX_REF_BANCARIA":"LP-CTM"}
+[2025-07-31 21:53:26] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 21:53:26] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 22:04:29] ===> Script iniciado. Método: POST
+[2025-07-31 22:04:29] Procesando integración para ID: 52
+[2025-07-31 22:04:29] 📦 Es SOBRANTE. Cuenta destino forzada a _SYS00000001307.
+[2025-07-31 22:04:29] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001548","TotalLC":1.1,"JournalRemarks":"CIERRE CAJA 2025-07-31 LP-CTM","BankReference":"002","U_IXX_REF_BANCARIA":"LP-CTM"}
+[2025-07-31 22:04:37] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 22:04:37] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 22:07:27] ===> Script iniciado. Método: POST
+[2025-07-31 22:07:27] Procesando integración para ID: 52
+[2025-07-31 22:07:27] 📦 Es SOBRANTE. Cuenta destino forzada a _SYS00000001307.
+[2025-07-31 22:07:27] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001548","TotalLC":1.1,"JournalRemarks":"CIERRE CAJA 2025-07-31 LP-CTM","BankReference":"002","U_IXX_REF_BANCARIA":"LP-CTM"}
+[2025-07-31 22:07:35] ❌ cURL error: Recv failure: Connection was reset
+[2025-07-31 22:22:30] ===> Script iniciado. Método: POST
+[2025-07-31 22:22:30] Procesando integración para ID: 53
+[2025-07-31 22:22:30] 📦 Es SOBRANTE. Cuenta destino forzada a _SYS00000001307.
+[2025-07-31 22:22:30] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001548","TotalLC":93.47,"JournalRemarks":"CIERRE CAJA 2025-07-31 LP-CTM","BankReference":"0001","U_IXX_REF_BANCARIA":"LP-CTM"}
+[2025-07-31 22:22:36] ✅ Respuesta SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 22:22:36] ❌ Error SAP (HTTP 500): Error al registrar el depósito: {
+   "error" : {
+      "code" : -10,
+      "message" : {
+         "lang" : "en-us",
+         "value" : "Cannot deposit an amount greater than fund balance "
+      }
+   }
+}
+
+[2025-07-31 22:50:12] ===> Script iniciado. Método: POST
+[2025-07-31 22:50:12] Procesando integración para ID: 53
+[2025-07-31 22:50:12] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":93.47,"JournalRemarks":"CIERRE CAJA 2025-07-31 LP-CTM","BankReference":"0001","U_IXX_REF_BANCARIA":"LP-CTM"}
+[2025-07-31 22:50:20] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-31 22:50:20] ✅ Depósito ID 53 marcado como integrado.
+[2025-07-31 23:04:24] ===> Script iniciado. Método: POST
+[2025-07-31 23:04:24] Procesando integración para ID: 54
+[2025-07-31 23:04:24] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001442","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":101.27,"JournalRemarks":"CIERRE CAJA 2025-07-30 LP-CTM","BankReference":"003","U_IXX_REF_BANCARIA":"LP-CTM"}
+[2025-07-31 23:04:32] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-07-31 23:04:32] ✅ Depósito ID 54 marcado como integrado.

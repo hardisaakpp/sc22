@@ -61,17 +61,6 @@ $fecha = $_GET["U_Fecha"] ?? date('Y-m-d');
                         <input type="text" class="form-control" value="<?= $almacen->cod_almacen ?? 'No definido' ?>" disabled>
                         <input type="hidden" name="U_WhsCode" value="<?= $almacen->cod_almacen ?>">
                     </div>
-<!-- Campo Marca -->
-<div class="form-group" hidden>
-    <label>Marca</label>
-    <input type="text" name="Marca" class="form-control" maxlength="20" list="sugerenciasMarca" hidden>
-    <datalist id="sugerenciasMarca">
-        <option value="ROL">
-        <option value="LIL">
-        <option value="OUT">
-        <option value="REGIONS">
-    </datalist>
-</div>
 
                     <!-- TotalLC -->
                     <div class="form-group">

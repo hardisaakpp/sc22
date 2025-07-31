@@ -20,7 +20,7 @@ $U_WhsCode         = $_POST["U_WhsCode"];
 $U_Ref_Bancar      = $_POST["U_Ref_Bancar"];
 $Responsable       = $_POST["Responsable"];
 $accion            = $_POST["accion"];
-$Marca             = $_POST["Marca"];
+//$sobrante          = isset($_POST["Sobrante"]) ? 1 : 0; // ✅ Nuevo campo tipo bit
 
 // Guardar en tabla local
 if ($accion === "guardar_local") {
@@ -42,14 +42,14 @@ if ($accion === "guardar_local") {
         INSERT INTO DepositosTiendas (
             DepositDate, DepositAccount, DepositCurrency, DepositType,
             AllocationAccount, TotalLC, U_Fecha, U_WhsCode,
-            U_Ref_Bancar, Responsable, fk_id_user, creadoSAP, Marca
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
+            U_Ref_Bancar, Responsable, fk_id_user, creadoSAP
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
     ");
 
     $ok = $stmt->execute([
         $DepositDate, $DepositAccount, $DepositCurrency, $DepositType,
         $AllocationAccount, $TotalLC, $U_Fecha, $U_WhsCode,
-        $U_Ref_Bancar, $Responsable, $idUsuario, $Marca
+        $U_Ref_Bancar, $Responsable, $idUsuario
     ]);
 
     if ($ok) {

@@ -19,7 +19,8 @@ include_once "header.php";
             c.AcctName,
             d.U_Ref_Bancar,
             d.TotalLC,
-            d.creadoSAP AS integrado
+            d.creadoSAP AS integrado,
+            d.sobrante
         FROM DepositosTiendas d
         JOIN CuentaFinanciera c ON d.DepositAccount = c.AcctCode
         WHERE d.U_WhsCode = ? AND d.U_Fecha = ?
@@ -110,6 +111,7 @@ include_once "header.php";
                             <th>Nombre Cuenta</th>
                             <th>Referencia Bancaria</th>
                             <th>Total</th>
+                    
                             <th>Integrado SAP</th>
                             <th>Acción</th>
 
@@ -125,6 +127,8 @@ include_once "header.php";
                                 <td><?= $d->AcctName ?></td>
                                 <td><?= $d->U_Ref_Bancar ?></td>
                                 <td><?= number_format($d->TotalLC, 2) ?></td>
+                     
+
                                 <td><?= $d->integrado ? 'Sí' : 'No' ?></td>
                                 <td>
                                     <?php if (!$d->integrado): ?>
@@ -136,10 +140,10 @@ include_once "header.php";
 
 
                                     <a href="php/eliminar_deposito.php?id=<?= $d->Id ?>&U_Fecha=<?= urlencode($fecha) ?>&U_WhsCode=<?= urlencode($whsCode) ?>"
-   onclick="return confirm('¿Estás seguro de eliminar este registro?')"
-   class="btn btn-danger btn-sm">
-   Eliminar
-</a>
+                                    onclick="return confirm('¿Estás seguro de eliminar este registro?')"
+                                    class="btn btn-danger btn-sm">
+                                    Eliminar
+                                    </a>
 
 
                                     <?php else: ?>

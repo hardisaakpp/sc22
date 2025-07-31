@@ -24,7 +24,7 @@ from
 	(
 	SELECT c.fecha, c.whsCode, sum(c.valRec) AS Efectivo
 	FROM cicUs c
-	WHERE c.whsCode = ?  AND c.fecha BETWEEN ? AND ?
+	WHERE c.fecha>='2025-07-30' and c.whsCode = ?  AND c.fecha BETWEEN ? AND ?
 		AND
 		  ( c.CardName COLLATE Latin1_General_CI_AI LIKE '%Efectivo%'
 		  or c.CardName COLLATE Latin1_General_CI_AI LIKE '%Abono%')
@@ -35,7 +35,7 @@ from
 	select U_Fecha,U_WhsCode, sum(TotalLC) AS Efectivo, 
            sum(CASE WHEN creadoSAP = 0 THEN 1 ELSE 0 END) as PendienteSAP
 	from DepositosTiendas d
-	where U_WhsCode = ?  AND d.U_Fecha BETWEEN ? AND ?
+	where d.U_Fecha>='2025-07-30' and U_WhsCode = ?  AND d.U_Fecha BETWEEN ? AND ? 
 	GROUP BY d.U_Fecha, d.U_WhsCode
 	) q2 on q1.whsCode=q2.U_WhsCode and q1.fecha=q2.U_Fecha
 

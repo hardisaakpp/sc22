@@ -20,7 +20,7 @@ FROM (
     SELECT c.fecha, c.whsCode, SUM(c.valRec) AS Efectivo, ISNULL(a.[marca], '') AS marca
     FROM cicUs c
     JOIN Almacen a ON c.whsCode = a.cod_almacen
-    WHERE c.fecha BETWEEN :f1 AND :f2
+    WHERE c.fecha>='2025-07-30' and c.fecha BETWEEN :f1 AND :f2
       AND a.fk_emp = 'MT'
       AND (
             c.CardName COLLATE Latin1_General_CI_AI LIKE '%Efectivo%'
@@ -39,7 +39,7 @@ LEFT JOIN (
     SELECT U_Fecha, U_WhsCode, SUM(TotalLC) AS Efectivo, 
            SUM(CASE WHEN creadoSAP = 0 THEN 1 ELSE 0 END) AS PendienteSAP
     FROM DepositosTiendas d
-    WHERE d.U_Fecha BETWEEN :f3 AND :f4
+    WHERE d.U_Fecha>='2025-07-30' and d.U_Fecha BETWEEN :f3 AND :f4
     GROUP BY d.U_Fecha, d.U_WhsCode
 ) q2 ON q1.whsCode = q2.U_WhsCode AND q1.fecha = q2.U_Fecha
 ";

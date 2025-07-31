@@ -92,9 +92,9 @@ if ($pFlag) {
                 $auxCAJA=0;
                 ///solo actualiza si es el mismo dia
                 if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {
- ///--  EXEC sp_cic_sincSAPSingle '". $tiendaCica ."', '". $pFecha ."';
+ 
                 $sentencia = $db->query("
-             
+  EXEC sp_cic_sincSAPSingle '". $tiendaCica ."', '". $pFecha ."';            
                 EXEC sp_cic_createCajas '". $tiendaCica ."', '". $pFecha ."';
                 EXEC sp_cicUs_create '". $tiendaCica ."', '". $pFecha ."';
                 " );

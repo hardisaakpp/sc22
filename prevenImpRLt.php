@@ -8,7 +8,7 @@ $pdia = date("j");
 
 //HOY
 
-if ($pdia>28) {
+if ($pdia>31) {
 
 
     

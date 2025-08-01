@@ -11,8 +11,9 @@ $alm = $db->prepare("SELECT cod_almacen FROM almacen WHERE id = ?");
 $alm->execute([$whsCica]);
 $almacen = $alm->fetch(PDO::FETCH_OBJ);
 
-$fechaInicio = $_GET["fechaInicio"] ?? date('Y-m-01');
-$fechaFin = $_GET["fechaFin"] ?? date('Y-m-t');
+$fechaFin = $_GET["fechaFin"] ?? date('Y-m-d');
+$fechaInicio = $_GET["fechaInicio"] ?? date('Y-m-d', strtotime('-15 days'));
+
 
 // Consulta resumen por fecha
 $sql = "

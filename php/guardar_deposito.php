@@ -38,6 +38,18 @@ if ($accion === "guardar_local") {
         exit();
     }
 
+$fechaMinima = '2025-08-01';
+$fechaActual = date('Y-m-d');
+
+if ($DepositDate < $fechaMinima || $DepositDate > $fechaActual) {
+    echo "<script>
+        alert('❌ La fecha del depósito debe estar entre el 01-08-2025 y hoy (" . $fechaActual . ").');
+        window.history.back();
+    </script>";
+    exit();
+}
+
+
     $stmt = $db->prepare("
         INSERT INTO DepositosTiendas (
             DepositDate, DepositAccount, DepositCurrency, DepositType,

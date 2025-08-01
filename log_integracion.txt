@@ -416,3 +416,8 @@
 [2025-07-31 23:04:24] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001442","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":101.27,"JournalRemarks":"CIERRE CAJA 2025-07-30 LP-CTM","BankReference":"003","U_IXX_REF_BANCARIA":"LP-CTM"}
 [2025-07-31 23:04:32] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
 [2025-07-31 23:04:32] ✅ Depósito ID 54 marcado como integrado.
+[2025-08-01 21:24:22] ===> Script iniciado. Método: POST
+[2025-08-01 21:24:22] Procesando integración para ID: 110
+[2025-08-01 21:24:22] Datos preparados para enviar: {"DepositDate":"2025-08-01","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":527.06,"JournalRemarks":"CIERRE CAJA 2025-07-31 RL-PSR","BankReference":"530257","U_IXX_REF_BANCARIA":"RL-PSR"}
+[2025-08-01 21:24:26] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-01 21:24:26] ✅ Depósito ID 110 marcado como integrado.

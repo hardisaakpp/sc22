@@ -33,7 +33,7 @@ $fecha = $_GET["U_Fecha"] ?? date('Y-m-d');
                     <!-- Fecha del depósito ingresada por el usuario -->
                     <div class="form-group">
                         <label>Fecha del Depósito</label>
-                        <input type="date" name="DepositDate" class="form-control" required min="2025-08-01" required>
+                        <input type="date" name="DepositDate" class="form-control" required min="2025-08-01"  max="<?= date('Y-m-d') ?>" required>
                     </div>
 
                     <!-- Fecha U_Fecha (bloqueada) -->

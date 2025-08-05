@@ -22,8 +22,7 @@ fputcsv($output, [
     'Almacén',
     'Número Depósito',
     'Responsable',
-    'Creado en SAP',
-    'Marca'
+    'Creado en SAP'
 ]);
 
 // Consulta SQL corregida (la que tú usaste)
@@ -36,8 +35,7 @@ $sql = "
         d.U_WhsCode, 
         d.U_Ref_Bancar AS NumeroDeposito,
         d.Responsable, 
-        d.creadoSAP, 
-        d.Marca
+        d.creadoSAP
     FROM DepositosTiendas d
     JOIN CuentaFinanciera c ON d.DepositAccount = c.AcctCode
     WHERE d.U_Fecha BETWEEN ? AND ?
@@ -56,8 +54,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $row['U_WhsCode'],
         $row['NumeroDeposito'],
         $row['Responsable'],
-        $row['creadoSAP'] ? 'Sí' : 'No',
-        $row['Marca']
+        $row['creadoSAP'] ? 'Sí' : 'No'
     ]);
 }
 

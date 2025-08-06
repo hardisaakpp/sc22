@@ -2,7 +2,7 @@
 include_once "bd_StoreControl.php"; // Asegúrate de que este archivo contiene la conexión $db
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idcab = $_POST['idcab'] ?? '';
+    $idcab = $_POST['id'] ?? '';
 
 
     if (empty($idcab) ) {
@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-            $stmt = $db->prepare("UPDATE [TransferenciasCabecera] set FechaIntegracion=GETDATE(), CreadaTransferencia=1 where id= = ?");
+            $stmt = $db->prepare("UPDATE [TransferenciasCabecera] set FechaIntegracion=GETDATE(), CreadaTransferencia=1 where Id= ?");
             $stmt->execute([$idcab]);
 
        

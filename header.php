@@ -170,7 +170,7 @@
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-menu-alt"></i><a href="recL.php">Revisar Aduanero</a></li>
+                                    <li><i class="ti ti-menu-alt"></i><a href="recL.php">Recepción Mercadería</a></li>
 
                                     <li><i class="ti ti-package"></i><a href="recPL.php">Picking</a></li>
                                    

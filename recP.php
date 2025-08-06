@@ -204,9 +204,12 @@
                             return;
                         }
                         
+
+
+
                         if(continuar){
                                
-                                console.log("📦 JSON generado:", stockTransfer);
+                           //     console.log("📦 JSON generado:", stockTransfer);
 
                             const transferBody = {
                                 Comments: stockTransfer.comments,
@@ -220,53 +223,69 @@
                                 }))
                             };
 
-                            console.log("📦 JSON corregido para SAP:", transferBody);
-                                fetch('php/enviar_transferencia_stock.php', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify(transferBody)
-                                })
-                                .then(async response => {
-                                    const text = await response.text();
+                            fetch('php/enviar_transferencia_stock.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(transferBody)
+})
+.then(async response => {
+    const text = await response.text();
 
-                            let data;
-                            try {
-                                data = JSON.parse(text);
-                            } catch (e) {
-                                data = text;
-                            }
-                            console.log('Respuesta API StockTransfer:', data);
-                            let msg = typeof data === 'string' ? data : (data && data.message ? data.message : JSON.stringify(data));
-                            if (msg && msg.includes('Transferencia creada exitosamente')) {
+    console.log('📦 Respuesta de la API:', text);
 
-                                 // Llamar a un script PHP para actualizar
-                                        fetch("php/actualizar_estado_recep.php", {
-                                            method: "POST",
-                                            headers: {
-                                                "Content-Type": "application/x-www-form-urlencoded"
-                                            },
-                                            body: new URLSearchParams({
-                                                id: "<?= $idcab ?>"
-                                            })
-                                        })
-                                        .then(() => {
-                                            window.location.href = "recPL.php";
-                                        });
-                                mostrarAlertaVerde('Transferencia creada exitosamente.');
-                                setTimeout(function() {
-                                    window.location.href = window.location.href;
-                                }, 1500);
-                            } else {
-                                mostrarAlertaRoja(msg || 'Error desconocido al crear la transferencia.');
-                            }
-                                })
-                                .catch(error => {
-                                    console.error("❌ Error de red:", error);
-                                    alert("Error al conectar con el servidor.");
-                                });
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch (e) {
+        data = text;
+    }
 
+    console.log('Respuesta API StockTransfer:', data);
+
+    // Extrae mensaje, ya sea de JSON o texto plano
+    let msg = typeof data === 'string' 
+        ? data 
+        : (data && data.message 
+            ? data.message 
+            : JSON.stringify(data));
+
+    console.log('msg Mensaje de la API:', msg);
+
+    mostrarLoader(false);
+
+    if (msg.includes('Transferencia creada')) {
+        alert('✔️ ' + msg);
+
+        // Actualiza estado en base de datos
+        fetch("php/actualizar_estado_recep.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+                id: "<?= $idcab ?>"
+            })
+        })
+        .then(() => {
+            // Redirige después de actualizar
+            setTimeout(() => {
+                window.location.href = "recPL.php";
+            }, 1500);
+        });
+
+    } else {
+        alert('🥲 ' + (msg || 'Error desconocido al crear la transferencia.'));
+    }
+})
+.catch(error => {
+    mostrarLoader(false);
+    console.error("❌ Error de red:", error);
+    alert("Error al conectar con el servidor.");
+});
+
+                        
 
 
 

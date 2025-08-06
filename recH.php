@@ -48,7 +48,7 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Transferencias en picking - <?php echo $almacenTran; ?></strong>
+                <strong class="card-title">Historial tranferencias procesadas - <?php echo $almacenTran; ?></strong>
                
 
             </div>
@@ -82,3 +82,5 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
         </div>
     </div>
 </div>
+
+<?php include_once "footer.php"; ?>

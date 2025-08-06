@@ -37,7 +37,7 @@
     $userId = $_SESSION['idU'];
     $userAdmin = $_SESSION["perfil"];
     $whsInvs = $_SESSION["whsInvs"];
-    $whsTurem = $_SESSION["whsTurem"];
+    //$whsTurem = $_SESSION["whsTurem"];
     $whsBodega = $_SESSION["whsBodeg"];
     $whsCica= $_SESSION["whsCica"];  
 ?>
@@ -162,6 +162,26 @@
                         </li>
                         ';
                     }
+//recepcion transferencias tiendas
+                     if ($userAdmin==2) {   
+                        
+                        
+                        echo '                       
+                            <li class="menu-item-has-children dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega</a>
+                                <ul class="sub-menu children dropdown-menu">     
+                                    <li><i class="ti ti-menu-alt"></i><a href="recL.php">Revisar Aduanero</a></li>
+
+                                    <li><i class="ti ti-package"></i><a href="recPL.php">Picking</a></li>
+                                   
+
+                                    <li><i class="ti ti-layout-grid2"></i><a href="recH.php">Historial</a></li>
+                                
+                                </ul>
+                            </li>
+                        ';
+                        }
+
 
         //PRESUPUESTOS - METAS
                         $LP = "LP"; $SAL = "SAL";

@@ -47,9 +47,10 @@ include_once "php/bd_StoreControl.php";
 
                     $_SESSION["whsInvs"] = $IDCONTEO->fk_ID_almacen_invs;  
                     
-                    $_SESSION["whsTurem"] = $IDCONTEO->fk_ID_almacen_turemp; 
+                    //$_SESSION["whsTurem"] = $IDCONTEO->fk_ID_almacen_turemp;   //ya no usamos turemp
                     $_SESSION["whsBodeg"] = $IDCONTEO->fk_ID_almacen_bodeg; 
                     $_SESSION["whsCica"] = $IDCONTEO->fk_ID_almacen_cierre; 
+                    $_SESSION["whsTr"] = $IDCONTEO->fk_ID_almacen_transitorio; 
 
                     
                      

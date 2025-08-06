@@ -7,10 +7,10 @@
     $idcab = $_GET["idcab"];
     $s1 = $db->query("
              SELECT d.Id as ID, d.ItemCode, d.CantidadAbierta AS stock, d.Scan, 
-                0 as [DocNum_Sot]        ,0 as [DocEntry_Sot],
+                0 as [DocNum_Sot]        ,d.DocEntry ,
                 d.Descripcion as descripcion, d.CodeBars AS codigoBarras
                 ,0 as [fk_idgroup]
-                    ,0 as LineNum
+                    ,LineNum
                 FROM [dbo].[TransferenciasCabecera] c
                 JOIN TransferenciasDetalle d ON c.Id = d.id_TrCab
                 WHERE c.id =".$idcab."  " );
@@ -59,15 +59,15 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0;overflow:hidden;">
-                <strong>Recepcion </strong> transferencia <?php echo $NumTransferencia ?>
+                <strong>Recepción </strong>  basado en transferencia <?php echo $NumTransferencia.'. '.$Filler.' a '.$ToWhsCode ?> 
                 <span id="warehouseCodeHeader"> </span>
             </div>
            
             <div class="card-body card-block">
                 <form id="form-codigo">
                         <div class="input-group mb-3 flex-nowrap">
-                            <div class="col-2"><input type="text" placeholder="cantidad" id="txtu" class="form-control" id="cantidad" min="1" value="1"></div>
-                            <div class="col-7"><input type="text" id="codigo" placeholder="Cod. Barras" class="form-control" autofocus></div>
+                            <div class="col-2"><input type="text" placeholder="cantidad" id="txtu" class="form-control" id="cantidad" autocomplete="off" min="1" value="1"></div>
+                            <div class="col-7"><input type="text" id="codigo" placeholder="Cod. Barras" class="form-control" autocomplete="off" autofocus></div>
                             <div class="col-3">
                                 <button id="btnAgregar" type="button"  class="btn btn-outline-primary btn-sm">➕</button>
                                 <button id="btnGuardar" type="button"  class="btn btn-outline-success">💾</button>
@@ -93,7 +93,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($scans as $item): ?>
-                            <tr data-codigo="<?= $item->codigoBarras ?>" data-id="<?= $item->ID ?>" data-itemcode="<?= $item->ItemCode ?>" data-docentry="<?= $item->DocEntry_Sot ?>" data-linenum="<?= $item->LineNum ?>" data-id="<?= $item->ID ?>">
+                            <tr data-codigo="<?= $item->codigoBarras ?>" data-id="<?= $item->ID ?>" data-itemcode="<?= $item->ItemCode ?>" data-linenum="<?= $item->LineNum ?>" data-id="<?= $item->ID ?>" data-docentry="<?= $item->DocEntry ?>" >
                                 <td class="col-barcodes"><?= $item->codigoBarras ?></td>
                                 <td class="col-nombre"><?= $item->ItemCode."- ".$item->descripcion ?></td>
                                 <td><?= $item->stock ?></td>
@@ -166,12 +166,14 @@
                             itemCode: fila.getAttribute('data-itemcode'),
                             quantity: escaneado,
                             warehouseCode: "<?= $ToWhsCode ?>",
+                            baseEntry: parseInt(fila.getAttribute('data-docentry')),
+                            baseLine: parseInt(fila.getAttribute('data-linenum')),
+                            baseType: 67
                         };
                         stockTransfer.stockTransferLines.push(item);
                     }
                 });
-                console.log("📦 Generando JSON de transferencia:", stockTransfer);
-        console.log("📦 JSON generado:");
+
               
      // Crear transferencia 
 
@@ -209,7 +211,7 @@
 
                         if(continuar){
                                
-                           //     console.log("📦 JSON generado:", stockTransfer);
+                                console.log("📦 JSON :", stockTransfer);
 
                             const transferBody = {
                                 Comments: stockTransfer.comments,
@@ -219,10 +221,13 @@
                                 StockTransferLines: stockTransfer.stockTransferLines.map(line => ({
                                     ItemCode: line.itemCode,
                                     Quantity: line.quantity,
-                                    WarehouseCode: line.warehouseCode
+                                    WarehouseCode: line.warehouseCode,
+                                    BaseEntry: line.baseEntry,
+                                    BaseLine: line.baseLine,
+                                    BaseType: line.baseType
                                 }))
                             };
-
+console.log("📦 JSON generado:", transferBody);
                             fetch('php/enviar_transferencia_stock.php', {
     method: 'POST',
     headers: {

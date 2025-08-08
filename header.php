@@ -163,7 +163,7 @@
                         ';
                     }
 //recepcion transferencias tiendas
-                     if ($userAdmin==2) {   
+                /*     if ($userAdmin==2) {   
                         
                         
                         echo '                       
@@ -180,7 +180,7 @@
                                 </ul>
                             </li>
                         ';
-                        }
+                        }*/
 
 
         //PRESUPUESTOS - METAS

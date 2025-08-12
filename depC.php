@@ -14,12 +14,36 @@ $alm = $db->prepare("SELECT cod_almacen FROM almacen WHERE id = ?");
 $alm->execute([$whsCica]);
 $almacen = $alm->fetch(PDO::FETCH_OBJ);
 
+
 // Obtener cuentas para el select
 $s1 = $db->query("SELECT AcctCode, AcctName, FormatCode FROM CuentaFinanciera where DepositTiendas = 1");
 $cuentas = $s1->fetchAll(PDO::FETCH_OBJ);
 
 // Obtener fecha desde POST o usar actual
 $fecha = $_GET["U_Fecha"] ?? date('Y-m-d');
+
+
+$maxLC = $db->prepare("select (q1.Efectivo - ISNULL(q2.Efectivo,0))+5 as Diferencia
+from
+	(
+	SELECT c.fecha, c.whsCode, sum(c.valRec) AS Efectivo
+	FROM cicUs c
+	WHERE c.fecha='".$fecha."' and c.whsCode = '".$almacen->cod_almacen."'
+		AND
+		  ( c.CardName COLLATE Latin1_General_CI_AI LIKE '%Efectivo%'
+		  or c.CardName COLLATE Latin1_General_CI_AI LIKE '%Abono%')
+	GROUP BY c.fecha, c.whsCode
+	) q1
+	left join
+	(
+	select U_Fecha,U_WhsCode, sum(TotalLC) AS Efectivo
+	from DepositosTiendas d
+	where  U_WhsCode = '".$almacen->cod_almacen."'
+	GROUP BY d.U_Fecha, d.U_WhsCode
+	) q2 on q1.whsCode=q2.U_WhsCode and q1.fecha=q2.U_Fecha");
+$maxLC->execute();
+$maxTotalLC = $maxLC->fetch(PDO::FETCH_OBJ);
+//ECHO "<input type='text' id='maxTotalLC' value='".($maxTotalLC->Diferencia ?? 0)."'>";
 ?>
 
 <div class="content">
@@ -35,7 +59,7 @@ $fecha = $_GET["U_Fecha"] ?? date('Y-m-d');
                         <label>Fecha del Depósito</label>
                         <input type="date" name="DepositDate" class="form-control" required min="2025-08-01"  max="<?= date('Y-m-d') ?>" required>
                     </div>
-
+<input type="hidden" id="maxPermitido" value="<?= $maxTotalLC->Diferencia ?? 0 ?>">
                     <!-- Fecha U_Fecha (bloqueada) -->
                     <div class="form-group">
                         <label>Fecha de Cierre de caja</label>
@@ -46,7 +70,7 @@ $fecha = $_GET["U_Fecha"] ?? date('Y-m-d');
                     <div class="form-group">
                         <label>Cuenta de Depósito</label>
                         <select name="DepositAccount" class="form-control" required>
-                            <option value="">Seleccione una cuenta</option>
+                            <option value="" disabled selected hidden>Seleccione una cuenta</option>
                             <?php foreach ($cuentas as $c): ?>
                                 <option value="<?= $c->AcctCode ?>">
                                     <?= $c->FormatCode ?> - <?= $c->AcctName ?>
@@ -65,7 +89,7 @@ $fecha = $_GET["U_Fecha"] ?? date('Y-m-d');
                     <!-- TotalLC -->
                     <div class="form-group">
                         <label>Valor Depositado</label>
-                        <input type="number" step="0.01" name="TotalLC" class="form-control restrict-copy-paste" required>
+                        <input type="number" step="0.01" name="TotalLC" class="form-control restrict-copy-paste" required max="<?= $maxTotalLC->Diferencia ?>">
                     </div>
 
                     <!-- Referencia Bancaria -->
@@ -127,14 +151,34 @@ function cerrarModal() {
 function validarConfirmacion() {
     const original = document.querySelector('input[name="U_Ref_Bancar"]').value.trim();
     const confirmacion = document.getElementById('confirmacionComprobante').value.trim();
+    const cuenta = document.querySelector('select[name="DepositAccount"]').value;
 
     
+    const totalLC = parseFloat(document.querySelector('input[name="TotalLC"]').value) || 0;
+    const maxPermitido = parseFloat(document.getElementById('maxPermitido').value) || 0;
+
+    // 1. Validar cuenta
+    if (cuenta === "") {
+        alert("Por favor seleccione una cuenta de depósito.");
+        return;
+    }
+
+    // 2. Validar TotalLC
+    if (totalLC > maxPermitido) {
+        alert("El valor depositado no puede ser mayor al efectivo declarado en Cierre de Caja");
+        return;
+    }
+
+
+
+    // 3. Validar confirmación de comprobante
     if (original === confirmacion && original.length > 0) {
         document.querySelector('form').submit();
     } else {
         document.getElementById('errorMensaje').style.display = 'block';
     }
 }
+
 </script>
 
 

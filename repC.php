@@ -39,23 +39,65 @@ if ($almTr && $idUser) {
     }
 }
 
-// Consulta resumen
+// Obtener filtros
+$codbar = $_GET['codbar'] ?? '';
+$referencia = $_GET['referencia'] ?? '';
+$nombre = $_GET['nombre'] ?? '';
+$arbol_nivel1_f = $_GET['arbol_nivel1'] ?? '';
+$arbol_nivel2_f = $_GET['arbol_nivel2'] ?? '';
+$arbol_nivel3_f = $_GET['arbol_nivel3'] ?? '';
+
+// Construir consulta dinámica
+$where = [];
+$params = [];
+
+$where[] = "[WhsCode]=?";
+$params[] = $almacen->cod_almacen;
+
+if ($codbar !== '') {
+    $where[] = "[CodeBars] LIKE ?";
+    $params[] = "%$codbar%";
+}
+if ($referencia !== '') {
+    $where[] = "[ItemCode] LIKE ?";
+    $params[] = "%$referencia%";
+}
+if ($nombre !== '') {
+    $where[] = "[ItemName] LIKE ?";
+    $params[] = "%$nombre%";
+}
+if ($arbol_nivel1_f !== '') {
+    $where[] = "[arbol_nivel1] = ?";
+    $params[] = $arbol_nivel1_f;
+}
+if ($arbol_nivel2_f !== '') {
+    $where[] = "[arbol_nivel2] = ?";
+    $params[] = $arbol_nivel2_f;
+}
+if ($arbol_nivel3_f !== '') {
+    $where[] = "[arbol_nivel3] = ?";
+    $params[] = $arbol_nivel3_f;
+}
+
 $sql = "SELECT TOP 1000 
-		  CodeBars,	
-		  ItemCode,	
-		  ItemName,	
-		  1 AS embalaje,	
-		  OnHand,	
-		  total_Transitoria_Tienda,	
-		  total_Bodega,	
-		  VentaUltima,	
-		  sugerido_final AS Sugerido
-        FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
-        WHERE [WhsCode]=?
-        ORDER BY Sugerido DESC";
+    CodeBars,
+    ItemCode,
+    ItemName,
+    1 AS embalaje,
+    OnHand,
+    total_Transitoria_Tienda,
+    total_Bodega,
+    VentaUltima,
+    sugerido_final AS Sugerido,
+    arbol_nivel1,
+    arbol_nivel2,
+    arbol_nivel3
+    FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
+    WHERE " . implode(' AND ', $where) . "
+    ORDER BY Sugerido DESC";
 
 $stmt = $dbdev->prepare($sql);
-$stmt->execute([$almacen->cod_almacen]);
+$stmt->execute($params);
 $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 
 // Consulta solicitados
@@ -95,6 +137,12 @@ $arbol_nivel3 = $stmtN3->fetchAll(PDO::FETCH_COLUMN);
             <div class="card-body">
                 <form method="GET" action="" id="form-filtros">
                     <div class="form-row">
+                        <!-- Codigo Barras -->
+                        <div class="form-group col-md-2">
+                            <label for="codbar">Codigo de barras</label>
+                            <input type="text" name="codbar" id="codbar" class="form-control" placeholder="Codigo de Barras">
+                        </div>
+
                         <!-- Referencia -->
                         <div class="form-group col-md-2">
                             <label for="referencia">Referencia</label>

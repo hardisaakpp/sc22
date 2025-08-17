@@ -114,11 +114,13 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 
 // Consulta solicitados
 $solicitados = [];
+$comentarios = [];
 if ($idRepCab) {
-    $stmtSol = $db->prepare("SELECT TOP 1000 [ItemCode], [Quantity] FROM [STORECONTROL].[dbo].[rep_det] WHERE [fk_id_cab]=?");
+    $stmtSol = $db->prepare("SELECT TOP 1000 [ItemCode], [Quantity], [comment] FROM [STORECONTROL].[dbo].[rep_det] WHERE [fk_id_cab]=?");
     $stmtSol->execute([$idRepCab]);
     foreach ($stmtSol->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $solicitados[$row['ItemCode']] = $row['Quantity'];
+        $comentarios[$row['ItemCode']] = $row['comment'];
     }
 }
 
@@ -273,6 +275,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                         <?php foreach ($resumen as $r): ?>
                             <?php
                                 $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
+                                $comentario = isset($comentarios[$r->ItemCode]) ? $comentarios[$r->ItemCode] : '';
                                 $transito = floatval($r->total_Transitoria_Tienda);
                                 $onhand = floatval($r->OnHand);
                                 $ventas = floatval($r->VentaUltima);
@@ -314,7 +317,14 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                                 <!-- dias de inventario -->
                                 <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
                                 <!-- observaciones -->
-                                <td>0</td>
+                                 
+                                <td>
+                                    <input type="text"
+                                           name="comment[<?= $r->ItemCode ?>]"
+                                           value="<?= htmlspecialchars($comentario) ?>"
+                                           maxlength="50"
+                                           class="form-control form-control-sm comment-input">
+                                </td>
                                 <!-- accion -->
                                 <td>0</td>
                             </tr>

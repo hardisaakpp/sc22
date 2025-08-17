@@ -57,6 +57,16 @@ $sql = "SELECT TOP 1000
 $stmt = $dbdev->prepare($sql);
 $stmt->execute([$almacen->cod_almacen]);
 $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+// Consulta solicitados
+$solicitados = [];
+if ($idRepCab) {
+    $stmtSol = $db->prepare("SELECT TOP 1000 [ItemCode], [Quantity] FROM [STORECONTROL].[dbo].[rep_det] WHERE [fk_id_cab]=?");
+    $stmtSol->execute([$idRepCab]);
+    foreach ($stmtSol->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $solicitados[$row['ItemCode']] = $row['Quantity'];
+    }
+}
 ?>
 
 
@@ -153,6 +163,9 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                     </thead>
                     <tbody>
                         <?php foreach ($resumen as $r): ?>
+                            <?php
+                                $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
+                            ?>
                             <tr>
                                 <td><?= $r->CodeBars ?></td>
                                 <td><?= $r->ItemCode ?></td>
@@ -166,11 +179,11 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                                 <td>
                                     <input type="number" 
                                            name="solicitar[<?= $r->ItemCode ?>]" 
-                                           value="0" 
+                                           value="<?= $valorSolicitado ?>" 
                                            min="0" 
                                            max="<?= $r->Sugerido ?>" 
                                            data-sugerido="<?= $r->Sugerido ?>" 
-                                           data-original="0"
+                                           data-original="<?= $valorSolicitado ?>"
                                            class="form-control form-control-sm">
                                 </td>
                                                                 <!-- dias de inventario -->

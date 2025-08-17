@@ -273,6 +273,20 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                         <?php foreach ($resumen as $r): ?>
                             <?php
                                 $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
+                                $transito = floatval($r->total_Transitoria_Tienda);
+                                $onhand = floatval($r->OnHand);
+                                $ventas = floatval($r->VentaUltima);
+                                $solicitado = floatval($valorSolicitado);
+                                // Días de inventario al cargar
+                                if ($ventas > 0) {
+                                    if ($solicitado == 0) {
+                                        $diasInv = (($solicitado + $transito + $onhand) / $ventas) * 30;
+                                    } else {
+                                        $diasInv = (($transito + $onhand + $solicitado) / $ventas) * 30;
+                                    }
+                                } else {
+                                    $diasInv = 0;
+                                }
                             ?>
                             <tr>
                                 <td><?= $r->CodeBars ?></td>
@@ -292,11 +306,14 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                                            max="<?= $r->Sugerido ?>" 
                                            data-sugerido="<?= $r->Sugerido ?>" 
                                            data-original="<?= $valorSolicitado ?>"
+                                           data-transito="<?= $transito ?>"
+                                           data-onhand="<?= $onhand ?>"
+                                           data-ventas="<?= $ventas ?>"
                                            class="form-control form-control-sm">
                                 </td>
-                                                                <!-- dias de inventario -->
-                                <td>0</td>
-                                <!-- onbseraciones -->
+                                <!-- dias de inventario -->
+                                <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
+                                <!-- observaciones -->
                                 <td>0</td>
                                 <!-- accion -->
                                 <td>0</td>
@@ -377,8 +394,14 @@ $(document).ready(function() {
         const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
         const towhs = "<?= $almTr->cod_almacen ?>";
         const idcab = "<?= $idRepCab ?>";
-        // Obtener el StockBodega de la fila actual
         const stockBodega = parseFloat($(this).closest('tr').find('td').eq(6).text().replace(/,/g, ''));
+
+        // Para cálculo de días de inventario
+        let transito = parseFloat($(this).data('transito')) || 0;
+        let onhand = parseFloat($(this).data('onhand')) || 0;
+        let ventas = parseFloat($(this).data('ventas')) || 0;
+        let $diasInvTd = $(this).closest('tr').find('td.dias-inv');
+        let solicitado = value;
 
         if (isNaN(value) || value < 0) {
             Swal.fire({
@@ -388,6 +411,17 @@ $(document).ready(function() {
                 confirmButtonText: 'Aceptar'
             }).then(() => {
                 this.value = original;
+                solicitado = parseFloat(original) || 0;
+                // Recalcular días de inventario
+                let diasInv = 0;
+                if (ventas > 0) {
+                    if (solicitado == 0) {
+                        diasInv = ((solicitado + transito + onhand) / ventas) * 30;
+                    } else {
+                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+                    }
+                }
+                $diasInvTd.text(diasInv.toFixed(2));
             });
             return;
         }
@@ -400,6 +434,17 @@ $(document).ready(function() {
                 confirmButtonText: 'Aceptar'
             }).then(() => {
                 this.value = original;
+                solicitado = parseFloat(original) || 0;
+                // Recalcular días de inventario
+                let diasInv = 0;
+                if (ventas > 0) {
+                    if (solicitado == 0) {
+                        diasInv = ((solicitado + transito + onhand) / ventas) * 30;
+                    } else {
+                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+                    }
+                }
+                $diasInvTd.text(diasInv.toFixed(2));
             });
             return;
         }
@@ -432,9 +477,23 @@ $(document).ready(function() {
                             console.error("Error al guardar:", xhr.responseText);
                         }
                     });
+                    // Recalcular días de inventario con el valor confirmado
+                    solicitado = value;
+                    let diasInv = 0;
+                    if (ventas > 0) {
+                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+                    }
+                    $diasInvTd.text(diasInv.toFixed(2));
                 } else {
                     this.value = sugerido;
                     $(this).data('original', sugerido);
+                    solicitado = sugerido;
+                    // Recalcular días de inventario con el valor sugerido
+                    let diasInv = 0;
+                    if (ventas > 0) {
+                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+                    }
+                    $diasInvTd.text(diasInv.toFixed(2));
                 }
             });
         } else {
@@ -456,6 +515,17 @@ $(document).ready(function() {
                     console.error("Error al guardar:", xhr.responseText);
                 }
             });
+            // Recalcular días de inventario con el valor aceptado
+            solicitado = value;
+            let diasInv = 0;
+            if (ventas > 0) {
+                if (solicitado == 0) {
+                    diasInv = ((solicitado + transito + onhand) / ventas) * 30;
+                } else {
+                    diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+                }
+            }
+            $diasInvTd.text(diasInv.toFixed(2));
         }
     });
 
@@ -465,6 +535,24 @@ $(document).ready(function() {
     $('#btnLimpiar').click(function() {
         $('#form-filtros')[0].reset();
         table.columns().search('').draw(); // limpiar filtros de DataTable
+    });
+
+    // Actualizar días de inventario al cambiar el input
+    $('#data-table tbody').on('input blur', 'input[type="number"][name^="solicitar"]', function() {
+        let solicitado = parseFloat(this.value) || 0;
+        let transito = parseFloat($(this).data('transito')) || 0;
+        let onhand = parseFloat($(this).data('onhand')) || 0;
+        let ventas = parseFloat($(this).data('ventas')) || 0;
+        let $diasInvTd = $(this).closest('tr').find('td.dias-inv');
+        let diasInv = 0;
+        if (ventas > 0) {
+            if (solicitado == 0) {
+                diasInv = ((solicitado + transito + onhand) / ventas) * 30;
+            } else {
+                diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+            }
+        }
+        $diasInvTd.text(diasInv.toFixed(2));
     });
 
 });

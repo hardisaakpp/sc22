@@ -46,6 +46,8 @@ $nombre = $_GET['nombre'] ?? '';
 $arbol_nivel1_f = $_GET['arbol_nivel1'] ?? '';
 $arbol_nivel2_f = $_GET['arbol_nivel2'] ?? '';
 $arbol_nivel3_f = $_GET['arbol_nivel3'] ?? '';
+$marca_f = $_GET['marca'] ?? '';
+$clasificacion_f = $_GET['clasificacionabc'] ?? '';
 
 // Construir consulta dinámica
 $where = [];
@@ -78,6 +80,14 @@ if ($arbol_nivel3_f !== '') {
     $where[] = "[arbol_nivel3] = ?";
     $params[] = $arbol_nivel3_f;
 }
+if ($marca_f !== '') {
+    $where[] = "[marca] = ?";
+    $params[] = $marca_f;
+}
+if ($clasificacion_f !== '') {
+    $where[] = "[ClasificacionABC] = ?";
+    $params[] = $clasificacion_f;
+}
 
 $sql = "SELECT TOP 1000 
     CodeBars,
@@ -91,7 +101,9 @@ $sql = "SELECT TOP 1000
     sugerido_final AS Sugerido,
     arbol_nivel1,
     arbol_nivel2,
-    arbol_nivel3
+    arbol_nivel3,
+    marca,
+    ClasificacionABC
     FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
     WHERE " . implode(' AND ', $where) . "
     ORDER BY Sugerido DESC";
@@ -110,10 +122,12 @@ if ($idRepCab) {
     }
 }
 
-// Consultas para los filtros de árbol
+// Consultas para los filtros de árbol y nuevos filtros
 $arbol_nivel1 = [];
 $arbol_nivel2 = [];
 $arbol_nivel3 = [];
+$marcas = [];
+$clasificaciones = [];
 
 $stmtN1 = $dbdev->query("SELECT DISTINCT [arbol_nivel1] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
 $arbol_nivel1 = $stmtN1->fetchAll(PDO::FETCH_COLUMN);
@@ -123,6 +137,12 @@ $arbol_nivel2 = $stmtN2->fetchAll(PDO::FETCH_COLUMN);
 
 $stmtN3 = $dbdev->query("SELECT DISTINCT [arbol_nivel3] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
 $arbol_nivel3 = $stmtN3->fetchAll(PDO::FETCH_COLUMN);
+
+$stmtMarca = $dbdev->query("SELECT DISTINCT [marca] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$marcas = $stmtMarca->fetchAll(PDO::FETCH_COLUMN);
+
+$stmtABC = $dbdev->query("SELECT DISTINCT [ClasificacionABC] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 
@@ -184,6 +204,28 @@ $arbol_nivel3 = $stmtN3->fetchAll(PDO::FETCH_COLUMN);
                                 <option value="">Todos</option>
                                 <?php foreach ($arbol_nivel3 as $n3): ?>
                                     <option value="<?= htmlspecialchars($n3) ?>"><?= htmlspecialchars($n3) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <!-- Filtro marca -->
+                        <div class="form-group col-md-2">
+                            <label for="marca">Marca</label>
+                            <select name="marca" id="marca" class="form-control">
+                                <option value="">Todos</option>
+                                <?php foreach ($marcas as $marca): ?>
+                                    <option value="<?= htmlspecialchars($marca) ?>"><?= htmlspecialchars($marca) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <!-- Filtro ClasificacionABC -->
+                        <div class="form-group col-md-2">
+                            <label for="clasificacionabc">Clasificación ABC</label>
+                            <select name="clasificacionabc" id="clasificacionabc" class="form-control">
+                                <option value="">Todos</option>
+                                <?php foreach ($clasificaciones as $abc): ?>
+                                    <option value="<?= htmlspecialchars($abc) ?>"><?= htmlspecialchars($abc) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>

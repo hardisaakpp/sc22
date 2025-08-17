@@ -67,6 +67,20 @@ if ($idRepCab) {
         $solicitados[$row['ItemCode']] = $row['Quantity'];
     }
 }
+
+// Consultas para los filtros de árbol
+$arbol_nivel1 = [];
+$arbol_nivel2 = [];
+$arbol_nivel3 = [];
+
+$stmtN1 = $dbdev->query("SELECT DISTINCT [arbol_nivel1] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$arbol_nivel1 = $stmtN1->fetchAll(PDO::FETCH_COLUMN);
+
+$stmtN2 = $dbdev->query("SELECT DISTINCT [arbol_nivel2] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$arbol_nivel2 = $stmtN2->fetchAll(PDO::FETCH_COLUMN);
+
+$stmtN3 = $dbdev->query("SELECT DISTINCT [arbol_nivel3] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$arbol_nivel3 = $stmtN3->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 
@@ -92,35 +106,39 @@ if ($idRepCab) {
                             <label for="nombre">Nombre</label>
                             <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
                         </div>
-                        <!-- Grupo -->
+               
+                        <!-- Filtro arbol_nivel1 -->
                         <div class="form-group col-md-2">
-                            <label for="grupo">Grupo</label>
-                            <select name="grupo" id="grupo" class="form-control">
-                                <option value="TODOS">TODOS</option>
-                                <option value="MEDIAS">MEDIAS</option>
-                                <option value="PIJAMAS">PIJAMAS</option>
-                                <option value="BOXER">BOXER</option>
-                                <!-- agregar más opciones según necesidad -->
+                            <label for="arbol_nivel1">Nivel 1</label>
+                            <select name="arbol_nivel1" id="arbol_nivel1" class="form-control">
+                                <option value="">Todos</option>
+                                <?php foreach ($arbol_nivel1 as $n1): ?>
+                                    <option value="<?= htmlspecialchars($n1) ?>"><?= htmlspecialchars($n1) ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
 
-                        <!-- Estado -->
+                        <!-- Filtro arbol_nivel2 -->
                         <div class="form-group col-md-2">
-                            <label>Estado</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="estado" id="estadoTodos" value="TODOS" checked>
-                                <label class="form-check-label" for="estadoTodos">TODOS</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="estado" id="estadoActivos" value="ACTIVOS">
-                                <label class="form-check-label" for="estadoActivos">ACTIVOS</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="estado" id="estadoInactivos" value="INACTIVOS">
-                                <label class="form-check-label" for="estadoInactivos">INACTIVOS</label>
-                            </div>
+                            <label for="arbol_nivel2">Nivel 2</label>
+                            <select name="arbol_nivel2" id="arbol_nivel2" class="form-control">
+                                <option value="">Todos</option>
+                                <?php foreach ($arbol_nivel2 as $n2): ?>
+                                    <option value="<?= htmlspecialchars($n2) ?>"><?= htmlspecialchars($n2) ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
+                        <!-- Filtro arbol_nivel3 -->
+                        <div class="form-group col-md-2">
+                            <label for="arbol_nivel3">Nivel 3</label>
+                            <select name="arbol_nivel3" id="arbol_nivel3" class="form-control">
+                                <option value="">Todos</option>
+                                <?php foreach ($arbol_nivel3 as $n3): ?>
+                                    <option value="<?= htmlspecialchars($n3) ?>"><?= htmlspecialchars($n3) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
                     </div>
 

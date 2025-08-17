@@ -12,7 +12,7 @@ $sentencia = $db->query("
                         [SotCab_MT] AS T1
                     WHERE 
                         T1.DocDate BETWEEN '$desde' AND '$hasta' 
-                        AND T1.Filler <> 'RL-SJ'
+                       
                         AND T1.DocStatus = 'O'
                     AND --DocNum_Tr=0 AND
                         

@@ -40,7 +40,7 @@ if ($almTr && $idUser) {
 }
 
 // Consulta resumen
-$sql = "SELECT TOP 1000 
+$sql = "   SELECT TOP 1000 
 		  CodeBars,	
 		  ItemCode,	
 		  ItemName,	
@@ -52,7 +52,8 @@ $sql = "SELECT TOP 1000
 		  sugerido_final AS Sugerido
         FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
         WHERE [WhsCode]=?
-        ORDER BY Sugerido DESC";
+        ORDER BY Sugerido DESC
+        ";
 
 $stmt = $dbdev->prepare($sql);
 $stmt->execute([$almacen->cod_almacen]);
@@ -119,6 +120,7 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                         <div class="col-auto">
                             <button type="submit" class="btn btn-primary">Buscar</button>
                             <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar filtros</button>
+
                         </div>
                     </div>
                 </form>
@@ -130,7 +132,7 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Top Articulos</strong>
+                <strong class="card-title">Top 1000 Articulos</strong>
             </div>
             <div class="card-body">
                 <table id="data-table" class="table table-striped table-bordered">
@@ -173,12 +175,13 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                                            data-original="0"
                                            class="form-control form-control-sm">
                                 </td>
-                                                                <!-- dias de inventario -->
+                                <!-- dias de inventario -->
                                 <td>0</td>
                                 <!-- onbseraciones -->
                                 <td>0</td>
                                 <!-- accion -->
-                                <td>0</td>
+                                <td><button>👀</button></td>
+                                
                             </tr>
                         <?php endforeach; ?>
                         <?php if (empty($resumen)): ?>
@@ -189,118 +192,97 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
             </div>
         </div>
     </div>
-</div>
 
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- jQuery y DataTables -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<script>
-$(document).ready(function() {
+    <!-- Modal Ver Solicitados -->
+    <div class="modal fade" id="modalSolicitados" tabindex="-1" role="dialog" aria-labelledby="modalSolicitadosLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalSolicitadosLabel">Artículos Solicitados</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="loaderSolicitados" style="display:none;text-align:center;">
+                <span class="spinner-border spinner-border-sm"></span> Cargando...
+            </div>
+            <div id="tablaSolicitados"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    // ---------------------------
-    // Añadir fila de filtros al thead
-    // ---------------------------
-    $('#data-table thead tr').clone(true).appendTo('#data-table thead');
-    $('#data-table thead tr:eq(1) th').each(function(i) {
-        var title = $(this).text();
-        if(title !== 'Solicitar') { // no poner filtro en "Solicitar"
-            $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Buscar '+title+'" />');
-        } else {
-            $(this).html(''); // dejar vacío
-        }
-    });
+    <!-- Bootstrap 4 JS (para modal) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    // ---------------------------
-    // Inicializar DataTable
-    // ---------------------------
-    var table = $('#data-table').DataTable({
-        pageLength: 25,
-        lengthMenu: [25,50,100],
-        order: [], // quitar orden inicial
-        columnDefs: [
-            {
-                targets: 12, // columna Solicitar
-                orderable: false // quitar orden
-            }
-        ]
-    });
+    <script>
+    $(document).ready(function() {
 
-    // ---------------------------
-    // Aplicar filtros por columna
-    // ---------------------------
-    table.columns().every(function(i) {
-        $('input', this.header()).on('keyup change', function() {
-            if (table.column(i).search() !== this.value) {
-                table.column(i).search(this.value).draw();
+        // ---------------------------
+        // Añadir fila de filtros al thead
+        // ---------------------------
+        $('#data-table thead tr').clone(true).appendTo('#data-table thead');
+        $('#data-table thead tr:eq(1) th').each(function(i) {
+            var title = $(this).text();
+            if(title !== 'Solicitar') { // no poner filtro en "Solicitar"
+                $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Buscar '+title+'" />');
+            } else {
+                $(this).html(''); // dejar vacío
             }
         });
-    });
 
-    // ---------------------------
-    // Guardar valor original al enfocar
-    // ---------------------------
-    $('#data-table tbody').on('focus', 'input[type="number"][name^="solicitar"]', function() {
-        $(this).data('original', this.value);
-    });
+        // ---------------------------
+        // Inicializar DataTable
+        // ---------------------------
+        var table = $('#data-table').DataTable({
+            pageLength: 25,
+            lengthMenu: [25,50,100],
+            order: [], // quitar orden inicial
+            columnDefs: [
+                {
+                    targets: 12, // columna Solicitar
+                    orderable: false // quitar orden
+                }
+            ]
+        });
 
-    // ---------------------------
-    // Validar al salir del input
-    // ---------------------------
-    $('#data-table tbody').on('blur', 'input[type="number"][name^="solicitar"]', function() {
-        const sugerido = parseFloat($(this).data('sugerido'));
-        let value = parseFloat(this.value);
-        const original = $(this).data('original');
-
-        if (isNaN(value) || value < 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Valor inválido',
-                text: 'El valor no puede ser menor que 0',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                this.value = original;
-            });
-            return;
-        }
-
-        if (value > sugerido) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cantidad mayor a la sugerida',
-                html: `Se sugiere solicitar <b>${sugerido}</b>.<br>¿Desea solicitar <b>${value}</b>?`,
-                showCancelButton: true,
-                confirmButtonText: 'Sí, solicitar',
-                cancelButtonText: 'No, usar sugerido'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Mantener el valor ingresado
-                    $(this).data('original', value);
-                } else {
-                    // Volver al valor sugerido
-                    this.value = sugerido;
-                    $(this).data('original', sugerido);
+        // ---------------------------
+        // Aplicar filtros por columna
+        // ---------------------------
+        table.columns().every(function(i) {
+            $('input', this.header()).on('keyup change', function() {
+                if (table.column(i).search() !== this.value) {
+                    table.column(i).search(this.value).draw();
                 }
             });
-        } else {
-            // Valor dentro de rango, actualizar valor original
-            $(this).data('original', value);
-        }
+        });
+
+        // ---------------------------
+        // Guardar valor original al enfocar
+        // ---------------------------
+     
+    
+
+        // ---------------------------
+        // Botón Limpiar filtros
+        // ---------------------------
+        $('#btnLimpiar').click(function() {
+            $('#form-filtros')[0].reset();
+            table.search('').columns().search('').draw(); // limpiar filtros y mantener paginado
+        });
+
     });
 
-    // ---------------------------
-    // Botón Limpiar filtros
-    // ---------------------------
-    $('#btnLimpiar').click(function() {
-        $('#form-filtros')[0].reset();
-        table.columns().search('').draw(); // limpiar filtros de DataTable
+    $('#data-table tbody').on('blur', 'input[type="number"][name^="solicitar"]', function() {
+        const sugerido = $(this).data('sugerido');
+        const valorIngresado = $(this).val();
+
+        alert("Ingresaste: " + valorIngresado + "\nSugerido: " + sugerido);
     });
-
-});
-</script>
-
-
+    </script>
 
 <?php include_once "footer.php"; ?>

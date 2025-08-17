@@ -13,6 +13,7 @@ $whsCierre = isset($_POST["whsCierre"]) ? $_POST["whsCierre"] : 0;
 $whsInvs = isset($_POST["whsInvs"]) ? $_POST["whsInvs"] : 0;
 $whsBodega = isset($_POST["whsBodega"]) ? $_POST["whsBodega"] : 0;
 $whsTransitorio = isset($_POST["whsTransitorio"]) ? $_POST["whsTransitorio"] : 0;
+$whsCD = isset($_POST["whsCD"]) ? $_POST["whsCD"] : 0;
 $codTimeSoft = isset($_POST["codTimeSoft"]) ? $_POST["codTimeSoft"] : '';
 $perfil = isset($_POST["radios"]) ? $_POST["radios"] : '';
 $email1 = isset($_POST["Email1"]) ? $_POST["Email1"] : '';
@@ -31,7 +32,7 @@ $sentencia = $db->prepare("
         [fk_ID_almacen_invs] = ?,
         [fk_ID_almacen_bodeg] = ?,
         [fk_ID_almacen_transitorio] = ?,
-        [Timesoft_CentroCosto] = ?,
+        [fk_ID_almacen_CD] = ?,
         [perfil] = ?,
         [email] = ?,
         [emailSuper] = ?
@@ -47,7 +48,7 @@ $resultado = $sentencia->execute([
     $whsInvs,
     $whsBodega,
     $whsTransitorio,
-    $codTimeSoft,
+    $whsCD,
     $perfil,
     $email1,
     $email2,

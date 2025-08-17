@@ -117,6 +117,17 @@
                             <?php } ?>
                             </select>
                     </div>
+                    <div class="form-group">
+                    <label for="whsCD" class=" form-control-label" class="standardSelect">Almacen CD para pedidos</label>
+                            <select name='whsCD'  data-placeholder='Selecciona el almacen' class='js-example-basic-single js-states form-control' id='whsCD'  Size='Number_of_options' disabled>
+                            <option value="0">Ninguno</option>
+                            <?php foreach($whs as $wh) { ?>
+                                <option value="<?php echo $wh->id ?>" <?php if ($wh->id == $usuarios->fk_ID_almacen_CD) echo 'selected' ?>>
+                                    <?php echo $wh->cod_almacen . ' ' . $wh->nombre ?>
+                                </option>
+                            <?php } ?>
+                            </select>
+                    </div>
     
 
                         <div class="row form-group">

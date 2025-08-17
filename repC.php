@@ -563,14 +563,93 @@ $(document).ready(function() {
         $diasInvTd.text(diasInv.toFixed(2));
     });
 
-    // Acción botón modal cod-producto (usa SweetAlert2)
+    // Acción botón modal cod-producto (consulta AJAX y muestra datos con SweetAlert2)
     $('#data-table').on('click', '.btn-modal-codprod', function() {
         var codprod = $(this).data('codprod');
-        Swal.fire({
-            title: 'Código Producto',
-            text: codprod,
-            icon: 'info',
-            confirmButtonText: 'OK'
+        var whscode = "<?= $almacen->cod_almacen ?>";
+        $.ajax({
+            url: 'ajax_modal_itemcode.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                itemcode: codprod,
+                whscode: whscode
+            },
+            success: function(resp) {
+                if (resp && resp.success && resp.data) {
+                    var d = resp.data;
+                    var html = `
+                        <div style="font-size:12px;">
+                        <table class="table table-bordered table-sm" style="margin-bottom:0;">
+                            <tr>
+                                <td><b>CodeBars</b></td><td>${d.CodeBars}</td>
+                                <td><b>ItemCode</b></td><td>${d.ItemCode}</td>
+                            </tr>
+                            <tr>
+                                <td><b>ItemName</b></td><td colspan="3">${d.ItemName}</td>
+                            </tr>
+                            <tr>
+                                <td><b>ClasificacionABC</b></td><td>${d.ClasificacionABC}</td>
+                                <td><b>Unidad</b></td><td>${d.unidad}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Categoria</b></td><td>${d.categoria}</td>
+                                <td><b>Linea</b></td><td>${d.linea}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Marca</b></td><td>${d.marca}</td>
+                                <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Días Ult. Fecha Ingreso</b></td><td>${d.dias_ultima_fecha_ingreso}</td>
+                                <td><b>Venta Ultima</b></td><td>${d.VentaUltima}</td>
+                            </tr>
+                            <tr>
+                                <td><b>PromVenta30dias</b></td><td>${d.PromVenta30dias}</td>
+                                <td><b>Venta 90 días</b></td><td>${d.venta_90dias}</td>
+                            </tr>
+                            <tr>
+                                <td><b>PromVenta90dias</b></td><td>${d.PromVenta90dias}</td>
+                                <td><b>OnHand</b></td><td>${d.OnHand}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Días Inv Actual</b></td><td>${d.diasInvActual}</td>
+                                <td><b>Total Bodega</b></td><td>${d.total_Bodega}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Transitoria Bodega</b></td><td>${d.total_Transitoria_Bodega}</td>
+                                <td><b>MinStock</b></td><td>${d.MinStock}</td>
+                            </tr>
+                            <tr>
+                                <td><b>MaxStock</b></td><td>${d.MaxStock}</td>
+                                <td><b>U_LEAD</b></td><td>${d.U_LEAD}</td>
+                            </tr>
+                        </table>
+                        </div>
+                    `;
+                    Swal.fire({
+                        title: 'Detalle Producto',
+                        html: html,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Detalle Producto',
+                        text: 'No se encontraron datos.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudo consultar el producto.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
         });
     });
 

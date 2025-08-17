@@ -184,7 +184,7 @@
 */
 
 //reposicion tienda
-                     if ($userAdmin==2) {   
+                     if ($userAdmin==2 && $userName == 'OUT-LLG') {   
                         
                         
                         echo '                       

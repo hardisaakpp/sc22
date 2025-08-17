@@ -105,7 +105,7 @@ $sql = "SELECT TOP 1000
     marca,
     ClasificacionABC
     FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
-    WHERE " . implode(' AND ', $where) . "
+    WHERE " . implode(' AND ', $where) . " 
     ORDER BY Sugerido DESC";
 
 $stmt = $dbdev->prepare($sql);
@@ -133,21 +133,14 @@ if ($idRepCab) {
     <div class="col-md-10 offset-md-1">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Filtros</strong>
+                <strong class="card-title">Informacion</strong>
             </div>  
             <div class="card-body">
                 <form method="GET" action="" id="form-filtros">
                     <div class="form-row">
-                        
+                    <?php echo 'Solicitado de '.$almTr->cod_almacen ?> 
+                    
 
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="form-row mt-2">
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">Buscar</button>
-                            <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar filtros</button>
-                        </div>
                     </div>
                 </form>
             </div>

@@ -344,10 +344,11 @@ $(document).ready(function() {
     $('#data-table thead tr').clone(true).appendTo('#data-table thead');
     $('#data-table thead tr:eq(1) th').each(function(i) {
         var title = $(this).text();
-        if(title !== 'Solicitar') { // no poner filtro en "Solicitar"
-            $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Buscar '+title+'" />');
+        // Quitar filtro en columnas: Solicitado (9), Dias de Inv. (10), Observaciones (11), Accion (12)
+        if (i === 9 || i === 10 || i === 11 || i === 12) {
+            $(this).html('');
         } else {
-            $(this).html(''); // dejar vacío
+            $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Buscar '+title+'" />');
         }
     });
 

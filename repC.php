@@ -273,67 +273,63 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                     </thead>
                     <tbody>
                         <?php foreach ($resumen as $r): ?>
-                            <?php
-                                $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
-                                $comentario = isset($comentarios[$r->ItemCode]) ? $comentarios[$r->ItemCode] : '';
-                                $transito = floatval($r->total_Transitoria_Tienda);
-                                $onhand = floatval($r->OnHand);
-                                $ventas = floatval($r->VentaUltima);
-                                $solicitado = floatval($valorSolicitado);
-                                // Días de inventario al cargar
-                                if ($ventas > 0) {
-                                    if ($solicitado == 0) {
-                                        $diasInv = round((($solicitado + $transito + $onhand) / $ventas) * 30);
-                                    } else {
-                                        $diasInv = round((($transito + $onhand + $solicitado) / $ventas) * 30);
-                                    }
-                                } else {
-                                    $diasInv = 0;
-                                }
-
-                            ?>
-                            <tr>
-                                <td><?= $r->CodeBars ?></td>
-                                <td><?= $r->ItemCode ?></td>
-                                <td><?= $r->ItemName ?></td>
-                                <td><?= number_format($r->embalaje,0) ?></td>
-                                <td><?= number_format($r->OnHand,0) ?></td>
-                                <td><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
-                                <td><?= number_format($r->total_Bodega,0) ?></td>
-                                <td><?= number_format($r->VentaUltima,0) ?></td>
-                                <td><?= number_format($r->Sugerido,0) ?></td>
-                                <td>
-                                    <input type="number" 
-                                           name="solicitar[<?= $r->ItemCode ?>]" 
-                                           value="<?= $valorSolicitado ?>" 
-                                           min="0" 
-                                           max="<?= $r->Sugerido ?>" 
-                                           data-sugerido="<?= $r->Sugerido ?>" 
-                                           data-original="<?= $valorSolicitado ?>"
-                                           data-transito="<?= $transito ?>"
-                                           data-onhand="<?= $onhand ?>"
-                                           data-ventas="<?= $ventas ?>"
-                                           class="form-control form-control-sm">
-                                </td>
-                                <!-- dias de inventario -->
-                                <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
-                                <!-- observaciones -->
-                                 
-                                <td>
-                                    <input type="text"
-                                           name="comment[<?= $r->ItemCode ?>]"
-                                           value="<?= htmlspecialchars($comentario) ?>"
-                                           maxlength="50"
-                                           class="form-control form-control-sm comment-input">
-                                </td>
-                                <!-- accion -->
-                                <td>0</td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <?php if (empty($resumen)): ?>
-                            <tr><td colspan="13" class="text-center">No hay datos</td></tr>
-                        <?php endif; ?>
-                    </tbody>
+        <?php
+            $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
+            $comentario = isset($comentarios[$r->ItemCode]) ? $comentarios[$r->ItemCode] : '';
+            $transito = floatval($r->total_Transitoria_Tienda);
+            $onhand = floatval($r->OnHand);
+            $ventas = floatval($r->VentaUltima);
+            $solicitado = floatval($valorSolicitado);
+            if ($ventas > 0) {
+                if ($solicitado == 0) {
+                    $diasInv = round((($solicitado + $transito + $onhand) / $ventas) * 30);
+                } else {
+                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) * 30);
+                }
+            } else {
+                $diasInv = 0;
+            }
+        ?>
+        <tr>
+            <td><?= $r->CodeBars ?></td>
+            <td><?= $r->ItemCode ?></td>
+            <td><?= $r->ItemName ?></td>
+            <td><?= number_format($r->embalaje,0) ?></td>
+            <td><?= number_format($r->OnHand,0) ?></td>
+            <td><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
+            <td><?= number_format($r->total_Bodega,0) ?></td>
+            <td><?= number_format($r->VentaUltima,0) ?></td>
+            <td><?= number_format($r->Sugerido,0) ?></td>
+            <td>
+                <input type="number" 
+                    name="solicitar[<?= $r->ItemCode ?>]" 
+                    value="<?= $valorSolicitado ?>" 
+                    min="0" 
+                    max="<?= $r->Sugerido ?>" 
+                    data-sugerido="<?= $r->Sugerido ?>" 
+                    data-original="<?= $valorSolicitado ?>"
+                    data-transito="<?= $transito ?>"
+                    data-onhand="<?= $onhand ?>"
+                    data-ventas="<?= $ventas ?>"
+                    class="form-control form-control-sm">
+            </td>
+            <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
+            <td>
+                <input type="text"
+                    name="comment[<?= $r->ItemCode ?>]"
+                    value="<?= htmlspecialchars($comentario) ?>"
+                    maxlength="50"
+                    class="form-control form-control-sm comment-input">
+            </td>
+            <td>
+                <button type="button" class="btn btn-info btn-modal-codprod" data-codprod="<?= htmlspecialchars($r->ItemCode) ?>">Ver</button>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    <?php if (empty($resumen)): ?>
+        <tr><td colspan="13" class="text-center">No hay datos</td></tr>
+    <?php endif; ?>
+</tbody>
                 </table>
             </div>
         </div>
@@ -567,9 +563,41 @@ $(document).ready(function() {
         $diasInvTd.text(diasInv.toFixed(2));
     });
 
+    // Acción botón modal cod-producto (usa SweetAlert2)
+    $('#data-table').on('click', '.btn-modal-codprod', function() {
+        var codprod = $(this).data('codprod');
+        Swal.fire({
+            title: 'Código Producto',
+            text: codprod,
+            icon: 'info',
+            confirmButtonText: 'OK'
+        });
+    });
+
 });
 </script>
 
+<!-- Modal -->
+<div class="modal fade" id="modalCodProd" tabindex="-1" role="dialog" aria-labelledby="modalCodProdLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCodProdLabel">Código Producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalCodProdBody">
+        <!-- Aquí se muestra el código producto -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Bootstrap JS (para el modal) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php include_once "footer.php"; ?>

@@ -377,12 +377,26 @@ $(document).ready(function() {
         const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
         const towhs = "<?= $almTr->cod_almacen ?>";
         const idcab = "<?= $idRepCab ?>";
+        // Obtener el StockBodega de la fila actual
+        const stockBodega = parseFloat($(this).closest('tr').find('td').eq(6).text().replace(/,/g, ''));
 
         if (isNaN(value) || value < 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Valor inválido',
                 text: 'El valor no puede ser menor que 0',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                this.value = original;
+            });
+            return;
+        }
+
+        if (value > stockBodega) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Stock insuficiente',
+                text: 'No puede solicitar más que el Stock Bodega (' + stockBodega + ')',
                 confirmButtonText: 'Aceptar'
             }).then(() => {
                 this.value = original;

@@ -253,6 +253,9 @@ $(document).ready(function() {
         const sugerido = parseFloat($(this).data('sugerido'));
         let value = parseFloat(this.value);
         const original = $(this).data('original');
+        const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
+        const towhs = "<?= $almTr->cod_almacen ?>";
+        const idcab = "<?= $idRepCab ?>";
 
         if (isNaN(value) || value < 0) {
             Swal.fire({
@@ -276,17 +279,48 @@ $(document).ready(function() {
                 cancelButtonText: 'No, usar sugerido'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Mantener el valor ingresado
                     $(this).data('original', value);
+                    // Guardar con AJAX
+                    $.ajax({
+                        url: 'ajax_repdet.php',
+                        type: 'POST',
+                        data: {
+                            idcab: idcab,
+                            towhs: towhs,
+                            itemcode: itemcode,
+                            quantity: value
+                        },
+                        success: function(resp) {
+                            console.log("Guardado:", resp);
+                        },
+                        error: function(xhr) {
+                            console.error("Error al guardar:", xhr.responseText);
+                        }
+                    });
                 } else {
-                    // Volver al valor sugerido
                     this.value = sugerido;
                     $(this).data('original', sugerido);
                 }
             });
         } else {
-            // Valor dentro de rango, actualizar valor original
             $(this).data('original', value);
+            // Guardar con AJAX
+            $.ajax({
+                url: 'ajax_repdet.php',
+                type: 'POST',
+                data: {
+                    idcab: idcab,
+                    towhs: towhs,
+                    itemcode: itemcode,
+                    quantity: value
+                },
+                success: function(resp) {
+                    console.log("Guardado:", resp);
+                },
+                error: function(xhr) {
+                    console.error("Error al guardar:", xhr.responseText);
+                }
+            });
         }
     });
 

@@ -567,6 +567,13 @@ $(document).ready(function() {
     $('#data-table').on('click', '.btn-modal-codprod', function() {
         var codprod = $(this).data('codprod');
         var whscode = "<?= $almacen->cod_almacen ?>";
+        // Obtener el valor solicitado de la fila actual
+        var solicitado = $(this).closest('tr').find('input[name^="solicitar"]').val();
+        // Obtener total_Bodega y total_Transitoria_Bodega de la fila actual
+        var totalBodega = $(this).closest('tr').find('td').eq(6).text().replace(/,/g, '');
+        var totalTransitoriaBodega = $(this).closest('tr').find('td').eq(7).text().replace(/,/g, '');
+        var totalStock = (parseFloat(solicitado) || 0) + (parseFloat(totalBodega) || 0) + (parseFloat(totalTransitoriaBodega) || 0);
+
         $.ajax({
             url: 'ajax_modal_itemcode.php',
             type: 'POST',
@@ -623,6 +630,10 @@ $(document).ready(function() {
                             <tr>
                                 <td><b>MaxStock</b></td><td>${d.MaxStock}</td>
                                 <td><b>U_LEAD</b></td><td>${d.U_LEAD}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Solicitado</b></td><td>${solicitado}</td>
+                                <td><b>TOTALSTOCK</b></td><td>${totalStock}</td>
                             </tr>
                         </table>
                         </div>

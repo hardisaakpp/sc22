@@ -2,7 +2,7 @@
 include_once "header.php";
 
 // Control de acceso
-if ($userAdmin != 1 && $userAdmin != 3 && $userAdmin != 6) {
+if ($userAdmin != 1 && $userAdmin != 5) {
     echo ('<h4> NO TIENE ACCESO</h4>');
 } else {
     // Fechas por defecto

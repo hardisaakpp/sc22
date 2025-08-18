@@ -423,7 +423,7 @@
                         }
 
             //Bodegas 2.0                
-                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
+                        if ($userAdmin==1 ) {   
                         
                         
                         echo '                       
@@ -443,7 +443,7 @@
                         }
 
             //MIGRACION       
-                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
+                        if ($userAdmin==1 ) {   
                         
                         
                         echo '                       
@@ -481,7 +481,7 @@
                         ';
                         }
         //CEDI 2.0                
-                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
+                        if ($userAdmin==1 ) {   
                         
                         
                         echo '                       

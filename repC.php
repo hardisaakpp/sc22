@@ -393,7 +393,7 @@ $(document).ready(function() {
     });
 
     // ---------------------------
-    // Validar al salir del input
+    // Validar al salir del input solicitado
     // ---------------------------
     $('#data-table tbody').on('blur', 'input[type="number"][name^="solicitar"]', function() {
         const sugerido = parseFloat($(this).data('sugerido'));
@@ -535,6 +535,31 @@ $(document).ready(function() {
             }
             $diasInvTd.text(diasInv.toFixed(2));
         }
+    });
+
+    // Guardar comentario al salir del input observaciones
+    $('#data-table tbody').on('blur', 'input[type="text"][name^="comment"]', function() {
+        const value = $(this).val();
+        const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
+        const towhs = "<?= $almTr->cod_almacen ?>";
+        const idcab = "<?= $idRepCab ?>";
+        // Guardar con AJAX igual que solicitado
+        $.ajax({
+            url: 'ajax_repdet.php',
+            type: 'POST',
+            data: {
+                idcab: idcab,
+                towhs: towhs,
+                itemcode: itemcode,
+                comment: value
+            },
+            success: function(resp) {
+                console.log("Comentario guardado:", resp);
+            },
+            error: function(xhr) {
+                console.error("Error al guardar comentario:", xhr.responseText);
+            }
+        });
     });
 
     // ---------------------------
@@ -687,7 +712,5 @@ $(document).ready(function() {
   </div>
 </div>
 
-<!-- Bootstrap JS (para el modal) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php include_once "footer.php"; ?>

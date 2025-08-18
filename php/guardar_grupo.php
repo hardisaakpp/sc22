@@ -4,7 +4,7 @@ include_once "bd_StoreControl.php";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ids = $_POST['ids'] ?? '';
     $nombreGrupo = $_POST['nombre_grupo'] ?? '';
-    $idUsuario = $_SESSION['id_usuario'] ?? 0;
+    $idUsuario = $_POST['idU'] ?? 0;
 
     if (empty($ids) || empty($nombreGrupo)) {
         echo "<script>alert('Faltan datos para guardar el grupo.'); window.history.back();</script>";

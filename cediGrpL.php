@@ -22,7 +22,7 @@ if ($estado==5) {
 		from ced_grouprecol 
 		group by fk_idgroup) r on g.id=r.id
 where CONVERT(DATE, g.fecha_creacion) BETWEEN :desde AND :hasta and ( r.diff<>0 )
-
+and g.estado<>2
         " );
       $s1->execute([':desde' => $desde, ':hasta' => $hasta]);
         $users = $s1->fetchAll(PDO::FETCH_OBJ);   
@@ -42,7 +42,7 @@ where CONVERT(DATE, g.fecha_creacion) BETWEEN :desde AND :hasta and ( r.diff<>0 
 		from ced_grouprecol 
 		group by fk_idgroup) r on g.id=r.id
 where CONVERT(DATE, g.fecha_creacion) BETWEEN :desde AND :hasta
-        and ( r.diff=0 )
+        and ( r.diff=0 ) and g.estado<>2
         " );
        $s2->execute([':desde' => $desde, ':hasta' => $hasta]);
         $users2 = $s2->fetchAll(PDO::FETCH_OBJ);   
@@ -62,7 +62,7 @@ where CONVERT(DATE, g.fecha_creacion) BETWEEN :desde AND :hasta
 		from ced_grouprecol 
 		group by fk_idgroup) r on g.id=r.id
 where CONVERT(DATE, g.fecha_creacion) BETWEEN :desde AND :hasta
-      and  ( r.diff<>0 )
+      and  ( r.diff<>0 ) and g.estado<>2
         
         " );
       $s1->execute([':desde' => $desde, ':hasta' => $hasta]);
@@ -83,7 +83,7 @@ where CONVERT(DATE, g.fecha_creacion) BETWEEN :desde AND :hasta
 		from ced_grouprecol 
 		group by fk_idgroup) r on g.id=r.id
 where CONVERT(DATE, g.fecha_creacion) BETWEEN :desde AND :hasta
-        and  ( r.diff=0 ) 
+        and  ( r.diff=0 ) and g.estado<>2
         
         " );
        $s2->execute([':desde' => $desde, ':hasta' => $hasta]);

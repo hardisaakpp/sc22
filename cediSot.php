@@ -1,4 +1,3 @@
-
 <?php
 include_once "header.php";
 
@@ -95,9 +94,9 @@ function cargarListado() {
     $.get('php/listado_solicitudes.php', { desde, hasta }, function(data) {
         $('#contenedor-listado').html(data);
 
-        // Inicializar DataTable con filtros por columna
+        // Inicializar DataTable with column filters
         const tabla = $('#tabla-solicitudes').DataTable({
-            destroy: true, // importante para reinicializar
+            destroy: true, // important for reinitialization
             initComplete: function () {
                 this.api().columns().every(function () {
                     var column = this;
@@ -117,7 +116,7 @@ function cargarListado() {
             }
         });
 
-        // Restaurar checks
+        // Restore checks
         seleccionados.forEach(id => {
             $(`.seleccionar[data-id="${id}"]`).prop('checked', true);
         });
@@ -186,6 +185,8 @@ $(document).on('click', '#guardar-grupo', function () {
     if (nombreGrupo.trim() === '') {
         alert('Ingrese un nombre para el grupo');
     } else {
+        // Agregar el parámetro idU de sesión al formulario antes de enviar
+        $('#form-grupo').append(`<input type="hidden" name="idU" value="<?= $_SESSION['idU'] ?>">`);
         $('#form-grupo').append(`<input type="hidden" name="nombre_grupo" value="${nombreGrupo}">`);
         $('#form-grupo').submit();
     }
@@ -197,7 +198,10 @@ $('#form-fechas').on('submit', function(e) {
 });
 
 $(document).ready(function() {
-    cargarListado(); // Carga inicial
+    // Ejecutar el SP antes de cargar el listado
+    $.get('php/ejecutar_sp.php?sp=sp_sot_merge', function() {
+        cargarListado(); // Carga inicial después de ejecutar el SP
+    });
 });
 </script>
 

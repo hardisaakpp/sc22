@@ -163,9 +163,7 @@
                         ';
                     }
 //recepcion transferencias tiendas
-             /*        if ($userAdmin==2) {   
-                        
-                        
+                    if ($userAdmin==2 && $userName == 'RL-PSC' && $userName == 'OUT-LLG') {   
                         echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega</a>
@@ -181,7 +179,7 @@
                             </li>
                         ';
                         }
-*/
+
 
 //reposicion tienda
                      if ($userAdmin==2 && $userName == 'OUT-LLG') {   

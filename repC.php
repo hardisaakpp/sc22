@@ -93,7 +93,7 @@ $sql = "SELECT TOP 1000
     CodeBars,
     ItemCode,
     ItemName,
-    1 AS embalaje,
+    embalaje,
     OnHand,
     total_Transitoria_Tienda,
     total_Bodega,

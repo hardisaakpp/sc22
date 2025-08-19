@@ -39,74 +39,46 @@ if ($almTr && $idUser) {
     }
 }
 
-// Obtener filtros
-$codbar = $_GET['codbar'] ?? '';
-$referencia = $_GET['referencia'] ?? '';
-$nombre = $_GET['nombre'] ?? '';
-$arbol_nivel1_f = $_GET['arbol_nivel1'] ?? '';
-$arbol_nivel2_f = $_GET['arbol_nivel2'] ?? '';
-$arbol_nivel3_f = $_GET['arbol_nivel3'] ?? '';
-$marca_f = $_GET['marca'] ?? '';
-$clasificacion_f = $_GET['clasificacionabc'] ?? '';
 
-// Construir consulta dinámica
-$where = [];
-$params = [];
+$sql = "DECLARE @WHS nvarchar(10);
+SET @WHS = '".$almacen->cod_almacen."';
 
-$where[] = "[WhsCode]=?";
-$params[] = $almacen->cod_almacen;
+DECLARE @TOWHS nvarchar(10);
+SET @TOWHS = '".$almacen->cod_almacen."';
 
-if ($codbar !== '') {
-    $where[] = "[CodeBars] LIKE ?";
-    $params[] = "%$codbar%";
-}
-if ($referencia !== '') {
-    $where[] = "[ItemCode] LIKE ?";
-    $params[] = "%$referencia%";
-}
-if ($nombre !== '') {
-    $where[] = "[ItemName] LIKE ?";
-    $params[] = "%$nombre%";
-}
-if ($arbol_nivel1_f !== '') {
-    $where[] = "[arbol_nivel1] = ?";
-    $params[] = $arbol_nivel1_f;
-}
-if ($arbol_nivel2_f !== '') {
-    $where[] = "[arbol_nivel2] = ?";
-    $params[] = $arbol_nivel2_f;
-}
-if ($arbol_nivel3_f !== '') {
-    $where[] = "[arbol_nivel3] = ?";
-    $params[] = $arbol_nivel3_f;
-}
-if ($marca_f !== '') {
-    $where[] = "[marca] = ?";
-    $params[] = $marca_f;
-}
-if ($clasificacion_f !== '') {
-    $where[] = "[ClasificacionABC] = ?";
-    $params[] = $clasificacion_f;
-}
+DECLARE @IDCAB int;
+SET @IDCAB = (
+    SELECT TOP 1 id
+    FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].rep_cab
+    WHERE CAST(fecCreacion AS DATE) = CAST(GETDATE() AS DATE)
+      AND [ToWhs] = @TOWHS
+    ORDER BY fecCreacion DESC
+);
 
-$sql = "SELECT TOP 1000 
-    CodeBars,
-    ItemCode,
-    ItemName,
-    1 AS embalaje,
-    OnHand,
-    total_Transitoria_Tienda,
-    total_Bodega,
-    VentaUltima,
-    sugerido_final AS Sugerido,
-    arbol_nivel1,
-    arbol_nivel2,
-    arbol_nivel3,
-    marca,
-    ClasificacionABC
-    FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
-    WHERE " . implode(' AND ', $where) . " 
-    ORDER BY Sugerido DESC";
+SELECT 
+    d.ItemCode,
+    d.Quantity,
+    d.comment,
+    c.CodeBars,
+    c.ItemName,
+    c.embalaje,
+    c.OnHand,
+    c.total_Transitoria_Tienda,
+    c.total_Bodega,
+    c.VentaUltima,
+    c.sugerido_final AS Sugerido,
+    c.arbol_nivel1,
+    c.arbol_nivel2,
+    c.arbol_nivel3,
+    c.marca,
+    c.ClasificacionABC
+FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].[rep_det] d
+INNER JOIN [MODULOS_SC].[reposicion].[ProcesadosCache] c 
+    ON d.ItemCode = c.ItemCode
+WHERE d.fk_id_cab = @IDCAB
+  AND d.Quantity > 0
+  AND c.WhsCode = @WHS;
+";
 
 $stmt = $dbdev->prepare($sql);
 $stmt->execute($params);

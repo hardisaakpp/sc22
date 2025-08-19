@@ -488,7 +488,15 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     const btn = document.getElementById("btnTransferencia");
     if (btn) {
-        btn.addEventListener("click", crearTransferencia);
+        btn.addEventListener("click", async function () {
+            // Ejecutar btnGuardar antes de crear transferencia
+            await new Promise((resolve) => {
+                document.getElementById("btnGuardar").click();
+                // Esperar a que termine el guardado (simple delay de 1s, ajusta si tienes callback)
+                setTimeout(resolve, 1000);
+            });
+            crearTransferencia();
+        });
     }
 });
 

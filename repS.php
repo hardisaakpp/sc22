@@ -39,62 +39,35 @@ if ($almTr && $idUser) {
     }
 }
 
+// Obtener datos de pedido
+$sol = $db->prepare("SELECT TOP (1) * FROM [STORECONTROL].[dbo].[rep_cab]
+  where id = ?");
+$sol->execute([$idRepCab]);
+$solcab = $sol->fetch(PDO::FETCH_OBJ);
 
+// Consulta de carrito
 $sql = "DECLARE @WHS nvarchar(10);
-SET @WHS = '".$almacen->cod_almacen."';
+        SET @WHS = '".$almacen->cod_almacen."';
+        DECLARE @TOWHS nvarchar(10);
+        SET @TOWHS = '".$almTr->cod_almacen."';
 
-DECLARE @TOWHS nvarchar(10);
-SET @TOWHS = '".$almacen->cod_almacen."';
+        DECLARE @IDCAB int;
+        SET @IDCAB = (
+            SELECT TOP 1 id
+            FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].rep_cab
+            WHERE CAST(fecCreacion AS DATE) = CAST(GETDATE() AS DATE)
+            AND [ToWhs] = @TOWHS
+            ORDER BY fecCreacion DESC  -- opcional, por si hay varios en el mismo día
+        );
 
-DECLARE @IDCAB int;
-SET @IDCAB = (
-    SELECT TOP 1 id
-    FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].rep_cab
-    WHERE CAST(fecCreacion AS DATE) = CAST(GETDATE() AS DATE)
-      AND [ToWhs] = @TOWHS
-    ORDER BY fecCreacion DESC
-);
-
-SELECT 
-    d.ItemCode,
-    d.Quantity,
-    d.comment,
-    c.CodeBars,
-    c.ItemName,
-    c.embalaje,
-    c.OnHand,
-    c.total_Transitoria_Tienda,
-    c.total_Bodega,
-    c.VentaUltima,
-    c.sugerido_final AS Sugerido,
-    c.arbol_nivel1,
-    c.arbol_nivel2,
-    c.arbol_nivel3,
-    c.marca,
-    c.ClasificacionABC
-FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].[rep_det] d
-INNER JOIN [MODULOS_SC].[reposicion].[ProcesadosCache] c 
-    ON d.ItemCode = c.ItemCode
-WHERE d.fk_id_cab = @IDCAB
-  AND d.Quantity > 0
-  AND c.WhsCode = @WHS;
-";
+        SELECT *
+        FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].[rep_det] d
+            join [MODULOS_SC].[reposicion].[ProcesadosCache] c on d.ItemCode=c.ItemCode
+        where	d.[fk_id_cab]= @IDCAB AND d.Quantity>0 AND c.WhsCode=@WHS;";
 
 $stmt = $dbdev->prepare($sql);
-$stmt->execute($params);
+$stmt->execute();
 $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-// Consulta solicitados
-$solicitados = [];
-$comentarios = [];
-if ($idRepCab) {
-    $stmtSol = $db->prepare("SELECT TOP 1000 [ItemCode], [Quantity], [comment] FROM [STORECONTROL].[dbo].[rep_det] WHERE [fk_id_cab]=?");
-    $stmtSol->execute([$idRepCab]);
-    foreach ($stmtSol->fetchAll(PDO::FETCH_ASSOC) as $row) {
-        $solicitados[$row['ItemCode']] = $row['Quantity'];
-        $comentarios[$row['ItemCode']] = $row['comment'];
-    }
-}
 
 ?>
 
@@ -102,18 +75,27 @@ if ($idRepCab) {
 
 
 <div class="content">
-    <div class="col-md-10 offset-md-1">
+    <div class="col-md-6 offset-md-1">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Informacion</strong>
+                <strong class="card-title">Solicitud de transferencia</strong>           
             </div>  
             <div class="card-body">
                 <form method="GET" action="" id="form-filtros">
-                    <div class="form-row">
-                    <?php echo 'Solicitado de '.$almTr->cod_almacen ?> 
-                    
-
-                    </div>
+                    <table style="width:50%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding:4px; font-weight:bold;">Origen:</td>
+                            <td style="padding:4px;"><?php echo $solcab->FromWhs; ?></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:4px; font-weight:bold;">Destino:</td>
+                            <td style="padding:4px;"><?php echo $solcab->ToWhs; ?></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:4px; font-weight:bold;">Fecha:</td>
+                            <td style="padding:4px;"><?php echo date("d-m-Y", strtotime($solcab->fecCreacion)); ?></td>
+                        </tr>
+                    </table>
                 </form>
             </div>
         </div>
@@ -123,7 +105,7 @@ if ($idRepCab) {
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Top Articulos</strong>
+                <strong class="card-title">Detalle</strong>
             </div>
             <div class="card-body">
                 <table id="data-table" class="table table-striped table-bordered">
@@ -141,72 +123,48 @@ if ($idRepCab) {
                             <th>Solicitado</th>
                             <th>Dias de Inv.</th>
                             <th>Observaciones</th>
-                            <th>Acción</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($resumen as $r): ?>
-                            <?php
-                                $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
-                                $comentario = isset($comentarios[$r->ItemCode]) ? $comentarios[$r->ItemCode] : '';
-                                $transito = floatval($r->total_Transitoria_Tienda);
-                                $onhand = floatval($r->OnHand);
-                                $ventas = floatval($r->VentaUltima);
-                                $solicitado = floatval($valorSolicitado);
-                                // Días de inventario al cargar
-                                if ($ventas > 0) {
-                                    if ($solicitado == 0) {
-                                        $diasInv = round((($solicitado + $transito + $onhand) / $ventas) * 30);
-                                    } else {
-                                        $diasInv = round((($transito + $onhand + $solicitado) / $ventas) * 30);
-                                    }
-                                } else {
-                                    $diasInv = 0;
-                                }
-
-                            ?>
-                            <tr>
-                                <td><?= $r->CodeBars ?></td>
-                                <td><?= $r->ItemCode ?></td>
-                                <td><?= $r->ItemName ?></td>
-                                <td><?= number_format($r->embalaje,0) ?></td>
-                                <td><?= number_format($r->OnHand,0) ?></td>
-                                <td><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
-                                <td><?= number_format($r->total_Bodega,0) ?></td>
-                                <td><?= number_format($r->VentaUltima,0) ?></td>
-                                <td><?= number_format($r->Sugerido,0) ?></td>
-                                <td>
-                                    <input type="number" 
-                                           name="solicitar[<?= $r->ItemCode ?>]" 
-                                           value="<?= $valorSolicitado ?>" 
-                                           min="0" 
-                                           max="<?= $r->Sugerido ?>" 
-                                           data-sugerido="<?= $r->Sugerido ?>" 
-                                           data-original="<?= $valorSolicitado ?>"
-                                           data-transito="<?= $transito ?>"
-                                           data-onhand="<?= $onhand ?>"
-                                           data-ventas="<?= $ventas ?>"
-                                           class="form-control form-control-sm">
-                                </td>
-                                <!-- dias de inventario -->
-                                <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
-                                <!-- observaciones -->
-                                 
-                                <td>
-                                    <input type="text"
-                                           name="comment[<?= $r->ItemCode ?>]"
-                                           value="<?= htmlspecialchars($comentario) ?>"
-                                           maxlength="50"
-                                           class="form-control form-control-sm comment-input">
-                                </td>
-                                <!-- accion -->
-                                <td>0</td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <?php if (empty($resumen)): ?>
-                            <tr><td colspan="13" class="text-center">No hay datos</td></tr>
-                        <?php endif; ?>
-                    </tbody>
+        <?php
+            $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
+            $comentario = isset($comentarios[$r->ItemCode]) ? $comentarios[$r->ItemCode] : '';
+            $transito = floatval($r->total_Transitoria_Tienda);
+            $onhand = floatval($r->OnHand);
+            $ventas = floatval($r->VentaUltima);
+            $solicitado = floatval($valorSolicitado);
+            if ($ventas > 0) {
+                if ($solicitado == 0) {
+                    $diasInv = round((($solicitado + $transito + $onhand) / $ventas) * 30);
+                } else {
+                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) * 30);
+                }
+            } else {
+                $diasInv = 0;
+            }
+        ?>
+        <tr>
+            <td><?= $r->CodeBars ?></td>
+            <td><?= $r->ItemCode ?></td>
+            <td><?= $r->ItemName ?></td>
+            <td><?= number_format($r->embalaje,0) ?></td>
+            <td><?= number_format($r->OnHand,0) ?></td>
+            <td><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
+            <td><?= number_format($r->total_Bodega,0) ?></td>
+            <td><?= number_format($r->VentaUltima,0) ?></td>
+            <td><?= number_format($r->sugerido_final,0) ?></td>
+            <td><?= number_format($r->Quantity,0) ?></td>
+            <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
+            <td><?= $r->comment ?></td>
+         
+        </tr>
+    <?php endforeach; ?>
+    <?php if (empty($resumen)): ?>
+        <tr><td colspan="13" class="text-center">No hay datos</td></tr>
+    <?php endif; ?>
+</tbody>
                 </table>
             </div>
         </div>
@@ -222,55 +180,9 @@ if ($idRepCab) {
 <script>
 $(document).ready(function() {
 
+  
     // ---------------------------
-    // Añadir fila de filtros al thead
-    // ---------------------------
-    $('#data-table thead tr').clone(true).appendTo('#data-table thead');
-    $('#data-table thead tr:eq(1) th').each(function(i) {
-        var title = $(this).text();
-        // Quitar filtro en columnas: Solicitado (9), Dias de Inv. (10), Observaciones (11), Accion (12)
-        if (i === 9 || i === 10 || i === 11 || i === 12) {
-            $(this).html('');
-        } else {
-            $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Buscar '+title+'" />');
-        }
-    });
-
-    // ---------------------------
-    // Inicializar DataTable
-    // ---------------------------
-    var table = $('#data-table').DataTable({
-        pageLength: 25,
-        lengthMenu: [25,50,100],
-        order: [], // quitar orden inicial
-        columnDefs: [
-            {
-                targets: 12, // columna Solicitar
-                orderable: false // quitar orden
-            }
-        ]
-    });
-
-    // ---------------------------
-    // Aplicar filtros por columna
-    // ---------------------------
-    table.columns().every(function(i) {
-        $('input', this.header()).on('keyup change', function() {
-            if (table.column(i).search() !== this.value) {
-                table.column(i).search(this.value).draw();
-            }
-        });
-    });
-
-    // ---------------------------
-    // Guardar valor original al enfocar
-    // ---------------------------
-    $('#data-table tbody').on('focus', 'input[type="number"][name^="solicitar"]', function() {
-        $(this).data('original', this.value);
-    });
-
-    // ---------------------------
-    // Validar al salir del input
+    // Validar al salir del input solicitado
     // ---------------------------
     $('#data-table tbody').on('blur', 'input[type="number"][name^="solicitar"]', function() {
         const sugerido = parseFloat($(this).data('sugerido'));
@@ -414,6 +326,31 @@ $(document).ready(function() {
         }
     });
 
+    // Guardar comentario al salir del input observaciones
+    $('#data-table tbody').on('blur', 'input[type="text"][name^="comment"]', function() {
+        const value = $(this).val();
+        const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
+        const towhs = "<?= $almTr->cod_almacen ?>";
+        const idcab = "<?= $idRepCab ?>";
+        // Guardar con AJAX igual que solicitado
+        $.ajax({
+            url: 'ajax_repdet.php',
+            type: 'POST',
+            data: {
+                idcab: idcab,
+                towhs: towhs,
+                itemcode: itemcode,
+                comment: value
+            },
+            success: function(resp) {
+                console.log("Comentario guardado:", resp);
+            },
+            error: function(xhr) {
+                console.error("Error al guardar comentario:", xhr.responseText);
+            }
+        });
+    });
+
     // ---------------------------
     // Botón Limpiar filtros
     // ---------------------------
@@ -440,9 +377,127 @@ $(document).ready(function() {
         $diasInvTd.text(diasInv.toFixed(2));
     });
 
+    // Acción botón modal cod-producto (consulta AJAX y muestra datos con SweetAlert2)
+    $(document).on('click', '.btn-modal-codprod', function() {
+        var codprod = $(this).data('codprod');
+        var whscode = "<?= $almacen->cod_almacen ?>";
+        var solicitado = $(this).closest('tr').find('td').eq(9).text();
+        var totalBodega = $(this).closest('tr').find('td').eq(6).text().replace(/,/g, '');
+        var totalTransitoriaBodega = $(this).closest('tr').find('td').eq(7).text().replace(/,/g, '');
+        var totalStock = (parseFloat(solicitado) || 0) + (parseFloat(totalBodega) || 0) + (parseFloat(totalTransitoriaBodega) || 0);
+
+        $.ajax({
+            url: 'ajax_modal_itemcode.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                itemcode: codprod,
+                whscode: whscode
+            },
+            success: function(resp) {
+                if (resp && resp.success && resp.data) {
+                    var d = resp.data;
+                    var html = `
+                        <div style="font-size:12px;">
+                        <table class="table table-bordered table-sm" style="margin-bottom:0;">
+                            <tr>
+                                <td><b>CodeBars</b></td><td>${d.CodeBars}</td>
+                                <td><b>ItemCode</b></td><td>${d.ItemCode}</td>
+                            </tr>
+                            <tr>
+                                <td><b>ItemName</b></td><td colspan="3">${d.ItemName}</td>
+                            </tr>
+                            <tr>
+                                <td><b>ClasificacionABC</b></td><td>${d.ClasificacionABC}</td>
+                                <td><b>Unidad</b></td><td>${d.unidad}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Categoria</b></td><td>${d.categoria}</td>
+                                <td><b>Linea</b></td><td>${d.linea}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Marca</b></td><td>${d.marca}</td>
+                                <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Días Ult. Fecha Ingreso</b></td><td>${d.dias_ultima_fecha_ingreso}</td>
+                                <td><b>Venta Ultima</b></td><td>${d.VentaUltima}</td>
+                            </tr>
+                            <tr>
+                                <td><b>PromVenta30dias</b></td><td>${d.PromVenta30dias}</td>
+                                <td><b>Venta 90 días</b></td><td>${d.venta_90dias}</td>
+                            </tr>
+                            <tr>
+                                <td><b>PromVenta90dias</b></td><td>${d.PromVenta90dias}</td>
+                                <td><b>OnHand</b></td><td>${d.OnHand}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Días Inv Actual</b></td><td>${d.diasInvActual}</td>
+                                <td><b>Total Bodega</b></td><td>${d.total_Bodega}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Transitoria Bodega</b></td><td>${d.total_Transitoria_Bodega}</td>
+                                <td><b>MinStock</b></td><td>${d.MinStock}</td>
+                            </tr>
+                            <tr>
+                                <td><b>MaxStock</b></td><td>${d.MaxStock}</td>
+                                <td><b>U_LEAD</b></td><td>${d.U_LEAD}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Solicitado</b></td><td>${solicitado}</td>
+                                <td><b>TOTALSTOCK</b></td><td>${totalStock}</td>
+                            </tr>
+                        </table>
+                        </div>
+                    `;
+                    Swal.fire({
+                        title: 'Detalle Producto',
+                        html: html,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Detalle Producto',
+                        text: 'No se encontraron datos.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudo consultar el producto.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+
 });
 </script>
 
+<!-- Modal -->
+<div class="modal fade" id="modalCodProd" tabindex="-1" role="dialog" aria-labelledby="modalCodProdLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCodProdLabel">Código Producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalCodProdBody">
+        <!-- Aquí se muestra el código producto -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <?php include_once "footer.php"; ?>

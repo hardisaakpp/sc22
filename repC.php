@@ -149,7 +149,6 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 
 
 
-
 <div class="content">
     <div class="col-md-10 offset-md-1">
         <div class="card">
@@ -178,7 +177,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                         </div>
                
                         <!-- Filtro arbol_nivel1 -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-2 d-none d-md-block">
                             <label for="arbol_nivel1">Nivel 1</label>
                             <select name="arbol_nivel1" id="arbol_nivel1" class="form-control">
                                 <option value="">Todos</option>
@@ -189,7 +188,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                         </div>
 
                         <!-- Filtro arbol_nivel2 -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-2 d-none d-md-block">
                             <label for="arbol_nivel2">Nivel 2</label>
                             <select name="arbol_nivel2" id="arbol_nivel2" class="form-control">
                                 <option value="">Todos</option>
@@ -200,7 +199,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                         </div>
 
                         <!-- Filtro arbol_nivel3 -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-2 d-none d-md-block">
                             <label for="arbol_nivel3">Nivel 3</label>
                             <select name="arbol_nivel3" id="arbol_nivel3" class="form-control">
                                 <option value="">Todos</option>
@@ -211,7 +210,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                         </div>
 
                         <!-- Filtro marca -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-2 d-none d-md-block">
                             <label for="marca">Marca</label>
                             <select name="marca" id="marca" class="form-control">
                                 <option value="">Todos</option>
@@ -222,7 +221,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                         </div>
 
                         <!-- Filtro ClasificacionABC -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-2 d-none d-md-block">
                             <label for="clasificacionabc">Clasificación ABC</label>
                             <select name="clasificacionabc" id="clasificacionabc" class="form-control">
                                 <option value="">Todos</option>
@@ -256,19 +255,19 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Codido Barra</th>
+                            <th class="d-none d-md-table-cell">Codido Barra</th>
                             <th>Cod Producto</th>
                             <th>Descripcion</th>
-                            <th>Embalaje</th>
-                            <th>Stock</th>
-                            <th>Transito</th>
+                            <th class="d-none d-md-table-cell">Embalaje</th>
+                            <th class="d-none d-md-table-cell">Stock</th>
+                            <th class="d-none d-md-table-cell">Transito</th>
                             <th>Total Disponible</th>
                             <th>Stock Bodega</th>
-                            <th>Venta Ult 30 dias</th>
+                            <th class="d-none d-md-table-cell">Venta Ult 30 dias</th>
                             <th>Sugerido</th>
                             <th>Solicitado</th>
-                            <th>Dias de Inv.</th>
-                            <th>Observaciones</th>
+                            <th class="d-none d-md-table-cell">Dias de Inv.</th>
+                            <th class="d-none d-md-table-cell">Observaciones</th>
                             <th>Acción</th>
                         </tr>
                     </thead>
@@ -293,15 +292,15 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
             }
         ?>
         <tr>
-            <td><?= $r->CodeBars ?></td>
+            <td class="d-none d-md-table-cell"><?= $r->CodeBars ?></td>
             <td><?= $r->ItemCode ?></td>
             <td><?= $r->ItemName ?></td>
-            <td><?= number_format($r->embalaje,0) ?></td>
-            <td><?= number_format($r->OnHand,0) ?></td>
-            <td><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->embalaje,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->OnHand,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
             <td class="total-disponible"><?= number_format($totalDisponible,0) ?></td>
             <td><?= number_format($r->total_Bodega,0) ?></td>
-            <td><?= number_format($r->VentaUltima,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->VentaUltima,0) ?></td>
             <td><?= number_format($r->Sugerido,0) ?></td>
             <td>
                 <input type="number" 
@@ -316,8 +315,8 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                     data-ventas="<?= $ventas ?>"
                     class="form-control form-control-sm">
             </td>
-            <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
-            <td>
+            <td class="d-none d-md-table-cell dias-inv"><?= number_format($diasInv, 2) ?></td>
+            <td class="d-none d-md-table-cell">
                 <input type="text"
                     name="comment[<?= $r->ItemCode ?>]"
                     value="<?= htmlspecialchars($comentario) ?>"
@@ -338,6 +337,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
         </div>
     </div>
 </div>
+
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

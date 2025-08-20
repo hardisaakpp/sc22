@@ -182,7 +182,7 @@
 
 
 //reposicion tienda
-                     if ($userAdmin==2 && $userName == 'OUT-LLG') {   
+                     if ($userName == 'RL-PSC' ||  $userName == 'OUT-LLG') {   
                         
                         
                         echo '                       

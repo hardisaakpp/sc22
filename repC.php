@@ -421,7 +421,47 @@ $(document).ready(function() {
         // Actualizar TotalDisponible siempre que cambia solicitado
         $totalDisponibleTd.text(totalDisponible.toFixed(0));
 
-        if (isNaN(value) || value < 0) {
+        let solicitadostiendas = 0;
+
+console.log("Solicitados:", itemcode, towhs);
+        $.ajax({
+            url: "ajax_solicitados.php",
+            type: "POST",
+            data: { 
+                itemcode: itemcode,
+                towhs: towhs
+            },
+            dataType: "json",
+            success: function (res) {
+
+                solicitadostiendas = res.solicitados;
+                console.log("Solicitados:", solicitadostiendas);
+                //console.log("Solicitados:", res.solicitados);
+                       if (value > stockBodega- solicitadostiendas) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Stock insuficiente',
+                                text: 'No puede solicitar más que el Stock DISPONIBLE de Bodega (' + (stockBodega-solicitadostiendas) + ')',
+                                confirmButtonText: 'Aceptar'
+                            }).then(() => {
+                                this.value = original;
+                                solicitado = parseFloat(original) || 0;
+                                let diasInv = 0;
+                                if (ventas > 0) {
+                                    if (solicitado == 0) {
+                                        diasInv = ((solicitado + transito + onhand) / ventas) * 30;
+                                    } else {
+                                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+                                    }
+                                }
+                                totalDisponible = onhand + transito + solicitado;
+                                $diasInvTd.text(diasInv.toFixed(2));
+                                $totalDisponibleTd.text(totalDisponible.toFixed(0));
+                            });
+                            return;
+                        }
+
+if (isNaN(value) || value < 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Valor inválido',
@@ -548,6 +588,15 @@ $(document).ready(function() {
             $diasInvTd.text(diasInv.toFixed(2));
             $totalDisponibleTd.text(totalDisponible.toFixed(0));
         }
+
+
+            },
+            error: function (xhr, status, err) {
+                console.error("AJAX Error:", err);
+            }
+        });
+
+        
     });
 
     // Guardar comentario al salir del input observaciones

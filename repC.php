@@ -262,6 +262,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                             <th>Embalaje</th>
                             <th>Stock</th>
                             <th>Transito</th>
+                            <th>Total Disponible</th>
                             <th>Stock Bodega</th>
                             <th>Venta Ult 30 dias</th>
                             <th>Sugerido</th>
@@ -280,6 +281,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
             $onhand = floatval($r->OnHand);
             $ventas = floatval($r->VentaUltima);
             $solicitado = floatval($valorSolicitado);
+            $totalDisponible = $onhand + $transito + $solicitado;
             if ($ventas > 0) {
                 if ($solicitado == 0) {
                     $diasInv = round((($solicitado + $transito + $onhand) / $ventas) * 30);
@@ -297,6 +299,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
             <td><?= number_format($r->embalaje,0) ?></td>
             <td><?= number_format($r->OnHand,0) ?></td>
             <td><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
+            <td class="total-disponible"><?= number_format($totalDisponible,0) ?></td>
             <td><?= number_format($r->total_Bodega,0) ?></td>
             <td><?= number_format($r->VentaUltima,0) ?></td>
             <td><?= number_format($r->Sugerido,0) ?></td>
@@ -395,21 +398,28 @@ $(document).ready(function() {
     // ---------------------------
     // Validar al salir del input solicitado
     // ---------------------------
-    $('#data-table tbody').on('blur', 'input[type="number"][name^="solicitar"]', function() {
+    $('#data-table tbody').on('blur input', 'input[type="number"][name^="solicitar"]', function() {
         const sugerido = parseFloat($(this).data('sugerido'));
         let value = parseFloat(this.value);
         const original = $(this).data('original');
         const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
         const towhs = "<?= $almTr->cod_almacen ?>";
         const idcab = "<?= $idRepCab ?>";
-        const stockBodega = parseFloat($(this).closest('tr').find('td').eq(6).text().replace(/,/g, ''));
+        // Cambia el índice de stockBodega por el nuevo índice (ahora es columna 7)
+        const stockBodega = parseFloat($(this).closest('tr').find('td').eq(7).text().replace(/,/g, ''));
 
-        // Para cálculo de días de inventario
+        // Para cálculo de días de inventario y total disponible
         let transito = parseFloat($(this).data('transito')) || 0;
         let onhand = parseFloat($(this).data('onhand')) || 0;
         let ventas = parseFloat($(this).data('ventas')) || 0;
-        let $diasInvTd = $(this).closest('tr').find('td.dias-inv');
+        let $row = $(this).closest('tr');
+        let $diasInvTd = $row.find('td.dias-inv');
+        let $totalDisponibleTd = $row.find('td.total-disponible');
         let solicitado = value;
+        let totalDisponible = onhand + transito + solicitado;
+
+        // Actualizar TotalDisponible siempre que cambia solicitado
+        $totalDisponibleTd.text(totalDisponible.toFixed(0));
 
         if (isNaN(value) || value < 0) {
             Swal.fire({
@@ -420,7 +430,6 @@ $(document).ready(function() {
             }).then(() => {
                 this.value = original;
                 solicitado = parseFloat(original) || 0;
-                // Recalcular días de inventario
                 let diasInv = 0;
                 if (ventas > 0) {
                     if (solicitado == 0) {
@@ -429,7 +438,9 @@ $(document).ready(function() {
                         diasInv = ((transito + onhand + solicitado) / ventas) * 30;
                     }
                 }
+                totalDisponible = onhand + transito + solicitado;
                 $diasInvTd.text(diasInv.toFixed(2));
+                $totalDisponibleTd.text(totalDisponible.toFixed(0));
             });
             return;
         }
@@ -443,7 +454,6 @@ $(document).ready(function() {
             }).then(() => {
                 this.value = original;
                 solicitado = parseFloat(original) || 0;
-                // Recalcular días de inventario
                 let diasInv = 0;
                 if (ventas > 0) {
                     if (solicitado == 0) {
@@ -452,7 +462,9 @@ $(document).ready(function() {
                         diasInv = ((transito + onhand + solicitado) / ventas) * 30;
                     }
                 }
+                totalDisponible = onhand + transito + solicitado;
                 $diasInvTd.text(diasInv.toFixed(2));
+                $totalDisponibleTd.text(totalDisponible.toFixed(0));
             });
             return;
         }
@@ -468,7 +480,6 @@ $(document).ready(function() {
             }).then((result) => {
                 if (result.isConfirmed) {
                     $(this).data('original', value);
-                    // Guardar con AJAX
                     $.ajax({
                         url: 'ajax_repdet.php',
                         type: 'POST',
@@ -485,28 +496,29 @@ $(document).ready(function() {
                             console.error("Error al guardar:", xhr.responseText);
                         }
                     });
-                    // Recalcular días de inventario con el valor confirmado
                     solicitado = value;
                     let diasInv = 0;
                     if (ventas > 0) {
                         diasInv = ((transito + onhand + solicitado) / ventas) * 30;
                     }
+                    totalDisponible = onhand + transito + solicitado;
                     $diasInvTd.text(diasInv.toFixed(2));
+                    $totalDisponibleTd.text(totalDisponible.toFixed(0));
                 } else {
                     this.value = sugerido;
                     $(this).data('original', sugerido);
                     solicitado = sugerido;
-                    // Recalcular días de inventario con el valor sugerido
                     let diasInv = 0;
                     if (ventas > 0) {
                         diasInv = ((transito + onhand + solicitado) / ventas) * 30;
                     }
+                    totalDisponible = onhand + transito + solicitado;
                     $diasInvTd.text(diasInv.toFixed(2));
+                    $totalDisponibleTd.text(totalDisponible.toFixed(0));
                 }
             });
         } else {
             $(this).data('original', value);
-            // Guardar con AJAX
             $.ajax({
                 url: 'ajax_repdet.php',
                 type: 'POST',
@@ -523,7 +535,6 @@ $(document).ready(function() {
                     console.error("Error al guardar:", xhr.responseText);
                 }
             });
-            // Recalcular días de inventario con el valor aceptado
             solicitado = value;
             let diasInv = 0;
             if (ventas > 0) {
@@ -533,7 +544,9 @@ $(document).ready(function() {
                     diasInv = ((transito + onhand + solicitado) / ventas) * 30;
                 }
             }
+            totalDisponible = onhand + transito + solicitado;
             $diasInvTd.text(diasInv.toFixed(2));
+            $totalDisponibleTd.text(totalDisponible.toFixed(0));
         }
     });
 

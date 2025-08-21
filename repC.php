@@ -178,7 +178,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                
                         <!-- Filtro arbol_nivel1 -->
                         <div class="form-group col-md-2 d-none d-md-block">
-                            <label for="arbol_nivel1">Nivel 1</label>
+                            <label for="arbol_nivel1">Unidad</label>
                             <select name="arbol_nivel1" id="arbol_nivel1" class="form-control">
                                 <option value="">Todos</option>
                                 <?php foreach ($arbol_nivel1 as $n1): ?>
@@ -189,7 +189,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 
                         <!-- Filtro arbol_nivel2 -->
                         <div class="form-group col-md-2 d-none d-md-block">
-                            <label for="arbol_nivel2">Nivel 2</label>
+                            <label for="arbol_nivel2">Categoría</label>
                             <select name="arbol_nivel2" id="arbol_nivel2" class="form-control">
                                 <option value="">Todos</option>
                                 <?php foreach ($arbol_nivel2 as $n2): ?>
@@ -200,7 +200,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 
                         <!-- Filtro arbol_nivel3 -->
                         <div class="form-group col-md-2 d-none d-md-block">
-                            <label for="arbol_nivel3">Nivel 3</label>
+                            <label for="arbol_nivel3">Línea</label>
                             <select name="arbol_nivel3" id="arbol_nivel3" class="form-control">
                                 <option value="">Todos</option>
                                 <?php foreach ($arbol_nivel3 as $n3): ?>

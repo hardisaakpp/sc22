@@ -116,7 +116,25 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 $solicitados = [];
 $comentarios = [];
 if ($idRepCab) {
-    $stmtSol = $db->prepare("SELECT TOP 1000 [ItemCode], [Quantity], [comment] FROM [STORECONTROL].[dbo].[rep_det] WHERE [fk_id_cab]=?");
+    $stmtSol = $db->prepare("declare @idcab int;
+set @idcab=?;
+
+ select isnull(q1.ItemCode ,q2.ItemCode) as ItemCode, 
+		isnull(q1.Quantity,0) as Quantity,
+		isnull(q2.Quantity,0) as solicitados,
+		q1.comment
+ from 
+ (
+  SELECT d.[ItemCode], d.[Quantity], d.[comment] 
+  FROM [STORECONTROL].[dbo].[rep_det] d join [STORECONTROL].[dbo].rep_cab c on d.fk_id_cab=c.id
+  WHERE d.[fk_id_cab]=@idcab and CAST(c.fecCreacion AS date) = CAST(GETDATE() AS date) and d.Quantity>0
+ ) q1  full  join
+ ( 
+  SELECT d.[ItemCode], sum(d.[Quantity] ) as Quantity
+  FROM [STORECONTROL].[dbo].[rep_det] d join [STORECONTROL].[dbo].rep_cab c on d.fk_id_cab=c.id
+  WHERE d.[fk_id_cab]<>@idcab and CAST(c.fecCreacion AS date) = CAST(GETDATE() AS date)  and d.Quantity>0
+  group by d.[ItemCode]
+ )q2 on q1.[ItemCode]=q2.[ItemCode]");
     $stmtSol->execute([$idRepCab]);
     foreach ($stmtSol->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $solicitados[$row['ItemCode']] = $row['Quantity'];
@@ -131,19 +149,19 @@ $arbol_nivel3 = [];
 $marcas = [];
 $clasificaciones = [];
 
-$stmtN1 = $dbdev->query("SELECT DISTINCT [arbol_nivel1] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$stmtN1 = $dbdev->query("SELECT DISTINCT [arbol_nivel1] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
 $arbol_nivel1 = $stmtN1->fetchAll(PDO::FETCH_COLUMN);
 
-$stmtN2 = $dbdev->query("SELECT DISTINCT [arbol_nivel2] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$stmtN2 = $dbdev->query("SELECT DISTINCT [arbol_nivel2] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
 $arbol_nivel2 = $stmtN2->fetchAll(PDO::FETCH_COLUMN);
 
-$stmtN3 = $dbdev->query("SELECT DISTINCT [arbol_nivel3] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$stmtN3 = $dbdev->query("SELECT DISTINCT [arbol_nivel3] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
 $arbol_nivel3 = $stmtN3->fetchAll(PDO::FETCH_COLUMN);
 
-$stmtMarca = $dbdev->query("SELECT DISTINCT [marca] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$stmtMarca = $dbdev->query("SELECT DISTINCT [marca] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
 $marcas = $stmtMarca->fetchAll(PDO::FETCH_COLUMN);
 
-$stmtABC = $dbdev->query("SELECT DISTINCT [ClasificacionABC] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='OUT-LLG'");
+$stmtABC = $dbdev->query("SELECT DISTINCT [ClasificacionABC] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
 $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 ?>
 

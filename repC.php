@@ -166,7 +166,11 @@ set @idcab=?;
     $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
-
+<style>
+    .col-dispo-bodega {
+        display: none !important;
+    }
+</style>
 
 <div class="content">
     <div class="col-md-10 offset-md-1">
@@ -284,7 +288,7 @@ set @idcab=?;
                             <th class="d-none d-md-table-cell">Stock Tienda</th>
                             <th class="d-none d-md-table-cell">Tránsito</th>
                             <th>Total Disponible</th>
-                            <th>Stock Bodega</th>
+                            <th class="d-none d-md-table-cell col-dispo-bodega">Stock Bodega</th>
                             <th>Disponible Bodega</th>
                             <th class="d-none d-md-table-cell">Venta Ult. 30 días</th>
                             <th>Sugerido</th>
@@ -323,7 +327,7 @@ set @idcab=?;
             <td class="d-none d-md-table-cell"><?= number_format($r->OnHand,0) ?></td>
             <td class="d-none d-md-table-cell"><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
             <td class="total-disponible"><?= number_format($totalDisponible,0) ?></td>
-            <td><?= number_format($r->total_Bodega,0) ?></td>
+            <td class="col-dispo-bodega"><?= number_format($r->total_Bodega,0) ?></td>
             <td><?= number_format($r->total_Bodega-$solicitadosTiendas,0) ?></td>
             <td class="d-none d-md-table-cell"><?= number_format($r->VentaUltima,0) ?></td>
             <td><?= number_format($r->Sugerido,0) ?></td>

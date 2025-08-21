@@ -398,206 +398,148 @@ $(document).ready(function() {
     // ---------------------------
     // Validar al salir del input solicitado
     // ---------------------------
-    $('#data-table tbody').on('blur input', 'input[type="number"][name^="solicitar"]', function() {
-        const sugerido = parseFloat($(this).data('sugerido'));
-        let value = parseFloat(this.value);
-        const original = $(this).data('original');
-        const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
-        const towhs = "<?= $almTr->cod_almacen ?>";
-        const idcab = "<?= $idRepCab ?>";
-        // Cambia el índice de stockBodega por el nuevo índice (ahora es columna 7)
-        const stockBodega = parseFloat($(this).closest('tr').find('td').eq(7).text().replace(/,/g, ''));
+ $('#data-table tbody').on('blur input', 'input[type="number"][name^="solicitar"]', function () {
+    const sugerido = parseFloat($(this).data('sugerido'));
+    let value = parseFloat(this.value);
+    const original = $(this).data('original');
+    const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
+    const towhs = "<?= $almTr->cod_almacen ?>";
+    const idcab = "<?= $idRepCab ?>";
+    const stockBodega = parseFloat($(this).closest('tr').find('td').eq(7).text().replace(/,/g, ''));
 
-        // Para cálculo de días de inventario y total disponible
-        let transito = parseFloat($(this).data('transito')) || 0;
-        let onhand = parseFloat($(this).data('onhand')) || 0;
-        let ventas = parseFloat($(this).data('ventas')) || 0;
-        let $row = $(this).closest('tr');
-        let $diasInvTd = $row.find('td.dias-inv');
-        let $totalDisponibleTd = $row.find('td.total-disponible');
-        let solicitado = value;
-        let totalDisponible = onhand + transito + solicitado;
+    let transito = parseFloat($(this).data('transito')) || 0;
+    let onhand = parseFloat($(this).data('onhand')) || 0;
+    let ventas = parseFloat($(this).data('ventas')) || 0;
+    let $row = $(this).closest('tr');
+    let $diasInvTd = $row.find('td.dias-inv');
+    let $totalDisponibleTd = $row.find('td.total-disponible');
+    let solicitado = value;
+    let totalDisponible = onhand + transito + solicitado;
+    let $input = $(this); // ✅ referencia al input
 
-        // Actualizar TotalDisponible siempre que cambia solicitado
-        $totalDisponibleTd.text(totalDisponible.toFixed(0));
+    // Mostrar disponible provisional mientras llega AJAX
+    $totalDisponibleTd.text(totalDisponible.toFixed(0));
 
-        let solicitadostiendas = 0;
+    $.ajax({
+        url: "ajax_solicitados.php",
+        type: "POST",
+        data: {
+            itemcode: itemcode,
+            towhs: towhs
+        },
+        dataType: "json",
+        success: function (res) {
+            let solicitadostiendas = res.solicitados || 0;
+            console.log("Solicitados tiendas:", solicitadostiendas);
 
-console.log("Solicitados:", itemcode, towhs);
-        $.ajax({
-            url: "ajax_solicitados.php",
-            type: "POST",
-            data: { 
-                itemcode: itemcode,
-                towhs: towhs
-            },
-            dataType: "json",
-            success: function (res) {
-
-                solicitadostiendas = res.solicitados;
-                console.log("Solicitados:", solicitadostiendas);
-                //console.log("Solicitados:", res.solicitados);
-                       if (value > stockBodega- solicitadostiendas) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Stock insuficiente',
-                                text: 'No puede solicitar más que el Stock DISPONIBLE de Bodega (' + (stockBodega-solicitadostiendas) + ')',
-                                confirmButtonText: 'Aceptar'
-                            }).then(() => {
-                                this.value = original;
-                                solicitado = parseFloat(original) || 0;
-                                let diasInv = 0;
-                                if (ventas > 0) {
-                                    if (solicitado == 0) {
-                                        diasInv = ((solicitado + transito + onhand) / ventas) * 30;
-                                    } else {
-                                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                                    }
-                                }
-                                totalDisponible = onhand + transito + solicitado;
-                                $diasInvTd.text(diasInv.toFixed(2));
-                                $totalDisponibleTd.text(totalDisponible.toFixed(0));
-                            });
-                            return;
-                        }
-
-if (isNaN(value) || value < 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Valor inválido',
-                text: 'El valor no puede ser menor que 0',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                this.value = original;
-                solicitado = parseFloat(original) || 0;
-                let diasInv = 0;
-                if (ventas > 0) {
-                    if (solicitado == 0) {
-                        diasInv = ((solicitado + transito + onhand) / ventas) * 30;
-                    } else {
-                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                    }
-                }
-                totalDisponible = onhand + transito + solicitado;
-                $diasInvTd.text(diasInv.toFixed(2));
-                $totalDisponibleTd.text(totalDisponible.toFixed(0));
-            });
-            return;
-        }
-
-        if (value > stockBodega) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Stock insuficiente',
-                text: 'No puede solicitar más que el Stock Bodega (' + stockBodega + ')',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                this.value = original;
-                solicitado = parseFloat(original) || 0;
-                let diasInv = 0;
-                if (ventas > 0) {
-                    if (solicitado == 0) {
-                        diasInv = ((solicitado + transito + onhand) / ventas) * 30;
-                    } else {
-                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                    }
-                }
-                totalDisponible = onhand + transito + solicitado;
-                $diasInvTd.text(diasInv.toFixed(2));
-                $totalDisponibleTd.text(totalDisponible.toFixed(0));
-            });
-            return;
-        }
-
-        if (value > sugerido) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cantidad mayor a la sugerida',
-                html: `Se sugiere solicitar <b>${sugerido}</b>.<br>¿Desea solicitar <b>${value}</b>?`,
-                showCancelButton: true,
-                confirmButtonText: 'Sí, solicitar',
-                cancelButtonText: 'No, usar sugerido'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $(this).data('original', value);
-                    $.ajax({
-                        url: 'ajax_repdet.php',
-                        type: 'POST',
-                        data: {
-                            idcab: idcab,
-                            towhs: towhs,
-                            itemcode: itemcode,
-                            quantity: value
-                        },
-                        success: function(resp) {
-                            console.log("Guardado:", resp);
-                        },
-                        error: function(xhr) {
-                            console.error("Error al guardar:", xhr.responseText);
-                        }
-                    });
-                    solicitado = value;
-                    let diasInv = 0;
-                    if (ventas > 0) {
-                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                    }
-                    totalDisponible = onhand + transito + solicitado;
-                    $diasInvTd.text(diasInv.toFixed(2));
-                    $totalDisponibleTd.text(totalDisponible.toFixed(0));
-                } else {
-                    this.value = sugerido;
-                    $(this).data('original', sugerido);
-                    solicitado = sugerido;
-                    let diasInv = 0;
-                    if (ventas > 0) {
-                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                    }
-                    totalDisponible = onhand + transito + solicitado;
-                    $diasInvTd.text(diasInv.toFixed(2));
-                    $totalDisponibleTd.text(totalDisponible.toFixed(0));
-                }
-            });
-        } else {
-            $(this).data('original', value);
-            $.ajax({
-                url: 'ajax_repdet.php',
-                type: 'POST',
-                data: {
-                    idcab: idcab,
-                    towhs: towhs,
-                    itemcode: itemcode,
-                    quantity: value
-                },
-                success: function(resp) {
-                    console.log("Guardado:", resp);
-                },
-                error: function(xhr) {
-                    console.error("Error al guardar:", xhr.responseText);
-                }
-            });
-            solicitado = value;
-            let diasInv = 0;
-            if (ventas > 0) {
-                if (solicitado == 0) {
-                    diasInv = ((solicitado + transito + onhand) / ventas) * 30;
-                } else {
-                    diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                }
+            // ✅ Validaciones
+            if (value > stockBodega - solicitadostiendas) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Stock insuficiente',
+                    text: 'No puede solicitar más que el Stock DISPONIBLE de Bodega (' + (stockBodega - solicitadostiendas) + ')',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    $input.val(original);
+                    solicitado = parseFloat(original) || 0;
+                    recalcularTotales();
+                });
+                return;
             }
-            totalDisponible = onhand + transito + solicitado;
-            $diasInvTd.text(diasInv.toFixed(2));
-            $totalDisponibleTd.text(totalDisponible.toFixed(0));
+
+            if (isNaN(value) || value < 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Valor inválido',
+                    text: 'El valor no puede ser menor que 0',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    $input.val(original);
+                    solicitado = parseFloat(original) || 0;
+                    recalcularTotales();
+                });
+                return;
+            }
+
+            if (value > stockBodega) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Stock insuficiente',
+                    text: 'No puede solicitar más que el Stock Bodega (' + stockBodega + ')',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    $input.val(original);
+                    solicitado = parseFloat(original) || 0;
+                    recalcularTotales();
+                });
+                return;
+            }
+
+            if (value > sugerido) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cantidad mayor a la sugerida',
+                    html: `Se sugiere solicitar <b>${sugerido}</b>.<br>¿Desea solicitar <b>${value}</b>?`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, solicitar',
+                    cancelButtonText: 'No, usar sugerido'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $input.data('original', value);
+                        guardarSolicitud(value);
+                        solicitado = value;
+                    } else {
+                        $input.val(sugerido);
+                        $input.data('original', sugerido);
+                        guardarSolicitud(sugerido);
+                        solicitado = sugerido;
+                    }
+                    recalcularTotales();
+                });
+            } else {
+                $input.data('original', value);
+                guardarSolicitud(value);
+                solicitado = value;
+                recalcularTotales();
+            }
+        },
+        error: function (xhr, status, err) {
+            console.error("AJAX Error:", err);
         }
+    });
 
+    function recalcularTotales() {
+        let diasInv = 0;
+        if (ventas > 0) {
+            diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+        }
+        totalDisponible = onhand + transito + solicitado;
+        $diasInvTd.text(diasInv.toFixed(2));
+        $totalDisponibleTd.text(totalDisponible.toFixed(0));
+    }
 
+    function guardarSolicitud(value) {
+        $input.data('original', value);
+        $.ajax({
+            url: 'ajax_repdet.php',
+            type: 'POST',
+            data: {
+                idcab: idcab,
+                towhs: towhs,
+                itemcode: itemcode,
+                quantity: value
             },
-            error: function (xhr, status, err) {
-                console.error("AJAX Error:", err);
+            success: function (resp) {
+                console.log("Guardado:", resp);
+            },
+            error: function (xhr) {
+                console.error("Error al guardar:", xhr.responseText);
             }
         });
+    }
+});
 
-        
-    });
+
 
     // Guardar comentario al salir del input observaciones
     $('#data-table tbody').on('blur', 'input[type="text"][name^="comment"]', function() {

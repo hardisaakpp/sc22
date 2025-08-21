@@ -106,7 +106,7 @@ $sql = "SELECT TOP 1000
     ClasificacionABC
     FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
     WHERE " . implode(' AND ', $where) . "
-    ORDER BY Sugerido DESC";
+    ORDER BY VentaUltima DESC";
 
 $stmt = $dbdev->prepare($sql);
 $stmt->execute($params);
@@ -139,30 +139,31 @@ set @idcab=?;
     foreach ($stmtSol->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $solicitados[$row['ItemCode']] = $row['Quantity'];
         $comentarios[$row['ItemCode']] = $row['comment'];
+        $solicitadosTiendas[$row['ItemCode']] = $row['solicitados'];
     }
 }
 
 // Consultas para los filtros de árbol y nuevos filtros
-$arbol_nivel1 = [];
-$arbol_nivel2 = [];
-$arbol_nivel3 = [];
-$marcas = [];
-$clasificaciones = [];
+    $arbol_nivel1 = [];
+    $arbol_nivel2 = [];
+    $arbol_nivel3 = [];
+    $marcas = [];
+    $clasificaciones = [];
 
-$stmtN1 = $dbdev->query("SELECT DISTINCT [arbol_nivel1] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
-$arbol_nivel1 = $stmtN1->fetchAll(PDO::FETCH_COLUMN);
+    $stmtN1 = $dbdev->query("SELECT DISTINCT [arbol_nivel1] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $arbol_nivel1 = $stmtN1->fetchAll(PDO::FETCH_COLUMN);
 
-$stmtN2 = $dbdev->query("SELECT DISTINCT [arbol_nivel2] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
-$arbol_nivel2 = $stmtN2->fetchAll(PDO::FETCH_COLUMN);
+    $stmtN2 = $dbdev->query("SELECT DISTINCT [arbol_nivel2] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $arbol_nivel2 = $stmtN2->fetchAll(PDO::FETCH_COLUMN);
 
-$stmtN3 = $dbdev->query("SELECT DISTINCT [arbol_nivel3] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
-$arbol_nivel3 = $stmtN3->fetchAll(PDO::FETCH_COLUMN);
+    $stmtN3 = $dbdev->query("SELECT DISTINCT [arbol_nivel3] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $arbol_nivel3 = $stmtN3->fetchAll(PDO::FETCH_COLUMN);
 
-$stmtMarca = $dbdev->query("SELECT DISTINCT [marca] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
-$marcas = $stmtMarca->fetchAll(PDO::FETCH_COLUMN);
+    $stmtMarca = $dbdev->query("SELECT DISTINCT [marca] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $marcas = $stmtMarca->fetchAll(PDO::FETCH_COLUMN);
 
-$stmtABC = $dbdev->query("SELECT DISTINCT [ClasificacionABC] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
-$clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
+    $stmtABC = $dbdev->query("SELECT DISTINCT [ClasificacionABC] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 
@@ -178,7 +179,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                     <div class="form-row">
                         <!-- Codigo Barras -->
                         <div class="form-group col-md-2">
-                            <label for="codbar">Codigo de barras</label>
+                            <label for="codbar">Código de barras</label>
                             <input type="text" name="codbar" id="codbar" class="form-control" placeholder="Codigo de Barras">
                         </div>
 
@@ -190,7 +191,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 
                         <!-- Nombre -->
                         <div class="form-group col-md-2">
-                            <label for="nombre">Nombre</label>
+                            <label for="nombre">Descripción</label>
                             <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
                         </div>
                
@@ -239,7 +240,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                         </div>
 
                         <!-- Filtro ClasificacionABC -->
-                        <div class="form-group col-md-2 d-none d-md-block">
+                     <!--   <div class="form-group col-md-2 d-none d-md-block">
                             <label for="clasificacionabc">Clasificación ABC</label>
                             <select name="clasificacionabc" id="clasificacionabc" class="form-control">
                                 <option value="">Todos</option>
@@ -248,6 +249,9 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
                                 <?php endforeach; ?>
                             </select>
                         </div>
+                        -->
+
+
 
                     </div>
 
@@ -267,25 +271,26 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Top Articulos</strong>
+                <strong class="card-title">Top Artículos</strong>
             </div>
             <div class="card-body">
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th class="d-none d-md-table-cell">Codido Barra</th>
-                            <th>Cod Producto</th>
-                            <th>Descripcion</th>
+                            <th class="d-none d-md-table-cell">Código Barras</th>
+                            <th>Referencia</th>
+                            <th>Descripción</th>
                             <th class="d-none d-md-table-cell">Embalaje</th>
-                            <th class="d-none d-md-table-cell">Stock</th>
-                            <th class="d-none d-md-table-cell">Transito</th>
+                            <th class="d-none d-md-table-cell">Stock Tienda</th>
+                            <th class="d-none d-md-table-cell">Tránsito</th>
                             <th>Total Disponible</th>
                             <th>Stock Bodega</th>
-                            <th class="d-none d-md-table-cell">Venta Ult 30 dias</th>
+                            <th>Disponible Bodega</th>
+                            <th class="d-none d-md-table-cell">Venta Ult. 30 días</th>
                             <th>Sugerido</th>
                             <th>Solicitado</th>
-                            <th class="d-none d-md-table-cell">Dias de Inv.</th>
-                            <th class="d-none d-md-table-cell">Observaciones</th>
+                            <th class="d-none d-md-table-cell">Días de Inv.</th>
+                            <th class="d-none d-md-table-cell">Observación</th>
                             <th>Acción</th>
                         </tr>
                     </thead>
@@ -294,6 +299,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
         <?php
             $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
             $comentario = isset($comentarios[$r->ItemCode]) ? $comentarios[$r->ItemCode] : '';
+            $solicitadosTiendas = isset($solicitadosTiendas[$r->ItemCode]) ? $solicitadosTiendas[$r->ItemCode] : 0;
             $transito = floatval($r->total_Transitoria_Tienda);
             $onhand = floatval($r->OnHand);
             $ventas = floatval($r->VentaUltima);
@@ -318,6 +324,7 @@ $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
             <td class="d-none d-md-table-cell"><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
             <td class="total-disponible"><?= number_format($totalDisponible,0) ?></td>
             <td><?= number_format($r->total_Bodega,0) ?></td>
+            <td><?= number_format($r->total_Bodega-$solicitadosTiendas,0) ?></td>
             <td class="d-none d-md-table-cell"><?= number_format($r->VentaUltima,0) ?></td>
             <td><?= number_format($r->Sugerido,0) ?></td>
             <td>
@@ -636,19 +643,19 @@ $(document).ready(function() {
                         <div style="font-size:12px;">
                         <table class="table table-bordered table-sm" style="margin-bottom:0;">
                             <tr>
-                                <td><b>CodeBars</b></td><td>${d.CodeBars}</td>
-                                <td><b>ItemCode</b></td><td>${d.ItemCode}</td>
+                                <td><b>Código Barras</b></td><td>${d.CodeBars}</td>
+                                <td><b>Referencia</b></td><td>${d.ItemCode}</td>
                             </tr>
                             <tr>
-                                <td><b>ItemName</b></td><td colspan="3">${d.ItemName}</td>
+                                <td><b>Descripción</b></td><td colspan="3">${d.ItemName}</td>
                             </tr>
                             <tr>
-                                <td><b>ClasificacionABC</b></td><td>${d.ClasificacionABC}</td>
+                                <td><b>Clasificación ABC</b></td><td>${d.ClasificacionABC}</td>
                                 <td><b>Unidad</b></td><td>${d.unidad}</td>
                             </tr>
                             <tr>
-                                <td><b>Categoria</b></td><td>${d.categoria}</td>
-                                <td><b>Linea</b></td><td>${d.linea}</td>
+                                <td><b>Categoría</b></td><td>${d.categoria}</td>
+                                <td><b>Línea</b></td><td>${d.linea}</td>
                             </tr>
                             <tr>
                                 <td><b>Marca</b></td><td>${d.marca}</td>
@@ -656,31 +663,31 @@ $(document).ready(function() {
                             </tr>
                             <tr>
                                 <td><b>Días Ult. Fecha Ingreso</b></td><td>${d.dias_ultima_fecha_ingreso}</td>
-                                <td><b>Venta Ultima</b></td><td>${d.VentaUltima}</td>
+                                <td><b>Venta última</b></td><td>${d.VentaUltima}</td>
                             </tr>
                             <tr>
-                                <td><b>PromVenta30dias</b></td><td>${d.PromVenta30dias}</td>
+                                <td><b>Prom. Venta 30 días</b></td><td>${d.PromVenta30dias}</td>
                                 <td><b>Venta 90 días</b></td><td>${d.venta_90dias}</td>
                             </tr>
                             <tr>
-                                <td><b>PromVenta90dias</b></td><td>${d.PromVenta90dias}</td>
-                                <td><b>OnHand</b></td><td>${d.OnHand}</td>
+                                <td><b>Prom. Venta 90 días</b></td><td>${d.PromVenta90dias}</td>
+                                <td><b>Stock tienda</b></td><td>${d.OnHand}</td>
                             </tr>
                             <tr>
-                                <td><b>Días Inv Actual</b></td><td>${d.diasInvActual}</td>
+                                <td><b>Días Inv. Actual</b></td><td>${parseFloat(d.diasInvActual).toFixed(2)}</td>
                                 <td><b>Total Bodega</b></td><td>${d.total_Bodega}</td>
                             </tr>
                             <tr>
                                 <td><b>Total Transitoria Bodega</b></td><td>${d.total_Transitoria_Bodega}</td>
-                                <td><b>MinStock</b></td><td>${d.MinStock}</td>
+                                <td><b>Stock Min.</b></td><td>${d.MinStock}</td>
                             </tr>
                             <tr>
-                                <td><b>MaxStock</b></td><td>${d.MaxStock}</td>
-                                <td><b>U_LEAD</b></td><td>${d.U_LEAD}</td>
+                                <td><b>Stock Max.</b></td><td>${d.MaxStock}</td>
+                                <td><b>Lead Time</b></td><td>${d.U_LEAD}</td>
                             </tr>
                             <tr>
                                 <td><b>Solicitado</b></td><td>${solicitado}</td>
-                                <td><b>TOTALSTOCK</b></td><td>${totalStock}</td>
+                                <td><b>Total Stock</b></td><td>${totalStock}</td>
                             </tr>
                         </table>
                         </div>

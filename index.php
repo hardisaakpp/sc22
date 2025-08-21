@@ -51,6 +51,7 @@ include_once "php/bd_StoreControl.php";
                     $_SESSION["whsBodeg"] = $IDCONTEO->fk_ID_almacen_bodeg; 
                     $_SESSION["whsCica"] = $IDCONTEO->fk_ID_almacen_cierre; 
                     $_SESSION["whsTr"] = $IDCONTEO->fk_ID_almacen_transitorio; 
+                    $_SESSION["whsCD"] = $IDCONTEO->fk_ID_almacen_CD; 
 
                     
                      

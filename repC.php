@@ -21,12 +21,18 @@ $almt = $db->prepare("SELECT cod_almacen FROM almacen WHERE id = ?");
 $almt->execute([$whsTr]);
 $almTr = $almt->fetch(PDO::FETCH_OBJ);
 
+// Obtener nombre del almacén
+$whsCD = $_SESSION["whsCD"] ?? null;
+$almcd = $db->prepare("SELECT cod_almacen FROM almacen WHERE id = ?");
+$almcd->execute([$whsCD]);
+$almCD = $almcd->fetch(PDO::FETCH_OBJ);
+
 // Ejecutar procedimiento almacenado (no devuelve nada)
 $idUser = $_SESSION["idU"] ?? null;
 $idRepCab = null;
 if ($almTr && $idUser) {
-    $stmtProc = $db->prepare("EXEC sp_GetOrInsertRepCab ?, ?");
-    $stmtProc->execute([$almTr->cod_almacen, $idUser]);
+    $stmtProc = $db->prepare("EXEC sp_GetOrInsert_RepCab ?, ?, ?");
+    $stmtProc->execute([$almTr->cod_almacen, $idUser, $almCD->cod_almacen]);
 
     // Obtener el id por consulta con ToWhs y fecha actual
     $fechaHoy = date('Y-m-d');

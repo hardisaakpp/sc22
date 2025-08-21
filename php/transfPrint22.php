@@ -118,7 +118,7 @@ for ($i=1; $i < $cc+1; $i++) {
         date = new Date().toLocaleString();
         document.write(date);
         </script></br>
-    Usuario:".$username."</br>
+    SOLICITUD:".$solicitud."</br>
     </h3>
 
     <div class='box box2'>

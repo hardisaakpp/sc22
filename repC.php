@@ -604,10 +604,10 @@ $(document).ready(function() {
     // ---------------------------
     // Botón Limpiar filtros
     // ---------------------------
-    $('#btnLimpiar').click(function() {
-        $('#form-filtros')[0].reset();
-        table.columns().search('').draw(); // limpiar filtros de DataTable
-    });
+$('#btnLimpiar').click(function() {
+    window.location.href = 'repC.php';
+});
+
 
     // Actualizar días de inventario al cambiar el input
     $('#data-table tbody').on('input blur', 'input[type="number"][name^="solicitar"]', function() {

@@ -187,14 +187,14 @@
                         
                         echo '                       
                             <li class="menu-item-has-children dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Reposiciones</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-shopping-cart"></i>Reposiciones</a>
                                 <ul class="sub-menu children dropdown-menu">     
                                     <li><i class="ti ti-menu-alt"></i><a href="repC.php">Solicitar</a></li>
 
-                                    <li><i class="ti ti-package"></i><a href="repS.php">Carrito</a></li>
+                                    <li><i class="ti ti-shopping-cart"></i><a href="repS.php">Carrito</a></li>
                                    
 
-                                    <li><i class="ti ti-layout-grid2"></i><a href="#">Historial</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="#">Historial</a></li>
                                 
                                 </ul>
                             </li>

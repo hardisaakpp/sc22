@@ -667,43 +667,62 @@ $('#btnLimpiar').click(function() {
                             </tr>
                             <tr>
                                 <td><b>Clasificación ABC</b></td><td>${d.ClasificacionABC}</td>
+                            </tr>
+                            <tr>
                                 <td><b>Unidad</b></td><td>${d.unidad}</td>
-                            </tr>
-                            <tr>
                                 <td><b>Categoría</b></td><td>${d.categoria}</td>
+                            </tr>
+                            <tr>
                                 <td><b>Línea</b></td><td>${d.linea}</td>
-                            </tr>
-                            <tr>
                                 <td><b>Marca</b></td><td>${d.marca}</td>
-                                <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso}</td>
                             </tr>
                             <tr>
-                                <td><b>Días Ult. Fecha Ingreso</b></td><td>${d.dias_ultima_fecha_ingreso}</td>
-                                <td><b>Venta 30 días</b></td><td>${d.VentaUltima}</td>
+                                <td><b>VENTAS</b></td>
+                            </tr>
+
+                            <tr>
+   <td><b>Venta 30 días</b></td><td>${parseInt(d.VentaUltima) || 0}</td>
+                                   <td><b>Días Ult. Fecha Ingreso</b></td><td>${parseInt(d.dias_ultima_fecha_ingreso) || 0}</td>
+                       
                             </tr>
                             <tr>
-                                <td><b>Prom. Venta 30 días</b></td><td>${d.PromVenta30dias}</td>
-                                <td><b>Venta 90 días</b></td><td>${d.venta_90dias}</td>
+                                <td><b>Prom. Venta 30 días</b></td><td>${parseFloat(d.PromVenta30dias).toFixed(2)}</td>
+                                         <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso}</td>
                             </tr>
                             <tr>
-                                <td><b>Prom. Venta 90 días</b></td><td>${d.PromVenta90dias}</td>
-                                <td><b>Stock tienda</b></td><td>${d.OnHand}</td>
+
+                                <td><b>Prom. Ult. 3 meses</b></td><td>${parseInt(d.venta_90dias/3) || 0}</td>
+                              <td><b>Stock Max.</b></td><td>${parseInt(d.MaxStock) || 0}</td>
                             </tr>
                             <tr>
+                                <td><b>Prom. Venta 90 días</b></td><td>${parseFloat(d.PromVenta90dias).toFixed(2)}</td>
+                                <td><b>Stock Min.</b></td><td>${parseInt(d.MinStock) || 0}</td>
+
+
+                            </tr>
+                            <tr>
+                                <td><b>STOCK</b></td>
+                            </tr>
+
+
+                            <tr>
+                             <td><b>Stock Actual</b></td><td>${parseInt(d.OnHand) || 0}</td>
                                 <td><b>Días Inv. Actual</b></td><td>${parseFloat(d.diasInvActual).toFixed(2)}</td>
-                                <td><b>Total Bodega</b></td><td>${d.total_Bodega}</td>
                             </tr>
                             <tr>
-                                <td><b>Total Transitoria Bodega</b></td><td>${d.total_Transitoria_Bodega}</td>
-                                <td><b>Stock Min.</b></td><td>${d.MinStock}</td>
+                             <td><b>Stock Bodega</b></td><td>${parseInt(d.total_Bodega) || 0}</td>
+                                <td><b>Lead Time</b></td><td>${parseInt(d.U_LEAD) || 0}</td>
                             </tr>
                             <tr>
-                                <td><b>Stock Max.</b></td><td>${d.MaxStock}</td>
-                                <td><b>Lead Time</b></td><td>${d.U_LEAD}</td>
+                                  <td><b>Transito Bodega</b></td><td>${parseInt(d.total_Transitoria_Bodega) || 0}</td>
                             </tr>
                             <tr>
-                                <td><b>Solicitado</b></td><td>${solicitado}</td>
-                                <td><b>Total Stock</b></td><td>${totalStock}</td>
+                                <td><b>Solicitado</b></td><td>${parseInt(solicitado) || 0}</td>
+
+                            </tr>
+                                                        <tr>
+
+                                <td><b>Total Stock</b></td><td>${parseInt(totalStock) || 0}</td>
                             </tr>
                         </table>
                         </div>
@@ -711,7 +730,7 @@ $('#btnLimpiar').click(function() {
                     Swal.fire({
                         title: 'Detalle Producto',
                         html: html,
-                        icon: 'info',
+                        //icon: 'info',
                         confirmButtonText: 'OK'
                     });
                 } else {

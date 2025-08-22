@@ -338,17 +338,18 @@ set @idcab=?;
             <td class="d-none d-md-table-cell"><?= number_format($r->VentaUltima,0) ?></td>
             <td><?= number_format($r->Sugerido,0) ?></td>
             <td>
-                <input type="number" 
-                    name="solicitar[<?= $r->ItemCode ?>]" 
-                    value="<?= $valorSolicitado ?>" 
-                    min="0" 
-                    max="<?= $r->Sugerido ?>" 
-                    data-sugerido="<?= $r->Sugerido ?>" 
-                    data-original="<?= $valorSolicitado ?>"
-                    data-transito="<?= $transito ?>"
-                    data-onhand="<?= $onhand ?>"
-                    data-ventas="<?= $ventas ?>"
-                    class="form-control form-control-sm">
+            <input type="number" 
+                name="solicitar[<?= $r->ItemCode ?>]" 
+                value="<?= $valorSolicitado ?>" 
+                min="0" 
+                max="<?= $r->Sugerido ?>" 
+                step="1"  
+                data-sugerido="<?= $r->Sugerido ?>" 
+                data-original="<?= $valorSolicitado ?>"
+                data-transito="<?= $transito ?>"
+                data-onhand="<?= $onhand ?>"
+                data-ventas="<?= $ventas ?>"
+                class="form-control form-control-sm">
             </td>
             <td class="d-none d-md-table-cell dias-inv"><?= number_format($diasInv, 2) ?></td>
             <td class="d-none d-md-table-cell">
@@ -433,6 +434,11 @@ $(document).ready(function() {
     // ---------------------------
     // Validar al salir del input solicitado
     // ---------------------------
+$('#data-table').on('input', 'input[type="number"][name^="solicitar"]', function () {
+    this.value = this.value.replace(/\D/g, ''); // deja solo dígitos
+});
+
+
  $('#data-table tbody').on('blur', 'input[type="number"][name^="solicitar"]', function () {
     const sugerido = parseFloat($(this).data('sugerido'));
     let value = parseFloat(this.value);

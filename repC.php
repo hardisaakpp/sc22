@@ -673,7 +673,7 @@ $(document).ready(function() {
                             </tr>
                             <tr>
                                 <td><b>Días Ult. Fecha Ingreso</b></td><td>${d.dias_ultima_fecha_ingreso}</td>
-                                <td><b>Venta última</b></td><td>${d.VentaUltima}</td>
+                                <td><b>Venta 30 días</b></td><td>${d.VentaUltima}</td>
                             </tr>
                             <tr>
                                 <td><b>Prom. Venta 30 días</b></td><td>${d.PromVenta30dias}</td>

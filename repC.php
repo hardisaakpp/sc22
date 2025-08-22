@@ -433,7 +433,7 @@ $(document).ready(function() {
     // ---------------------------
     // Validar al salir del input solicitado
     // ---------------------------
- $('#data-table tbody').on('blur input', 'input[type="number"][name^="solicitar"]', function () {
+ $('#data-table tbody').on('blur', 'input[type="number"][name^="solicitar"]', function () {
     const sugerido = parseFloat($(this).data('sugerido'));
     let value = parseFloat(this.value);
     const original = $(this).data('original');

@@ -504,6 +504,54 @@ $(document).ready(function() {
     </div>
   </div>
 </div>
+<div class="text-right mb-3">
+    <button id="btnDescargarPDF" class="btn btn-danger">
+        Descargar PDF
+    </button>
+</div>
+<script>
+document.getElementById("btnDescargarPDF").addEventListener("click", function() {
+    // Selecciona el contenido a exportar (puedes ajustar la clase o id)
+    const content = document.querySelector(".content");
 
+    html2canvas(content, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("p", "mm", "a4");
+
+        // Tamaño de la página
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        // Escalamos la imagen al ancho de la página
+        const imgWidth = pageWidth;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        let position = 0;
+
+        if (imgHeight < pageHeight) {
+            // Si cabe en una sola página
+            pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        } else {
+            // Si ocupa varias páginas
+            let heightLeft = imgHeight;
+            while (heightLeft > 0) {
+                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                if (heightLeft > 0) {
+                    pdf.addPage();
+                    position = -pageHeight;
+                }
+            }
+        }
+
+        pdf.save("solicitud_transferencia.pdf");
+    });
+});
+</script>
+
+<!-- jsPDF + html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <?php include_once "footer.php"; ?>

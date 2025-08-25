@@ -176,6 +176,14 @@ set @idcab=?;
     .col-dispo-bodega {
         display: none !important;
     }
+
+    #data-table thead th {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
+    }
+
 </style>
 
 <div class="content">
@@ -283,7 +291,7 @@ set @idcab=?;
             <div class="card-header">
                 <strong class="card-title">Top Artículos</strong>
             </div>
-            <div class="card-body">
+            <div style="max-height: 600px; overflow-y: auto;" class="card-body">
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>

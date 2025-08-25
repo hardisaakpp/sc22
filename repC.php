@@ -198,30 +198,34 @@ set @idcab=?;
                         <!-- Codigo Barras -->
                         <div class="form-group col-md-2">
                             <label for="codbar">Código de barras</label>
-                            <input type="text" name="codbar" id="codbar" class="form-control" placeholder="Codigo de Barras">
+                            <input type="text" name="codbar" id="codbar" class="form-control" placeholder="Codigo de Barras" value="<?= htmlspecialchars($codbar) ?>">
                         </div>
 
                         <!-- Referencia -->
                         <div class="form-group col-md-2">
                             <label for="referencia">Referencia</label>
-                            <input type="text" name="referencia" id="referencia" class="form-control" placeholder="Referencia">
+                            <input type="text" name="referencia" id="referencia" class="form-control" placeholder="Referencia" value="<?= htmlspecialchars($referencia) ?>">
                         </div>
 
                         <!-- Nombre -->
                         <div class="form-group col-md-2">
                             <label for="nombre">Descripción</label>
-                            <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                            <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre" value="<?= htmlspecialchars($nombre) ?>">
                         </div>
                
                         <!-- Filtro arbol_nivel1 -->
                         <div class="form-group col-md-2 d-none d-md-block">
                             <label for="arbol_nivel1">Unidad</label>
-                            <select name="arbol_nivel1" id="arbol_nivel1" class="form-control">
+                           <select name="arbol_nivel1" id="arbol_nivel1" class="form-control">
                                 <option value="">Todos</option>
                                 <?php foreach ($arbol_nivel1 as $n1): ?>
-                                    <option value="<?= htmlspecialchars($n1) ?>"><?= htmlspecialchars($n1) ?></option>
+                                    <option value="<?= htmlspecialchars($n1) ?>"
+                                        <?= ($n1 == $arbol_nivel1_f) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($n1) ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
+
                         </div>
 
                         <!-- Filtro arbol_nivel2 -->
@@ -230,9 +234,13 @@ set @idcab=?;
                             <select name="arbol_nivel2" id="arbol_nivel2" class="form-control">
                                 <option value="">Todos</option>
                                 <?php foreach ($arbol_nivel2 as $n2): ?>
-                                    <option value="<?= htmlspecialchars($n2) ?>"><?= htmlspecialchars($n2) ?></option>
+                                    <option value="<?= htmlspecialchars($n2) ?>"
+                                        <?= ($n2 == $arbol_nivel2_f) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($n2) ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
+
                         </div>
 
                         <!-- Filtro arbol_nivel3 -->
@@ -241,9 +249,13 @@ set @idcab=?;
                             <select name="arbol_nivel3" id="arbol_nivel3" class="form-control">
                                 <option value="">Todos</option>
                                 <?php foreach ($arbol_nivel3 as $n3): ?>
-                                    <option value="<?= htmlspecialchars($n3) ?>"><?= htmlspecialchars($n3) ?></option>
+                                    <option value="<?= htmlspecialchars($n3) ?>"
+                                        <?= ($n3 == $arbol_nivel3_f) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($n3) ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
+
                         </div>
 
                         <!-- Filtro marca -->
@@ -252,9 +264,13 @@ set @idcab=?;
                             <select name="marca" id="marca" class="form-control">
                                 <option value="">Todos</option>
                                 <?php foreach ($marcas as $marca): ?>
-                                    <option value="<?= htmlspecialchars($marca) ?>"><?= htmlspecialchars($marca) ?></option>
+                                    <option value="<?= htmlspecialchars($marca) ?>"
+                                        <?= ($marca == $marca_f) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($marca) ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
+
                         </div>
 
                         <!-- Filtro ClasificacionABC -->

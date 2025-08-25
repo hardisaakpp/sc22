@@ -192,7 +192,7 @@ set @idcab=?;
 /* Para celulares */
 @media (max-width: 767px) {
     .top-articulos-body {
-        max-height: 1500px;
+        max-height: 1200px;
     }
 }
 

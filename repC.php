@@ -666,7 +666,10 @@ $('#btnLimpiar').click(function() {
                     var html = `
                         <div style="font-size:12px;">
                         <table class="table table-bordered table-sm" style="margin-bottom:0;">
-                            <tr>
+                          <tr style="background-color: #f2f2f2;">
+                                <td colspan="4"><b>DETALLE PRODUCTO</b></td>
+                            </tr>    
+                        <tr>
                                 <td><b>Código Barras</b></td><td>${d.CodeBars}</td>
                                 <td><b>Referencia</b></td><td>${d.ItemCode}</td>
                             </tr>
@@ -684,13 +687,13 @@ $('#btnLimpiar').click(function() {
                                 <td><b>Línea</b></td><td>${d.linea}</td>
                                 <td><b>Marca</b></td><td>${d.marca}</td>
                             </tr>
-                            <tr>
-                                <td><b>VENTAS</b></td>
+                            <tr style="background-color: #f2f2f2;">
+                                <td colspan="4"><b>VENTAS</b></td>
                             </tr>
 
                             <tr>
-   <td><b>Venta 30 días</b></td><td>${parseInt(d.VentaUltima) || 0}</td>
-                                   <td><b>Días Ult. Fecha Ingreso</b></td><td>${parseInt(d.dias_ultima_fecha_ingreso) || 0}</td>
+                                <td><b>Venta 30 días</b></td><td>${parseInt(d.VentaUltima) || 0}</td>
+                                <td><b>Días Ult. Fecha Ingreso</b></td><td>${parseInt(d.dias_ultima_fecha_ingreso) || 0}</td>
                        
                             </tr>
                             <tr>
@@ -700,33 +703,32 @@ $('#btnLimpiar').click(function() {
                             <tr>
 
                                 <td><b>Prom. Ult. 3 meses</b></td><td>${parseInt(d.venta_90dias/3) || 0}</td>
-                              <td><b>Stock Max.</b></td><td>${parseInt(d.MaxStock) || 0}</td>
-                            </tr>
-                            <tr>
                                 <td><b>Prom. Venta 90 días</b></td><td>${parseFloat(d.PromVenta90dias).toFixed(2)}</td>
-                                <td><b>Stock Min.</b></td><td>${parseInt(d.MinStock) || 0}</td>
-
-
+                              
                             </tr>
-                            <tr>
-                                <td><b>STOCK</b></td>
+                           
+                           
+   
+                            <tr style="background-color: #f2f2f2;">
+                                <td colspan="4"><b>STOCK</b></td>
                             </tr>
 
 
                             <tr>
                              <td><b>Stock Actual</b></td><td>${parseInt(d.OnHand) || 0}</td>
-                                <td><b>Días Inv. Actual</b></td><td>${parseFloat(d.diasInvActual).toFixed(2)}</td>
+                           <td><b>Stock Min.</b></td><td>${parseInt(d.MinStock) || 0}</td>
                             </tr>
                             <tr>
                              <td><b>Stock Bodega</b></td><td>${parseInt(d.total_Bodega) || 0}</td>
-                                <td><b>Lead Time</b></td><td>${parseInt(d.U_LEAD) || 0}</td>
+                                <td><b>Stock Max.</b></td><td>${parseInt(d.MaxStock) || 0}</td>
                             </tr>
                             <tr>
                                   <td><b>Transito Bodega</b></td><td>${parseInt(d.total_Transitoria_Bodega) || 0}</td>
+                                       <td><b>Días Inv. Actual</b></td><td>${parseFloat(d.diasInvActual).toFixed(2)}</td>
                             </tr>
                             <tr>
                                 <td><b>Solicitado</b></td><td>${parseInt(solicitado) || 0}</td>
-
+<td><b>Lead Time</b></td><td>${parseInt(d.U_LEAD) || 0}</td>
                             </tr>
                                                         <tr>
 
@@ -736,7 +738,7 @@ $('#btnLimpiar').click(function() {
                         </div>
                     `;
                     Swal.fire({
-                        title: 'Detalle Producto',
+                        //title: 'Detalle Producto',
                         html: html,
                         //icon: 'info',
                         confirmButtonText: 'OK'

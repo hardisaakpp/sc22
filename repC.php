@@ -156,19 +156,19 @@ set @idcab=?;
     $marcas = [];
     $clasificaciones = [];
 
-    $stmtN1 = $dbdev->query("SELECT DISTINCT [arbol_nivel1] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $stmtN1 = $dbdev->query("SELECT DISTINCT [arbol_nivel1] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'  ORDER BY 1");
     $arbol_nivel1 = $stmtN1->fetchAll(PDO::FETCH_COLUMN);
 
-    $stmtN2 = $dbdev->query("SELECT DISTINCT [arbol_nivel2] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $stmtN2 = $dbdev->query("SELECT DISTINCT [arbol_nivel2] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."' ORDER BY 1");
     $arbol_nivel2 = $stmtN2->fetchAll(PDO::FETCH_COLUMN);
 
-    $stmtN3 = $dbdev->query("SELECT DISTINCT [arbol_nivel3] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $stmtN3 = $dbdev->query("SELECT DISTINCT [arbol_nivel3] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."' ORDER BY 1");
     $arbol_nivel3 = $stmtN3->fetchAll(PDO::FETCH_COLUMN);
 
-    $stmtMarca = $dbdev->query("SELECT DISTINCT [marca] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $stmtMarca = $dbdev->query("SELECT DISTINCT [marca] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."' ORDER BY 1");
     $marcas = $stmtMarca->fetchAll(PDO::FETCH_COLUMN);
 
-    $stmtABC = $dbdev->query("SELECT DISTINCT [ClasificacionABC] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."'");
+    $stmtABC = $dbdev->query("SELECT DISTINCT [ClasificacionABC] FROM [MODULOS_SC].[reposicion].[ProcesadosCache] WHERE [WhsCode]='".$almacen->cod_almacen."' ORDER BY 1");
     $clasificaciones = $stmtABC->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
@@ -189,114 +189,101 @@ set @idcab=?;
 <div class="content">
     <div class="col-md-10 offset-md-1">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <strong class="card-title">Filtros</strong>
+                <button class="btn btn-sm btn-info" type="button" data-toggle="collapse" data-target="#collapseFiltros" aria-expanded="false" aria-controls="collapseFiltros" id="btnToggleFiltros">
+                    Mostrar filtros
+                </button>
             </div>  
-            <div class="card-body">
-                <form method="GET" action="" id="form-filtros">
-                    <div class="form-row">
-                        <!-- Codigo Barras -->
-                        <div class="form-group col-md-2">
-                            <label for="codbar">Código de barras</label>
-                            <input type="text" name="codbar" id="codbar" class="form-control" placeholder="Codigo de Barras" value="<?= htmlspecialchars($codbar) ?>">
-                        </div>
 
-                        <!-- Referencia -->
-                        <div class="form-group col-md-2">
-                            <label for="referencia">Referencia</label>
-                            <input type="text" name="referencia" id="referencia" class="form-control" placeholder="Referencia" value="<?= htmlspecialchars($referencia) ?>">
-                        </div>
+            <div id="collapseFiltros" class="collapse">
+                <div class="card-body">
+                    <form method="GET" action="" id="form-filtros">
+                        <div class="form-row">
+                            <!-- Codigo Barras -->
+                            <div class="form-group col-md-2">
+                                <label for="codbar">Código de barras</label>
+                                <input type="text" name="codbar" id="codbar" class="form-control" placeholder="Codigo de Barras" value="<?= htmlspecialchars($codbar) ?>">
+                            </div>
 
-                        <!-- Nombre -->
-                        <div class="form-group col-md-2">
-                            <label for="nombre">Descripción</label>
-                            <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre" value="<?= htmlspecialchars($nombre) ?>">
-                        </div>
+                            <!-- Referencia -->
+                            <div class="form-group col-md-2">
+                                <label for="referencia">Referencia</label>
+                                <input type="text" name="referencia" id="referencia" class="form-control" placeholder="Referencia" value="<?= htmlspecialchars($referencia) ?>">
+                            </div>
+
+                            <!-- Nombre -->
+                            <div class="form-group col-md-2">
+                                <label for="nombre">Descripción</label>
+                                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre" value="<?= htmlspecialchars($nombre) ?>">
+                            </div>
                
-                        <!-- Filtro arbol_nivel1 -->
-                        <div class="form-group col-md-2 d-none d-md-block">
-                            <label for="arbol_nivel1">Unidad</label>
-                           <select name="arbol_nivel1" id="arbol_nivel1" class="form-control">
-                                <option value="">Todos</option>
-                                <?php foreach ($arbol_nivel1 as $n1): ?>
-                                    <option value="<?= htmlspecialchars($n1) ?>"
-                                        <?= ($n1 == $arbol_nivel1_f) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($n1) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <!-- Filtro arbol_nivel1 -->
+                            <div class="form-group col-md-2">
+                                <label for="arbol_nivel1">Unidad</label>
+                                <select name="arbol_nivel1" id="arbol_nivel1" class="form-control">
+                                    <option value="">Todos</option>
+                                    <?php foreach ($arbol_nivel1 as $n1): ?>
+                                        <option value="<?= htmlspecialchars($n1) ?>"
+                                            <?= ($n1 == $arbol_nivel1_f) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($n1) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
 
+                            <!-- Filtro arbol_nivel2 -->
+                            <div class="form-group col-md-2">
+                                <label for="arbol_nivel2">Categoría</label>
+                                <select name="arbol_nivel2" id="arbol_nivel2" class="form-control">
+                                    <option value="">Todos</option>
+                                    <?php foreach ($arbol_nivel2 as $n2): ?>
+                                        <option value="<?= htmlspecialchars($n2) ?>"
+                                            <?= ($n2 == $arbol_nivel2_f) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($n2) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <!-- Filtro arbol_nivel3 -->
+                            <div class="form-group col-md-2">
+                                <label for="arbol_nivel3">Línea</label>
+                                <select name="arbol_nivel3" id="arbol_nivel3" class="form-control">
+                                    <option value="">Todos</option>
+                                    <?php foreach ($arbol_nivel3 as $n3): ?>
+                                        <option value="<?= htmlspecialchars($n3) ?>"
+                                            <?= ($n3 == $arbol_nivel3_f) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($n3) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <!-- Filtro marca -->
+                            <div class="form-group col-md-2">
+                                <label for="marca">Marca</label>
+                                <select name="marca" id="marca" class="form-control">
+                                    <option value="">Todos</option>
+                                    <?php foreach ($marcas as $marca): ?>
+                                        <option value="<?= htmlspecialchars($marca) ?>"
+                                            <?= ($marca == $marca_f) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($marca) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
 
-                        <!-- Filtro arbol_nivel2 -->
-                        <div class="form-group col-md-2 d-none d-md-block">
-                            <label for="arbol_nivel2">Categoría</label>
-                            <select name="arbol_nivel2" id="arbol_nivel2" class="form-control">
-                                <option value="">Todos</option>
-                                <?php foreach ($arbol_nivel2 as $n2): ?>
-                                    <option value="<?= htmlspecialchars($n2) ?>"
-                                        <?= ($n2 == $arbol_nivel2_f) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($n2) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-
+                        <!-- Botones -->
+                        <div class="form-row mt-2">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                                <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar filtros</button>
+                            </div>
                         </div>
-
-                        <!-- Filtro arbol_nivel3 -->
-                        <div class="form-group col-md-2 d-none d-md-block">
-                            <label for="arbol_nivel3">Línea</label>
-                            <select name="arbol_nivel3" id="arbol_nivel3" class="form-control">
-                                <option value="">Todos</option>
-                                <?php foreach ($arbol_nivel3 as $n3): ?>
-                                    <option value="<?= htmlspecialchars($n3) ?>"
-                                        <?= ($n3 == $arbol_nivel3_f) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($n3) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-
-                        </div>
-
-                        <!-- Filtro marca -->
-                        <div class="form-group col-md-2 d-none d-md-block">
-                            <label for="marca">Marca</label>
-                            <select name="marca" id="marca" class="form-control">
-                                <option value="">Todos</option>
-                                <?php foreach ($marcas as $marca): ?>
-                                    <option value="<?= htmlspecialchars($marca) ?>"
-                                        <?= ($marca == $marca_f) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($marca) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-
-                        </div>
-
-                        <!-- Filtro ClasificacionABC -->
-                     <!--   <div class="form-group col-md-2 d-none d-md-block">
-                            <label for="clasificacionabc">Clasificación ABC</label>
-                            <select name="clasificacionabc" id="clasificacionabc" class="form-control">
-                                <option value="">Todos</option>
-                                <?php foreach ($clasificaciones as $abc): ?>
-                                    <option value="<?= htmlspecialchars($abc) ?>"><?= htmlspecialchars($abc) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        -->
-
-
-
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="form-row mt-2">
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">Buscar</button>
-                            <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar filtros</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -307,7 +294,7 @@ set @idcab=?;
             <div class="card-header">
                 <strong class="card-title">Top Artículos</strong>
             </div>
-            <div style="max-height: 600px; overflow-y: auto;" class="card-body">
+            <div style="max-height: 800px; overflow-y: auto;" class="card-body">
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -398,6 +385,14 @@ set @idcab=?;
     </div>
 </div>
 
+<script>
+    $('#collapseFiltros').on('shown.bs.collapse', function () {
+        $('#btnToggleFiltros').text('Ocultar filtros');
+    });
+    $('#collapseFiltros').on('hidden.bs.collapse', function () {
+        $('#btnToggleFiltros').text('Mostrar filtros');
+    });
+</script>
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

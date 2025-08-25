@@ -184,6 +184,18 @@ set @idcab=?;
         z-index: 10;
     }
 
+.top-articulos-body {
+    max-height: 800px;
+    overflow-y: auto;
+}
+
+/* Para celulares */
+@media (max-width: 767px) {
+    .top-articulos-body {
+        max-height: 1500px;
+    }
+}
+
 </style>
 
 <div class="content">
@@ -294,7 +306,7 @@ set @idcab=?;
             <div class="card-header">
                 <strong class="card-title">Top Artículos</strong>
             </div>
-            <div style="max-height: 800px; overflow-y: auto;" class="card-body">
+            <div class="card-body top-articulos-body">
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>

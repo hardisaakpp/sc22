@@ -299,7 +299,7 @@ set @idcab=?;
                     <thead>
                         <tr>
                             <th class="d-none d-md-table-cell">Código Barras</th>
-                            <th>Referencia</th>
+                            <th class="d-none d-md-table-cell">Referencia</th>
                             <th>Descripción</th>
                             <th class="d-none d-md-table-cell">Embalaje</th>
                             <th class="d-none d-md-table-cell">Stock Tienda</th>

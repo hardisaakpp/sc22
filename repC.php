@@ -695,7 +695,7 @@ $('#btnLimpiar').click(function() {
                             </tr>
                             <tr>
                                 <td><b>Prom. Venta 30 días</b></td><td>${parseFloat(d.PromVenta30dias).toFixed(2)}</td>
-                                         <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso}</td>
+                                         <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso.split(" ")[0]}</td>
                             </tr>
                             <tr>
 

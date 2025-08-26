@@ -96,20 +96,8 @@ if ($clasificacion_f !== '') {
 }
 
 $sql = "SELECT TOP 1000 
-    CodeBars,
-    ItemCode,
-    ItemName,
-    embalaje,
-    OnHand,
-    total_Transitoria_Tienda,
-    total_Bodega,
-    VentaUltima,
-    sugerido_final AS Sugerido,
-    arbol_nivel1,
-    arbol_nivel2,
-    arbol_nivel3,
-    marca,
-    ClasificacionABC
+    *,
+    sugerido_final AS Sugerido
     FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
     WHERE " . implode(' AND ', $where) . "
     ORDER BY VentaUltima DESC";
@@ -319,7 +307,7 @@ set @idcab=?;
                             <th>Total Disponible</th>
                             <th class="d-none d-md-table-cell col-dispo-bodega">Stock Bodega</th>
                             <th>Disponible Bodega</th>
-                            <th class="d-none d-md-table-cell">Venta Ult. 30 días</th>
+                            <th class="d-none d-md-table-cell">Venta Prom.30 días</th>
                             <th>Sugerido</th>
                             <th>Solicitado</th>
                             <th class="d-none d-md-table-cell">Días de Inv.</th>
@@ -358,7 +346,7 @@ set @idcab=?;
             <td class="total-disponible"><?= number_format($totalDisponible,0) ?></td>
             <td class="col-dispo-bodega"><?= number_format($r->total_Bodega,0) ?></td>
             <td><?= number_format($r->total_Bodega-$solicitadosTiendas,0) ?></td>
-            <td class="d-none d-md-table-cell"><?= number_format($r->VentaUltima,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->VentaPromedio,0) ?></td>
             <td><?= number_format($r->Sugerido,0) ?></td>
             <td>
             <input type="number" 
@@ -715,18 +703,18 @@ $('#btnLimpiar').click(function() {
                             </tr>
 
                             <tr>
-                                <td><b>Venta 30 días</b></td><td>${parseInt(d.VentaUltima) || 0}</td>
+                                <td><b>Venta 30 días</b></td><td>${parseInt(d.CantidadTotalTreintaDias) || 0}</td>
                                 <td><b>Días Ult. Fecha Ingreso</b></td><td>${parseInt(d.dias_ultima_fecha_ingreso) || 0}</td>
                        
                             </tr>
                             <tr>
-                                <td><b>Prom. Venta 30 días</b></td><td>${parseFloat(d.PromVenta30dias).toFixed(2)}</td>
+                                <td><b>Prom. Venta 30 días</b></td><td>${parseFloat(d.VentaPromedio).toFixed(2)}</td>
                                          <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso.split(" ")[0]}</td>
                             </tr>
                             <tr>
 
-                                <td><b>Prom. Ult. 3 meses</b></td><td>${parseInt(d.venta_90dias/3) || 0}</td>
-                                <td><b>Prom. Venta 90 días</b></td><td>${parseFloat(d.PromVenta90dias).toFixed(2)}</td>
+                                <td><b>Prom. Ult. 3 meses</b></td><td>${parseInt(d.PromedioNoventaDias) || 0}</td>
+                                <td><b>Venta 90 días</b></td><td>${parseFloat(d.CantidadTotalNoventaDias).toFixed(2)}</td>
                               
                             </tr>
                            

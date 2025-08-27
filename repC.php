@@ -307,7 +307,7 @@ set @idcab=?;
                             <th>Total Disponible</th>
                             <th class="d-none d-md-table-cell col-dispo-bodega">Stock Bodega</th>
                             <th>Disponible Bodega</th>
-                            <th class="d-none d-md-table-cell">Venta Total 30 días</th>
+                            <th class="d-none d-md-table-cell"></br></br>Total Venta 30 días</th>
                             <th>Sugerido</th>
                             <th>Solicitado</th>
                             <th class="d-none d-md-table-cell">Días de Inv.</th>
@@ -323,14 +323,14 @@ set @idcab=?;
             $solicitadosTiendas = isset($solicitadosTiendas[$r->ItemCode]) ? $solicitadosTiendas[$r->ItemCode] : 0;
             $transito = floatval($r->total_Transitoria_Tienda);
             $onhand = floatval($r->OnHand);
-            $ventas = floatval($r->VentaUltima);
+            $ventas = floatval($r->VentaPromedio);
             $solicitado = floatval($valorSolicitado);
             $totalDisponible = $onhand + $transito + $solicitado;
             if ($ventas > 0) {
                 if ($solicitado == 0) {
-                    $diasInv = round((($solicitado + $transito + $onhand) / $ventas) * 30);
+                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) );
                 } else {
-                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) * 30);
+                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) );
                 }
             } else {
                 $diasInv = 0;
@@ -714,10 +714,15 @@ $('#btnLimpiar').click(function() {
                             <tr>
 
                                 <td><b>Prom. Ult. 3 meses</b></td><td>${parseInt(d.PromedioNoventaDias) || 0}</td>
+                                <td><b>Última Fecha Venta</b></td><td>${d.FechaUltimaVenta.split(" ")[0]}</td>
+                              
+                            </tr>
+                            <tr>
+
+    
                                 <td><b>Venta 90 días</b></td><td>${parseFloat(d.CantidadTotalNoventaDias).toFixed(2)}</td>
                               
                             </tr>
-                           
                            
    
                             <tr style="background-color: #f2f2f2;">

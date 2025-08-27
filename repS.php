@@ -511,7 +511,6 @@ $(document).ready(function() {
 </div>
 <script>
 document.getElementById("btnDescargarPDF").addEventListener("click", function() {
-    // Selecciona el contenido a exportar (puedes ajustar la clase o id)
     const content = document.querySelector(".content");
 
     html2canvas(content, { scale: 2 }).then(canvas => {
@@ -519,28 +518,44 @@ document.getElementById("btnDescargarPDF").addEventListener("click", function() 
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF("p", "mm", "a4");
 
-        // Tamaño de la página
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
 
-        // Escalamos la imagen al ancho de la página
         const imgWidth = pageWidth;
         const imgHeight = canvas.height * imgWidth / canvas.width;
 
-        let position = 0;
+        // --------------------------
+        // Encabezado dinámico
+        // --------------------------
+        const fechaHora = "<?= date('d-m-Y H:i:s'); ?>";
+        const almacen = "<?= $almacen->cod_almacen ?? 'N/A'; ?>";
+        const usuario = "<?= $_SESSION['idU'].' - '.$_SESSION['username']; ?>";
 
-        if (imgHeight < pageHeight) {
-            // Si cabe en una sola página
-            pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        pdf.setFontSize(10);
+        pdf.text("Fecha y Hora: " + fechaHora, 10, 10);
+        pdf.text("Almacén: " + almacen, 10, 15);
+        pdf.text("Usuario: " + usuario, 10, 20);
+
+        // --------------------------
+        // Imagen del contenido
+        // --------------------------
+        let position = 30; // deja espacio al encabezado
+
+        if (imgHeight < pageHeight - 30) {
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         } else {
-            // Si ocupa varias páginas
             let heightLeft = imgHeight;
             while (heightLeft > 0) {
                 pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
                 heightLeft -= pageHeight;
                 if (heightLeft > 0) {
                     pdf.addPage();
-                    position = -pageHeight;
+                    // Reagregar encabezado en cada página
+                    pdf.setFontSize(10);
+                    pdf.text("Fecha y Hora: " + fechaHora, 10, 10);
+                    pdf.text("Almacén: " + almacen, 10, 15);
+                    pdf.text("Usuario: " + usuario, 10, 20);
+                    position = 30;
                 }
             }
         }
@@ -549,6 +564,7 @@ document.getElementById("btnDescargarPDF").addEventListener("click", function() 
     });
 });
 </script>
+
 
 <!-- jsPDF + html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

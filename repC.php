@@ -299,11 +299,12 @@ set @idcab=?;
                     <thead>
                         <tr>
                             <th class="d-none d-md-table-cell">Código Barras</th>
-                            <th class="d-none d-md-table-cell">Referencia</th>
+                            
                             <th>Descripción</th>
                             <th class="d-none d-md-table-cell">Embalaje</th>
                             <th class="d-none d-md-table-cell">Stock Tienda</th>
                             <th class="d-none d-md-table-cell">Tránsito</th>
+                            <th class="d-none d-md-table-cell">Comprometido</th>
                             <th>Total Disponible</th>
                             <th class="d-none d-md-table-cell col-dispo-bodega">Stock Bodega</th>
                             <th>Disponible Bodega</th>
@@ -324,8 +325,9 @@ set @idcab=?;
             $transito = floatval($r->total_Transitoria_Tienda);
             $onhand = floatval($r->OnHand);
             $ventas = floatval($r->VentaPromedio);
+            $comprometido = floatval($r->total_Solicitud_Tienda);
             $solicitado = floatval($valorSolicitado);
-            $totalDisponible = $onhand + $transito + $solicitado;
+            $totalDisponible = $onhand + $transito + $solicitado +$comprometido;
             if ($ventas > 0) {
                 if ($solicitado == 0) {
                     $diasInv = round((($transito + $onhand + $solicitado) / $ventas) );
@@ -338,11 +340,12 @@ set @idcab=?;
         ?>
         <tr>
             <td class="d-none d-md-table-cell"><?= $r->CodeBars ?></td>
-            <td class="d-none d-md-table-cell"><?= $r->ItemCode ?></td>
+            
             <td><?= $r->ItemCode.' - '.$r->ItemName ?></td>
             <td class="d-none d-md-table-cell"><?= number_format($r->embalaje,0) ?></td>
             <td class="d-none d-md-table-cell"><?= number_format($r->OnHand,0) ?></td>
             <td class="d-none d-md-table-cell"><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->total_Solicitud_Tienda,0) ?></td>
             <td class="total-disponible"><?= number_format($totalDisponible,0) ?></td>
             <td class="col-dispo-bodega"><?= number_format($r->total_Bodega,0) ?></td>
             <td><?= number_format($r->total_Bodega-$solicitadosTiendas,0) ?></td>

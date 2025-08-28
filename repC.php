@@ -713,7 +713,7 @@ $('#btnLimpiar').click(function() {
                             </tr>
                             <tr>
                                 <td><b>Prom. Venta 30 días</b></td><td>${parseFloat(d.VentaPromedio).toFixed(2)}</td>
-                                <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso.split(" ")[0]}</td>
+                                <td><b>Últ. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso.split(" ")[0]}</td>
                             </tr>
                             <tr>
 
@@ -722,7 +722,10 @@ $('#btnLimpiar').click(function() {
                             </tr>
                             <tr>    
                                 <td><b>Venta 90 días</b></td><td>${parseFloat(d.CantidadTotalNoventaDias).toFixed(2)}</td>
-                              
+                              <td><b>Días desde Últ. Venta</b></td>
+                                <td>
+                                ${Math.abs(Math.floor((new Date() - new Date(d.FechaUltimaVenta.split(" ")[0])) / (1000*60*60*24)))}
+                                </td>
                             </tr>
                            
    

@@ -745,12 +745,29 @@ $('#btnLimpiar').click(function() {
                             </tr>
                             <tr>
                                 <td><b>Solicitado</b></td><td>${parseInt(solicitado) || 0}</td>
-<td><b>Lead Time</b></td><td>${parseInt(d.U_LEAD) || 0}</td>
+                        <td><b>Lead Time</b></td><td>${parseInt(d.U_LEAD) || 0}</td>
                             </tr>
-                                                        <tr>
+                             <tr>
 
                                 <td><b>Total Stock</b></td><td>${parseInt(totalStock) || 0}</td>
+
+
+                      
+                                <td><b>Stock de Seguridad</b></td><td>${parseInt(d.U_STK_SEG) || 0}</td>
+                           
+
                             </tr>
+                             <tr>
+
+                                <td></td><td></td>
+
+
+                      
+                                <td><b>Perfil Reposición</b></td><td>${parseInt(d.U_PER_REP) || 0}</td>
+                           
+
+                            </tr>
+                            
                         </table>
                         </div>
                     `;

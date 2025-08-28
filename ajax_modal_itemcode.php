@@ -11,7 +11,7 @@ if ($itemcode && $whscode) {
         [venta_90dias], [venta_90dias]/90 as PromVenta90dias, [OnHand],
         ISNULL(([total_Bodega] / NULLIF([VentaUltima], 0)) * 30, 0) AS diasInvActual,
         [total_Bodega], [total_Transitoria_Bodega], [MinStock], [MaxStock], [U_LEAD], [VentaPromedio], [CantidadTotalNoventaDias], 
-        [PromedioNoventaDias], CantidadTotalTreintaDias, FechaUltimaVenta
+        [PromedioNoventaDias], CantidadTotalTreintaDias, FechaUltimaVenta, U_PER_REP, U_STK_SEG
         FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
         WHERE [ItemCode]=? AND [WhsCode]=?";
     $stmt = $dbdev->prepare($sql);

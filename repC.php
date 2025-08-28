@@ -708,7 +708,7 @@ $('#btnLimpiar').click(function() {
 
                             <tr>
                                 <td><b>Venta 30 días</b></td><td>${d.CantidadTotalTreintaDias}</td>
-                                <td><b>Días Ult. Fecha Ingreso</b></td><td>${parseInt(d.dias_ultima_fecha_ingreso) || 0}</td>
+                                <td><b>Días Últ. Fecha Ingreso</b></td><td>${parseInt(d.dias_ultima_fecha_ingreso) || 0}</td>
                        
                             </tr>
                             <tr>
@@ -717,7 +717,7 @@ $('#btnLimpiar').click(function() {
                             </tr>
                             <tr>
 
-                                <td><b>Prom. Ult. 3 meses</b></td><td>${parseInt(d.CantidadTotalNoventaDias/3) || 0}</td>
+                                <td><b>Prom. Últ. 3 meses</b></td><td>${parseInt(d.CantidadTotalNoventaDias/3) || 0}</td>
                                 <td><b>Última Fecha Venta</b></td><td>${d.FechaUltimaVenta.split(" ")[0]}</td>
                             </tr>
                             <tr>    

@@ -66,7 +66,7 @@ $sql = "DECLARE @WHS nvarchar(10);
             ORDER BY fecCreacion DESC  -- opcional, por si hay varios en el mismo día
         );
 
-        SELECT *
+        SELECT *, sugerido_final AS Sugerido
         FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].[rep_det] d
             join [MODULOS_SC].[reposicion].[ProcesadosCache] c on d.ItemCode=c.ItemCode
         where	d.[fk_id_cab]= @IDCAB AND d.Quantity>0 AND c.WhsCode=@WHS;";
@@ -117,50 +117,57 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Codido Barra</th>
-                            <th>Cod Producto</th>
-                            <th>Descripcion</th>
-                            <th>Embalaje</th>
-                            <th>Stock</th>
-                            <th>Transito</th>
-                            <th>Stock Bodega</th>
-                            <th>Venta Ult 30 dias</th>
+                            <th class="d-none d-md-table-cell">Código Barras</th>
+                            <th>Descripción</th>
+                            <th class="d-none d-md-table-cell">Embalaje</th>
+                            <th class="d-none d-md-table-cell">Stock Tienda</th>
+                            <th class="d-none d-md-table-cell">Tránsito</th>
+                            <th class="d-none d-md-table-cell">Comprometido</th>
+                            <th>Total Disponible</th>
+                            <th class="d-none d-md-table-cell col-dispo-bodega">Stock Bodega</th>
+                            <th>Disponible Bodega</th>
+                            <th class="d-none d-md-table-cell"></br></br>Total Venta 30 días</th>
                             <th>Sugerido</th>
                             <th>Solicitado</th>
-                            <th>Dias de Inv.</th>
-                            <th>Observaciones</th>
-
+                            <th class="d-none d-md-table-cell">Días de Inv.</th>
+                            <th class="d-none d-md-table-cell">Observación</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($resumen as $r): ?>
         <?php
-            $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
+             $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
             $comentario = isset($comentarios[$r->ItemCode]) ? $comentarios[$r->ItemCode] : '';
+            $solicitadosTiendas = isset($solicitadosTiendas[$r->ItemCode]) ? $solicitadosTiendas[$r->ItemCode] : 0;
             $transito = floatval($r->total_Transitoria_Tienda);
             $onhand = floatval($r->OnHand);
-            $ventas = floatval($r->VentaUltima);
+            $ventas = floatval($r->VentaPromedio);
+            $comprometido = floatval($r->total_Solicitud_Tienda);
             $solicitado = floatval($valorSolicitado);
+            $totalDisponible = $onhand + $transito + $solicitado +$comprometido;
             if ($ventas > 0) {
                 if ($solicitado == 0) {
-                    $diasInv = round((($solicitado + $transito + $onhand) / $ventas) * 30);
+                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) );
                 } else {
-                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) * 30);
+                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) );
                 }
             } else {
                 $diasInv = 0;
             }
         ?>
         <tr>
-            <td><?= $r->CodeBars ?></td>
-            <td><?= $r->ItemCode ?></td>
-            <td><?= $r->ItemName ?></td>
-            <td><?= number_format($r->embalaje,0) ?></td>
-            <td><?= number_format($r->OnHand,0) ?></td>
-            <td><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
-            <td><?= number_format($r->total_Bodega,0) ?></td>
-            <td><?= number_format($r->VentaUltima,0) ?></td>
-            <td><?= number_format($r->sugerido_final,0) ?></td>
+             <td class="d-none d-md-table-cell"><?= $r->CodeBars ?></td>
+            
+            <td><?= $r->ItemCode.' - '.$r->ItemName ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->embalaje,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->OnHand,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->total_Solicitud_Tienda,0) ?></td>
+            <td class="total-disponible"><?= number_format($totalDisponible,0) ?></td>
+            <td class="col-dispo-bodega"><?= number_format($r->total_Bodega,0) ?></td>
+            <td><?= number_format($r->total_Bodega-$solicitadosTiendas,0) ?></td>
+            <td class="d-none d-md-table-cell"><?= number_format($r->CantidadTotalTreintaDias,0) ?></td>
+            <td><?= number_format($r->Sugerido,0) ?></td>
             <td><?= number_format($r->Quantity,0) ?></td>
             <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
             <td><?= $r->comment ?></td>

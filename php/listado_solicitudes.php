@@ -13,7 +13,8 @@ $sentencia = $db->query("
                     WHERE 
                         T1.DocDate BETWEEN '$desde' AND '$hasta' 
                        
-                        AND T1.DocStatus = 'O'
+                        AND T1.DocStatus = 'O' 
+ AND T1.LineStatus='N'
                     AND --DocNum_Tr=0 AND
                         
                          NOT EXISTS (

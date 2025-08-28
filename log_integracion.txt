@@ -621,3 +621,58 @@
 [2025-08-27 21:57:39] Datos preparados para enviar: {"DepositDate":"2025-08-27","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":1172.81,"JournalRemarks":"26\/08\/2025","BankReference":"2192","U_IXX_REF_BANCARIA":"RL-MRC"}
 [2025-08-27 21:57:44] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
 [2025-08-27 21:57:44] ✅ Depósito ID 2224 marcado como integrado.
+[2025-08-27 23:23:00] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:00] Procesando integración para ID: 2148
+[2025-08-27 23:23:00] Datos preparados para enviar: {"DepositDate":"2025-08-22","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":110,"JournalRemarks":"20\/08\/2025","BankReference":"4172405","U_IXX_REF_BANCARIA":"BYL-QSN"}
+[2025-08-27 23:23:03] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:03] Procesando integración para ID: 2147
+[2025-08-27 23:23:03] Datos preparados para enviar: {"DepositDate":"2025-08-22","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":40,"JournalRemarks":"21\/08\/2025","BankReference":"4172404","U_IXX_REF_BANCARIA":"BYL-QSN"}
+[2025-08-27 23:23:05] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:05] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:06] ✅ Depósito ID 2148 marcado como integrado.
+[2025-08-27 23:23:06] ✅ Depósito ID 2147 marcado como integrado.
+[2025-08-27 23:23:06] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:06] Procesando integración para ID: 1848
+[2025-08-27 23:23:06] Datos preparados para enviar: {"DepositDate":"2025-08-23","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":381.47,"JournalRemarks":"22\/08\/2025","BankReference":"474665","U_IXX_REF_BANCARIA":"RL-BAT"}
+[2025-08-27 23:23:08] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:08] Procesando integración para ID: 2146
+[2025-08-27 23:23:08] Datos preparados para enviar: {"DepositDate":"2025-08-26","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":151.8,"JournalRemarks":"22\/08\/2025","BankReference":"04174401","U_IXX_REF_BANCARIA":"BYL-QSN"}
+[2025-08-27 23:23:10] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:10] ✅ Depósito ID 1848 marcado como integrado.
+[2025-08-27 23:23:10] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:11] ✅ Depósito ID 2146 marcado como integrado.
+[2025-08-27 23:23:12] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:12] Procesando integración para ID: 1958
+[2025-08-27 23:23:12] Datos preparados para enviar: {"DepositDate":"2025-08-25","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":60,"JournalRemarks":"23\/08\/2025","BankReference":"04342143","U_IXX_REF_BANCARIA":"BYL-SCA"}
+[2025-08-27 23:23:14] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:14] ✅ Depósito ID 1958 marcado como integrado.
+[2025-08-27 23:23:16] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:16] Procesando integración para ID: 1988
+[2025-08-27 23:23:16] Datos preparados para enviar: {"DepositDate":"2025-08-25","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":270.6,"JournalRemarks":"23\/08\/2025","BankReference":"806033","U_IXX_REF_BANCARIA":"RL-BAT"}
+[2025-08-27 23:23:18] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:18] ✅ Depósito ID 1988 marcado como integrado.
+[2025-08-27 23:23:18] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:18] Procesando integración para ID: 1992
+[2025-08-27 23:23:18] Datos preparados para enviar: {"DepositDate":"2025-08-25","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":494.01,"JournalRemarks":"24\/08\/2025","BankReference":"418160","U_IXX_REF_BANCARIA":"RL-BAT"}
+[2025-08-27 23:23:20] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:20] ✅ Depósito ID 1992 marcado como integrado.
+[2025-08-27 23:23:21] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:21] Procesando integración para ID: 2124
+[2025-08-27 23:23:21] Datos preparados para enviar: {"DepositDate":"2025-08-26","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":768,"JournalRemarks":"25\/08\/2025","BankReference":"103798","U_IXX_REF_BANCARIA":"RL-BAT"}
+[2025-08-27 23:23:23] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:23] ✅ Depósito ID 2124 marcado como integrado.
+[2025-08-27 23:23:24] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:24] Procesando integración para ID: 2145
+[2025-08-27 23:23:25] Datos preparados para enviar: {"DepositDate":"2025-08-26","DepositAccount":"_SYS00000001154","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":105,"JournalRemarks":"25\/08\/2025","BankReference":"04174402","U_IXX_REF_BANCARIA":"BYL-QSN"}
+[2025-08-27 23:23:27] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:27] ✅ Depósito ID 2145 marcado como integrado.
+[2025-08-27 23:23:27] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:27] Procesando integración para ID: 2169
+[2025-08-27 23:23:27] Datos preparados para enviar: {"DepositDate":"2025-08-27","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":318.36,"JournalRemarks":"26\/08\/2025","BankReference":"697900","U_IXX_REF_BANCARIA":"RL-BAT"}
+[2025-08-27 23:23:30] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:30] ✅ Depósito ID 2169 marcado como integrado.
+[2025-08-27 23:23:30] ===> Script iniciado. Método: POST
+[2025-08-27 23:23:30] Procesando integración para ID: 2231
+[2025-08-27 23:23:30] Datos preparados para enviar: {"DepositDate":"2025-08-27","DepositAccount":"_SYS00000001444","DepositCurrency":"USD","DepositType":"dtCash","AllocationAccount":"_SYS00000001151","TotalLC":383.57,"JournalRemarks":"26\/08\/2025","BankReference":"861450","U_IXX_REF_BANCARIA":"LP-QSN"}
+[2025-08-27 23:23:32] ✅ Respuesta SAP (HTTP 200): Depósito registrado exitosamente.
+[2025-08-27 23:23:32] ✅ Depósito ID 2231 marcado como integrado.

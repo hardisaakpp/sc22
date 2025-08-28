@@ -493,7 +493,7 @@ $('#data-table').on('input', 'input[type="number"][name^="solicitar"]', function
         dataType: "json",
         success: function (res) {
             let solicitadostiendas = res.solicitados || 0;
-            console.log("Solicitados tiendas:", solicitadostiendas);
+            //console.log("Solicitados tiendas:", solicitadostiendas);
 
             // ✅ Validaciones
             if (value > stockBodega - solicitadostiendas) {
@@ -574,7 +574,8 @@ $('#data-table').on('input', 'input[type="number"][name^="solicitar"]', function
     function recalcularTotales() {
         let diasInv = 0;
         if (ventas > 0) {
-            diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+            
+            diasInv = ((transito + onhand + solicitado) / ventas) ;
         }
         totalDisponible = onhand + transito + solicitado;
         $diasInvTd.text(diasInv.toFixed(2));
@@ -647,9 +648,9 @@ $('#btnLimpiar').click(function() {
         let diasInv = 0;
         if (ventas > 0) {
             if (solicitado == 0) {
-                diasInv = ((solicitado + transito + onhand) / ventas) * 30;
+                diasInv = ((solicitado + transito + onhand) / ventas) ;
             } else {
-                diasInv = ((transito + onhand + solicitado) / ventas) * 30;
+                diasInv = ((transito + onhand + solicitado) / ventas) ;
             }
         }
         $diasInvTd.text(diasInv.toFixed(2));
@@ -712,17 +713,14 @@ $('#btnLimpiar').click(function() {
                             </tr>
                             <tr>
                                 <td><b>Prom. Venta 30 días</b></td><td>${parseFloat(d.VentaPromedio).toFixed(2)}</td>
-                                         <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso.split(" ")[0]}</td>
+                                <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso.split(" ")[0]}</td>
                             </tr>
                             <tr>
 
-                                <td><b>Prom. Ult. 3 meses</b></td><td>${parseInt(d.PromedioNoventaDias) || 0}</td>
+                                <td><b>Prom. Ult. 3 meses</b></td><td>${parseInt(d.CantidadTotalNoventaDias/3) || 0}</td>
                                 <td><b>Última Fecha Venta</b></td><td>${d.FechaUltimaVenta.split(" ")[0]}</td>
-                              
                             </tr>
-                            <tr>
-
-    
+                            <tr>    
                                 <td><b>Venta 90 días</b></td><td>${parseFloat(d.CantidadTotalNoventaDias).toFixed(2)}</td>
                               
                             </tr>

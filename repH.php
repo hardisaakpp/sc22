@@ -29,49 +29,16 @@ $almCD = $almcd->fetch(PDO::FETCH_OBJ);
 
 // Ejecutar procedimiento almacenado (no devuelve nada)
 $idUser = $_SESSION["idU"] ?? null;
-$idRepCab = null;
-if ($almTr && $idUser) {
-    $stmtProc = $db->prepare("EXEC sp_GetOrInsert_RepCab ?, ?, ?");
-    $stmtProc->execute([$almTr->cod_almacen, $idUser, $almCD->cod_almacen]);
 
-    // Obtener el id por consulta con ToWhs y fecha actual
-    $fechaHoy = date('Y-m-d');
-    $stmtId = $db->prepare("SELECT TOP 1 id FROM [STORECONTROL].[dbo].[rep_cab] WHERE ToWhs = ? AND idUser = ? AND CAST(fecCreacion AS DATE) = ?");
-    $stmtId->execute([$almTr->cod_almacen, $idUser, $fechaHoy]);
-    $resultId = $stmtId->fetch(PDO::FETCH_ASSOC);
-    if ($resultId && isset($resultId['id'])) {
-        $idRepCab = $resultId['id'];
-        //echo "idRepCab obtenido: " . $idRepCab ;
-    }
-}
 
-// Obtener datos de pedido
-$sol = $db->prepare("SELECT TOP (1) * FROM [STORECONTROL].[dbo].[rep_cab]
-  where id = ?");
-$sol->execute([$idRepCab]);
-$solcab = $sol->fetch(PDO::FETCH_OBJ);
 
 // Consulta de carrito
-$sql = "DECLARE @WHS nvarchar(10);
-        SET @WHS = '".$almacen->cod_almacen."';
-        DECLARE @TOWHS nvarchar(10);
-        SET @TOWHS = '".$almTr->cod_almacen."';
+$sql = "select c.*, u.username 
+        from rep_cab c join users u on c.idUser = u.id
+        where idUser= '".$_SESSION["idU"]."';
+        ";
 
-        DECLARE @IDCAB int;
-        SET @IDCAB = (
-            SELECT TOP 1 id
-            FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].rep_cab
-            WHERE CAST(fecCreacion AS DATE) = CAST(GETDATE() AS DATE)
-            AND [ToWhs] = @TOWHS
-            ORDER BY fecCreacion DESC  -- opcional, por si hay varios en el mismo día
-        );
-
-        SELECT *
-        FROM [LS_10_10_100_12_Prod].[STORECONTROL].[dbo].[rep_det] d
-            join [MODULOS_SC].[reposicion].[ProcesadosCache] c on d.ItemCode=c.ItemCode
-        where	d.[fk_id_cab]= @IDCAB AND d.Quantity>0 AND c.WhsCode=@WHS;";
-
-$stmt = $dbdev->prepare($sql);
+$stmt = $db->prepare($sql);
 $stmt->execute();
 $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -84,22 +51,13 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
     <div class="col-md-6 offset-md-1">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Solicitud de transferencia</strong>           
+                <strong class="card-title">...</strong>           
             </div>  
             <div class="card-body">
                 <form method="GET" action="" id="form-filtros">
                     <table style="width:50%; border-collapse: collapse;">
                         <tr>
-                            <td style="padding:4px; font-weight:bold;">Origen:</td>
-                            <td style="padding:4px;"><?php echo $solcab->FromWhs; ?></td>
-                        </tr>
-                        <tr>
-                            <td style="padding:4px; font-weight:bold;">Destino:</td>
-                            <td style="padding:4px;"><?php echo $solcab->ToWhs; ?></td>
-                        </tr>
-                        <tr>
-                            <td style="padding:4px; font-weight:bold;">Fecha:</td>
-                            <td style="padding:4px;"><?php echo date("d-m-Y", strtotime($solcab->fecCreacion)); ?></td>
+                           
                         </tr>
                     </table>
                 </form>
@@ -111,62 +69,29 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Detalle</strong>
+                <strong class="card-title">Solicitudes</strong>
             </div>
             <div class="card-body">
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Codido Barra</th>
-                            <th>Cod Producto</th>
-                            <th>Descripcion</th>
-                            <th>Embalaje</th>
-                            <th>Stock</th>
-                            <th>Transito</th>
-                            <th>Stock Bodega</th>
-                            <th>Venta Ult 30 dias</th>
-                            <th>Sugerido</th>
-                            <th>Solicitado</th>
-                            <th>Dias de Inv.</th>
-                            <th>Observaciones</th>
-
+                            <th>Fecha Creacion</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Usuario Solicita</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($resumen as $r): ?>
-        <?php
-            $valorSolicitado = isset($solicitados[$r->ItemCode]) ? $solicitados[$r->ItemCode] : 0;
-            $comentario = isset($comentarios[$r->ItemCode]) ? $comentarios[$r->ItemCode] : '';
-            $transito = floatval($r->total_Transitoria_Tienda);
-            $onhand = floatval($r->OnHand);
-            $ventas = floatval($r->VentaUltima);
-            $solicitado = floatval($valorSolicitado);
-            if ($ventas > 0) {
-                if ($solicitado == 0) {
-                    $diasInv = round((($solicitado + $transito + $onhand) / $ventas) * 30);
-                } else {
-                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) * 30);
-                }
-            } else {
-                $diasInv = 0;
-            }
-        ?>
-        <tr>
-            <td><?= $r->CodeBars ?></td>
-            <td><?= $r->ItemCode ?></td>
-            <td><?= $r->ItemName ?></td>
-            <td><?= number_format($r->embalaje,0) ?></td>
-            <td><?= number_format($r->OnHand,0) ?></td>
-            <td><?= number_format($r->total_Transitoria_Tienda,0) ?></td>
-            <td><?= number_format($r->total_Bodega,0) ?></td>
-            <td><?= number_format($r->VentaUltima,0) ?></td>
-            <td><?= number_format($r->sugerido_final,0) ?></td>
-            <td><?= number_format($r->Quantity,0) ?></td>
-            <td class="dias-inv"><?= number_format($diasInv, 2) ?></td>
-            <td><?= $r->comment ?></td>
-         
-        </tr>
-    <?php endforeach; ?>
+                        <tr>
+                            <td><?= date("d-m-Y H:i", strtotime($r->fecCreacion)) ?></td>
+                            <td><?= $r->FromWhs ?></td>
+                            <td><?= $r->ToWhs ?></td>
+                            <td><?= $r->username ?></td>
+                            <td><?= $r->integrado == 1 ? '🟢 Integrado a SAP' : 'Por enviar' ?></td>
+                        </tr>
+                    <?php endforeach; ?>
     <?php if (empty($resumen)): ?>
         <tr><td colspan="13" class="text-center">No hay datos</td></tr>
     <?php endif; ?>
@@ -504,6 +429,70 @@ $(document).ready(function() {
     </div>
   </div>
 </div>
+<div class="text-right mb-3">
+    <button id="btnDescargarPDF" class="btn btn-danger">
+        Descargar PDF
+    </button>
+</div>
+<script>
+document.getElementById("btnDescargarPDF").addEventListener("click", function() {
+    const content = document.querySelector(".content");
 
+    html2canvas(content, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("p", "mm", "a4");
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        const imgWidth = pageWidth;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        // --------------------------
+        // Encabezado dinámico
+        // --------------------------
+        const fechaHora = "<?= date('d-m-Y H:i:s'); ?>";
+        const almacen = "<?= $almacen->cod_almacen ?? 'N/A'; ?>";
+        const usuario = "<?= $_SESSION['idU'].' - '.$_SESSION['username']; ?>";
+
+        pdf.setFontSize(10);
+        pdf.text("Fecha y Hora: " + fechaHora, 10, 10);
+        pdf.text("Almacén: " + almacen, 10, 15);
+        pdf.text("Usuario: " + usuario, 10, 20);
+
+        // --------------------------
+        // Imagen del contenido
+        // --------------------------
+        let position = 30; // deja espacio al encabezado
+
+        if (imgHeight < pageHeight - 30) {
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        } else {
+            let heightLeft = imgHeight;
+            while (heightLeft > 0) {
+                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                if (heightLeft > 0) {
+                    pdf.addPage();
+                    // Reagregar encabezado en cada página
+                    pdf.setFontSize(10);
+                    pdf.text("Fecha y Hora: " + fechaHora, 10, 10);
+                    pdf.text("Almacén: " + almacen, 10, 15);
+                    pdf.text("Usuario: " + usuario, 10, 20);
+                    position = 30;
+                }
+            }
+        }
+
+        pdf.save("solicitud_transferencia.pdf");
+    });
+});
+</script>
+
+
+<!-- jsPDF + html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <?php include_once "footer.php"; ?>

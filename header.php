@@ -194,7 +194,7 @@
                                     <li><i class="ti ti-shopping-cart"></i><a href="repS.php">Carrito</a></li>
                                    
 
-                                    <li><i class="fa fa-h-square"></i><a href="#">Historial</a></li>
+                                    <li><i class="fa fa-h-square"></i><a href="repH.php">Historial</a></li>
                                 
                                 </ul>
                             </li>

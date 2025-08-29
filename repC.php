@@ -330,9 +330,9 @@ set @idcab=?;
             $totalDisponible = $onhand + $transito + $solicitado +$comprometido;
             if ($ventas > 0) {
                 if ($solicitado == 0) {
-                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) );
+                    $diasInv = ((($transito + $onhand + $solicitado) / $ventas) );
                 } else {
-                    $diasInv = round((($transito + $onhand + $solicitado) / $ventas) );
+                    $diasInv = ((($transito + $onhand + $solicitado) / $ventas) );
                 }
             } else {
                 $diasInv = 0;
@@ -572,7 +572,7 @@ $('#data-table').on('input', 'input[type="number"][name^="solicitar"]', function
     });
 
     function recalcularTotales() {
-        let diasInv = 0;
+        let diasInv = 0.0;
         if (ventas > 0) {
             
             diasInv = ((transito + onhand + solicitado) / ventas) ;
@@ -658,14 +658,14 @@ $('#btnLimpiar').click(function() {
 
     // Acción botón modal cod-producto (consulta AJAX y muestra datos con SweetAlert2)
     $('#data-table').on('click', '.btn-modal-codprod', function() {
-        var codprod = $(this).data('codprod');
-        var whscode = "<?= $almacen->cod_almacen ?>";
-        // Obtener el valor solicitado de la fila actual
-        var solicitado = $(this).closest('tr').find('input[name^="solicitar"]').val();
-        // Obtener total_Bodega y total_Transitoria_Bodega de la fila actual
-        var totalBodega = $(this).closest('tr').find('td').eq(6).text().replace(/,/g, '');
-        var totalTransitoriaBodega = $(this).closest('tr').find('td').eq(7).text().replace(/,/g, '');
-        var totalStock = (parseFloat(solicitado) || 0) + (parseFloat(totalBodega) || 0) + (parseFloat(totalTransitoriaBodega) || 0);
+    var $row = $(this).closest('tr'); // guardamos la fila
+    var codprod = $(this).data('codprod');
+    var whscode = "<?= $almacen->cod_almacen ?>";
+    var solicitado = $row.find('input[name^="solicitar"]').val();
+    var totalBodega = $row.find('td').eq(6).text().replace(/,/g, '');
+    var totalTransitoriaBodega = $row.find('td').eq(7).text().replace(/,/g, '');
+    var totalStock = (parseFloat(solicitado) || 0) + (parseFloat(totalBodega) || 0) + (parseFloat(totalTransitoriaBodega) || 0);
+    var diasInv = parseFloat($row.find('td.dias-inv').text()).toFixed(2); // <-- aquí
 
         $.ajax({
             url: 'ajax_modal_itemcode.php',
@@ -721,7 +721,7 @@ $('#btnLimpiar').click(function() {
                                 <td><b>Última Fecha Venta</b></td><td>${d.FechaUltimaVenta.split(" ")[0]}</td>
                             </tr>
                             <tr>    
-                                <td><b>Venta 90 días</b></td><td>${parseFloat(d.CantidadTotalNoventaDias).toFixed(2)}</td>
+                                <td><b>Venta 90 días</b></td><td>${parseInt(d.CantidadTotalNoventaDias)|| 0}</td>
                               <td><b>Días desde Últ. Venta</b></td>
                                 <td>
                                 ${Math.abs(Math.floor((new Date() - new Date(d.FechaUltimaVenta.split(" ")[0])) / (1000*60*60*24)))}
@@ -744,7 +744,7 @@ $('#btnLimpiar').click(function() {
                             </tr>
                             <tr>
                                   <td><b>Transito Bodega</b></td><td>${parseInt(d.total_Transitoria_Bodega) || 0}</td>
-                                       <td><b>Días Inv. Actual</b></td><td>${parseFloat(d.diasInvActual).toFixed(2)}</td>
+                                       <td><b>Días de Inv.</b></td><td>${diasInv}</td>
                             </tr>
                             <tr>
                                 <td><b>Solicitado</b></td><td>${parseInt(solicitado) || 0}</td>

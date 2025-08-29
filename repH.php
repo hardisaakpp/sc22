@@ -15,62 +15,51 @@ $alm = $db->prepare("SELECT cod_almacen FROM almacen WHERE id = ?");
 $alm->execute([$whsCica]);
 $almacen = $alm->fetch(PDO::FETCH_OBJ);
 
-// Obtener nombre del almacén
 $whsTr = $_SESSION["whsTr"] ?? null;
 $almt = $db->prepare("SELECT cod_almacen FROM almacen WHERE id = ?");
 $almt->execute([$whsTr]);
 $almTr = $almt->fetch(PDO::FETCH_OBJ);
 
-// Obtener nombre del almacén
-$whsCD = $_SESSION["whsCD"] ?? null;
-$almcd = $db->prepare("SELECT cod_almacen FROM almacen WHERE id = ?");
-$almcd->execute([$whsCD]);
-$almCD = $almcd->fetch(PDO::FETCH_OBJ);
+// -----------------------------
+// Filtro de fechas
+// -----------------------------
+$fechaDesde = $_GET['fecha_desde'] ?? date('Y-m-d', strtotime('-9 days'));
+$fechaHasta = $_GET['fecha_hasta'] ?? date('Y-m-d');
 
-// Ejecutar procedimiento almacenado (no devuelve nada)
-$idUser = $_SESSION["idU"] ?? null;
-
-
-
-// Consulta de carrito
-$sql = "select c.*, u.username 
-        from rep_cab c join users u on c.idUser = u.id
-        where idUser= '".$_SESSION["idU"]."';
-        ";
-
+// Consultar solicitudes del usuario con filtro de fechas
+$sql = "SELECT c.*, u.username 
+        FROM rep_cab c 
+        JOIN users u ON c.idUser = u.id
+        WHERE idUser = ? AND fecCreacion BETWEEN ? AND ?";
 $stmt = $db->prepare($sql);
-$stmt->execute();
+$stmt->execute([$_SESSION["idU"], $fechaDesde . ' 00:00:00', $fechaHasta . ' 23:59:59']);
 $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
-
 ?>
 
-
-
-
 <div class="content">
-    <div class="col-md-6 offset-md-1">
+    <div class="col-md-6 offset-md-1 mb-3">
         <div class="card">
-            <div class="card-header">
-                <strong class="card-title">...</strong>           
-            </div>  
+            <div class="card-header"><strong>Filtrar por fechas</strong></div>
             <div class="card-body">
-                <form method="GET" action="" id="form-filtros">
-                    <table style="width:50%; border-collapse: collapse;">
-                        <tr>
-                           
-                        </tr>
-                    </table>
+                <form method="GET" action="" class="form-inline">
+                    <div class="form-group mr-2">
+                        <label for="fecha_desde" class="mr-1">Desde:</label>
+                        <input type="date" name="fecha_desde" id="fecha_desde" class="form-control" value="<?= $fechaDesde ?>">
+                    </div>
+                    <div class="form-group mr-2">
+                        <label for="fecha_hasta" class="mr-1">Hasta:</label>
+                        <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control" value="<?= $fechaHasta ?>">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                    <a href="?" class="btn btn-secondary ml-1">Restablecer</a>
                 </form>
             </div>
         </div>
     </div>
 
-    
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header">
-                <strong class="card-title">Solicitudes</strong>
-            </div>
+            <div class="card-header"><strong>Solicitudes</strong></div>
             <div class="card-body">
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
@@ -80,6 +69,7 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                             <th>Destino</th>
                             <th>Usuario Solicita</th>
                             <th>Estado</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,409 +80,115 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                             <td><?= $r->ToWhs ?></td>
                             <td><?= $r->username ?></td>
                             <td><?= $r->integrado == 1 ? '🟢 Integrado a SAP' : 'Por enviar' ?></td>
+                            <td>
+                                <button class="btn btn-info btn-sm btn-detalle" data-idcab="<?= $r->id ?>">Detalle</button>
+                                <button class="btn btn-success btn-sm btn-descargar" data-idcab="<?= $r->id ?>">PDF</button>
+                            </td>
                         </tr>
-                    <?php endforeach; ?>
-    <?php if (empty($resumen)): ?>
-        <tr><td colspan="13" class="text-center">No hay datos</td></tr>
-    <?php endif; ?>
-</tbody>
+                        <?php endforeach; ?>
+                        <?php if (empty($resumen)): ?>
+                        <tr><td colspan="6" class="text-center">No hay datos</td></tr>
+                        <?php endif; ?>
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
 
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- jQuery y DataTables -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- jsPDF UMD -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
 $(document).ready(function() {
+    $('#data-table').DataTable();
 
-  
-    // ---------------------------
-    // Validar al salir del input solicitado
-    // ---------------------------
-    $('#data-table tbody').on('blur', 'input[type="number"][name^="solicitar"]', function() {
-        const sugerido = parseFloat($(this).data('sugerido'));
-        let value = parseFloat(this.value);
-        const original = $(this).data('original');
-        const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
-        const towhs = "<?= $almTr->cod_almacen ?>";
-        const idcab = "<?= $idRepCab ?>";
-        const stockBodega = parseFloat($(this).closest('tr').find('td').eq(6).text().replace(/,/g, ''));
-
-        // Para cálculo de días de inventario
-        let transito = parseFloat($(this).data('transito')) || 0;
-        let onhand = parseFloat($(this).data('onhand')) || 0;
-        let ventas = parseFloat($(this).data('ventas')) || 0;
-        let $diasInvTd = $(this).closest('tr').find('td.dias-inv');
-        let solicitado = value;
-
-        if (isNaN(value) || value < 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Valor inválido',
-                text: 'El valor no puede ser menor que 0',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                this.value = original;
-                solicitado = parseFloat(original) || 0;
-                // Recalcular días de inventario
-                let diasInv = 0;
-                if (ventas > 0) {
-                    if (solicitado == 0) {
-                        diasInv = ((solicitado + transito + onhand) / ventas) * 30;
-                    } else {
-                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                    }
-                }
-                $diasInvTd.text(diasInv.toFixed(2));
-            });
-            return;
-        }
-
-        if (value > stockBodega) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Stock insuficiente',
-                text: 'No puede solicitar más que el Stock Bodega (' + stockBodega + ')',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                this.value = original;
-                solicitado = parseFloat(original) || 0;
-                // Recalcular días de inventario
-                let diasInv = 0;
-                if (ventas > 0) {
-                    if (solicitado == 0) {
-                        diasInv = ((solicitado + transito + onhand) / ventas) * 30;
-                    } else {
-                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                    }
-                }
-                $diasInvTd.text(diasInv.toFixed(2));
-            });
-            return;
-        }
-
-        if (value > sugerido) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cantidad mayor a la sugerida',
-                html: `Se sugiere solicitar <b>${sugerido}</b>.<br>¿Desea solicitar <b>${value}</b>?`,
-                showCancelButton: true,
-                confirmButtonText: 'Sí, solicitar',
-                cancelButtonText: 'No, usar sugerido'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $(this).data('original', value);
-                    // Guardar con AJAX
-                    $.ajax({
-                        url: 'ajax_repdet.php',
-                        type: 'POST',
-                        data: {
-                            idcab: idcab,
-                            towhs: towhs,
-                            itemcode: itemcode,
-                            quantity: value
-                        },
-                        success: function(resp) {
-                            console.log("Guardado:", resp);
-                        },
-                        error: function(xhr) {
-                            console.error("Error al guardar:", xhr.responseText);
-                        }
-                    });
-                    // Recalcular días de inventario con el valor confirmado
-                    solicitado = value;
-                    let diasInv = 0;
-                    if (ventas > 0) {
-                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                    }
-                    $diasInvTd.text(diasInv.toFixed(2));
-                } else {
-                    this.value = sugerido;
-                    $(this).data('original', sugerido);
-                    solicitado = sugerido;
-                    // Recalcular días de inventario con el valor sugerido
-                    let diasInv = 0;
-                    if (ventas > 0) {
-                        diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                    }
-                    $diasInvTd.text(diasInv.toFixed(2));
-                }
-            });
-        } else {
-            $(this).data('original', value);
-            // Guardar con AJAX
-            $.ajax({
-                url: 'ajax_repdet.php',
-                type: 'POST',
-                data: {
-                    idcab: idcab,
-                    towhs: towhs,
-                    itemcode: itemcode,
-                    quantity: value
-                },
-                success: function(resp) {
-                    console.log("Guardado:", resp);
-                },
-                error: function(xhr) {
-                    console.error("Error al guardar:", xhr.responseText);
-                }
-            });
-            // Recalcular días de inventario con el valor aceptado
-            solicitado = value;
-            let diasInv = 0;
-            if (ventas > 0) {
-                if (solicitado == 0) {
-                    diasInv = ((solicitado + transito + onhand) / ventas) * 30;
-                } else {
-                    diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-                }
-            }
-            $diasInvTd.text(diasInv.toFixed(2));
-        }
-    });
-
-    // Guardar comentario al salir del input observaciones
-    $('#data-table tbody').on('blur', 'input[type="text"][name^="comment"]', function() {
-        const value = $(this).val();
-        const itemcode = $(this).attr('name').match(/\[(.*?)\]/)[1];
-        const towhs = "<?= $almTr->cod_almacen ?>";
-        const idcab = "<?= $idRepCab ?>";
-        // Guardar con AJAX igual que solicitado
+    // Detalle con SweetAlert
+    $(document).on('click', '.btn-detalle', function() {
+        var idCab = $(this).data('idcab');
         $.ajax({
-            url: 'ajax_repdet.php',
+            url: 'ajax_detalle_solicitud.php',
             type: 'POST',
-            data: {
-                idcab: idcab,
-                towhs: towhs,
-                itemcode: itemcode,
-                comment: value
-            },
-            success: function(resp) {
-                console.log("Comentario guardado:", resp);
-            },
-            error: function(xhr) {
-                console.error("Error al guardar comentario:", xhr.responseText);
-            }
-        });
-    });
-
-    // ---------------------------
-    // Botón Limpiar filtros
-    // ---------------------------
-    $('#btnLimpiar').click(function() {
-        $('#form-filtros')[0].reset();
-        table.columns().search('').draw(); // limpiar filtros de DataTable
-    });
-
-    // Actualizar días de inventario al cambiar el input
-    $('#data-table tbody').on('input blur', 'input[type="number"][name^="solicitar"]', function() {
-        let solicitado = parseFloat(this.value) || 0;
-        let transito = parseFloat($(this).data('transito')) || 0;
-        let onhand = parseFloat($(this).data('onhand')) || 0;
-        let ventas = parseFloat($(this).data('ventas')) || 0;
-        let $diasInvTd = $(this).closest('tr').find('td.dias-inv');
-        let diasInv = 0;
-        if (ventas > 0) {
-            if (solicitado == 0) {
-                diasInv = ((solicitado + transito + onhand) / ventas) * 30;
-            } else {
-                diasInv = ((transito + onhand + solicitado) / ventas) * 30;
-            }
-        }
-        $diasInvTd.text(diasInv.toFixed(2));
-    });
-
-    // Acción botón modal cod-producto (consulta AJAX y muestra datos con SweetAlert2)
-    $(document).on('click', '.btn-modal-codprod', function() {
-        var codprod = $(this).data('codprod');
-        var whscode = "<?= $almacen->cod_almacen ?>";
-        var solicitado = $(this).closest('tr').find('td').eq(9).text();
-        var totalBodega = $(this).closest('tr').find('td').eq(6).text().replace(/,/g, '');
-        var totalTransitoriaBodega = $(this).closest('tr').find('td').eq(7).text().replace(/,/g, '');
-        var totalStock = (parseFloat(solicitado) || 0) + (parseFloat(totalBodega) || 0) + (parseFloat(totalTransitoriaBodega) || 0);
-
-        $.ajax({
-            url: 'ajax_modal_itemcode.php',
-            type: 'POST',
+            data: { idCab: idCab },
             dataType: 'json',
-            data: {
-                itemcode: codprod,
-                whscode: whscode
-            },
             success: function(resp) {
-                if (resp && resp.success && resp.data) {
-                    var d = resp.data;
-                    var html = `
-                        <div style="font-size:12px;">
-                        <table class="table table-bordered table-sm" style="margin-bottom:0;">
-                            <tr>
-                                <td><b>CodeBars</b></td><td>${d.CodeBars}</td>
-                                <td><b>ItemCode</b></td><td>${d.ItemCode}</td>
-                            </tr>
-                            <tr>
-                                <td><b>ItemName</b></td><td colspan="3">${d.ItemName}</td>
-                            </tr>
-                            <tr>
-                                <td><b>ClasificacionABC</b></td><td>${d.ClasificacionABC}</td>
-                                <td><b>Unidad</b></td><td>${d.unidad}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Categoria</b></td><td>${d.categoria}</td>
-                                <td><b>Linea</b></td><td>${d.linea}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Marca</b></td><td>${d.marca}</td>
-                                <td><b>Ult. Fecha Ingreso</b></td><td>${d.ultima_fecha_ingreso}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Días Ult. Fecha Ingreso</b></td><td>${d.dias_ultima_fecha_ingreso}</td>
-                                <td><b>Venta Ultima</b></td><td>${d.VentaUltima}</td>
-                            </tr>
-                            <tr>
-                                <td><b>PromVenta30dias</b></td><td>${d.PromVenta30dias}</td>
-                                <td><b>Venta 90 días</b></td><td>${d.venta_90dias}</td>
-                            </tr>
-                            <tr>
-                                <td><b>PromVenta90dias</b></td><td>${d.PromVenta90dias}</td>
-                                <td><b>OnHand</b></td><td>${d.OnHand}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Días Inv Actual</b></td><td>${d.diasInvActual}</td>
-                                <td><b>Total Bodega</b></td><td>${d.total_Bodega}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Total Transitoria Bodega</b></td><td>${d.total_Transitoria_Bodega}</td>
-                                <td><b>MinStock</b></td><td>${d.MinStock}</td>
-                            </tr>
-                            <tr>
-                                <td><b>MaxStock</b></td><td>${d.MaxStock}</td>
-                                <td><b>U_LEAD</b></td><td>${d.U_LEAD}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Solicitado</b></td><td>${solicitado}</td>
-                                <td><b>TOTALSTOCK</b></td><td>${totalStock}</td>
-                            </tr>
-                        </table>
-                        </div>
-                    `;
-                    Swal.fire({
-                        title: 'Detalle Producto',
-                        html: html,
-                        icon: 'info',
-                        confirmButtonText: 'OK'
+                let html = '<table class="table table-bordered table-sm"><tr><th>ItemCode</th><th>Cantidad</th></tr>';
+                if(resp && resp.length > 0){
+                    resp.forEach(d => {
+                        html += `<tr><td>${d.ItemCode}</td><td>${d.Quantity}</td></tr>`;
                     });
                 } else {
-                    Swal.fire({
-                        title: 'Detalle Producto',
-                        text: 'No se encontraron datos.',
-                        icon: 'warning',
-                        confirmButtonText: 'OK'
-                    });
+                    html += '<tr><td colspan="2">No hay detalles</td></tr>';
                 }
+                html += '</table>';
+                Swal.fire({ title: 'Detalle', html: html, icon: 'info' });
             },
             error: function() {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'No se pudo consultar el producto.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+                Swal.fire({ title: 'Error', text: 'No se pudo consultar los detalles.', icon: 'error' });
             }
         });
     });
 
-});
-</script>
-
-<!-- Modal -->
-<div class="modal fade" id="modalCodProd" tabindex="-1" role="dialog" aria-labelledby="modalCodProdLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalCodProdLabel">Código Producto</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="modalCodProdBody">
-        <!-- Aquí se muestra el código producto -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="text-right mb-3">
-    <button id="btnDescargarPDF" class="btn btn-danger">
-        Descargar PDF
-    </button>
-</div>
-<script>
-document.getElementById("btnDescargarPDF").addEventListener("click", function() {
-    const content = document.querySelector(".content");
-
-    html2canvas(content, { scale: 2 }).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
+    // Descargar PDF por línea
+    $(document).on('click', '.btn-descargar', async function() {
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF("p", "mm", "a4");
-
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = pageWidth;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-
-        // --------------------------
-        // Encabezado dinámico
-        // --------------------------
         const fechaHora = "<?= date('d-m-Y H:i:s'); ?>";
-        const almacen = "<?= $almacen->cod_almacen ?? 'N/A'; ?>";
         const usuario = "<?= $_SESSION['idU'].' - '.$_SESSION['username']; ?>";
 
         pdf.setFontSize(10);
-        pdf.text("Fecha y Hora: " + fechaHora, 10, 10);
-        pdf.text("Almacén: " + almacen, 10, 15);
-        pdf.text("Usuario: " + usuario, 10, 20);
+        pdf.text("Fecha de descarga: " + fechaHora, 10, 10);
+        pdf.text("Usuario: " + usuario, 10, 15);
 
-        // --------------------------
-        // Imagen del contenido
-        // --------------------------
-        let position = 30; // deja espacio al encabezado
+        let startY = 25;
 
-        if (imgHeight < pageHeight - 30) {
-            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        } else {
-            let heightLeft = imgHeight;
-            while (heightLeft > 0) {
-                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-                if (heightLeft > 0) {
+        const tr = $(this).closest('tr')[0];
+        const cells = tr.querySelectorAll("td");
+        const idCab = $(this).data('idcab');
+
+        pdf.setFontSize(12);
+        pdf.text(`Solicitud #${idCab}`, 10, startY);
+        startY += 5;
+
+        pdf.setFontSize(10);
+        pdf.text(`Fecha Creación: ${cells[0].innerText}`, 10, startY);
+        pdf.text(`Origen: ${cells[1].innerText}`, 60, startY);
+        pdf.text(`Destino: ${cells[2].innerText}`, 120, startY);
+        pdf.text(`Usuario: ${cells[3].innerText}`, 10, startY + 5);
+        pdf.text(`Estado: ${cells[4].innerText}`, 60, startY + 5);
+        startY += 12;
+
+        let detalle = await fetch('ajax_detalle_solicitud.php', {
+            method: 'POST',
+            body: new URLSearchParams({ idCab: idCab })
+        }).then(res => res.json()).catch(() => []);
+
+        if(detalle && detalle.length > 0){
+            pdf.text("Detalle:", 10, startY);
+            startY += 5;
+            detalle.forEach(d => {
+                pdf.text(`- ${d.ItemCode}: ${d.Quantity}`, 15, startY);
+                startY += 5;
+                if(startY > 270){
                     pdf.addPage();
-                    // Reagregar encabezado en cada página
-                    pdf.setFontSize(10);
-                    pdf.text("Fecha y Hora: " + fechaHora, 10, 10);
-                    pdf.text("Almacén: " + almacen, 10, 15);
-                    pdf.text("Usuario: " + usuario, 10, 20);
-                    position = 30;
+                    startY = 20;
                 }
-            }
+            });
+        } else {
+            pdf.text("No hay detalles disponibles.", 10, startY);
         }
 
-        pdf.save("solicitud_transferencia.pdf");
+        pdf.save(`solicitud_${idCab}.pdf`);
     });
 });
 </script>
-
-
-<!-- jsPDF + html2canvas -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <?php include_once "footer.php"; ?>

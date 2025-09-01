@@ -56,7 +56,7 @@
 
 <div class="content">
 
-
+    <!-- Card Principal picking -->
     <div class="col-md-6">
         <div class="card">
             <div class="card-header" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0;overflow:hidden;">
@@ -392,8 +392,6 @@
         });
     }
 
-
-
     document.getElementById('btnDescargarCSV').addEventListener('click', function () {
         const tabla = document.querySelector('#tabla');
         if (!tabla) {
@@ -419,7 +417,6 @@
         enlace.click();
         document.body.removeChild(enlace);
     });
-
 
     function mostrarLoader(mostrar) {
         document.getElementById('loader').style.display = mostrar ? 'block' : 'none';
@@ -488,125 +485,119 @@
         });
     });
 
+    // Pintar filas al cargar la página según el estado del escaneo
+    window.addEventListener('DOMContentLoaded', () => {
+        const filas = document.querySelectorAll('#tabla tbody tr');
 
+        filas.forEach(fila => {
+            const solicitado = parseInt(fila.cells[2].textContent);
+            const escaneado = parseInt(fila.cells[3].textContent);
 
-        // Pintar filas al cargar la página según el estado del escaneo
-        window.addEventListener('DOMContentLoaded', () => {
-            const filas = document.querySelectorAll('#tabla tbody tr');
+            fila.classList.remove('fila-completa', 'fila-parcial');
+            
+            if (escaneado === solicitado) {
+                fila.classList.add('fila-completa'); // verde
+            } else if (escaneado > 0 && escaneado < solicitado) {
+                fila.classList.add('fila-parcial'); // gris
+            } else if (escaneado > solicitado) {
+                fila.style.backgroundColor = '#f8d7da'; // rojo claro
+            }
+        });
+    });
 
-            filas.forEach(fila => {
-                const solicitado = parseInt(fila.cells[2].textContent);
-                const escaneado = parseInt(fila.cells[3].textContent);
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputCodigo = document.getElementById("codigo");
+        const inputCantidad = document.getElementById("txtu");
+        const tabla = document.getElementById("tabla").getElementsByTagName("tbody")[0];
+        const botonAgregar = document.getElementById("btnAgregar");
 
-                fila.classList.remove('fila-completa', 'fila-parcial');
-                
-                if (escaneado === solicitado) {
-                    fila.classList.add('fila-completa'); // verde
-                } else if (escaneado > 0 && escaneado < solicitado) {
-                    fila.classList.add('fila-parcial'); // gris
-                } else if (escaneado > solicitado) {
-                    fila.style.backgroundColor = '#f8d7da'; // rojo claro
+        function procesarCodigo() {
+            const codigoIngresado = inputCodigo.value.trim();
+            const cantidad = parseInt(inputCantidad.value.trim()) || 1;
+
+            if (!codigoIngresado) {
+                alert("Por favor ingresa un código de barras.");
+                return;
+            }
+
+            let encontrado = false;
+
+            Array.from(tabla.rows).forEach(fila => {
+                const codigoTabla = fila.getAttribute("data-codigo");
+                const solicitado = parseInt(fila.cells[2].textContent.trim());
+                const escaneadoCell = fila.querySelector(".escaneados");
+                let escaneado = parseInt(escaneadoCell.textContent.trim());
+
+                if (codigoTabla === codigoIngresado) {
+                    encontrado = true;
+
+                    if (escaneado + cantidad > solicitado) {
+                        alert("No puedes escanear más de lo solicitado.");
+                        // 👇 también lo guardamos en la tabla de adicionales
+                        agregarCodigoNoReconocido(codigoIngresado, "Código superó lo solicitado");
+                    } else {
+
+                        escaneado += cantidad;
+                        escaneadoCell.textContent = escaneado;
+
+                        tabla.insertBefore(fila, tabla.firstChild);
+                        // Limpiar estilos anteriores
+                        fila.classList.remove("fila-completa", "fila-parcial");
+                        fila.style.backgroundColor = "";
+
+                        // Aplicar color según condición
+                        if (escaneado === solicitado) {
+                            fila.classList.add("fila-completa"); // verde
+                        } else if (escaneado > 0 && escaneado < solicitado) {
+                            fila.classList.add("fila-parcial"); // gris
+                        } else if (escaneado > solicitado) {
+                            fila.style.backgroundColor = "#f8d7da"; // rojo claro
+                        }
+                    }
                 }
             });
-        });
 
-    
-
-document.addEventListener("DOMContentLoaded", function () {
-    const inputCodigo = document.getElementById("codigo");
-    const inputCantidad = document.getElementById("txtu");
-    const tabla = document.getElementById("tabla").getElementsByTagName("tbody")[0];
-    const botonAgregar = document.getElementById("btnAgregar");
-
-   function procesarCodigo() {
-    const codigoIngresado = inputCodigo.value.trim();
-    const cantidad = parseInt(inputCantidad.value.trim()) || 1;
-
-    if (!codigoIngresado) {
-        alert("Por favor ingresa un código de barras.");
-        return;
-    }
-
-    let encontrado = false;
-
-    Array.from(tabla.rows).forEach(fila => {
-        const codigoTabla = fila.getAttribute("data-codigo");
-        const solicitado = parseInt(fila.cells[2].textContent.trim());
-        const escaneadoCell = fila.querySelector(".escaneados");
-        let escaneado = parseInt(escaneadoCell.textContent.trim());
-
-        if (codigoTabla === codigoIngresado) {
-            encontrado = true;
-
-            if (escaneado + cantidad > solicitado) {
-                alert("No puedes escanear más de lo solicitado.");
-                // 👇 también lo guardamos en la tabla de adicionales
-                agregarCodigoNoReconocido(codigoIngresado, "Código superó lo solicitado");
-            } else {
-
-                escaneado += cantidad;
-                escaneadoCell.textContent = escaneado;
-
-                tabla.insertBefore(fila, tabla.firstChild);
-                // Limpiar estilos anteriores
-                fila.classList.remove("fila-completa", "fila-parcial");
-                fila.style.backgroundColor = "";
-
-                // Aplicar color según condición
-                if (escaneado === solicitado) {
-                    fila.classList.add("fila-completa"); // verde
-                } else if (escaneado > 0 && escaneado < solicitado) {
-                    fila.classList.add("fila-parcial"); // gris
-                } else if (escaneado > solicitado) {
-                    fila.style.backgroundColor = "#f8d7da"; // rojo claro
-                }
+            // 👇 Aquí reemplazo el alert por la lógica de "no encontrado"
+            if (!encontrado) {
+                alert("❌ Codigo no pertenece a esta Solicitud.");
+                agregarCodigoNoReconocido(codigoIngresado);
             }
+            
+            inputCantidad.value = "1"; // Resetear cantidad
+            inputCodigo.value = "";
+            inputCodigo.focus();
         }
-    });
 
-    // 👇 Aquí reemplazo el alert por la lógica de "no encontrado"
-    if (!encontrado) {
-        alert("❌ Codigo no pertenece a esta Solicitud.");
-        agregarCodigoNoReconocido(codigoIngresado);
-    }
-    
-    inputCantidad.value = "1"; // Resetear cantidad
-    inputCodigo.value = "";
-    inputCodigo.focus();
-}
-
-    // Click en botón ➕
-    botonAgregar.addEventListener("click", function (e) {
-        e.preventDefault();
-        procesarCodigo();
-    });
-
-    // Enter en input de código
-    inputCodigo.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
+        // Click en botón ➕
+        botonAgregar.addEventListener("click", function (e) {
             e.preventDefault();
             procesarCodigo();
+        });
+
+        // Enter en input de código
+        inputCodigo.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                procesarCodigo();
+            }
+        });
+    
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const btn = document.getElementById("btnTransferencia");
+        if (btn) {
+            btn.addEventListener("click", async function () {
+                // Ejecutar btnGuardar antes de crear transferencia
+                await new Promise((resolve) => {
+                    document.getElementById("btnGuardar").click();
+                    // Esperar a que termine el guardado (simple delay de 1s, ajusta si tienes callback)
+                    setTimeout(resolve, 1000);
+                });
+                crearTransferencia();
+            });
         }
     });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const btn = document.getElementById("btnTransferencia");
-    if (btn) {
-        btn.addEventListener("click", async function () {
-            // Ejecutar btnGuardar antes de crear transferencia
-            await new Promise((resolve) => {
-                document.getElementById("btnGuardar").click();
-                // Esperar a que termine el guardado (simple delay de 1s, ajusta si tienes callback)
-                setTimeout(resolve, 1000);
-            });
-            crearTransferencia();
-        });
-    }
-});
-
-
-
 
 </script>
 

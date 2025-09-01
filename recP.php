@@ -119,7 +119,35 @@
         </div>
     </div>
 
-      
+    <!-- Notificación -->
+    <div id="alertaCodigo" class="alert alert-danger text-center" style="display:none; position:fixed; top:20px; right:20px; z-index:9999;">
+        Código no encontrado
+    </div>
+
+    <!-- Card para codigos no reconocidos -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Códigos Adicionales
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-bordered" id="tablaNoReconocidos">
+                    <thead>
+                        <tr>
+                            <th>Código de barras</th>
+                            <th>Fecha / Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Aquí se agregan dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  
+
+
 </div>
 
 <script>
@@ -241,70 +269,70 @@
                                     BaseType: line.baseType
                                 }))
                             };
-console.log("📦 JSON generado:", transferBody);
-                            fetch('php/enviar_transferencia_stock.php', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(transferBody)
-})
-.then(async response => {
-    const text = await response.text();
+                console.log("📦 JSON generado:", transferBody);
+                                            fetch('php/enviar_transferencia_stock.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(transferBody)
+                })
+                .then(async response => {
+                    const text = await response.text();
 
-    console.log('📦 Respuesta de la API:', text);
+                    console.log('📦 Respuesta de la API:', text);
 
-    let data;
-    try {
-        data = JSON.parse(text);
-    } catch (e) {
-        data = text;
-    }
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        data = text;
+                    }
 
-    console.log('Respuesta API StockTransfer:', data);
+                    console.log('Respuesta API StockTransfer:', data);
 
-    // Extrae mensaje, ya sea de JSON o texto plano
-    let msg = typeof data === 'string' 
-        ? data 
-        : (data && data.message 
-            ? data.message 
-            : JSON.stringify(data));
+                    // Extrae mensaje, ya sea de JSON o texto plano
+                    let msg = typeof data === 'string' 
+                        ? data 
+                        : (data && data.message 
+                            ? data.message 
+                            : JSON.stringify(data));
 
-    console.log('msg Mensaje de la API:', msg);
+                    console.log('msg Mensaje de la API:', msg);
 
-    mostrarLoader(false);
+                    mostrarLoader(false);
 
-    if (msg.includes('Transferencia creada')) {
-        alert('✔️ ' + msg);
+                    if (msg.includes('Transferencia creada')) {
+                        alert('✔️ ' + msg);
 
-        // Actualiza estado en base de datos
-        fetch("php/actualizar_estado_recep.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: new URLSearchParams({
-                id: "<?= $idcab ?>"
-            })
-        })
-        .then(() => {
-            // Redirige después de actualizar
-            setTimeout(() => {
-                window.location.href = "recPL.php";
-            }, 1500);
-        });
+                        // Actualiza estado en base de datos
+                        fetch("php/actualizar_estado_recep.php", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: new URLSearchParams({
+                                id: "<?= $idcab ?>"
+                            })
+                        })
+                        .then(() => {
+                            // Redirige después de actualizar
+                            setTimeout(() => {
+                                window.location.href = "recPL.php";
+                            }, 1500);
+                        });
 
-    } else {
-        alert('🥲 ' + (msg || 'Error desconocido al crear la transferencia.'));
-    }
-})
-.catch(error => {
-    mostrarLoader(false);
-    console.error("❌ Error de red:", error);
-    alert("Error al conectar con el servidor.");
-});
+                    } else {
+                        alert('🥲 ' + (msg || 'Error desconocido al crear la transferencia.'));
+                    }
+                })
+                .catch(error => {
+                    mostrarLoader(false);
+                    console.error("❌ Error de red:", error);
+                    alert("Error al conectar con el servidor.");
+                });
 
-                        
+                                        
 
 
 
@@ -320,6 +348,50 @@ console.log("📦 JSON generado:", transferBody);
         mostrarLoader(false);
 
     };
+
+    function mostrarAlertaNoReconocido(mensaje) {
+        const alerta = document.getElementById("alertaCodigo");
+        alerta.textContent = mensaje;
+        alerta.style.display = "block";
+        alerta.style.opacity = 1;
+
+        setTimeout(() => {
+            let opacidad = 1;
+            const fade = setInterval(() => {
+                if (opacidad <= 0.1) {
+                    clearInterval(fade);
+                    alerta.style.display = "none";
+                }
+                alerta.style.opacity = opacidad;
+                opacidad -= 0.1;
+            }, 100);
+        }, 2000);
+    }
+
+    function agregarCodigoNoReconocido(codigo, motivo = "Código no encontrado") {
+        const tabla = document.querySelector("#tablaNoReconocidos tbody");
+        const fila = document.createElement("tr");
+
+        const celdaCodigo = document.createElement("td");
+        celdaCodigo.textContent = codigo;
+
+        const celdaFecha = document.createElement("td");
+        celdaFecha.textContent = new Date().toLocaleString();
+
+        fila.appendChild(celdaCodigo);
+        fila.appendChild(celdaFecha);
+        tabla.appendChild(fila);
+
+        mostrarAlertaNoReconocido(motivo);
+
+        // Guardar en BD
+        fetch('php/guardar_no_reconocidos.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ codigo: codigo, motivo: motivo, idcab: "<?= $idcab ?>" })
+        });
+    }
+
 
 
     document.getElementById('btnDescargarCSV').addEventListener('click', function () {
@@ -446,57 +518,62 @@ document.addEventListener("DOMContentLoaded", function () {
     const tabla = document.getElementById("tabla").getElementsByTagName("tbody")[0];
     const botonAgregar = document.getElementById("btnAgregar");
 
-    function procesarCodigo() {
-        const codigoIngresado = inputCodigo.value.trim();
-        const cantidad = parseInt(inputCantidad.value.trim()) || 1;
+   function procesarCodigo() {
+    const codigoIngresado = inputCodigo.value.trim();
+    const cantidad = parseInt(inputCantidad.value.trim()) || 1;
 
-        if (!codigoIngresado) {
-            alert("Por favor ingresa un código de barras.");
-            return;
-        }
+    if (!codigoIngresado) {
+        alert("Por favor ingresa un código de barras.");
+        return;
+    }
 
-        let encontrado = false;
+    let encontrado = false;
 
-        Array.from(tabla.rows).forEach(fila => {
-            const codigoTabla = fila.getAttribute("data-codigo");
-            const solicitado = parseInt(fila.cells[2].textContent.trim());
-            const escaneadoCell = fila.querySelector(".escaneados");
-            let escaneado = parseInt(escaneadoCell.textContent.trim());
+    Array.from(tabla.rows).forEach(fila => {
+        const codigoTabla = fila.getAttribute("data-codigo");
+        const solicitado = parseInt(fila.cells[2].textContent.trim());
+        const escaneadoCell = fila.querySelector(".escaneados");
+        let escaneado = parseInt(escaneadoCell.textContent.trim());
 
-            if (codigoTabla === codigoIngresado) {
-                encontrado = true;
+        if (codigoTabla === codigoIngresado) {
+            encontrado = true;
 
-                if (escaneado + cantidad > solicitado) {
-                    alert("No puedes escanear más de lo solicitado.");
-                } else {
-                    escaneado += cantidad;
-                    escaneadoCell.textContent = escaneado;
+            if (escaneado + cantidad > solicitado) {
+                alert("No puedes escanear más de lo solicitado.");
+                // 👇 también lo guardamos en la tabla de adicionales
+                agregarCodigoNoReconocido(codigoIngresado, "Código superó lo solicitado");
+            } else {
 
-                    tabla.insertBefore(fila, tabla.firstChild);
-                    // Limpiar estilos anteriores
-                    fila.classList.remove("fila-completa", "fila-parcial");
-                    fila.style.backgroundColor = "";
+                escaneado += cantidad;
+                escaneadoCell.textContent = escaneado;
 
-                    // Aplicar color según condición
-                    if (escaneado === solicitado) {
-                        fila.classList.add("fila-completa"); // verde
-                    } else if (escaneado > 0 && escaneado < solicitado) {
-                        fila.classList.add("fila-parcial"); // gris
-                    } else if (escaneado > solicitado) {
-                        fila.style.backgroundColor = "#f8d7da"; // rojo claro
-                    }
+                tabla.insertBefore(fila, tabla.firstChild);
+                // Limpiar estilos anteriores
+                fila.classList.remove("fila-completa", "fila-parcial");
+                fila.style.backgroundColor = "";
+
+                // Aplicar color según condición
+                if (escaneado === solicitado) {
+                    fila.classList.add("fila-completa"); // verde
+                } else if (escaneado > 0 && escaneado < solicitado) {
+                    fila.classList.add("fila-parcial"); // gris
+                } else if (escaneado > solicitado) {
+                    fila.style.backgroundColor = "#f8d7da"; // rojo claro
                 }
             }
-        });
-
-        if (!encontrado) {
-            alert("❌ Código no encontrado en la tabla.");
         }
-        
-        inputCantidad.value = "1"; // Resetear cantidad
-        inputCodigo.value = "";
-        inputCodigo.focus();
+    });
+
+    // 👇 Aquí reemplazo el alert por la lógica de "no encontrado"
+    if (!encontrado) {
+        alert("❌ Codigo no pertenece a esta Solicitud.");
+        agregarCodigoNoReconocido(codigoIngresado);
     }
+    
+    inputCantidad.value = "1"; // Resetear cantidad
+    inputCodigo.value = "";
+    inputCodigo.focus();
+}
 
     // Click en botón ➕
     botonAgregar.addEventListener("click", function (e) {

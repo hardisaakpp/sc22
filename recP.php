@@ -151,6 +151,10 @@
 </div>
 
 <script>
+
+    let reconteo = false; // Variable global para saber si ya hubo reconteo
+
+
     async function crearTransferencia() {
         
         if (!responsable) {
@@ -175,11 +179,28 @@
                 }
                 if (escaneado < solicitado) {
                     incompletos++;
+                    diferencias = true;
+
+                    // Primera vez que hay diferencias: resetear escaneado
+                    if (!reconteo) {
+                        fila.cells[3].textContent = 0;
+                        fila.style.backgroundColor = ""; // dejar fondo blanco/sin color
+                        fila.classList.remove("fila-completa", "fila-parcial"); // opcional limpiar clases de color
+                    }
                 }
                 if (escaneado > 0) {
                     totalEscaneado++;
                 }
             });
+
+            // Primera vez que hay diferencias: mostrar alerta y detener
+            if (diferencias && !reconteo) {
+                alert("⚠️ ES NECESARIO RECONTAR LOS ITEMS CON DIFERENCIAS PARA PROCEDER CON LA CREACION DE TRASLADO.");
+                reconteo = true; // activamos reconteo
+                mostrarLoader(false);
+                return; // detener creación hasta que se haga el reconteo
+            }
+
 
             if (errorCritico) {
                 alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");
@@ -332,17 +353,7 @@
                     alert("Error al conectar con el servidor.");
                 });
 
-                                        
-
-
-
-
-
-
-
-
-
-
+                                
                                 
                         }
         mostrarLoader(false);

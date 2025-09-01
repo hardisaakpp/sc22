@@ -16,6 +16,10 @@
                 WHERE c.id =".$idcab."  " );
     $scans = $s1->fetchAll(PDO::FETCH_OBJ);
 
+    $stmt = $db->prepare("SELECT CodeBars, datetime FROM TransferenciasDiferencias WHERE id_TrCab = ? ORDER BY datetime ASC");
+    $stmt->execute([$idcab]);
+    $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     // Obtener los almacenes desde sesión
     $whsCica = $_SESSION["whsCica"] ?? null;
     $whsTr = $_SESSION["whsTr"] ?? null;
@@ -360,6 +364,50 @@
 
     };
 
+    function guardarCodigosDiferencias() {
+        const codigos = Array.from(document.querySelectorAll("#tablaNoReconocidos tbody tr td:first-child"))
+            .map(td => td.textContent.trim());
+
+        if (codigos.length === 0) return;
+
+    // 🔹 Imprimir en consola antes de guardar
+    console.log("Códigos a guardar:", codigos);
+
+        fetch('php/guardar_diferencias.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idcab: "<?= $idcab ?>", codigos: codigos })
+        })
+       .then(res => res.text()) // <- leer como texto crudo
+        .then(resp => {
+            console.log("Respuesta del servidor:", resp);
+        })
+        .catch(err => console.error("Error fetch:", err));
+    }
+
+function cargarCodigosDiferencias() {
+    fetch('php/obtener_diferencias.php?idcab=<?= $idcab ?>')
+    .then(res => res.json())
+    .then(data => {
+        const tbody = document.querySelector("#tablaNoReconocidos tbody");
+        tbody.innerHTML = ""; // limpiar tabla
+        data.forEach(item => {
+            const fila = document.createElement("tr");
+            const celdaCodigo = document.createElement("td");
+            celdaCodigo.textContent = item.CodeBars;
+            const celdaFecha = document.createElement("td");
+            celdaFecha.textContent = item.datetime;
+            fila.appendChild(celdaCodigo);
+            fila.appendChild(celdaFecha);
+            tbody.appendChild(fila);
+        });
+    });
+}
+
+// Ejecutar al cargar la página
+document.addEventListener("DOMContentLoaded", cargarCodigosDiferencias);
+
+
     function mostrarAlertaNoReconocido(mensaje) {
         const alerta = document.getElementById("alertaCodigo");
         alerta.textContent = mensaje;
@@ -396,11 +444,7 @@
         mostrarAlertaNoReconocido(motivo);
 
         // Guardar en BD
-        fetch('php/guardar_no_reconocidos.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ codigo: codigo, motivo: motivo, idcab: "<?= $idcab ?>" })
-        });
+        guardarCodigosDiferencias();
     }
 
     document.getElementById('btnDescargarCSV').addEventListener('click', function () {

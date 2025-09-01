@@ -94,7 +94,7 @@ if ($pFlag) {
                 if ($pFecha>=date('Y-m-d', strtotime('yesterday'))) {
  
                 $sentencia = $db->query("
-  --EXEC sp_cic_sincSAPSingle '". $tiendaCica ."', '". $pFecha ."';            
+  EXEC sp_cic_sincSAPSingle '". $tiendaCica ."', '". $pFecha ."';            
                 EXEC sp_cic_createCajas '". $tiendaCica ."', '". $pFecha ."';
                 EXEC sp_cicUs_create '". $tiendaCica ."', '". $pFecha ."';
                 " );

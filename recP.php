@@ -205,6 +205,38 @@
                 return; // detener creación hasta que se haga el reconteo
             }
 
+            // Solo después de reconteo, mostrar mensaje informativo
+            if (reconteo) {
+                // Productos faltantes en la tabla principal
+                const faltantes = [];
+                filas.forEach(fila => {
+                    const solicitado = parseInt(fila.cells[2].textContent);
+                    const escaneado = parseInt(fila.cells[3].textContent);
+                    if (escaneado !== solicitado) {
+                        faltantes.push(fila.cells[1].textContent + ` (Solicitado: ${solicitado}, Escaneado: ${escaneado})`);
+                    }
+                });
+
+                // Códigos adicionales escaneados
+                const adicionales = Array.from(document.querySelectorAll("#tablaNoReconocidos tbody tr td:first-child"))
+                    .map(td => td.textContent.trim());
+
+                let mensaje = "📧 Mail enviado a 'Atencion Al Cliente'\n\n";
+                if (faltantes.length > 0) {
+                    mensaje += "Productos faltantes:\n" + faltantes.join("\n") + "\n\n";
+                } else {
+                    mensaje += "No hay productos faltantes.\n\n";
+                }
+
+                if (adicionales.length > 0) {
+                    mensaje += "Códigos adicionales escaneados:\n" + adicionales.join("\n");
+                } else {
+                    mensaje += "No hay códigos adicionales escaneados.";
+                }
+
+                alert(mensaje);
+            }
+
 
             if (errorCritico) {
                 alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");

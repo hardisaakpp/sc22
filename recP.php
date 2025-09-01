@@ -29,6 +29,7 @@
     $almacenR = $db->query("SELECT cod_almacen FROM almacen WHERE id = '{$whsCica}'")->fetchColumn();
     $TEMPa1 = $db->query("SELECT CreadaTransferencia FROM TransferenciasCabecera WHERE id = '{$idcab}'")->fetchColumn();
     $NumTransferencia = $db->query("SELECT NumTransferencia FROM TransferenciasCabecera WHERE id = '{$idcab}'")->fetchColumn();
+    $Responsable = $db->query("SELECT Responsable FROM TransferenciasCabecera WHERE id = '{$idcab}'")->fetchColumn();
 
             $Filler = $almacenTran;
             $ToWhsCode = $almacenR;
@@ -66,8 +67,15 @@
             <div class="card-body card-block">
                 <form id="form-codigo">
                         <div class="input-group mb-3 flex-nowrap">
-                            <div class="col-2"><input type="text" placeholder="cantidad" id="txtu" class="form-control" id="cantidad" autocomplete="off" min="1" value="1"></div>
-                            <div class="col-7"><input type="text" id="codigo" placeholder="Cod. Barras" class="form-control" autocomplete="off" autofocus></div>
+                            <div class="col-2"><label for="responsable" class="form-label"><b>Responsable:</b></label></div>
+                            <div class="col-7">
+                                <input type="text"  maxlength="49" id="responsable" name="responsable" class="form-control" value="<?= htmlspecialchars($Responsable ?? '') ?>" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3 flex-nowrap">
+                            <div class="col-2"><input type="text" placeholder="cantidad" id="txtu" class="form-control" id="cantidad" autocomplete="off" min="1" max="1000" value="1"></div>
+                            <div class="col-7"><input type="text"  maxlength="20" id="codigo" placeholder="Cod. Barras" class="form-control" autocomplete="off" autofocus></div>
                             <div class="col-3">
                                 <button id="btnAgregar" type="button"  class="btn btn-outline-primary btn-sm">➕</button>
                                 <button id="btnGuardar" type="button"  class="btn btn-outline-success">💾</button>
@@ -117,6 +125,12 @@
 <script>
     async function crearTransferencia() {
         
+        if (!responsable) {
+            alert("❌ Debe ingresar el Responsable antes de crear la transferencia.");
+            mostrarLoader(false);
+            return;
+        }
+
         mostrarLoader(true); // Mostrar loader
         const filas = document.querySelectorAll('#tabla tbody tr');
         let errorCritico = false;
@@ -339,13 +353,27 @@ console.log("📦 JSON generado:", transferBody);
         document.getElementById('loader').style.display = mostrar ? 'block' : 'none';
     }
 
+    function obtenerResponsable() {
+        return document.getElementById("responsable").value.trim();
+    }
 
     document.getElementById('btnGuardar').addEventListener('click', function () {
-        mostrarLoader(true); // Mostrar loader
+        const responsable = obtenerResponsable();
+        if (!responsable) {
+            alert("❌ Debe ingresar el Responsable antes de guardar.");
+            return;
+        }
+
+        mostrarLoader(true);
 
         const filas = document.querySelectorAll('#tabla tbody tr');
         let errorCritico = false;
-        const datos = [];
+
+        const datos = {
+            responsable,
+            idcab: "<?= $idcab ?>",   // id de la cabecera actual
+            items: []
+        };
 
         filas.forEach(fila => {
             const solicitado = parseInt(fila.cells[2].textContent);
@@ -354,7 +382,7 @@ console.log("📦 JSON generado:", transferBody);
                 errorCritico = true;
             }
 
-            datos.push({
+            datos.items.push({
                 id: fila.getAttribute('data-id'),
                 scan: escaneado
             });
@@ -366,19 +394,18 @@ console.log("📦 JSON generado:", transferBody);
             return;
         }
 
+        // Guardar detalle y responsable en base de datos
         fetch('php/guardar_scans_recep.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         })
         .then(response => response.json())
         .then(data => {
             if (data.status === "success") {
-                alert("✅ Datos guardados correctamente.");
+                alert("✅ Datos y Responsable guardados correctamente.");
             } else {
-                alert("❌ Error al guardar los datos.");
+                alert("❌ Error: " + (data.message || "al guardar los datos."));
             }
             mostrarLoader(false);
         })
@@ -388,6 +415,7 @@ console.log("📦 JSON generado:", transferBody);
             mostrarLoader(false);
         });
     });
+
 
 
         // Pintar filas al cargar la página según el estado del escaneo

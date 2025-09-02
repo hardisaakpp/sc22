@@ -166,7 +166,7 @@
                     if ($userAdmin==2 || $userName == 'RL-PSC' || $userName == 'OUT-LLG') {   
                         echo '                       
                             <li class="menu-item-has-children dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Recepción</a>
                                 <ul class="sub-menu children dropdown-menu">     
                                     <li><i class="ti ti-menu-alt"></i><a href="recL.php">Recepción Mercadería</a></li>
 

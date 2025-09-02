@@ -160,8 +160,7 @@
 
 
     async function crearTransferencia() {
-         let diferencias = false; // 👈 la inicializamos aquí
-
+        
         if (!responsable) {
             alert("❌ Debe ingresar el Responsable antes de crear la transferencia.");
             mostrarLoader(false);

@@ -136,7 +136,140 @@
 
 </style>
 
+<?php
+if($userAdmin==2) // si es TIENDA
+{
+        
+        $sentencia = $db->query("exec sp_getStockTotalXAlm ". $_SESSION['idU'] ." " );
+        $quser = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
+        if (count($quser) > 0) {
+            $sentencia2 = $db->query("exec sp_getStockTotalXAlm ". $_SESSION['idU'] ." " );
+            $TEMP1 = $sentencia2->fetchObject();
+            $xpuntaje1 = $TEMP1->Inventario;
+            $xtransit = $TEMP1->WhsCode;
+        } else {
+            $xpuntaje1 = 0;
+            $xtransit = '.';
+        }
+
+        $sentencia4 = $db->query("exec sp_getStockTransitorio ". $_SESSION['idU'] ." " );
+        $qtrans = $sentencia4->fetchAll(PDO::FETCH_OBJ);
+
+
+        
+    ?>
+
+
+    <div class="row">
+
+
+    <div class="container">
+    <?php if ($xpuntaje1>0) {  ?>
+      <div class="card">
+        <div class="box">
+          <div class="content">
+            <h2>🚛</h2>
+            <div class="col-md-6" style="text-align: center; display: flex; justify-content: center;">
+                    <img src="images/dash_icon.jpg" class="img-fluid rounded-start" alt="...">
+                    </div>
+            <h3>
+                
+            Transitoria <?php echo $xtransit; ?></h3>
+            <p>
+            <?php foreach($qtrans as $mascota){ 
+                        if ($mascota->ANTIGUEDAD=='RETRASADO') {?>
+
+
+
+                            <h5 class="card-title" style=" color: red;">
+                                <?php echo $mascota->OpenQty; ?> u. pendientes mayor a 48horas
+                            </h5>
+
+
+                            <?php  }else {?>
+                                
+                                <h5 class="card-title" style=" color: green;">
+                                <?php echo $xpuntaje1; ?> unidades recientes
+                            </h5>
+
+
+                            <?php }?>
+                        
+                    <?php } ?>
+                    <small class="text-muted">Actualizado desde SAP B1</small>
+            </p>
+            
+          </div>
+        </div>
+      </div>
+<?php }else {   ?> 
+    <div class="card">
+    <div class="box">
+      <div class="content">
+        <h2>📦</h2>
+        <div class="col-md-6" style="text-align: center; display: flex; justify-content: center;">
+                <img src="images/dash_icon.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+        <h3>
+            
+         Transitoria <?php echo $xtransit; ?></h3>
+        <p>
+        <h5 class="card-title">
+                <?php echo $xpuntaje1; ?> unidades pendientes
+            </h5>
+            <p class="card-text">Transitoria limpia. Buen trabajo. 👍</p>
+                <small class="text-muted">Actualizado desde SAP B1</small>
+        </p>
+        
+      </div>
+    </div>
+  </div>
+<?php
+}
+
+?>
+
+
+
+
+  <div class="card">
+    <div class="box">
+      <div class="content">
+        <h2>📝</h2>
+        <h3>Toma Física Diaria</h3>
+        <p>Items de forma aleatoria se listan de LUNES a JUEVES, excepto feriados.</p>
+        <a href="tfaD.php">Iniciar</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="box">
+      <div class="content">
+        <h2>🛠️</h2>
+        <h3>Mesa de Servicios</h3>
+        <p>Genera requerimientos mediante tickets. </p>
+        <a href="http://192.168.2.12:8081/glpi/index.php">Ir</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+       
+   
+        
+
+        
+    </div>
+
+    <?php    
+}  ?>
 
 <!---------------------------------------------->
 <!--------------Fin Content -------------------->

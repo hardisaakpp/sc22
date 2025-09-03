@@ -6,8 +6,7 @@ include_once "header.php";
 
     $fecha = $_GET["fecha"] ?? $_POST["fecha"] ?? null;
     $whsCode = $_GET["whsCode"] ?? $_POST["whsCode"] ?? null;
-
-
+ $id = $whsCode.$fecha;
 
     // 1. Obtener depósitos
     $sql1 = "
@@ -175,11 +174,14 @@ include_once "header.php";
                    <?php if ((isset($_GET['pflag']) && $_GET['pflag'] == 1)): ?>
                         <button class="btn btn-success mt-3" onclick="window.close()">OK</button>
                     <?php else: ?>
-                        <a href="depL.php" class="btn btn-secondary mt-3">← Volver al resumen</a>
-                        <a href="depC.php?U_Fecha=<?= $fecha ?>" class="btn btn-primary mt-3">Nuevo</a>
+                        <a href="depL.php" class="btn btn-outline-secondary mt-3">🔙 Volver al resumen</a>
+                        <a href="depC.php?U_Fecha=<?= $fecha ?>" class="btn btn-primary mt-3">📄 Nuevo</a>
                         <button onclick="imprimirContenido()" class="btn btn-primary mt-3">🖨️ Imprimir</button>
-
+                        
                     <?php endif; ?>
+                        <button type="button" class="btn btn-warning mt-3" onClick=window.open("<?php echo "adjuntos.php?id=" . $id ?>","demo","toolbar=0,status=0,")>
+                            <i class="fa fa-paperclip"></i>&nbsp; ADJUNTOS
+                        </button>
 
 
             </div>

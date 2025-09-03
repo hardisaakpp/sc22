@@ -46,11 +46,16 @@ include_once "php/bd_StoreControl.php";
                     $_SESSION["username"] = $xusername;  
 
                     $_SESSION["whsInvs"] = $IDCONTEO->fk_ID_almacen_invs;  
+
+                    $_SESSION["whsCica"] = $IDCONTEO->fk_ID_almacen_cierre; 
                     
+                    $_SESSION["emp"] = $db->query("SELECT fk_emp FROM almacen WHERE id = '{$IDCONTEO->fk_ID_almacen_cierre}'")->fetchColumn();
+
                     //$_SESSION["whsTurem"] = $IDCONTEO->fk_ID_almacen_turemp;   //ya no usamos turemp
                     $_SESSION["whsBodeg"] = $IDCONTEO->fk_ID_almacen_bodeg; 
-                    $_SESSION["whsCica"] = $IDCONTEO->fk_ID_almacen_cierre; 
+
                     $_SESSION["whsTr"] = $IDCONTEO->fk_ID_almacen_transitorio; 
+
                     $_SESSION["whsCD"] = $IDCONTEO->fk_ID_almacen_CD; 
 
                     

@@ -35,7 +35,7 @@ from
 	(
 	select U_Fecha,U_WhsCode, sum(TotalLC) AS Efectivo, 
            sum(CASE WHEN creadoSAP = 0 THEN 1 ELSE 0 END) as PendienteSAP
-	from DepositosTiendas d
+	from DepositosTiendasCE d
 	where d.U_Fecha>='2025-07-30' and U_WhsCode = ?  AND d.U_Fecha BETWEEN ? AND ? 
 	GROUP BY d.U_Fecha, d.U_WhsCode
 	) q2 on q1.whsCode=q2.U_WhsCode and q1.fecha=q2.U_Fecha

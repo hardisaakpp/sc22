@@ -353,10 +353,25 @@
                             <ul class="sub-menu children dropdown-menu">
                                  <li><i class="fa fa-pencil-square-o"></i><a href="cic2.php">Cierre de Caja</a></li>
                                  <li><i class="fa fa-h-square"></i><a href="cic2H.php">Historial</a></li>
-                                 <li><i class="fa fa-money"></i><a href="depL.php">Depositos</a></li>
-                            </ul>
-                            </li>
+                                 
                             ';
+                                 if ($_SESSION["emp"] == 'MT') {
+                                    ?>
+
+                                        <li><i class="fa fa-money"></i><a href="depL.php">Depositos</a></li>
+                                    </ul>
+                                    </li>
+
+                                      
+                                    <?php
+                                } else {
+                                    ?>
+                                        <li><i class="fa fa-money"></i><a href="depLce.php">Depositos</a></li>
+                                    </ul>
+                                    </li>
+                                    <?php
+                                }
+                                    
                     }
                         
         // CIERRES DE CAJA PARA CONTABILIDAD               
@@ -394,7 +409,8 @@
                             <ul class="sub-menu children dropdown-menu">     
                                         <li><i class="fa fa-users"></i><a href="userL.php">Usuarios</a></li>
                                         <li><i class="fa fa-home"></i><a href="whsL.php">Almacenes</a></li>
-                                        <li><i class="fa fa-home"></i><a href="depbankL.php">Cuenta Financiera</a></li>
+                                        <li><i class="fa fa-home"></i><a href="depbankL.php">Cuenta Financiera MT</a></li>
+                                        <li><i class="fa fa-home"></i><a href="depbankLce.php">Cuenta Financiera CE</a></li>
                                         <li><i class="fa fa-refresh"></i><a href="confMerg.php">Actualiza SAP->SC </a></li>
                             </ul>
                             </li>';

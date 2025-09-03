@@ -6,7 +6,7 @@
         exit();
         }
 
-        $s1 = $db->query("select * from CuentaFinanciera" );
+        $s1 = $db->query("select * from CuentaFinancieraCE" );
         $whs = $s1->fetchAll(PDO::FETCH_OBJ);       
        
 ?>
@@ -15,7 +15,7 @@
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
-              <strong class="card-title">Cuentas Financieras - MABEL</strong> para Depositos Tiendas
+              <strong class="card-title">Cuentas Financieras - COSMEC</strong> para Depositos Tiendas
         </div> 
         <div class="card-body">
             <table class="table table-striped table-bordered">
@@ -54,7 +54,7 @@
 <script>
     function cambiarEstado(acctCode, nuevoEstado) {
         if (confirm("¿Estás seguro de cambiar el estado de esta cuenta?")) {
-            fetch('php/actualizar_estado_cuentafinanciera.php', {
+            fetch('php/actualizar_estado_cuentafinancieraCE.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'

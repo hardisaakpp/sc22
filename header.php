@@ -491,7 +491,7 @@
                                     <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
 
                                     <li><i class="ti ti-dropbox"></i><a href="soltr.php">Etiquetas</a></li>
-                                    
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLhis.php">Historial</a></li>
                                 </ul>
                             </li>
                         ';

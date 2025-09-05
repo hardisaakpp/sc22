@@ -20,21 +20,7 @@ if ($estado==5) {
         " );
        $s2->execute([':desde' => $desde, ':hasta' => $hasta]);
         $users2 = $s2->fetchAll(PDO::FETCH_OBJ);   
-} else {
-      $s1 = $db->prepare("
-        select * from ced_group where (estado=2)
-        AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
-        " );
-      $s1->execute([':desde' => $desde, ':hasta' => $hasta, ':estado' => $estado]);
-        $users = $s1->fetchAll(PDO::FETCH_OBJ);   
-
-        $s2 = $db->prepare("
-        select * from ced_group where (estado=2)
-        AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
-        " );
-       $s2->execute([':desde' => $desde, ':hasta' => $hasta, ':estado' => $estado]);
-        $users2 = $s2->fetchAll(PDO::FETCH_OBJ);  
-}
+} 
 
        
 ?>
@@ -50,14 +36,7 @@ if ($estado==5) {
                             <form method="GET" class="form-inline mb-3">
 
 <label for="estado">Estado:</label>
-     <select name="estado" id="estado" class="form-control mx-2">
-        <option value="5" <?php if($estado === '5') echo 'selected'; ?>>Todos</option>
-        <option value="0" <?php if($estado === '0') echo 'selected'; ?>>Nuevo</option>
-        <option value="1" <?php if($estado === '1') echo 'selected'; ?>>En proceso</option>
-        <option value="2" <?php if($estado === '2') echo 'selected'; ?>>Finalizado</option>
-      
-  
-     </select>
+    
 
         <label for="desde">Desde:</label>
         <input type="date" name="desde" id="desde" class="form-control mx-2"
@@ -86,64 +65,8 @@ if ($estado==5) {
 <!---------------------------------------------->
 
 
-    <div class="row">
-
-    <?php   
-    foreach($users as $user){ 
-        //0 inicio, 1 en proceso, 2 terminado
-
-  if ($user->estado==1) {
-     ?> 
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="stat-widget-five">
-                            <div class="stat-icon dib flat-color-1">
-                            <a href="cediGrpLdid.php?idcab=<?php echo $user->id?>">
-                                <i class="pe-7s-config"></i>
-                                </a>
-                            </div>
-                            <div class="stat-content">
-                                <div class="text-left dib">
-                                    <div class="stat-text"># <span class="count"><?php echo $user->id ?></span></div>
-                                    <div class="stat-text"><?php echo ''.$user->comentario?></div>
-                                    <div class="stat-heading"><?php echo 'Gen.'.$user->fecha_creacion ?></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-     <?php  
-} else { #es igual a 0
-     ?> 
-   <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="stat-widget-five">
-                            <div class="stat-icon dib flat-color-4">
-                            <a href="cediGrpLdid.php?idcab=<?php echo $user->id?>">
-                                <i class="pe-7s-box2"></i>
-                                </a>
-                            </div>
-                            <div class="stat-content">
-                                <div class="text-left dib">
-                                    <div class="stat-text">Grupo #<span class="count"><?php echo $user->id ?></span></div>
-                                    <div class="stat-text"><?php echo 'Ref.:'.$user->comentario?></div>
-                                    <div class="stat-heading"><?php echo $user->fecha_creacion ?></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-     <?php  
-}
-        ?> 
-    <?php } ?> 
-        
-
-    </div>
+   
+   
     <div class="row">
         <?php   
         foreach($users2 as $user){ 

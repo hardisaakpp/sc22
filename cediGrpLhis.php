@@ -8,14 +8,14 @@
 
 if ($estado==5) {
       $s1 = $db->prepare("
-        select * from ced_group where (estado=2)
+        select * from ced_group where (estado>0)
         AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
         " );
       $s1->execute([':desde' => $desde, ':hasta' => $hasta]);
         $users = $s1->fetchAll(PDO::FETCH_OBJ);   
 
         $s2 = $db->prepare("
-        select * from ced_group where (estado=2 ) 
+        select * from ced_group where (estado>0 ) 
         AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
         " );
        $s2->execute([':desde' => $desde, ':hasta' => $hasta]);

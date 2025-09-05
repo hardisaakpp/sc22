@@ -258,11 +258,12 @@
             if (escaneado > solicitado) {
                 errorCritico = true;
             }
-
-            datos.push({
-                id: fila.getAttribute('data-id'),
-                scan: escaneado
-            });
+            if (escaneado > 0) {
+                datos.push({
+                    id: fila.getAttribute('data-id'),
+                    scan: escaneado
+                });
+            }
         });
 
         if (errorCritico) {
@@ -270,6 +271,12 @@
             alert("❌ Error crítico: Hay productos con escaneado mayor al solicitado. Contacte con sistemas.");
             return;
         }
+
+        if (datos.length === 0) {
+        mostrarLoader(false);
+        alert("⚠️ No hay productos escaneados para guardar.");
+        return;
+    }
 
         fetch('php/guardar_scans.php', {
             method: 'POST',

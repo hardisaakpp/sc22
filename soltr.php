@@ -45,7 +45,6 @@ if($userAdmin==5 || $userAdmin==1)
             if ($res==0) {
                 echo "<h3 style='color: RED';> No se encontro el numero de solicitud.</h3>
                  <p style='color: GRAY';> (Solo puede visualizar datos del año actual)</p>";
-                   
             }else {
                 $sentencia = $db->query("
                     select * from StockCab_ST st 

@@ -156,6 +156,9 @@ function validarConfirmacion() {
     
     const totalLC = parseFloat(document.querySelector('input[name="TotalLC"]').value) || 0;
     const maxPermitido = parseFloat(document.getElementById('maxPermitido').value) || 0;
+    const fechaDeposito = new Date(document.querySelector('input[name="DepositDate"]').value);
+    const fechaCierre   = new Date(document.querySelector('input[name="U_Fecha"]').value);
+
 
     // 1. Validar cuenta
     if (cuenta === "") {
@@ -169,7 +172,11 @@ function validarConfirmacion() {
         return;
     }
 
-
+    // 3. Validar que la fecha de depósito >= fecha de cierre
+    if (fechaDeposito < fechaCierre) {
+        alert("La Fecha del Depósito no puede ser menor a la Fecha de Cierre de Caja.");
+        return;
+    }
 
     // 3. Validar confirmación de comprobante
     if (original === confirmacion && original.length > 0) {

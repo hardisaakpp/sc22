@@ -41,7 +41,7 @@
             <div class="col-sm-4">
                 <div class="page-header float-left">
                     <div class="page-title">
-                        <h1>Solicitudes de Lista <?php echo $idcab; ?></h1>
+                        <h1 id="tituloGrupo">Solicitudes de Lista <?php echo $idcab; ?></h1>
                     </div>
                 </div>
             </div>
@@ -142,50 +142,87 @@
     </div>
 </div>
 
-<!-- Menú contextual personalizado -->
-<ul id="contextMenu" class="dropdown-menu" style="display:none; position:absolute; z-index:1000;">
+<!-- Menú contextual para las cards -->
+<ul id="contextMenuCard" class="dropdown-menu" style="display:none; position:absolute; z-index:10000;">
   <li><a href="#" id="descargarDocSap">⬇️ Descargar DocSap</a></li>
   <li><a href="#" id="confirmarRecepcion">✅ Confirmar recepción 100%</a></li>
 </ul>
 
+<!-- Menú contextual para el título (descargar todo el grupo) -->
+<ul id="contextMenuTitulo" class="dropdown-menu" style="display:none; position:absolute; z-index:10000;">
+  <li><a href="#" id="descargarGrupo">⬇️ Descargar Excel Grupo</a></li>
+</ul>
+
 <script>
-// Variables globales
+// util: ocultar todos los menus
+function hideAllContextMenus() {
+    const menus = document.querySelectorAll('#contextMenuCard, #contextMenuTitulo');
+    menus.forEach(m => m.style.display = 'none');
+}
+
 let selectedDocNum = null;
 let selectedId = null;
 
-// Detectar clic derecho en card
+// ----- CONTEXT MENU para CARDS -----
 document.querySelectorAll('.card').forEach(function(card) {
     card.addEventListener('contextmenu', function(e) {
         e.preventDefault();
+        hideAllContextMenus();
         selectedDocNum = this.getAttribute('data-docnum');
         selectedId     = this.getAttribute('data-id');
-        let menu = document.getElementById('contextMenu');
+
+        const menu = document.getElementById('contextMenuCard');
         menu.style.left = e.pageX + 'px';
         menu.style.top = e.pageY + 'px';
         menu.style.display = 'block';
     });
 });
 
-// Ocultar menú
-document.addEventListener('click', function() {
-    document.getElementById('contextMenu').style.display = 'none';
-});
-
-// Acción Descargar
+// Opciones del menu de card
 document.getElementById('descargarDocSap').addEventListener('click', function(e) {
     e.preventDefault();
-    if (selectedDocNum) {
-        window.location.href = "descargarDocSap.php?idcab=<?php echo $idcab; ?>&docnum=" + selectedDocNum;
-    }
+    hideAllContextMenus();
+    if (!selectedDocNum) { alert('No se identificó el documento.'); return; }
+    window.location.href = "descargarDocSap.php?idcab=<?php echo $idcab; ?>&docnum=" + encodeURIComponent(selectedDocNum);
 });
 
-// Acción Confirmar Recepción
 document.getElementById('confirmarRecepcion').addEventListener('click', function(e) {
     e.preventDefault();
-    if (selectedDocNum && selectedId) {
-        window.location.href = "confirmarRecepcion.php?idcab=<?php echo $idcab; ?>&docnum=" + selectedDocNum + "&id=" + selectedId;
-    }
+    hideAllContextMenus();
+    if (!selectedDocNum || !selectedId) { alert('Faltan parámetros.'); return; }
+    if (!confirm('¿Confirmar recepción 100% para la solicitud ' + selectedDocNum + ' ?')) return;
+    window.location.href = "confirmarRecepcion.php?idcab=<?php echo $idcab; ?>&docnum=" + encodeURIComponent(selectedDocNum) + "&id=" + encodeURIComponent(selectedId);
+});
+
+// ----- CONTEXT MENU para TITULO -----
+const titulo = document.getElementById('tituloGrupo');
+titulo.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    hideAllContextMenus();
+    const menu = document.getElementById('contextMenuTitulo');
+    menu.style.left = e.pageX + 'px';
+    menu.style.top = e.pageY + 'px';
+    menu.style.display = 'block';
+});
+
+document.getElementById('descargarGrupo').addEventListener('click', function(e) {
+    e.preventDefault();
+    hideAllContextMenus();
+    window.location.href = "descargarGrupo.php?idcab=<?php echo $idcab; ?>";
+});
+
+// Ocultar menus al hacer clic fuera
+document.addEventListener('click', function(e) {
+    if (e.target.closest('#contextMenuCard') || e.target.closest('#contextMenuTitulo')) return;
+    hideAllContextMenus();
+});
+
+// ocultar con Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') hideAllContextMenus();
 });
 </script>
+
+
 
 <?php include_once "footer.php"; ?>

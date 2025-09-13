@@ -492,6 +492,7 @@
                                     <li><i class="ti ti-search"></i><a href="findTransfer.php">Buscar #Transferencia</a></li>
                                     <li><i class="ti ti-dropbox"></i><a href="soltr.php">Etiquetas</a></li>
                                     <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLhis.php">Historial</a></li>
+                                     <li><i class="ti ti-layout-grid2"></i><a href="odc.php">ODC</a></li>
                                 </ul>
                             </li>
                         ';

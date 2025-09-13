@@ -58,7 +58,7 @@ try {
     // -------------------------------
     // 5️⃣ Llamar al API REST
     // -------------------------------
-    $apiUrl = "http://192.168.2.12:8087/api/GoodsReceipt/TEST";
+    $apiUrl = "http://192.168.2.12:8087/api/GoodsReceipt";
 
     $ch = curl_init($apiUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

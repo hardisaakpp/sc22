@@ -151,6 +151,8 @@
 <!-- Menú contextual para el título (descargar todo el grupo) -->
 <ul id="contextMenuTitulo" class="dropdown-menu" style="display:none; position:absolute; z-index:10000;">
   <li><a href="#" id="descargarGrupo">⬇️ Descargar Excel Grupo</a></li>
+  <li><a href="#" id="confirmarRecepcionGrupo">✅ Confirmar recepción 100% Grupo</a></li>
+  <li><a href="#" id="consultarTransferencias">🔎 Consultar num.transferencias</a></li>
 </ul>
 
 <script>
@@ -159,6 +161,14 @@ function hideAllContextMenus() {
     const menus = document.querySelectorAll('#contextMenuCard, #contextMenuTitulo');
     menus.forEach(m => m.style.display = 'none');
 }
+
+document.getElementById('consultarTransferencias').addEventListener('click', function(e) {
+    e.preventDefault();
+    hideAllContextMenus();
+    window.location.href = "consultarTransferencias.php?idcab=<?php echo $idcab; ?>";
+});
+
+
 
 let selectedDocNum = null;
 let selectedId = null;
@@ -193,6 +203,16 @@ document.getElementById('confirmarRecepcion').addEventListener('click', function
     if (!confirm('¿Confirmar recepción 100% para la solicitud ' + selectedDocNum + ' ?')) return;
     window.location.href = "confirmarRecepcion.php?idcab=<?php echo $idcab; ?>&docnum=" + encodeURIComponent(selectedDocNum) + "&id=" + encodeURIComponent(selectedId);
 });
+
+// Acción Confirmar Recepción Grupo
+document.getElementById('confirmarRecepcionGrupo').addEventListener('click', function(e) {
+    e.preventDefault();
+    hideAllContextMenus();
+    if (!confirm('¿Confirmar recepción 100% de TODA la lista <?php echo $idcab; ?> ?')) return;
+    // Llama a confirmarRecepcionGrupo.php y recarga al terminar
+    window.location.href = "confirmarRecepcionGrupo.php?idcab=<?php echo $idcab; ?>";
+});
+
 
 // ----- CONTEXT MENU para TITULO -----
 const titulo = document.getElementById('tituloGrupo');

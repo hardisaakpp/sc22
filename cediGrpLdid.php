@@ -153,6 +153,7 @@
   <li><a href="#" id="descargarGrupo">⬇️ Descargar Excel Grupo</a></li>
   <li><a href="#" id="confirmarRecepcionGrupo">✅ Confirmar recepción 100% Grupo</a></li>
   <li><a href="#" id="consultarTransferencias">🔎 Consultar num.transferencias</a></li>
+  <li><a href="#" id="crearTransferenciasGrupo">📦 Crear transferencias</a></li> 
 </ul>
 
 <script>
@@ -168,6 +169,57 @@ document.getElementById('consultarTransferencias').addEventListener('click', fun
     window.location.href = "consultarTransferencias.php?idcab=<?php echo $idcab; ?>";
 });
 
+
+document.getElementById('crearTransferenciasGrupo').addEventListener('click', async function(e) {
+    e.preventDefault();
+    hideAllContextMenus();
+
+    if (!confirm("⚠️ Esto creará transferencias para TODAS las solicitudes del grupo <?= $idcab ?>. ¿Continuar?")) return;
+
+    mostrarLoader(true);
+
+    try {
+        // 1. Obtener JSON de transferencias de todas las solicitudes
+        const resp = await fetch("php/getTransferData.php?idcab=<?= $idcab ?>");
+        const transfers = await resp.json();
+
+        for (const docnum in transfers) {
+            const jsonPayload = JSON.stringify(transfers[docnum]);
+
+            // 2. Enviar transferencia
+            const response = await fetch("php/enviar_transferencia.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: jsonPayload
+            });
+
+            const text = await response.text();
+            console.log(`Solicitud ${docnum}:`, text);
+
+            // 3. Actualizar estado si se creó
+            if (text.includes("Transferencia creada")) {
+                await fetch("php/actualizar_estado.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({
+                        fk_idgroup: "<?= $idcab ?>",
+                        docnum_sot: docnum
+                    })
+                })
+                .then(res => res.json())
+                .then(data => console.log(`Estado actualizado ${docnum}:`, data.message))
+                .catch(err => console.error(`Error actualizando estado ${docnum}:`, err));
+            }
+        }
+
+        alert("✅ Todas las transferencias fueron procesadas.");
+    } catch (err) {
+        console.error(err);
+        alert("❌ Ocurrió un error al procesar las transferencias.");
+    } finally {
+        mostrarLoader(false);
+    }
+});
 
 
 let selectedDocNum = null;

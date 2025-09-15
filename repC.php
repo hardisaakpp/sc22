@@ -298,7 +298,7 @@ set @idcab=?;
                 <table id="data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th class="d-none d-md-table-cell">Código Barras</th>
+                            <th>Código Barras</th>
                             
                             <th>Descripción</th>
                             <th class="d-none d-md-table-cell">Embalaje</th>
@@ -339,7 +339,7 @@ set @idcab=?;
             }
         ?>
         <tr>
-            <td class="d-none d-md-table-cell"><?= $r->CodeBars ?></td>
+            <td><?= $r->CodeBars ?></td>
             
             <td><?= $r->ItemCode.' - '.$r->ItemName ?></td>
             <td class="d-none d-md-table-cell"><?= number_format($r->embalaje,0) ?></td>

@@ -23,7 +23,7 @@ $cuentas = $s1->fetchAll(PDO::FETCH_OBJ);
 $fecha = $_GET["U_Fecha"] ?? date('Y-m-d');
 
 
-$maxLC = $db->prepare("select (q1.Efectivo - ISNULL(q2.Efectivo,0))+5 as Diferencia
+$maxLC = $db->prepare("select (q1.Efectivo - ISNULL(q2.Efectivo,0)) as Diferencia
 from
 	(
 	SELECT c.fecha, c.whsCode, sum(c.valRec) AS Efectivo
@@ -153,7 +153,6 @@ function validarConfirmacion() {
     const confirmacion = document.getElementById('confirmacionComprobante').value.trim();
     const cuenta = document.querySelector('select[name="DepositAccount"]').value;
 
-    
     const totalLC = parseFloat(document.querySelector('input[name="TotalLC"]').value) || 0;
     const maxPermitido = parseFloat(document.getElementById('maxPermitido').value) || 0;
     const fechaDeposito = new Date(document.querySelector('input[name="DepositDate"]').value);

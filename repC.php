@@ -100,7 +100,7 @@ $sql = "SELECT TOP 1000
     sugerido_final AS Sugerido
     FROM [MODULOS_SC].[reposicion].[ProcesadosCache]
     WHERE " . implode(' AND ', $where) . "
-    ORDER BY VentaUltima DESC";
+    ORDER BY CantidadTotalTreintaDias DESC";
 
 $stmt = $dbdev->prepare($sql);
 $stmt->execute($params);

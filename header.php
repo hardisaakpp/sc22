@@ -437,7 +437,7 @@
                         }
 
             //Bodegas 2.0                
-                        if ($userAdmin==1 ) {   
+                    /*    if ($userAdmin==1 ) {   
                         
                         
                         echo '                       
@@ -454,10 +454,10 @@
                                 </ul>
                             </li>
                         ';
-                        }
+                        }*/
 
             //MIGRACION       
-                        if ($userAdmin==1 ) {   
+                    /*    if ($userAdmin==1 ) {   
                         
                         
                         echo '                       
@@ -474,7 +474,7 @@
                                 </ul>
                             </li>
                         ';
-                        }
+                        }*/
             //CEDI                
                         if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
                         
@@ -498,10 +498,26 @@
                         ';
 
                         
-                      
+                        echo '                       
+                            <li class="menu-item-has-children dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI CE</a>
+                                <ul class="sub-menu children dropdown-menu">     
+                                    <li><i class="ti ti-menu-alt"></i><a href="cediSotCE.php">Crea Lista D.</a></li>
+
+                                    <li><i class="ti ti-package"></i><a href="cediGrpDCE.php">Eliminar Lista</a></li>
+                                    <li><i class="ti-dropbox"></i><a href="cediGrpLCE.php">Recolección</a></li>
+
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdisCE.php">Distribución</a></li>
+                                    <li><i class="ti ti-search"></i><a href="findTransferCE.php">Buscar #Transferencia</a></li>
+                                    <li><i class="ti ti-dropbox"></i><a href="soltrCE.php">Etiquetas</a></li>
+                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLhisCE.php">Historial</a></li>
+                                     <li><i class="ti ti-layout-grid2"></i><a href="odcCE.php">ODC</a></li>
+                                </ul>
+                            </li>
+                        ';
                         }
         //CEDI 2.0                
-                        if ($userAdmin==1 ) {   
+              /*          if ($userAdmin==1 ) {   
                         
                         
                         echo '                       
@@ -519,6 +535,7 @@
                             </li>
                         ';
                         }
+                */
         //Toma Fisica Total
             if ($userAdmin==1 || $userAdmin==3) { 
                 echo '

@@ -20,6 +20,22 @@ if ($sp === 'sp_articuloF5') {
             "error" => "❌ Error al ejecutar sp_articuloF5: " . $e->getMessage()
         ]);
     }
+} else  if ($sp === 'sp_sot_mergeCE') {
+    try {
+        $sql = "EXEC sp_sot_mergeCE";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        echo json_encode([
+            "success" => true,
+            "mensaje" => "✔️ Procedimiento sp_sot_merge ejecutado correctamente"
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            "success" => false,
+            "error" => "❌ Error al ejecutar sp_sot_merge: " . $e->getMessage()
+        ]);
+    }
 } else if ($sp === 'sp_sot_merge') {
     try {
         $sql = "EXEC sp_sot_merge";

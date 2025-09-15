@@ -39,7 +39,7 @@ if ($userAdmin != 1 && $userAdmin != 5) {
                     <strong>Solicitudes Seleccionadas</strong>
                 </div>
                 <div class="card-body">
-                    <form id="form-grupo" method="post" action="php/guardar_grupo.php">
+                    <form id="form-grupo" method="post" action="php/guardar_grupoCE.php">
                         <table class="table table-bordered" id="tabla-grupo">
                             <thead>
                                 <tr>
@@ -91,7 +91,7 @@ function cargarListado() {
     const desde = $('#desde').val();
     const hasta = $('#hasta').val();
 
-    $.get('php/listado_solicitudes.php', { desde, hasta }, function(data) {
+    $.get('php/listado_solicitudesCE.php', { desde, hasta }, function(data) {
         $('#contenedor-listado').html(data);
 
         // Inicializar DataTable with column filters
@@ -199,7 +199,7 @@ $('#form-fechas').on('submit', function(e) {
 
 $(document).ready(function() {
     // Ejecutar el SP antes de cargar el listado
-    $.get('php/ejecutar_sp.php?sp=sp_sot_merge', function() {
+    $.get('php/ejecutar_sp.php?sp=sp_sot_mergeCE', function() {
         cargarListado(); // Carga inicial después de ejecutar el SP
     });
 });

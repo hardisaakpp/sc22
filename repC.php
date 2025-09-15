@@ -292,7 +292,7 @@ set @idcab=?;
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Top Artículos</strong>
+                <strong class="card-title">Top 1000 Artículos</strong>
             </div>
             <div class="card-body top-articulos-body">
                 <table id="data-table" class="table table-striped table-bordered">

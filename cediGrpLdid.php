@@ -169,7 +169,6 @@ document.getElementById('consultarTransferencias').addEventListener('click', fun
     window.location.href = "consultarTransferencias.php?idcab=<?php echo $idcab; ?>";
 });
 
-
 document.getElementById('crearTransferenciasGrupo').addEventListener('click', async function(e) {
     e.preventDefault();
     hideAllContextMenus();
@@ -183,20 +182,41 @@ document.getElementById('crearTransferenciasGrupo').addEventListener('click', as
         const resp = await fetch("php/getTransferData.php?idcab=<?= $idcab ?>");
         const transfers = await resp.json();
 
-        for (const docnum in transfers) {
-            const jsonPayload = JSON.stringify(transfers[docnum]);
+        // Agrupar por documento (docnum) para enviar cada solicitud una sola vez
+        const grouped = {};
+        transfers.forEach(item => {
+            if (!grouped[item.fk_docnumsotcab]) grouped[item.fk_docnumsotcab] = [];
+            grouped[item.fk_docnumsotcab].push(item);
+        });
 
-            // 2. Enviar transferencia
+        // 2. Enviar cada solicitud y actualizar estado
+        for (const docnum in grouped) {
+            const items = grouped[docnum];
+            const stockTransfer = {
+                cardCode: "",
+                comments: "sc22",
+                fromWarehouse: items[0].Filler,
+                toWarehouse: items[0].ToWhsCode,
+                priceList: -2,
+                stockTransferLines: items.map(i => ({
+                    itemCode: i.ItemCode,
+                    quantity: i.Quantity,
+                    warehouseCode: i.ToWhsCode,
+                    baseEntry: i.BaseEntry,
+                    baseLine: i.LineNum,
+                    baseType: 1250000001
+                }))
+            };
+
             const response = await fetch("php/enviar_transferencia.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: jsonPayload
+                body: JSON.stringify(stockTransfer)
             });
 
             const text = await response.text();
             console.log(`Solicitud ${docnum}:`, text);
 
-            // 3. Actualizar estado si se creó
             if (text.includes("Transferencia creada")) {
                 await fetch("php/actualizar_estado.php", {
                     method: "POST",
@@ -222,8 +242,42 @@ document.getElementById('crearTransferenciasGrupo').addEventListener('click', as
 });
 
 
+
+function mostrarLoader(mostrar) {
+    let loader = document.getElementById('loader');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'loader';
+        loader.style.cssText = `
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.7);
+            z-index: 9999;
+            text-align: center;
+            padding-top: 20%;
+        `;
+        loader.innerHTML = `
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="sr-only">Cargando...</span>
+            </div>
+            <p>Procesando, por favor espera...</p>
+        `;
+        document.body.appendChild(loader);
+    }
+    loader.style.display = mostrar ? 'block' : 'none';
+}
+
+
+
 let selectedDocNum = null;
 let selectedId = null;
+
+document.getElementById('crearTransferenciasGrupo').addEventListener('click', async function(e) {
+    mostrarLoader(true); // ← se llama aquí
+});
+
 
 // ----- CONTEXT MENU para CARDS -----
 document.querySelectorAll('.card').forEach(function(card) {

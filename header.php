@@ -509,7 +509,7 @@
 
                                     <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdisCE.php">Distribución</a></li>
                                     <li><i class="ti ti-search"></i><a href="findTransferCE.php">Buscar #Transferencia</a></li>
-                                    <li><i class="ti ti-dropbox"></i><a href="soltrCE.php">Etiquetas</a></li>
+                                  
                                     <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLhisCE.php">Historial</a></li>
                                      <li><i class="ti ti-layout-grid2"></i><a href="odcCE.php">ODC</a></li>
                                 </ul>

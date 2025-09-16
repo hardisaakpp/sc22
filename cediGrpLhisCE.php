@@ -9,14 +9,14 @@
 
 if ($estado==5) {
       $s1 = $db->prepare("
-        select * from ced_group where (estado>0)
+        select * from ced_groupCE where (estado>0)
         AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
         " );
       $s1->execute([':desde' => $desde, ':hasta' => $hasta]);
         $users = $s1->fetchAll(PDO::FETCH_OBJ);   
 
         $s2 = $db->prepare("
-        select * from ced_group where (estado>0 ) 
+        select * from ced_groupCE where (estado>0 ) 
         AND CONVERT(DATE, fecha_creacion) BETWEEN :desde AND :hasta 
         " );
        $s2->execute([':desde' => $desde, ':hasta' => $hasta]);
@@ -85,7 +85,7 @@ if ($estado==5) {
                                 </div>
 
                                 <div class="card-right float-right text-right">
-                                    <a href="cediGrpLdid.php?idcab=<?php echo $user->id?>">
+                                    <a href="cediGrpLdidCE.php?idcab=<?php echo $user->id?>">
                                     <i class="icon fade-5 icon-lg pe-7s-check"></i>
                                     </a>
                                 </div>  

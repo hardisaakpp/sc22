@@ -13,7 +13,7 @@ $sentencia = $db->query("
                     WHERE 
                         T1.DocDate BETWEEN '$desde' AND '$hasta' 
                        
-                        AND T1.DocStatus = 'O' 
+                       -- AND T1.DocStatus = 'O' 
  AND T1.LineStatus='N'
                     AND --DocNum_Tr=0 AND
                         
@@ -41,6 +41,7 @@ if (count($rows) == 0) {
                     <th>ORIGEN</th>
                     <th>DESTINO</th>
                     <th>COMENTARIO</th>
+                    <th>HORA</th>
                 </tr>
             </thead>
             <tbody>';
@@ -54,6 +55,7 @@ if (count($rows) == 0) {
                 <td>{$citem->Filler}</td>
                 <td>{$citem->ToWhsCode}</td>
                 <td>{$citem->Comments}</td>
+                <td>{$citem->Hour}</td>
               </tr>";
     }
     echo '</tbody></table>';

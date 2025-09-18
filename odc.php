@@ -25,6 +25,7 @@ if (isset($_GET['oc'])) {
     } else {
         $fecha = $rows[0]->FechaHoraActualizacion ?? "";
         $estadoOC = $rows[0]->DocStatus ?? 'O';
+        $U_ODC = $rows[0]->U_ODC ?? "";
 
         // Determinar color y texto
         if ($estadoOC == 'O') {
@@ -45,6 +46,7 @@ if (isset($_GET['oc'])) {
                 <div>
                     <h5 class='card-title'>Orden de Compra Nº $oc</h5>
                     <p class='card-text'>Fecha de creación en sistema: <b>$fecha</b></p>
+                    <p class='card-text'>U_ODC: <b>$U_ODC</b></p>
                     <p class='card-text'>Estado: 
                         <span style='background-color:$estadoColor; color:white; padding:5px 10px; border-radius:5px;'>
                             <b>$estadoTexto</b>

@@ -13,25 +13,51 @@ if (!$data || !isset($data['idcab']) || !isset($data['codigos'])) {
 }
 
 $idcab = (int)$data['idcab'];
-$codigos = $data['codigos']; // array de códigos
+$codigos = array_unique($data['codigos']); // eliminar duplicados
+$respuesta = [];
 
 try {
-    // 1. Eliminar los existentes para esta cabecera
-    $stmtDel = $db->prepare("DELETE FROM TransferenciasDiferencias WHERE id_TrCab = ?");
-    $stmtDel->execute([$idcab]);
+    // Preparar el insert
+    $stmtIns = $db->prepare("
+        INSERT INTO TransferenciasDiferencias (id_TrCab, CodeBars, datetime, product) 
+        VALUES (?, ?, GETDATE(), ?)
+    ");
 
-    // 2. Insertar los nuevos sin repetir
-    $stmtIns = $db->prepare("INSERT INTO TransferenciasDiferencias (id_TrCab, CodeBars, datetime) VALUES (?, ?, GETDATE())");
+    // Preparar consulta para obtener producto
+    $stmtProd = $db->prepare("
+        SELECT TOP 1 CONCAT(ID_articulo, ' ', descripcion) AS producto 
+        FROM Articulo 
+        WHERE codigoBarras = ?
+    ");
 
-    $codigosUnicos = array_unique($codigos);
-    foreach ($codigosUnicos as $c) {
-        $stmtIns->execute([$idcab, $c]);
+    foreach ($codigos as $c) {
+        $producto = "❌ No encontrado"; // valor por defecto
+
+        // Consultar producto por código de barras
+        $stmtProd->execute([$c]);
+        $row = $stmtProd->fetch(PDO::FETCH_ASSOC);
+        if ($row && isset($row['producto']) && $row['producto'] !== "") {
+            $producto = $row['producto'];
+        }
+
+        // Insertar en la BD
+        $stmtIns->execute([$idcab, $c, $producto]);
+
+        // Obtener datetime real del insert
+        $datetime = $db->query("SELECT TOP 1 datetime FROM TransferenciasDiferencias WHERE id_TrCab = $idcab AND CodeBars = '$c' ORDER BY datetime DESC")->fetchColumn();
+
+        // Agregar a la respuesta
+        $respuesta[] = [
+            "CodeBars" => $c,
+            "producto" => $producto,
+            "datetime" => $datetime
+        ];
     }
 
-    echo json_encode(["status" => "success", "message" => "Códigos guardados correctamente."]);
+    echo json_encode($respuesta);
 
 } catch (PDOException $e) {
     echo json_encode(["status" => "error", "message" => $e->getMessage()]);
 }
 
-exit(); // Asegura que no se envíe HTML adicional
+exit();

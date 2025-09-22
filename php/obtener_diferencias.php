@@ -12,7 +12,11 @@ if (!isset($_GET['idcab'])) {
 $idcab = (int)$_GET['idcab'];
 
 try {
-    $stmt = $db->prepare("SELECT CodeBars, datetime FROM TransferenciasDiferencias WHERE id_TrCab = ? ORDER BY datetime ASC");
+    $stmt = $db->prepare("SELECT CodeBars, datetime, product 
+                      FROM TransferenciasDiferencias 
+                      WHERE id_TrCab = ? 
+                      ORDER BY datetime ASC");
+
     $stmt->execute([$idcab]);
     $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

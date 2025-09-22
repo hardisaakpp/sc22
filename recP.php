@@ -16,9 +16,12 @@
                 WHERE c.id =".$idcab."  " );
     $scans = $s1->fetchAll(PDO::FETCH_OBJ);
 
-    $stmt = $db->prepare("SELECT CodeBars, datetime FROM TransferenciasDiferencias WHERE id_TrCab = ? ORDER BY datetime ASC");
-    $stmt->execute([$idcab]);
-    $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+ $stmt = $db->prepare("SELECT CodeBars, datetime, product 
+                      FROM TransferenciasDiferencias 
+                      WHERE id_TrCab = ? 
+                      ORDER BY datetime ASC");
+$stmt->execute([$idcab]);
+$registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Obtener los almacenes desde sesión
     $whsCica = $_SESSION["whsCica"] ?? null;
@@ -132,13 +135,14 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                Códigos Adicionales
+               <strong>Log</strong> Códigos Adicionales
             </div>
             <div class="card-body">
                 <table class="table table-sm table-bordered" id="tablaNoReconocidos">
                     <thead>
                         <tr>
                             <th>Código de barras</th>
+                            <th>Producto</th>
                             <th>Fecha / Hora</th>
                         </tr>
                     </thead>
@@ -426,16 +430,25 @@ function cargarCodigosDiferencias() {
         tbody.innerHTML = ""; // limpiar tabla
         data.forEach(item => {
             const fila = document.createElement("tr");
+
             const celdaCodigo = document.createElement("td");
             celdaCodigo.textContent = item.CodeBars;
+
+            const celdaProducto = document.createElement("td");
+            celdaProducto.textContent = item.product ?? "❌ No encontrado";
+
             const celdaFecha = document.createElement("td");
             celdaFecha.textContent = item.datetime;
+
             fila.appendChild(celdaCodigo);
+            fila.appendChild(celdaProducto);
             fila.appendChild(celdaFecha);
+
             tbody.appendChild(fila);
         });
     });
 }
+
 
 // Ejecutar al cargar la página
 document.addEventListener("DOMContentLoaded", cargarCodigosDiferencias);
@@ -460,25 +473,50 @@ document.addEventListener("DOMContentLoaded", cargarCodigosDiferencias);
         }, 2000);
     }
 
-    function agregarCodigoNoReconocido(codigo, motivo = "Código no encontrado") {
-        const tabla = document.querySelector("#tablaNoReconocidos tbody");
+function agregarCodigoNoReconocido(codigo, motivo = "Código no encontrado") {
+    const tabla = document.querySelector("#tablaNoReconocidos tbody");
+
+    mostrarLoader(true);
+
+    fetch('php/guardar_diferencias.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idcab: "<?= $idcab ?>", codigos: [codigo] })
+    })
+    .then(res => res.json())
+    .then(data => {
+        mostrarLoader(false);
+
+        // Tomar el primer elemento del array devuelto
+        const item = data[0];
+
         const fila = document.createElement("tr");
 
         const celdaCodigo = document.createElement("td");
-        celdaCodigo.textContent = codigo;
+        celdaCodigo.textContent = item.CodeBars;
+
+        const celdaProducto = document.createElement("td");
+        celdaProducto.textContent = item.producto ?? "❌ No encontrado";
 
         const celdaFecha = document.createElement("td");
-        celdaFecha.textContent = new Date().toLocaleString();
+        celdaFecha.textContent = item.datetime;
 
         fila.appendChild(celdaCodigo);
+        fila.appendChild(celdaProducto);
         fila.appendChild(celdaFecha);
+
         tabla.appendChild(fila);
 
         mostrarAlertaNoReconocido(motivo);
+    })
+    .catch(err => {
+        mostrarLoader(false);
+        console.error("Error al guardar código adicional:", err);
+        agregarCodigoNoReconocidoLocal(codigo, motivo); // fallback local si falla
+    });
+}
 
-        // Guardar en BD
-        guardarCodigosDiferencias();
-    }
+
 
     document.getElementById('btnDescargarCSV').addEventListener('click', function () {
         const tabla = document.querySelector('#tabla');

@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        $stmt = $db->prepare("UPDATE ced_groupsot SET transferencia = 1,[enabled]=0 WHERE fk_idgroup = ? AND id = ?");
+        $stmt = $db->prepare("UPDATE ced_groupsot SET transferencia = 1,[enabled]=0 WHERE fk_idgroup = ? AND fk_docnumsotcab = ?");
         $stmt->execute([$fk_idgroup, $docnum_sot]);
 
         echo json_encode(["status" => "success", "message" => "Estado actualizado correctamente."]);

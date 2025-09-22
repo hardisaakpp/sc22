@@ -24,6 +24,8 @@ if ($userAdmin != 1 && $userAdmin != 5) {
                         <label for="hasta">hasta:</label>
                         <input type="date" name="hasta" id="hasta" class="form-control mx-2" value="<?php echo $hasta ?>" required>
                         <button type="submit" class="btn btn-primary me-2">Buscar 🔎</button>
+                        <button type="button" id="btn-exportar" class="btn btn-outline-success">📥 Exportar a Excel</button>
+
                     </form>
 
                     <div id="contenedor-listado">
@@ -86,6 +88,13 @@ if ($userAdmin != 1 && $userAdmin != 5) {
 
 <script>
 let seleccionados = new Set(); // IDs seleccionados
+
+$(document).on('click', '#btn-exportar', function() {
+    const desde = $('#desde').val();
+    const hasta = $('#hasta').val();
+    window.location.href = `php/exportar_excel.php?desde=${desde}&hasta=${hasta}`;
+});
+
 
 function cargarListado() {
     const desde = $('#desde').val();

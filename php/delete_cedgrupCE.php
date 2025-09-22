@@ -10,7 +10,7 @@ $sentencia = $db->prepare("DELETE FROM ced_groupCE WHERE id = ?");
 $resultado = $sentencia->execute([$id]);
 
 if ($resultado) {
-    header("Location: ../cediGrpD.php"); // Redirige de nuevo a la página principal
+    header("Location: ../cediGrpDCE.php"); // Redirige de nuevo a la página principal
 } else {
     echo "Error al eliminar el grupo.";
 }

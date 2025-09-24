@@ -114,13 +114,14 @@
         margin-left: 0 !important;
         width: 100% !important;
         position: relative;
+        padding: 0 0;
     }
     
     /* Header mejorado para móviles - Todo alineado a la izquierda */
     .header {
         position: relative;
         z-index: 1000;
-        padding: 8px 10px;
+        padding: 8px 10px 8px 0;
         background: #fff;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         min-height: 60px;
@@ -134,14 +135,14 @@
         flex: 1;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 6px; /* Reducir gap para acercar user-area al hamburguesa */
         justify-content: flex-start;
     }
     
     .navbar-header {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 8px; /* Reducir gap para elementos más compactos */
         flex: 1;
     }
     
@@ -156,7 +157,7 @@
     /* Menú toggle más prominente y táctil */
     #menuToggle {
         order: -1; /* Colocar el botón hamburguesa primero */
-        padding: 10px;
+        padding: 10px 10px 10px 5px; /* Menos padding izquierdo */
         font-size: 22px;
         background: none;
         border: none;
@@ -213,14 +214,14 @@
     .header-menu {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 4px; /* Reducir gap para acercar elementos */
         width: auto; /* Cambiar de 100% a auto para no ocupar todo el ancho */
         flex-wrap: nowrap;
         justify-content: flex-start; /* Alinear contenido a la izquierda */
     }
     
     .header-left {
-        font-size: 11px !important;
+        font-size: 17px !important; /* Aumentado para mejor legibilidad en móviles */
         color: #666;
         margin: 0 !important;
         white-space: nowrap;
@@ -232,10 +233,10 @@
         flex-shrink: 0; /* No permitir que se comprima */
     }
     
-    /* User area optimizado para móviles */
+    /* User area optimizado para móviles - Sin espacios a la izquierda */
     .user-area {
         position: relative;
-        margin-left: 8px;
+        margin-left: 0; /* Eliminar margen izquierdo */
         order: -2; /* Mover avatar hacia la izquierda en móviles, después del hamburguesa */
     }
     
@@ -243,7 +244,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 4px;
+        padding: 2px; /* Reducir padding para acercar más a la izquierda */
         border-radius: 50%;
         transition: all 0.2s ease;
         min-width: 44px;
@@ -344,12 +345,44 @@
     body.menu-open {
         overflow: hidden;
     }
+    
+    /* Prevenir conflictos con Bootstrap navbar-collapse */
+    @media (max-width: 768px) {
+        .navbar-collapse {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+        
+        .navbar-collapse.collapse {
+            display: block !important;
+        }
+        
+        .navbar-collapse.collapsing {
+            display: block !important;
+        }
+        
+        /* Asegurar que nuestro sistema tenga prioridad */
+        .left-panel {
+            display: block !important;
+        }
+        
+        .left-panel:not(.show) {
+            transform: translateX(-100%) !important;
+        }
+        
+        .left-panel.show {
+            transform: translateX(0) !important;
+        }
+    }
 }
 
 /* Estilos para tablets - Elementos más concentrados a la izquierda */
 @media (min-width: 769px) and (max-width: 1024px) {
     .header {
-        padding: 10px 15px;
+        padding: 10px 15px 10px 0; /* Eliminar padding izquierdo en tablets */
         min-height: 65px;
         justify-content: flex-start;
     }
@@ -367,7 +400,7 @@
     }
     
     .header-left {
-        font-size: 12px;
+        font-size: 14px; /* Aumentado para mejor legibilidad en tablets */
         max-width: none; /* Sin límite de ancho */
         display: block !important;
         overflow: visible;
@@ -415,25 +448,26 @@
     
     /* Header ultra-compacto para pantallas pequeñas - Todo a la izquierda */
     .header {
-        padding: 5px 8px;
+        padding: 5px 8px 5px 0; /* Eliminar padding izquierdo completamente */
         min-height: 55px;
         justify-content: flex-start;
     }
     
     .top-left {
-        gap: 8px;
+        gap: 4px; /* Gap mínimo para pantallas pequeñas */
         flex: 1;
         justify-content: flex-start;
     }
     
     .navbar-header {
-        gap: 8px;
+        gap: 4px; /* Gap mínimo para pantallas pequeñas */
         justify-content: flex-start;
     }
     
     /* Top-right muy compacto, pegado al contenido izquierdo */
     .top-right {
         margin-left: 8px; /* Muy poco espacio desde el logo */
+        padding: 0 0;
     }
     
     .navbar-brand {
@@ -445,7 +479,7 @@
         min-width: 40px;
         min-height: 40px;
         font-size: 20px;
-        padding: 8px;
+        padding: 8px 8px 8px 2px; /* Menos padding izquierdo en pantallas pequeñas */
     }
     
     /* Top-right ultra-compacto para pantallas pequeñas */
@@ -454,11 +488,11 @@
     }
     
     .header-menu {
-        gap: 5px;
+        gap: 2px; /* Gap mínimo para pantallas pequeñas */
     }
     
     .header-left {
-        font-size: 10px !important;
+        font-size: 12px !important; /* Aumentado para mejor legibilidad */
         max-width: 180px; /* Más ancho para mostrar más contenido */
         display: block !important;
         overflow: visible;
@@ -467,7 +501,7 @@
     }
     
     .user-area {
-        margin-left: 5px;
+        margin-left: 0; /* Eliminar margen para pantallas pequeñas */
     }
     
     .user-area .dropdown-toggle {
@@ -498,7 +532,7 @@
 /* Optimizaciones para landscape en móviles - Elementos a la izquierda */
 @media (max-height: 500px) and (orientation: landscape) {
     .header {
-        padding: 4px 8px;
+        padding: 4px 8px 4px 0; /* Eliminar padding izquierdo en landscape */
         min-height: 50px;
         justify-content: flex-start;
     }
@@ -521,7 +555,7 @@
     }
     
     .header-left {
-        font-size: 9px !important;
+        font-size: 11px !important; /* Aumentado para mejor legibilidad en landscape */
         max-width: 150px; /* Más ancho para landscape */
         display: block !important;
         overflow: visible;
@@ -533,6 +567,7 @@
         min-width: 38px;
         min-height: 38px;
         font-size: 18px;
+        padding: 6px 6px 6px 2px; /* Menos padding izquierdo en landscape */
     }
     
     .user-area .dropdown-toggle {
@@ -854,23 +889,36 @@
         <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
 
 <script>
-// Navegación móvil mejorada con overlay
+// Navegación móvil mejorada con overlay - Versión estable
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('menuToggle');
     const leftPanel = document.getElementById('left-panel');
     const mobileOverlay = document.querySelector('.mobile-overlay');
+    
+    // Variable para prevenir conflictos
+    let menuIsToggling = false;
 
-    // Toggle del menú móvil
+    // Toggle del menú móvil con protección contra doble click
     if (menuToggle) {
         menuToggle.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            
+            if (menuIsToggling) return;
+            menuIsToggling = true;
+            
             toggleMobileMenu();
+            
+            setTimeout(() => {
+                menuIsToggling = false;
+            }, 300);
         });
     }
 
     // Cerrar menú al hacer click en el overlay
     if (mobileOverlay) {
-        mobileOverlay.addEventListener('click', function() {
+        mobileOverlay.addEventListener('click', function(e) {
+            e.stopPropagation();
             closeMobileMenu();
         });
     }
@@ -882,21 +930,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Cerrar menú al cambiar el tamaño de ventana
+    // Cerrar menú al cambiar el tamaño de ventana con debounce
+    let resizeTimer;
     window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            closeMobileMenu();
-        }
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        }, 150);
     });
 
-    // Mejorar el comportamiento de los dropdowns en móvil
+    // Mejorar el comportamiento de los dropdowns en móvil con mejor control
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
     dropdownToggles.forEach(function(toggle) {
         toggle.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
+                e.stopPropagation();
+                
                 const dropdown = this.nextElementSibling;
-                if (dropdown) {
+                if (dropdown && dropdown.classList.contains('sub-menu')) {
                     const isOpen = dropdown.style.display === 'block';
                     
                     // Cerrar todos los otros dropdowns
@@ -912,6 +966,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Prevenir que Bootstrap interfiera con nuestro sistema
+    document.addEventListener('click', function(e) {
+        // Si el click es en un elemento del menú móvil, no hacer nada más
+        if (e.target.closest('.left-panel') && window.innerWidth <= 768) {
+            e.stopPropagation();
+        }
+    });
 });
 
 function toggleMobileMenu() {
@@ -919,20 +981,24 @@ function toggleMobileMenu() {
     const mobileOverlay = document.querySelector('.mobile-overlay');
     const body = document.body;
     
-    if (leftPanel && mobileOverlay) {
-        const isOpen = leftPanel.classList.contains('show');
+    if (!leftPanel || !mobileOverlay) return;
+    
+    const isOpen = leftPanel.classList.contains('show');
+    
+    // Limpiar cualquier estado inconsistente
+    clearTimeout(window.menuCloseTimer);
+    
+    if (isOpen) {
+        // Cerrar menú
+        closeMobileMenu();
+    } else {
+        // Abrir menú
+        leftPanel.classList.add('show');
+        mobileOverlay.classList.add('show');
+        body.classList.add('menu-open');
         
-        if (isOpen) {
-            // Cerrar menú
-            leftPanel.classList.remove('show');
-            mobileOverlay.classList.remove('show');
-            body.classList.remove('menu-open');
-        } else {
-            // Abrir menú
-            leftPanel.classList.add('show');
-            mobileOverlay.classList.add('show');
-            body.classList.add('menu-open');
-        }
+        // Asegurar que el menú esté visible
+        leftPanel.style.display = 'block';
     }
 }
 
@@ -941,16 +1007,24 @@ function closeMobileMenu() {
     const mobileOverlay = document.querySelector('.mobile-overlay');
     const body = document.body;
     
-    if (leftPanel && mobileOverlay) {
-        leftPanel.classList.remove('show');
-        mobileOverlay.classList.remove('show');
-        body.classList.remove('menu-open');
-        
-        // Cerrar todos los dropdowns
-        document.querySelectorAll('.sub-menu').forEach(function(menu) {
-            menu.style.display = 'none';
-        });
-    }
+    if (!leftPanel || !mobileOverlay) return;
+    
+    // Remover clases de manera segura
+    leftPanel.classList.remove('show');
+    mobileOverlay.classList.remove('show');
+    body.classList.remove('menu-open');
+    
+    // Cerrar todos los dropdowns
+    document.querySelectorAll('.sub-menu').forEach(function(menu) {
+        menu.style.display = 'none';
+    });
+    
+    // Limpiar estilos inline que puedan interferir
+    setTimeout(() => {
+        if (!leftPanel.classList.contains('show')) {
+            leftPanel.style.display = '';
+        }
+    }, 300);
 }
 
 // Mejorar la experiencia de touch

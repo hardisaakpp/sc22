@@ -286,7 +286,32 @@ html, body {
     }
     
     .navbar-brand {
-        margin-left: 50px; /* Espacio para el botón */
+        margin-left: 50px; 
+    }
+
+    #left-panel {
+        z-index: 9999 !important; 
+    }
+
+    .header-menu {
+        display: flex;
+        align-items: center;
+        flex-direction: row-reverse; /* Invertir orden: user-area primero */
+    }
+
+    .header-left {
+        order: -1; 
+        margin-left: 10px !important; /* Margen desde la izquierda */
+        margin-right: auto !important; /* Empujar hacia la izquierda */
+    }
+
+    .content {
+        padding: 0 !important;
+    }
+
+    /* Mover el user-menu dropdown hacia la derecha en pantallas pequeñas */
+    .user-area .user-menu.dropdown-menu.show {
+        right: -40px !important; /* Mover 20px hacia la derecha */
     }
 }
 

@@ -1,5 +1,15 @@
 <?php
-session_start(); // Siempre antes que cualquier salida
+// Suprimir warnings y notices que pueden mostrar paths de archivos
+error_reporting(E_ERROR | E_PARSE);
+ini_set('display_errors', 0);
+
+// Iniciar output buffer para evitar output no deseado
+ob_start();
+
+// Iniciar sesión solo si no está ya iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["numTransferencia"])) {
     require_once "php/bd_StoreControl.php"; // Conexión sin incluir header.php todavía
@@ -31,8 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["numTransferencia"])) 
 }
 ?>
 
-
 <?php
+// Limpiar cualquier output no deseado antes de incluir el header
+ob_clean();
 
 include_once "header.php";
 include_once "php/bd_StoreControl.php";
@@ -95,6 +106,71 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <style>
+/* Fix para el espacio extra debajo del body */
+html, body {
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+}
+
+/* Layout principal usando flexbox para controlar altura */
+#right-panel {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1 1 auto;
+    padding-bottom: 20px !important;
+}
+
+.site-footer {
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+/* Prevenir espacios extra en tablas DataTables */
+.dataTables_wrapper {
+    margin-bottom: 15px !important;
+}
+
+.card:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Estilos para la columna de descripción en todas las pantallas */
+#bootstrap-data-table td:nth-child(4) {
+    white-space: normal !important;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 300px; /* Más ancho para acomodar texto del tamaño original */
+    line-height: 1.4;
+    vertical-align: top;
+    padding: 10px 8px;
+}
+
+#bootstrap-data-table th:nth-child(4) {
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Mejorar el formato del ItemCode y Descripción */
+.item-code {
+    font-weight: bold;
+    color: #007bff;
+    font-size: inherit; /* Mantener tamaño original */
+    display: block;
+    margin-bottom: 3px;
+}
+
+.item-description {
+    color: #666;
+    font-size: inherit; /* Mantener tamaño original */
+    line-height: 1.4;
+}
+
 /* Estilos responsivos que preservan funcionalidad de DataTables */
 @media (max-width: 768px) {
     /* Hacer la tabla scrolleable horizontalmente en móviles */
@@ -116,12 +192,28 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
         white-space: nowrap;
     }
     
+    /* Ajustar la columna de descripción en móviles */
+    #bootstrap-data-table td:nth-child(4) {
+        max-width: 220px !important; /* Más ancho para texto del tamaño original */
+        padding: 8px 6px !important;
+    }
+    
+    .item-code {
+        font-size: inherit !important; /* Mantener tamaño original */
+        margin-bottom: 2px !important;
+    }
+    
+    .item-description {
+        font-size: inherit !important; /* Mantener tamaño original */
+        line-height: 1.3 !important;
+    }
+    
     /* Botones más grandes para touch */
     .btn-sm {
         min-height: 38px;
         min-width: 80px;
         font-size: 14px;
-        padding: 8px 12px;
+        padding: 6px 10px; /* Reducido de 8px 12px */
         border-radius: 6px;
     }
     
@@ -196,7 +288,22 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
     .btn-sm {
         min-width: 70px;
         font-size: 12px;
-        padding: 6px 8px;
+        padding: 5px 8px; /* Reducido ligeramente */
+    }
+    
+    /* Ajustar descripción en pantallas muy pequeñas */
+    #bootstrap-data-table td:nth-child(4) {
+        max-width: 160px !important; /* Un poco más ancho para compensar el tamaño de texto */
+    }
+    
+    .item-code {
+        font-size: inherit !important; /* Mantener tamaño original */
+        margin-bottom: 1px !important;
+    }
+    
+    .item-description {
+        font-size: inherit !important; /* Mantener tamaño original */
+        line-height: 1.2 !important;
     }
     
     /* Ocultar columnas menos importantes en pantallas muy pequeñas */
@@ -213,7 +320,7 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
     
     .btn-sm {
         min-height: 36px;
-        padding: 7px 14px;
+        padding: 6px 12px; /* Reducido de 7px 14px */
     }
 }
 </style>
@@ -249,7 +356,10 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                                     </td>
                                     <td><?= $r->BodegaOrigen ?></td>
                                     <td><?= $r->Fecha ?></td>
-                                    <td><?= $r->ItemCode . ' - ' . $r->Descripcion ?></td>
+                                    <td>
+                                        <span class="item-code"><?= $r->ItemCode ?></span>
+                                        <span class="item-description"><?= $r->Descripcion ?></span>
+                                    </td>
                                     <td><?= $r->CantidadAbierta ?></td>
                                 </tr>
                             <?php endforeach; ?>
@@ -267,6 +377,17 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 function confirmarRecepcion(num, fecha) {
     return confirm("¿Quiere proceder a recibir la transferencia número " + num + " de fecha " + fecha + "?");
 }
+
+// Mejorar la visualización de las descripciones largas
+$(document).ready(function() {
+    // Agregar tooltips para descripciones que se corten
+    $('.item-description').each(function() {
+        var $this = $(this);
+        if (this.scrollHeight > this.clientHeight) {
+            $this.attr('title', $this.text());
+        }
+    });
+});
 </script>
 
 <?php include_once "footer.php"; ?>

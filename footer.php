@@ -15,17 +15,8 @@
             </div>
         </footer>
         <!-- /.site-footer -->
-    
-    
-
-
-
-<!-- Right Panel -->
-
-
-
-
-
+    </div>
+    <!-- /.right-panel -->
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
@@ -64,7 +55,7 @@
 
 $(window).on('load',function() {
       setTimeout(function () {
-    $(".loader-page").css({visibility:"hidden",opacity:"80"})
+    $(".loader-page").css({visibility:"hidden",opacity:"0", display:"none"})
   }, 2000);
 });
 
@@ -77,6 +68,30 @@ $(document).ready(function() {
     });
     $('.js-example-basic-single').select2();
     indexesLX();
+    
+    // Fix para espacios extra después de cargar DataTables
+    setTimeout(function() {
+        // Limpiar espacios extra en DataTables
+        $('.dataTables_wrapper').css('margin-bottom', '0');
+        $('.dataTables_info, .dataTables_paginate').css('margin-bottom', '10px');
+        
+        // Asegurar que el footer esté en la posición correcta
+        $('.site-footer').css('margin-top', 'auto');
+        
+        // Limpiar cualquier altura extra en el body
+        $('body').css('padding-bottom', '0');
+        $('#right-panel').css('padding-bottom', '0');
+        
+        // Debug: mostrar en consola si hay elementos con altura excesiva
+        if (window.location.search.includes('debug=height')) {
+            $('*').each(function() {
+                var height = $(this).outerHeight();
+                if (height > $(window).height() * 0.8) {
+                    console.log('Elemento con altura excesiva:', this, 'Altura:', height + 'px');
+                }
+            });
+        }
+    }, 500);
 } );
 
 

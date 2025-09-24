@@ -14,6 +14,56 @@
     --transition-mobile: all 0.3s ease;
 }
 
+/* Fix global para espacios extra en el layout */
+html, body {
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+}
+
+/* Layout principal usando flexbox */
+#right-panel {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+    padding-bottom: 20px !important;
+}
+
+.site-footer {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+/* Prevenir espacios extra en DataTables */
+.dataTables_wrapper {
+    margin-bottom: 0 !important;
+}
+
+.dataTables_info, 
+.dataTables_paginate {
+    margin-bottom: 10px !important;
+}
+
+/* Limpiar espacios extra de elementos comunes */
+.card:last-child {
+    margin-bottom: 0 !important;
+}
+
+.row:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Fix para el loader que puede causar espacios extra */
+.loader-page {
+    position: fixed !important;
+    z-index: 25000 !important;
+}
+
 /* Mejoras globales para móviles */
 @media (max-width: 768px) {
     /* Scroll suave en iOS */

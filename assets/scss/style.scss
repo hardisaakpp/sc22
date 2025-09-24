@@ -412,21 +412,20 @@ aside.left-panel {
                     li {
                         position: relative;
                     }
+                    i {
+                        color: #414244;
+                        float: left;
+                        padding: 0;
+                        position: absolute;
+                        left: 0;
+                        font-size: 14px;
+                        top: 9px;
+                    }
                     a {
-                        padding: 2px 0 2px 0px;
-                        display: flex;
-                        align-items: center;
-                        gap: 8px;
+                        padding: 2px 0 2px 30px;
                         &:before {
                             content: '';
                             display: none;
-                        }
-                        i {
-                            color: #414244;
-                            font-size: 14px;
-                            width: 18px;
-                            text-align: center;
-                            flex-shrink: 0;
                         }
                         .menu-icon {
                             top: 13px;
@@ -2675,7 +2674,7 @@ footer.site-footer {
                 border-bottom: 1px solid #dcdcdc;
             }
             .top-right {
-                padding:0 1px;
+                padding:0 30px;
             }
         }
     }

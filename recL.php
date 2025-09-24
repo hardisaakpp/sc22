@@ -272,6 +272,22 @@ html, body {
     .table-responsive:hover::after {
         opacity: 1;
     }
+    
+    .navbar-header {
+        position: relative;
+    }
+    
+    .menutoggle {
+        position: absolute;
+        left: 10px; /* Ajusta esta distancia según necesites */
+        top: 35%;
+        transform: translateY(-50%);
+        z-index: 1000;
+    }
+    
+    .navbar-brand {
+        margin-left: 50px; /* Espacio para el botón */
+    }
 }
 
 @media (max-width: 480px) {

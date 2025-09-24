@@ -7,7 +7,7 @@
     <title>StoreControl|22</title>
     <link rel="icon" type="image/png" href="images/favicon.png"/>
     <meta name="description" content="StoreControl22">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="assets/css/lib/datatable/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/mobile-responsive.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -86,8 +87,140 @@
     animation: rotarload 1s ease-out infinite;
     transform: rotate(0deg);
   }
- 
 
+/* Mejoras de responsividad móvil */
+@media (max-width: 768px) {
+    /* Navegación lateral mejorada para móviles */
+    .left-panel {
+        width: 280px !important;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .left-panel.show {
+        transform: translateX(0);
+    }
+    
+    .right-panel {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    
+    /* Header móvil optimizado */
+    .header {
+        padding: 10px 15px;
+    }
+    
+    .navbar-brand {
+        font-size: 18px !important;
+        padding: 8px 0;
+    }
+    
+    .header-left {
+        font-size: 12px !important;
+        margin: auto 5px !important;
+    }
+    
+    .user-avatar {
+        width: 35px !important;
+        height: 35px !important;
+    }
+    
+    /* Menú toggle más grande para touch */
+    #menuToggle {
+        padding: 12px;
+        font-size: 18px;
+        background: none;
+        border: none;
+        color: #333;
+    }
+    
+    /* Elementos del menú más grandes para touch */
+    .main-menu .nav li a {
+        padding: 15px 20px !important;
+        font-size: 16px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .sub-menu li a {
+        padding: 12px 25px !important;
+        font-size: 14px;
+    }
+    
+    /* Dropdown mejorado */
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+    
+    /* Content padding para móviles */
+    .content {
+        padding: 15px 10px;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes para pantallas muy pequeñas */
+    .navbar-brand {
+        font-size: 16px !important;
+    }
+    
+    .header-left {
+        display: none; /* Ocultar info de usuario en pantallas muy pequeñas */
+    }
+    
+    .content {
+        padding: 10px 5px;
+    }
+    
+    /* Botones más grandes para touch */
+    .btn {
+        min-height: 44px;
+        font-size: 16px;
+        padding: 12px 16px;
+    }
+    
+    .btn-sm {
+        min-height: 38px;
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+}
+
+/* Mejoras para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .left-panel {
+        width: 240px;
+    }
+    
+    .right-panel {
+        margin-left: 240px;
+    }
+    
+    .content {
+        padding: 20px 15px;
+    }
+}
+
+/* Overlay para cerrar menú en móvil */
+@media (max-width: 768px) {
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+        display: none;
+    }
+    
+    .mobile-overlay.show {
+        display: block;
+    }
+}
 </style>
  
     <aside id="left-panel" class="left-panel">
@@ -119,49 +252,7 @@
             </li>';
 
         }  else  {     
-        //INVENTARIOS TFA
-                    if ($userAdmin==1 && $userName <> 'SISTEMAS') { // ADMIN   
-                        echo '
-                        <li class="menu-item-has-children dropdown">
-                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
-                            <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
-                        </ul>
-                        </li>
-                        ';
-                    } else   if ( $userName === 'SISTEMAS') { // ADMIN   
-                        echo '
-                        <li class="menu-item-has-children dropdown">
-                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-spinner"></i><a href="tfaRe.php">Log Tomas aleatorias</a></li>
-                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
-                            <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
-                        </ul>
-                        </li>
-                        ';
-                    } else if ($userAdmin==2){ // TIENDA
-                        echo '
-                        <li class="menu-item-has-children dropdown">
-                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-pencil-square-o"></i><a href="tfaD.php">Toma aleatoria</a></li>
-                            <li><i class="fa fa-h-square"></i><a href="tfaHu.php">Historial</a></li>
-                        </ul>
-                        </li>
-                        ';
-                    } else if ($userAdmin==3){ // INVENTARIO
-                        echo '
-                        <li class="menu-item-has-children dropdown">
-                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-check-square"></i>Inventarios</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-spinner"></i><a href="loadTF.php">Cargar tomas aleatorias</a></li>
-                            <li><i class="fa fa-h-square"></i><a href="tfaL.php">Revisar tomas tiendas</a></li>
-                        </ul>
-                        </li>
-                        ';
-                    }
+
 //recepcion transferencias tiendas
                     if ($userAdmin==2 || $userName == 'RL-PSC' || $userName == 'OUT-LLG') {   
                         echo '                       
@@ -181,131 +272,6 @@
                         }
 
 
-//reposicion tienda
-                    if ($userName == 'RL-PSC' || strpos($userName, 'OUT') === 0) {
-                        
-                        
-                        echo '                       
-                            <li class="menu-item-has-children dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-shopping-cart"></i>Reposiciones</a>
-                                <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-menu-alt"></i><a href="repC.php">Solicitar</a></li>
-
-                                    <li><i class="ti ti-shopping-cart"></i><a href="repS.php">Carrito</a></li>
-                                   
-
-                                    <li><i class="fa fa-h-square"></i><a href="repH.php">Historial</a></li>
-                                
-                                </ul>
-                            </li>
-                        ';
-                        }
-
-
-
-        //PRESUPUESTOS - METAS
-                        $LP = "LP"; $SAL = "SAL";
-                        $RL = "RL";
-                        $OUT = "OUT";
-                        $YHD = "YHD";
-
-                            if ($userAdmin==1 ) { // ADMIN   
-                                echo '
-                                <li class="menu-item-has-children dropdown">
-                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
-                                <ul class="sub-menu children dropdown-menu">
-
-                                    <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar COSMEC</a></li>
-                                    <li><i class="fa fa-spinner"></i><a href="prevenImpRL.php">Cargar ROLAND</a></li>
-                                    <li><i class="fa fa-spinner"></i><a href="prevenImpLP.php">Cargar LILI PINK</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar COSMEC</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRL.php">Revisar ROLAND</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLLP.php">Revisar LILI PINK</a></li>
-                                
-                                
-                                </ul>
-                                </li>
-                                ';
-                            }else if ($userAdmin==2){ // TIENDA
-
-                                if ( substr($userName, 0, strlen($RL)) === $RL || substr($userName, 0, strlen($OUT)) === $OUT || substr($userName, 0, strlen($YHD)) === $YHD  ) {
-                                    echo '<li class="menu-item-has-children dropdown">
-                                    <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
-                                    <ul class="sub-menu children dropdown-menu">
-                                    <li><i class="fa fa-spinner"></i><a href="prevenImpRLt.php">Cargar</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLt.php">Revisar Metas</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLmDAY.php">Ventas Día/Asesor</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLm.php">Cumplimiento</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenList.php">Maestro Vendedores</a></li>
-                                     </ul>
-                                </li>';
-                                } else   if (substr($userName, 0, strlen($LP)) === $LP  ) {
-                                    echo '<li class="menu-item-has-children dropdown">
-                                    <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
-                                    <ul class="sub-menu children dropdown-menu">
-                                    <li><i class="fa fa-spinner"></i><a href="prevenImpRLt.php">Cargar</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLt.php">Revisar Metas</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLmDAY.php">Ventas Día/Asesor</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLm.php">Cumplimiento</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenList.php">Maestro Vendedores</a></li>       
-                                    </ul>
-                                </li>';
-                                        } else {
-                                            echo '
-                                            <li class="menu-item-has-children dropdown">
-                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
-                                <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar COSMEC</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar COSMEC</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="prevenLRLmDAY.php">Ventas Día/Asesor</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLRLm.php">Cumplimiento</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="prevenLIstC.php">Maestro Vendedores COSMEC</a></li>
-                                            </ul>
-                                </li>';
-                                        
-                                }
-                               
-
-
-
-
-                            }  else if ($userId==274){ // TIENDA
-                                echo '
-                                <li class="menu-item-has-children dropdown">
-                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
-                                <ul class="sub-menu children dropdown-menu">
-                                  
-                                    <li><i class="fa fa-spinner"></i><a href="prevenImpLP.php">Cargar LILI PINK</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLLP.php">Revisar LILI PINK</a></li>
-                                    <li><i class="fa fa-h-square"></i><a href="prevenLIstC.php">Maestro Vendedores</a></li>
-                                </ul>
-                                </li>
-                                ';
-                            } else if ($userId==275){ // TIENDA
-                                echo '
-                                <li class="menu-item-has-children dropdown">
-                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
-                                <ul class="sub-menu children dropdown-menu">
-                                  
-                                <li><i class="fa fa-spinner"></i><a href="prevenImpRL.php">Cargar ROLAND</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="prevenLRL.php">Revisar ROLAND</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="prevenLIstC.php">Maestro Vendedores</a></li>
-                                </ul>
-                                </li>
-                                ';
-                            } else if ($userId==276){ // TIENDA
-                                echo '
-                                <li class="menu-item-has-children dropdown">
-                                <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-dashboard"></i>Presupuesto Vendedor</a>
-                                <ul class="sub-menu children dropdown-menu">
-                                  
-                                <li><i class="fa fa-spinner"></i><a href="prevenImp.php">Cargar COSMEC</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="prevenL.php">Revisar COSMEC</a></li>
-                                <li><i class="fa fa-h-square"></i><a href="prevenLIstC.php">Maestro Vendedores</a></li>
-                                </ul>
-                                </li>
-                                ';
-                            } 
         //HORARIOS-->
                       /*  if ($userAdmin==1) { // ADMIN   
                             echo '
@@ -330,77 +296,7 @@
                             </li>
                             ';
                         } */
-        //CIERRES DE CAJA-->
-                    if ($userAdmin==1) { // ADMIN   
-                        echo '
-                        <li class="menu-item-has-children dropdown">
-                        <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja (HITELL)</a></li>
-                            <li><i class="fa fa-pencil-square-o"></i><a href="cicaL.php">Cierres de caja (MT)</a></li>
-                            <li><i class="fa fa-pencil-square-o"></i><a href="cicaLlp.php">Cierres de caja (LP-HITELL)</a></li>
-                            <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
-                            <li><i class="fa fa-pencil-square-o"></i><a href="depL.php">DEPOSITOS [Tiendas]</a></li>
-                            <li><i class="fa fa-pencil-square-o"></i><a href="depLa.php">DEPOSITOS POR TIENDA DIA [Contabilidad]</a></li>
-                            <li><i class="fa fa-pencil-square-o"></i><a href="depLa2.php">DEPOSITOS [Contabilidad]</a></li>
-                        </ul>
-                        </li>
-                        ';
-                    } else if ($userAdmin==2){ // TIENDA
-                        echo '
-                            <li class="menu-item-has-children dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                 <li><i class="fa fa-pencil-square-o"></i><a href="cic2.php">Cierre de Caja</a></li>
-                                 <li><i class="fa fa-h-square"></i><a href="cic2H.php">Historial</a></li>
-                                 
-                            ';
-                                 if ($_SESSION["emp"] == 'MT') {
-                                    ?>
-
-                                        <li><i class="fa fa-money"></i><a href="depL.php">Depositos</a></li>
-                                    </ul>
-                                    </li>
-
-                                      
-                                    <?php
-                                } else {
-                                    ?>
-                                        <li><i class="fa fa-money"></i><a href="depLce.php">Depositos</a></li>
-                                    </ul>
-                                    </li>
-                                    <?php
-                                }
-                                    
-                    }
-                        
-        // CIERRES DE CAJA PARA CONTABILIDAD               
-                if ($userAdmin==6 && $userName=='CONTABILIDADMT'){ 
-                    echo '
-                    <li class="menu-item-has-children dropdown">
-                    <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                    <ul class="sub-menu children dropdown-menu">
-                        <li><i class="fa fa-pencil-square-o"></i><a href="cicL.php">Cierres de caja</a></li>
-                        <li><i class="fa fa-refresh"></i><a href="cic2f5.php">Actualiza cajas por día [SAP]</a></li>
-                        <li><i class="fa fa-money"></i><a href="depLa.php">Dépositos Día-Tienda</a></li>
-                        <li><i class="fa fa-money"></i><a href="depLa2.php">Dépositos Detalle</a></li>
-                    </ul>
-                    </li>
-
-                    
-                    ';
-                }else if ($userAdmin==6 && $userName=='CONTABILIDADCE'){ // INVENTARIO
-                    echo '
-                    <li class="menu-item-has-children dropdown">
-                    <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-money"></i>Contabilidad</a>
-                    <ul class="sub-menu children dropdown-menu">
-                        <li><i class="fa fa-pencil-square-o"></i><a href="cicaLce.php">Cierres de caja (CE)</a></li>
-                        <li><i class="fa fa-pencil-square-o"></i><a href="cicLce.php">Cierres de caja (CE-HITELL)</a></li>
-                        <li><i class="fa fa-refresh"></i><a href="cic2f5.php">Actualiza cajas por día [SAP]</a></li>
-                    </ul>
-                    </li>
-                    ';
-                }
+                       
         //CONFIGURACION-->
                     if ($userAdmin==1) {   
                             echo '
@@ -621,4 +517,82 @@
    
         <!-- .content -->   
         <div class="loader-page"></div>
+        <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+
+<script>
+// Funcionalidad mejorada para el menú móvil
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menuToggle');
+    const leftPanel = document.getElementById('left-panel');
+    const mobileOverlay = document.querySelector('.mobile-overlay');
+    const rightPanel = document.getElementById('right-panel');
+
+    // Toggle del menú móvil
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleMobileMenu();
+        });
+    }
+
+    // Cerrar menú al hacer click en el overlay
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', function() {
+            closeMobileMenu();
+        });
+    }
+
+    // Cerrar menú al cambiar el tamaño de ventana
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            closeMobileMenu();
+        }
+    });
+
+    // Mejorar el comportamiento de los dropdowns en móvil
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+        toggle.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const dropdown = this.nextElementSibling;
+                if (dropdown) {
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                }
+            }
+        });
+    });
+});
+
+function toggleMobileMenu() {
+    const leftPanel = document.getElementById('left-panel');
+    const mobileOverlay = document.querySelector('.mobile-overlay');
+    
+    if (leftPanel && mobileOverlay) {
+        leftPanel.classList.toggle('show');
+        mobileOverlay.classList.toggle('show');
+        
+        // Prevenir scroll del body cuando el menú está abierto
+        if (leftPanel.classList.contains('show')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }
+}
+
+function closeMobileMenu() {
+    const leftPanel = document.getElementById('left-panel');
+    const mobileOverlay = document.querySelector('.mobile-overlay');
+    
+    if (leftPanel && mobileOverlay) {
+        leftPanel.classList.remove('show');
+        mobileOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
+
+// Mejorar la experiencia de touch en botones
+document.addEventListener('touchstart', function() {}, {passive: true});
+</script>
       

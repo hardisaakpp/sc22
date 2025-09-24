@@ -1,0 +1,310 @@
+/* 
+ * Mobile Responsive Enhancements for StoreControl22
+ * Mejoras específicas de responsividad móvil
+ */
+
+/* Variables CSS para consistencia */
+:root {
+    --mobile-breakpoint: 768px;
+    --small-mobile-breakpoint: 480px;
+    --tablet-breakpoint: 1024px;
+    --touch-target-size: 44px;
+    --border-radius-mobile: 8px;
+    --shadow-mobile: 0 2px 8px rgba(0,0,0,0.1);
+    --transition-mobile: all 0.3s ease;
+}
+
+/* Mejoras globales para móviles */
+@media (max-width: 768px) {
+    /* Scroll suave en iOS */
+    * {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Mejorar tap highlights */
+    * {
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        -webkit-touch-callout: none;
+    }
+    
+    /* Botones táctiles mejorados */
+    .btn, button, [role="button"] {
+        min-height: var(--touch-target-size);
+        min-width: var(--touch-target-size);
+        border-radius: var(--border-radius-mobile);
+        transition: var(--transition-mobile);
+    }
+    
+    .btn:active, button:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    /* Cards responsivas */
+    .card {
+        border-radius: var(--border-radius-mobile);
+        box-shadow: var(--shadow-mobile);
+        margin-bottom: 15px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+    
+    /* Formularios móviles */
+    .form-control {
+        min-height: var(--touch-target-size);
+        font-size: 16px; /* Previene zoom en iOS */
+        border-radius: var(--border-radius-mobile);
+    }
+    
+    /* Tablas responsivas - Vista de cards */
+    .mobile-table {
+        display: none;
+    }
+    
+    .mobile-cards {
+        display: block;
+    }
+    
+    .mobile-card-item {
+        background: #fff;
+        border-radius: var(--border-radius-mobile);
+        box-shadow: var(--shadow-mobile);
+        margin-bottom: 12px;
+        padding: 15px;
+        border-left: 4px solid #007bff;
+    }
+    
+    .mobile-card-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        padding: 4px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .mobile-card-row:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    
+    .mobile-card-label {
+        font-weight: 600;
+        color: #333;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .mobile-card-value {
+        color: #666;
+        font-size: 14px;
+        text-align: right;
+        flex: 1;
+        margin-left: 10px;
+    }
+    
+    /* Alertas y notificaciones móviles */
+    .alert {
+        border-radius: var(--border-radius-mobile);
+        font-size: 14px;
+        padding: 12px 15px;
+    }
+    
+    /* Modales móviles */
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .modal-content {
+        border-radius: var(--border-radius-mobile);
+    }
+    
+    /* Paginación móvil */
+    .pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .page-link {
+        min-height: var(--touch-target-size);
+        min-width: var(--touch-target-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Pantallas muy pequeñas (menos de 480px) */
+@media (max-width: 480px) {
+    .container, .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .row {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+    
+    [class*="col-"] {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    
+    /* Texto más legible en pantallas pequeñas */
+    body {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 18px; }
+    h4 { font-size: 16px; }
+    h5 { font-size: 15px; }
+    h6 { font-size: 14px; }
+    
+    .card-title {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+}
+
+/* Tablets en orientación portrait */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+    .container {
+        max-width: 95%;
+    }
+    
+    .table-responsive {
+        font-size: 14px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+    }
+}
+
+/* Mejoras para landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .left-panel {
+        width: 250px !important;
+    }
+    
+    .header {
+        padding: 5px 15px;
+    }
+    
+    .content {
+        padding: 10px;
+    }
+    
+    .card-body {
+        padding: 10px;
+    }
+}
+
+/* Dark mode support para móviles */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+    .mobile-card-item {
+        background: #2d2d2d;
+        border-left-color: #4a90e2;
+    }
+    
+    .mobile-card-label {
+        color: #e0e0e0;
+    }
+    
+    .mobile-card-value {
+        color: #b0b0b0;
+    }
+}
+
+/* Animaciones suaves para móviles */
+@media (max-width: 768px) {
+    .fade-in-mobile {
+        animation: fadeInMobile 0.3s ease-in;
+    }
+    
+    @keyframes fadeInMobile {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .slide-in-mobile {
+        animation: slideInMobile 0.3s ease-out;
+    }
+    
+    @keyframes slideInMobile {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+}
+
+/* Estados de focus mejorados para accesibilidad móvil */
+@media (max-width: 768px) {
+    .btn:focus,
+    .form-control:focus,
+    .dropdown-toggle:focus {
+        outline: 2px solid #007bff;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    }
+    
+    /* Mejorar visibilidad de enlaces */
+    a {
+        min-height: var(--touch-target-size);
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+    }
+    
+    a:hover, a:focus {
+        text-decoration: underline;
+    }
+}
+
+/* Utilidades específicas para móviles */
+@media (max-width: 768px) {
+    .mobile-hidden {
+        display: none !important;
+    }
+    
+    .mobile-visible {
+        display: block !important;
+    }
+    
+    .mobile-text-center {
+        text-align: center !important;
+    }
+    
+    .mobile-full-width {
+        width: 100% !important;
+    }
+    
+    .mobile-margin-bottom {
+        margin-bottom: 15px !important;
+    }
+    
+    .mobile-padding {
+        padding: 15px !important;
+    }
+    
+    .mobile-no-padding {
+        padding: 0 !important;
+    }
+}

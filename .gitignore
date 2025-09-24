@@ -1,2 +1,59 @@
+# Archivos de configuración sensibles
+config.php
+*.env
+.env
+.env.local
+.env.production
 
-/films
+# Archivos de base de datos
+*.sql
+*.db
+*.sqlite
+
+# Archivos de logs
+logs/
+*.log
+error.log
+access.log
+
+# Archivos temporales
+tmp/
+temp/
+cache/
+*.tmp
+*.cache
+
+# Archivos de backup
+*.bak
+*.backup
+*~
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de dependencias (si usas composer)
+vendor/
+composer.lock
+
+# Archivos de uploads (si contienen datos sensibles)
+uploads/private/
+uploads/sensitive/
+
+# Archivos de configuración específicos del servidor
+.htaccess.local
+php.ini.local
+
+# Archivos de sesión PHP
+session_*
+
+# Archivos de cache de PHP
+opcache/
+*.opcache

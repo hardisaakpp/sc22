@@ -5,7 +5,7 @@
 <!---------------------------------------------->
 <!----------------- Content -------------------->
 <!---------------------------------------------->
-<h1 ALIGN="center" class="display-3">Bienvenido</h1>
+<h1 ALIGN="center" class="display-6">Bienvenido</h1>
 
 <style>
     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap");
@@ -229,43 +229,6 @@ if($userAdmin==2) // si es TIENDA
 }
 
 ?>
-
-
-
-
-  <div class="card">
-    <div class="box">
-      <div class="content">
-        <h2>📝</h2>
-        <h3>Toma Física Diaria</h3>
-        <p>Items de forma aleatoria se listan de LUNES a JUEVES, excepto feriados.</p>
-        <a href="tfaD.php">Iniciar</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="box">
-      <div class="content">
-        <h2>🛠️</h2>
-        <h3>Mesa de Servicios</h3>
-        <p>Genera requerimientos mediante tickets. </p>
-        <a href="http://192.168.2.12:8081/glpi/index.php">Ir</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-       
-   
-        
-
-        
     </div>
 
     <?php    

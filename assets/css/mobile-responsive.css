@@ -57,6 +57,64 @@
         font-size: 16px; /* Previene zoom en iOS */
         border-radius: var(--border-radius-mobile);
     }
+    
+    /* Mejoras específicas para DataTables en móvil */
+    .dataTables_wrapper {
+        font-size: 14px;
+    }
+    
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        margin: 8px 0;
+    }
+    
+    /* Controles de DataTables más táctiles */
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input[type="search"] {
+        min-height: 38px !important;
+        font-size: 16px !important;
+        border-radius: 6px !important;
+        padding: 8px 12px !important;
+        border: 1px solid #ddd !important;
+    }
+    
+    /* Paginación de DataTables mejorada */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        min-height: 36px !important;
+        min-width: 36px !important;
+        margin: 2px !important;
+        padding: 6px 12px !important;
+        border-radius: 6px !important;
+        font-size: 14px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        background: #007bff !important;
+        color: white !important;
+        border-color: #007bff !important;
+    }
+    
+    /* Headers de tabla ordenables */
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        cursor: pointer;
+        position: relative;
+        padding-right: 30px !important;
+    }
+    
+    /* Indicadores de ordenamiento más visibles en móvil */
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_desc:after {
+        font-size: 16px !important;
+        right: 8px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+    }
 }
 
 @media (max-width: 480px) {

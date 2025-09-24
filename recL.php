@@ -95,101 +95,125 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <style>
-/* Estilos responsivos para móviles */
+/* Estilos responsivos que preservan funcionalidad de DataTables */
 @media (max-width: 768px) {
-    .mobile-card-view {
-        display: block !important;
-    }
-    
-    .mobile-card-view thead,
-    .mobile-card-view tbody,
-    .mobile-card-view th,
-    .mobile-card-view td,
-    .mobile-card-view tr {
-        display: block;
-    }
-    
-    .mobile-card-view thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-    
-    .mobile-card-view tr {
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-        padding: 10px;
+    /* Hacer la tabla scrolleable horizontalmente en móviles */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         border-radius: 8px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
-    .mobile-card-view td {
-        border: none;
-        position: relative;
-        padding: 8px 8px 8px 120px !important;
-        text-align: left;
-        white-space: normal;
+    /* Mejorar el diseño de la tabla en móviles sin romper DataTables */
+    #bootstrap-data-table {
+        min-width: 600px; /* Ancho mínimo para mantener funcionalidad */
         font-size: 14px;
     }
     
-    .mobile-card-view td:before {
-        content: attr(data-label) ": ";
-        position: absolute;
-        left: 8px;
-        width: 100px;
-        font-weight: bold;
-        color: #333;
-        text-align: left;
+    #bootstrap-data-table th,
+    #bootstrap-data-table td {
+        padding: 8px 6px;
+        white-space: nowrap;
     }
     
-    .mobile-btn-transfer {
-        width: 100% !important;
-        padding: 12px !important;
-        font-size: 16px !important;
-        margin-bottom: 8px;
+    /* Botones más grandes para touch */
+    .btn-sm {
+        min-height: 38px;
+        min-width: 80px;
+        font-size: 14px;
+        padding: 8px 12px;
         border-radius: 6px;
-        font-weight: bold;
     }
     
-    .card-title-mobile {
-        font-size: 18px;
-        text-align: center;
-        margin-bottom: 15px;
+    /* Header de la tabla más compacto */
+    #bootstrap-data-table thead th {
+        font-size: 13px;
+        font-weight: 600;
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    /* Mejorar controles de DataTables en móvil */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 10px;
+    }
+    
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        min-height: 38px;
+        font-size: 16px; /* Previene zoom en iOS */
+        border-radius: 6px;
+    }
+    
+    /* Paginación más táctil */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        min-height: 38px;
+        min-width: 38px;
+        margin: 2px;
+        border-radius: 6px;
+    }
+    
+    /* Info de la tabla más compacta */
+    .dataTables_wrapper .dataTables_info {
+        font-size: 12px;
+        margin-top: 10px;
+    }
+    
+    /* Indicador de scroll horizontal */
+    .table-responsive::after {
+        content: "← Desliza para ver más →";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,123,255,0.8);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .table-responsive:hover::after {
+        opacity: 1;
     }
 }
 
 @media (max-width: 480px) {
-    .content {
-        padding: 10px 5px;
+    /* Pantallas muy pequeñas */
+    #bootstrap-data-table {
+        font-size: 12px;
     }
     
-    .card {
-        margin: 0 5px;
-        border-radius: 10px;
+    #bootstrap-data-table th,
+    #bootstrap-data-table td {
+        padding: 6px 4px;
     }
     
-    .card-body {
-        padding: 15px 10px;
+    .btn-sm {
+        min-width: 70px;
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+    
+    /* Ocultar columnas menos importantes en pantallas muy pequeñas */
+    .mobile-hide-sm {
+        display: none;
     }
 }
 
 /* Mejoras para tablets */
 @media (min-width: 769px) and (max-width: 1024px) {
-    .table-responsive {
+    #bootstrap-data-table {
         font-size: 14px;
     }
     
-    .btn {
-        padding: 8px 12px;
-    }
-}
-
-/* Scroll horizontal para pantallas medianas cuando sea necesario */
-@media (min-width: 769px) {
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+    .btn-sm {
+        min-height: 36px;
+        padding: 7px 14px;
     }
 }
 </style>
@@ -198,11 +222,11 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title card-title-mobile">Stock en Transitoria <?php echo $almacenTran; ?></strong>
+                <strong class="card-title">Stock en Transitoria <?php echo $almacenTran; ?></strong>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="bootstrap-data-table" class="table table-striped table-bordered mobile-card-view">
+                    <table id="bootstrap-data-table" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>Transferencia</th>
@@ -215,18 +239,18 @@ $resumen = $stmt->fetchAll(PDO::FETCH_OBJ);
                         <tbody>
                             <?php foreach ($resumen as $r): ?>
                                 <tr>
-                                    <td data-label="Transferencia">
+                                    <td>
                                         <form method="post" action="" style="display:inline;" onsubmit="return confirmarRecepcion(<?= $r->NumTransferencia ?>, '<?= $r->Fecha ?>')">
                                             <input type="hidden" name="numTransferencia" value="<?= $r->NumTransferencia ?>">
-                                            <button type="submit" class="btn btn-primary btn-sm mobile-btn-transfer">
+                                            <button type="submit" class="btn btn-primary btn-sm">
                                                 <?= $r->NumTransferencia ?>
                                             </button>
                                         </form>
                                     </td>
-                                    <td data-label="Bodega Origen"><?= $r->BodegaOrigen ?></td>
-                                    <td data-label="Fecha"><?= $r->Fecha ?></td>
-                                    <td data-label="Producto"><?= $r->ItemCode . ' - ' . $r->Descripcion ?></td>
-                                    <td data-label="Cantidad"><?= $r->CantidadAbierta ?></td>
+                                    <td><?= $r->BodegaOrigen ?></td>
+                                    <td><?= $r->Fecha ?></td>
+                                    <td><?= $r->ItemCode . ' - ' . $r->Descripcion ?></td>
+                                    <td><?= $r->CantidadAbierta ?></td>
                                 </tr>
                             <?php endforeach; ?>
                             <?php if (empty($resumen)): ?>

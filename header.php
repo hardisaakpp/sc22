@@ -94,7 +94,7 @@
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
-        width: 280px !important;
+        width: 320px !important; /* Aumentado de 280px para más espacio */
         height: 100vh !important;
         z-index: 9999 !important;
         transform: translateX(-100%);
@@ -330,15 +330,43 @@
         font-size: 16px;
         border-bottom: 1px solid #f0f0f0;
         transition: background-color 0.2s;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
     }
     
     .main-menu .nav li a:hover {
         background-color: #f8f9fa;
     }
     
+    .main-menu .nav li a i {
+        width: 18px !important;
+        text-align: center !important;
+        flex-shrink: 0 !important;
+        font-size: 16px !important;
+    }
+    
     .sub-menu li a {
-        padding: 12px 25px !important;
+        padding: 12px 30px 12px 25px !important; /* Aumentar padding derecho */
         font-size: 14px;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .sub-menu li a i {
+        width: 16px !important;
+        text-align: center !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Asegurar que el texto tenga espacio suficiente */
+    .sub-menu li a span,
+    .sub-menu li a:not(:has(i)) {
+        flex: 1 !important;
+        padding-right: 10px !important;
     }
     
     /* Prevenir scroll del body cuando el menú está abierto */
@@ -354,6 +382,8 @@
             opacity: 1 !important;
             height: auto !important;
             overflow: visible !important;
+            width: 100% !important;
+            padding: 0 !important;
         }
         
         .navbar-collapse.collapse {
@@ -362,6 +392,21 @@
         
         .navbar-collapse.collapsing {
             display: block !important;
+        }
+        
+        /* Mejorar el contenedor del navbar para móviles */
+        .navbar {
+            width: 100% !important;
+            padding: 0 10px !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
+        
+        .navbar-nav {
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
         }
         
         /* Asegurar que nuestro sistema tenga prioridad */
@@ -375,6 +420,40 @@
         
         .left-panel.show {
             transform: translateX(0) !important;
+        }
+        
+        /* Mejorar spacing de dropdown menus */
+        .dropdown-menu {
+            position: static !important;
+            float: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: #f8f9fa !important;
+        }
+        
+        /* Aumentar ancho de sub-menu children dropdown-menu */
+        .sub-menu.children.dropdown-menu {
+            width: 100% !important;
+            min-width: 300px !important; /* Aumentado de 280px */
+            max-width: none !important;
+            padding-right: 25px !important; /* Más padding derecho */
+            box-sizing: border-box !important;
+        }
+        
+        /* Estilos específicos para los elementos li dentro del sub-menu */
+        .sub-menu.children.dropdown-menu li {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        /* Mejorar el ancho total del menú desplegable */
+        .menu-item-has-children .sub-menu {
+            width: 100% !important;
+            min-width: 300px !important;
+            padding: 5px 0 !important;
         }
     }
 }
@@ -443,7 +522,7 @@
 
 @media (max-width: 480px) {
     .left-panel {
-        width: 260px !important;
+        width: 300px !important; /* Aumentado de 260px para mejor alineación */
     }
     
     /* Header ultra-compacto para pantallas pequeñas - Todo a la izquierda */
@@ -529,6 +608,100 @@
     }
 }
 
+/* Estilos para navbar responsivo de ancho completo */
+.navbar {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.navbar-collapse {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.navbar-nav {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Asegurar que el left-panel también sea responsivo */
+.left-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Estilos específicos para diferentes tamaños de pantalla */
+@media (max-width: 575px) {
+    .navbar {
+        padding: 0 8px !important;
+    }
+    
+    .navbar-nav li > a {
+        padding: 12px 8px !important;
+        font-size: 14px !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .navbar {
+        padding: 0 12px !important;
+    }
+    
+    .navbar-nav li > a {
+        padding: 14px 12px !important;
+        font-size: 15px !important;
+    }
+}
+
+/* Mejorar la flexibilidad del navbar */
+.navbar .navbar-nav {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+}
+
+.navbar .navbar-nav li {
+    width: 100% !important;
+    display: block !important;
+}
+
+.navbar .navbar-nav li > a {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+/* Responsive breakpoints para el navbar */
+@media (min-width: 576px) {
+    .navbar {
+        padding: 0 15px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar {
+        padding: 0 20px !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar {
+        padding: 0 25px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .navbar {
+        padding: 0 30px !important;
+    }
+}
+
 /* Optimizaciones para landscape en móviles - Elementos a la izquierda */
 @media (max-height: 500px) and (orientation: landscape) {
     .header {
@@ -593,7 +766,7 @@
 </style>
  
     <aside id="left-panel" class="left-panel">
-        <nav class="navbar navbar-expand-sm navbar-default">
+        <nav class="navbar navbar-expand-sm navbar-default w-100">
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
@@ -628,12 +801,12 @@
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Recepción</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-menu-alt"></i><a href="recL.php">Recepción Mercadería</a></li>
+                                    <li><a href="recL.php"><i class="ti ti-menu-alt"></i>Recepción Mercadería</a></li>
 
-                                    <li><i class="ti ti-package"></i><a href="recPL.php">Picking</a></li>
+                                    <li><a href="recPL.php"><i class="ti ti-package"></i>Picking</a></li>
                                    
 
-                                    <li><i class="ti ti-layout-grid2"></i><a href="recH.php">Historial</a></li>
+                                    <li><a href="recH.php"><i class="ti ti-layout-grid2"></i>Historial</a></li>
                                 
                                 </ul>
                             </li>
@@ -693,9 +866,9 @@
                                     <i class="menu-icon fa fa-list-alt"></i>Reportes
                                 </a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-layout-grid2-alt"></i><a href="stTrMT.php">Transitorias (MT)</a></li>
-                                    <li><i class="ti ti-layout-grid2-alt"></i><a href="stTrCE.php">Transitorias (CE)</a></li>
-                                    <li><i class="ti ti-view-grid"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
+                                    <li><a href="stTrMT.php"><i class="ti ti-layout-grid2-alt"></i>Transitorias (MT)</a></li>
+                                    <li><a href="stTrCE.php"><i class="ti ti-layout-grid2-alt"></i>Transitorias (CE)</a></li>
+                                    <li><a href="stransitoriaItmAll.php"><i class="ti ti-view-grid"></i>Transfers. Pendientes</a></li>
                                 </ul>
                             </li>
                         ';
@@ -709,12 +882,12 @@
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodega Demo</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
+                                    <li><a href="cediSot.php"><i class="ti ti-menu-alt"></i>Crea Lista D.</a></li>
 
-                                    <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
+                                    <li><a href="cediGrpD.php"><i class="ti ti-package"></i>Eliminar Lista</a></li>
                                    
 
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
+                                    <li><a href="cediGrpLdis.php"><i class="ti ti-layout-grid2"></i>Distribución</a></li>
                                 
                                 </ul>
                             </li>
@@ -729,12 +902,12 @@
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>MIGRACION</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
+                                    <li><a href="cediSot.php"><i class="ti ti-menu-alt"></i>Crea Lista D.</a></li>
 
-                                    <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
-                                    <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recolección</a></li>
+                                    <li><a href="cediGrpD.php"><i class="ti ti-package"></i>Eliminar Lista</a></li>
+                                    <li><a href="cediGrpL.php"><i class="ti ti-dropbox"></i>Recolección</a></li>
 
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
+                                    <li><a href="cediGrpLdis.php"><i class="ti ti-layout-grid2"></i>Distribución</a></li>
                                     
                                 </ul>
                             </li>
@@ -748,17 +921,17 @@
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
+                                    <li><a href="cediSot.php"><i class="ti ti-menu-alt"></i>Crea Lista D.</a></li>
 
-                                    <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
-                                    <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recolección</a></li>
+                                    <li><a href="cediGrpD.php"><i class="ti ti-package"></i>Eliminar Lista</a></li>
+                                    <li><a href="cediGrpL.php"><i class="ti ti-dropbox"></i>Recolección</a></li>
 
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
-                                    <li><i class="ti ti-search"></i><a href="findTransfer.php">Buscar #Transferencia</a></li>
-                                    <li><i class="ti ti-dropbox"></i><a href="soltr.php">Etiquetas</a></li>
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLhis.php">Historial</a></li>
-                                    <li><i class="ti ti-layout-grid2"></i><a href="odc.php">ODC</a></li>
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediKxSc.php">Log Solicitudes</a></li>
+                                    <li><a href="cediGrpLdis.php"><i class="ti ti-layout-grid2"></i>Distribución</a></li>
+                                    <li><a href="findTransfer.php"><i class="ti ti-search"></i>Buscar #Transferencia</a></li>
+                                    <li><a href="soltr.php"><i class="ti ti-dropbox"></i>Etiquetas</a></li>
+                                    <li><a href="cediGrpLhis.php"><i class="ti ti-layout-grid2"></i>Historial</a></li>
+                                    <li><a href="odc.php"><i class="ti ti-layout-grid2"></i>ODC</a></li>
+                                    <li><a href="cediKxSc.php"><i class="ti ti-layout-grid2"></i>Log Solicitudes</a></li>
                                 </ul>
                             </li>
                         ';
@@ -768,17 +941,17 @@
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI CE</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-menu-alt"></i><a href="cediSotCE.php">Crea Lista D.</a></li>
+                                    <li><a href="cediSotCE.php"><i class="ti ti-menu-alt"></i>Crea Lista D.</a></li>
 
-                                    <li><i class="ti ti-package"></i><a href="cediGrpDCE.php">Eliminar Lista</a></li>
-                                    <li><i class="ti-dropbox"></i><a href="cediGrpLCE.php">Recolección</a></li>
+                                    <li><a href="cediGrpDCE.php"><i class="ti ti-package"></i>Eliminar Lista</a></li>
+                                    <li><a href="cediGrpLCE.php"><i class="ti ti-dropbox"></i>Recolección</a></li>
 
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdisCE.php">Distribución</a></li>
-                                    <li><i class="ti ti-search"></i><a href="findTransferCE.php">Buscar #Transferencia</a></li>
+                                    <li><a href="cediGrpLdisCE.php"><i class="ti ti-layout-grid2"></i>Distribución</a></li>
+                                    <li><a href="findTransferCE.php"><i class="ti ti-search"></i>Buscar #Transferencia</a></li>
                                   
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLhisCE.php">Historial</a></li>
-                                     <li><i class="ti ti-layout-grid2"></i><a href="odcCE.php">ODC</a></li>
-                                     <li><i class="ti ti-layout-grid2"></i><a href="cediKxScCE.php">Log Solicitudes</a></li>
+                                    <li><a href="cediGrpLhisCE.php"><i class="ti ti-layout-grid2"></i>Historial</a></li>
+                                     <li><a href="odcCE.php"><i class="ti ti-layout-grid2"></i>ODC</a></li>
+                                     <li><a href="cediKxScCE.php"><i class="ti ti-layout-grid2"></i>Log Solicitudes</a></li>
                                 </ul>
                             </li>
                         ';
@@ -791,13 +964,13 @@
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI 2</a>
                                 <ul class="sub-menu children dropdown-menu">     
-                                    <li><i class="ti ti-menu-alt"></i><a href="cediSot.php">Crea Lista D.</a></li>
+                                    <li><a href="cediSot.php"><i class="ti ti-menu-alt"></i>Crea Lista D.</a></li>
 
-                                    <li><i class="ti ti-package"></i><a href="cediGrpD.php">Eliminar Lista</a></li>
-                                    <li><i class="ti-dropbox"></i><a href="cediGrpL.php">Recolección</a></li>
+                                    <li><a href="cediGrpD.php"><i class="ti ti-package"></i>Eliminar Lista</a></li>
+                                    <li><a href="cediGrpL.php"><i class="ti ti-dropbox"></i>Recolección</a></li>
 
-                                    <li><i class="ti ti-layout-grid2"></i><a href="cediGrpLdis.php">Distribución</a></li>
-                                    <li><i class="ti ti-control-shuffle"></i><a href="cediMv.php">Reubicación</a></li>
+                                    <li><a href="cediGrpLdis.php"><i class="ti ti-layout-grid2"></i>Distribución</a></li>
+                                    <li><a href="cediMv.php"><i class="ti ti-control-shuffle"></i>Reubicación</a></li>
                                 </ul>
                             </li>
                         ';
@@ -822,9 +995,9 @@
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
                             <ul class="sub-menu children dropdown-menu">     
-                                        <li><i class="ti ti-package"></i><a href="stTrMT.php">Stock Transitorias (MT)</a></li>
-                                        <li><i class="ti ti-package"></i><a href="stTrCE.php">Stock Transitorias (CE)</a></li>
-                                        <li><i class="ti ti-package"></i><a href="stransitoriaItmAll.php">Transfers. Pendientes</a></li>
+                                        <li><a href="stTrMT.php"><i class="ti ti-package"></i>Stock Transitorias (MT)</a></li>
+                                        <li><a href="stTrCE.php"><i class="ti ti-package"></i>Stock Transitorias (CE)</a></li>
+                                        <li><a href="stransitoriaItmAll.php"><i class="ti ti-view-grid"></i>Transfers. Pendientes</a></li>
                             </ul>
                         </li>
 

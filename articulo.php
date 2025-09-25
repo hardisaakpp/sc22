@@ -57,8 +57,11 @@ try {
                                     // Cargar almacenes desde la base de datos
                                     if (!empty($almacenes)) {
                                         foreach ($almacenes as $almacen) {
-                                            echo '<option value="' . htmlspecialchars($almacen['cod_almacen'], ENT_QUOTES, 'UTF-8') . '">';
-                                            echo '🏢 ' . htmlspecialchars($almacen['nombre'], ENT_QUOTES, 'UTF-8');
+                                            $nombreCompleto = htmlspecialchars($almacen['nombre'], ENT_QUOTES, 'UTF-8');
+                                            $nombreCorto = strlen($nombreCompleto) > 25 ? substr($nombreCompleto, 0, 25) . '...' : $nombreCompleto;
+                                            echo '<option value="' . htmlspecialchars($almacen['cod_almacen'], ENT_QUOTES, 'UTF-8') . '" ';
+                                            echo 'title="🏢 ' . $nombreCompleto . '" data-full-name="' . $nombreCompleto . '">';
+                                            echo '🏢 ' . $nombreCorto;
                                             echo '</option>';
                                         }
                                     } else {
@@ -149,6 +152,7 @@ try {
             border-radius: 10px;
             transition: all 0.3s ease;
             background-color: #f8f9fa;
+            font-size: 15px !important;
         }
 
         .form-control:focus {
@@ -166,6 +170,7 @@ try {
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.3s ease;
+            font-size: 15px !important;
         }
 
         .custom-btn:hover {
@@ -194,11 +199,138 @@ try {
 
         .custom-select {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            padding-right: 2.5rem;
+            font-size: 15px !important;
+        }
+        
+        /* Mejorar la legibilidad del dropdown */
+        .custom-select option {
+            padding: 12px 15px;
+            line-height: 1.6;
+            color: #495057;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            font-size: 15px !important;
+        }
+        
+        .custom-select option:hover,
+        .custom-select option:focus {
+            background-color: #f8f9fa;
+        }
+        
+        /* Asegurar que el select tenga altura suficiente */
+        .custom-select {
+            min-height: 48px;
+            line-height: 1.6;
+            vertical-align: middle;
+        }
+        
+        /* Estilos específicos para diferentes navegadores */
+        .custom-select::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .custom-select::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .custom-select::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .custom-select::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+        
+        /* Estilos para el tooltip nativo del browser */
+        .custom-select option[title] {
+            position: relative;
+        }
+        
+        /* Indicador visual cuando el dropdown está activo */
+        .custom-select.dropdown-active {
+            border-color: #667eea !important;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+            transform: scale(1.02);
         }
 
+        /* Estilos responsivos para pantallas pequeñas */
         @media (max-width: 768px) {
             .card-body {
                 padding: 2rem !important;
+            }
+            
+            /* Ajustes específicos para el dropdown de almacén en móviles */
+            .custom-select {
+                font-size: 15px !important;
+                padding: 0.75rem 2.25rem 0.75rem 0.75rem;
+                max-width: 100%;
+                min-height: 44px;
+                line-height: 1.5;
+            }
+            
+            /* Truncar texto largo en opciones del select */
+            .custom-select option {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+                padding: 10px 15px;
+                min-height: 36px;
+                line-height: 1.5;
+                display: flex;
+                align-items: center;
+                font-size: 15px !important;
+            }
+            
+            /* Ajustar el contenedor del formulario */
+            .col-md-8 {
+                padding: 0 15px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            /* Para pantallas extra pequeñas */
+            .card-body {
+                padding: 1.5rem !important;
+            }
+            
+            .custom-select {
+                font-size: 15px !important;
+                padding: 0.75rem 2rem 0.75rem 0.75rem;
+                min-height: 42px;
+                line-height: 1.4;
+            }
+            
+            .custom-select option {
+                font-size: 15px !important;
+                padding: 8px 12px;
+                min-height: 32px;
+                line-height: 1.4;
+                display: flex;
+                align-items: center;
+            }
+            
+            .form-label {
+                font-size: 0.9rem;
+            }
+            
+            /* Reducir el espaciado en pantallas muy pequeñas */
+            .form-group {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .display-4 {
+                font-size: 2rem !important;
+            }
+            
+            .card-title {
+                font-size: 1.25rem !important;
             }
         }
 
@@ -279,7 +411,45 @@ try {
                     }, 100);
                 }
             }
+            
+            // Mejorar la experiencia del dropdown en móviles
+            setupMobileDropdown();
         });
+
+        // Función para mejorar el dropdown en dispositivos móviles
+        function setupMobileDropdown() {
+            var selectElement = document.getElementById('almacen');
+            
+            if (selectElement) {
+                // Detectar si es un dispositivo móvil
+                var isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // En móviles, mejorar la accesibilidad del select
+                    selectElement.addEventListener('focus', function() {
+                        this.style.fontSize = '16px'; // Prevenir zoom en iOS
+                    });
+                    
+                    // Mostrar el nombre completo en el tooltip cuando se selecciona
+                    selectElement.addEventListener('change', function() {
+                        var selectedOption = this.options[this.selectedIndex];
+                        if (selectedOption && selectedOption.getAttribute('data-full-name')) {
+                            var fullName = selectedOption.getAttribute('data-full-name');
+                            this.title = '🏢 ' + fullName;
+                        }
+                    });
+                }
+                
+                // Agregar indicador visual cuando el dropdown está abierto
+                selectElement.addEventListener('mousedown', function() {
+                    this.classList.add('dropdown-active');
+                });
+                
+                selectElement.addEventListener('blur', function() {
+                    this.classList.remove('dropdown-active');
+                });
+            }
+        }
 
         // Función para mostrar el modal
         function mostrarModal() {
@@ -461,7 +631,7 @@ try {
                                     </div>
                                     
                                     <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Venta Última:</strong></div>
+                                        <div class="col-sm-4"><strong>Venta 30 días:</strong></div>
                                         <div class="col-sm-8">${art.VentaUltima || '0'}</div>
                                     </div>
                                     

@@ -112,7 +112,7 @@
 
 
                     //CONFIGURACION SOLO SOPORTETI-->
-                    if ($userAdmin == 1  && $userName == 'SOPORTETI') {
+                    if ($userAdmin == 1  && $userName == 'SOPORTETI' && $userName != 'CORTIZ') {
                         echo '
             <li class="menu-item-has-children dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
@@ -126,7 +126,7 @@
                     } else {
 
                         //recepcion transferencias tiendas
-                        if ($userAdmin == 2) {
+                        if ($userAdmin == 2 && $userName != 'CORTIZ') {
                             echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Recepción</a>
@@ -169,7 +169,7 @@
                         } */
 
                         //CONFIGURACION-->
-                        if ($userAdmin == 1) {
+                        if ($userAdmin == 1 && $userName != 'CORTIZ') {
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
@@ -185,7 +185,7 @@
 
                         //Reportes
 
-                        if ($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) {
+                        if (($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) && $userName != 'CORTIZ') {
 
 
                             echo '                       
@@ -242,7 +242,7 @@
                         ';
                         }*/
                         //CEDI                
-                        if ($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) {
+                        if (($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) && $userName != 'CORTIZ') {
 
 
                             echo '                       
@@ -265,6 +265,7 @@
                         ';
 
 
+                            if ($userName != 'CORTIZ') {
                             echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI CE</a>
@@ -283,6 +284,7 @@
                                 </ul>
                             </li>
                         ';
+                            }
                         }
                         //CEDI 2.0                
                         /*          if ($userAdmin==1 ) {   
@@ -305,7 +307,7 @@
                         }
                 */
                         //Toma Fisica Total
-                        if ($userAdmin == 1 || $userAdmin == 3) {
+                        if (($userAdmin == 1 || $userAdmin == 3) && $userName != 'CORTIZ') {
                             echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti ti-check-box"></i>Toma Fisica Total</a>
@@ -318,7 +320,7 @@
                             </ul>
                         </li>
                     ';
-                        } else if ($userAdmin == 4) {
+                        } else if ($userAdmin == 4 && $userName != 'CORTIZ') {
                             echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
@@ -327,8 +329,10 @@
                                         <li><a href="stTrCE.php"><i class="ti ti-package"></i>Stock Transitorias (CE)</a></li>
                                         <li><a href="stransitoriaItmAll.php"><i class="ti ti-view-grid"></i>Transfers. Pendientes</a></li>
                             </ul>
-                        </li>
-
+                        </li>';
+                        
+                        if ($userName != 'CORTIZ') {
+                        echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti ti-check-box"></i>Toma Fisica Total</a>
                             <ul class="sub-menu children dropdown-menu">     
@@ -341,6 +345,21 @@
                         </li>
                     ';
                         }
+                        }
+                    }
+
+                    // Menú específico para CORTIZ
+                    if ($userName == 'CORTIZ') {
+                        echo '
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                                <i class="menu-icon fa fa-cube"></i>Gestión de Artículos
+                            </a>
+                            <ul class="sub-menu children dropdown-menu">     
+                                <li><a href="articulo.php"><i class="fa fa-search"></i>Consultar Artículos</a></li>
+                            </ul>
+                        </li>
+                        ';
                     }
                     ?>
 

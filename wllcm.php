@@ -228,24 +228,28 @@ include_once "header.php";
           </div>
         <?php
         }
-
         ?>
-        <?php if($userName == 'RL-PSC') { ?>
-          <div class="card">
-            <div class="box">
-              <div class="content">
-                <h2>📝</h2>
-                <h3>Artículo</h3>
-                <p>Revisa tus productos.</p>
-                <a href="articulo.php">Iniciar</a>
-              </div>
-            </div>
-          </div>
-          <?php } ?>
+        
       </div>
 
     <?php
   }  ?>
+
+  <!-- Card específica para CORTIZ, independiente del perfil de usuario -->
+  <?php if ($userName == 'CORTIZ' && $userAdmin != 2) { ?>
+    <div class="container">
+      <div class="card">
+        <div class="box">
+          <div class="content">
+            <h2>📝</h2>
+            <h3>Artículo</h3>
+            <p>Revisa tus productos.</p>
+            <a href="articulo.php">Iniciar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php } ?>
 
     <!---------------------------------------------->
     <!--------------Fin Content -------------------->

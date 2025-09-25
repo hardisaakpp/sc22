@@ -420,15 +420,29 @@ function confirmarRecepcion(num, fecha) {
 }
 
 // Mejorar la visualización de las descripciones largas
-$(document).ready(function() {
-    // Agregar tooltips para descripciones que se corten
-    $('.item-description').each(function() {
-        var $this = $(this);
-        if (this.scrollHeight > this.clientHeight) {
-            $this.attr('title', $this.text());
+// Ensure jQuery is available before running
+(function() {
+    function initDescriptionTooltips() {
+        if (typeof $ === 'undefined' || typeof $.fn === 'undefined') {
+            console.log('jQuery not ready for description tooltips, retrying...');
+            setTimeout(initDescriptionTooltips, 100);
+            return;
         }
-    });
-});
+        
+        $(document).ready(function() {
+            // Agregar tooltips para descripciones que se corten
+            $('.item-description').each(function() {
+                var $this = $(this);
+                if (this.scrollHeight > this.clientHeight) {
+                    $this.attr('title', $this.text());
+                }
+            });
+        });
+    }
+    
+    // Start initialization
+    initDescriptionTooltips();
+})();
 </script>
 
 <?php include_once "footer.php"; ?>

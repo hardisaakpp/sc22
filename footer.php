@@ -32,7 +32,35 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery.flot@0.8.3/jquery.flot.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flot-spline@0.0.1/js/jquery.flot.spline.min.js"></script>
     <!-- local -->
-    <script src="assets/js/widgets.js"></script>
+    <script>
+        // Override Flot to prevent dimension errors when no charts are present
+        // Wait for jQuery to be available
+        (function() {
+            function initCharts() {
+                if (typeof $ === 'undefined' || typeof $.fn === 'undefined') {
+                    console.log('jQuery not ready, retrying...');
+                    setTimeout(initCharts, 100);
+                    return;
+                }
+                
+                $(document).ready(function() {
+                    // Check if there are any chart containers before initializing
+                    if ($('[id*="flot"], [class*="flot"], [id*="chart"], [class*="chart"]').length === 0) {
+                        // No chart elements found, skip widgets.js initialization
+                        console.log('No chart elements found, skipping chart initialization');
+                    } else {
+                        // Load widgets.js only if chart elements exist
+                        $.getScript('assets/js/widgets.js').fail(function() {
+                            console.log('widgets.js not found or failed to load');
+                        });
+                    }
+                });
+            }
+            
+            // Start initialization
+            initCharts();
+        })();
+    </script>
 
     
 <script src="assets/js/lib/chosen/chosen.jquery.min.js"></script>
@@ -59,18 +87,62 @@ $(window).on('load',function() {
   }, 2000);
 });
 
-$(document).ready(function() {
-  $('#bootstrap-data-table-export').DataTable();
-  $('#example').DataTable({
-        paging: false,
-        ordering: false,
-        info: false,
-    });
-    $('.js-example-basic-single').select2();
-    indexesLX();
-    
-    // Fix para espacios extra después de cargar DataTables
-    setTimeout(function() {
+// Ensure jQuery is available before running
+(function() {
+    function initializeApp() {
+        if (typeof $ === 'undefined' || typeof $.fn === 'undefined') {
+            console.log('jQuery not ready for main initialization, retrying...');
+            setTimeout(initializeApp, 100);
+            return;
+        }
+        
+        $(document).ready(function() {
+            // Initialize DataTables if elements exist
+            if ($('#bootstrap-data-table-export').length) {
+                $('#bootstrap-data-table-export').DataTable();
+            }
+            if ($('#example').length) {
+                $('#example').DataTable({
+                    paging: false,
+                    ordering: false,
+                    info: false,
+                });
+            }
+            
+            // Initialize select2 if elements exist
+            if ($('.js-example-basic-single').length) {
+                $('.js-example-basic-single').select2();
+            }
+            
+            // Define indexesLX function if not already defined
+            if (typeof indexesLX === 'undefined') {
+                window.indexesLX = function() {
+                    try {
+                        // Column toggle functionality for tables
+                        $('#n1').click(function() {
+                            var n11 = 6;
+                            $("td:nth-child(" + n11 + "),th:nth-child(" + n11 + ")").toggle();
+                        });
+                        $('#n2').click(function() {
+                            $('td:nth-child(8),th:nth-child(8)').toggle();
+                        });
+                        $('#n3').click(function() {
+                            $('td:nth-child(10),th:nth-child(10)').toggle();
+                        });
+                    } catch(x) {
+                        // Handle any errors silently
+                        console.log('indexesLX error:', x.message);
+                    }
+                };
+            }
+            
+            // Only call indexesLX if there are elements that need it
+            if ($('#n1, #n2, #n3').length > 0) {
+                indexesLX();
+            }
+            
+            // Fix para espacios extra después de cargar DataTables
+            setTimeout(function() {
         // Limpiar espacios extra en DataTables
         $('.dataTables_wrapper').css('margin-bottom', '0');
         $('.dataTables_info, .dataTables_paginate').css('margin-bottom', '10px');
@@ -90,9 +162,14 @@ $(document).ready(function() {
                     console.log('Elemento con altura excesiva:', this, 'Altura:', height + 'px');
                 }
             });
-        }
-    }, 500);
-} );
+            }
+        }, 500);
+        });
+    }
+    
+    // Start initialization
+    initializeApp();
+})();
 
 
 

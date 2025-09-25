@@ -621,63 +621,40 @@ try {
             
             if (data.success && data.articulo) {
                 var art = data.articulo;
+                
+                // Construir jerarquía
+                var jerarquia = '';
+                if (art.arbol_nivel1 || art.arbol_nivel2 || art.arbol_nivel3) {
+                    var niveles = [art.arbol_nivel1, art.arbol_nivel2, art.arbol_nivel3].filter(nivel => nivel && nivel !== 'N/A');
+                    jerarquia = niveles.length > 0 ? niveles.join(' > ') : 'N/A';
+                } else {
+                    jerarquia = 'N/A';
+                }
+                
                 var modalContent = `
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card border-0 shadow-sm">
-                                <div class="card-body">
-                                    <h6 class="text-muted mb-3">
-                                        <i class="fa fa-info-circle mr-2"></i>Información del Artículo
+                            <!-- DETALLE PRODUCTO -->
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fa fa-cube mr-2"></i>DETALLE PRODUCTO
                                     </h6>
-                                    
+                                </div>
+                                <div class="card-body">
                                     <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>ItemCode:</strong></div>
+                                        <div class="col-sm-4"><strong>Código:</strong></div>
                                         <div class="col-sm-8">${art.ItemCode || 'N/A'}</div>
                                     </div>
                                     
                                     <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Nombre:</strong></div>
+                                        <div class="col-sm-4"><strong>Descripción:</strong></div>
                                         <div class="col-sm-8">${art.ItemName || 'N/A'}</div>
                                     </div>
                                     
                                     <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Código de Barras:</strong></div>
+                                        <div class="col-sm-4"><strong>Código Barras:</strong></div>
                                         <div class="col-sm-8">${art.CodeBars || 'N/A'}</div>
-                                    </div>
-                                    
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Almacén:</strong></div>
-                                        <div class="col-sm-8">${almacenTexto} (${almacen})</div>
-                                    </div>
-                                    
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Stock Bodega:</strong></div>
-                                        <div class="col-sm-8">${art.total_Bodega || '0'}</div>
-                                    </div>
-                                    
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Stock Tienda:</strong></div>
-                                        <div class="col-sm-8">${art.total_Tienda || '0'}</div>
-                                    </div>
-                                    
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Stock Transitoria:</strong></div>
-                                        <div class="col-sm-8">${art.total_Transitoria_Tienda || '0'}</div>
-                                    </div>
-                                    
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Venta Promedio:</strong></div>
-                                        <div class="col-sm-8">${art.VentaPromedio || '0'}</div>
-                                    </div>
-                                    
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Venta 30 días:</strong></div>
-                                        <div class="col-sm-8">${art.VentaUltima || '0'}</div>
-                                    </div>
-                                    
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Venta 90 días:</strong></div>
-                                        <div class="col-sm-8">${art.venta_90dias || '0'}</div>
                                     </div>
                                     
                                     <div class="row mb-2">
@@ -691,8 +668,83 @@ try {
                                     </div>
                                     
                                     <div class="row mb-2">
-                                        <div class="col-sm-4"><strong>Días Última Fecha Ingreso:</strong></div>
+                                        <div class="col-sm-4"><strong>Jerarquía:</strong></div>
+                                        <div class="col-sm-8">${jerarquia}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- VENTAS -->
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fa fa-chart-line mr-2"></i>VENTAS
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Promedio 30 días:</strong></div>
+                                        <div class="col-sm-8">${art.VentaPromedio || '0'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Última Venta:</strong></div>
+                                        <div class="col-sm-8">${art.VentaUltima || '0'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Total 30 días:</strong></div>
+                                        <div class="col-sm-8">${art.CantidadTotalTreintaDias || '0'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Total 90 días:</strong></div>
+                                        <div class="col-sm-8">${art.CantidadTotalNoventaDias || '0'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Venta acumulada 90 días:</strong></div>
+                                        <div class="col-sm-8">${art.venta_90dias || '0'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Días última fecha ingreso:</strong></div>
                                         <div class="col-sm-8">${art.dias_ultima_fecha_ingreso || 'N/A'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Días última venta:</strong></div>
+                                        <div class="col-sm-8">${art.DiasUltimaFechaIngreso || 'N/A'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- STOCK -->
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fa fa-boxes mr-2"></i>STOCK
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Stock en tienda:</strong></div>
+                                        <div class="col-sm-8">${art.total_Tienda || '0'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Stock en bodega:</strong></div>
+                                        <div class="col-sm-8">${art.total_Bodega || '0'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Stock en tránsito:</strong></div>
+                                        <div class="col-sm-8">${art.total_Transitoria_Tienda || '0'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Almacén:</strong></div>
+                                        <div class="col-sm-8">${art.WhsCode || almacen} - ${art.WhsName || almacenTexto}</div>
                                     </div>
                                 </div>
                             </div>

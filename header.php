@@ -112,7 +112,7 @@
 
 
                     //CONFIGURACION SOLO SOPORTETI-->
-                    if ($userAdmin == 1  && $userName == 'SOPORTETI' && $userName != 'CORTIZ') {
+                    if ($userAdmin == 1  && $userName == 'SOPORTETI' && $userName != 'CONSULTOR') {
                         echo '
             <li class="menu-item-has-children dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
@@ -126,7 +126,7 @@
                     } else {
 
                         //recepcion transferencias tiendas
-                        if ($userAdmin == 2 && $userName != 'CORTIZ') {
+                        if ($userAdmin == 2 && $userName != 'CONSULTOR') {
                             echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Recepción</a>
@@ -169,7 +169,7 @@
                         } */
 
                         //CONFIGURACION-->
-                        if ($userAdmin == 1 && $userName != 'CORTIZ') {
+                        if ($userAdmin == 1 && $userName != 'CONSULTOR') {
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
@@ -185,7 +185,7 @@
 
                         //Reportes
 
-                        if (($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) && $userName != 'CORTIZ') {
+                        if (($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) && $userName != 'CONSULTOR') {
 
 
                             echo '                       
@@ -242,7 +242,7 @@
                         ';
                         }*/
                         //CEDI                
-                        if (($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) && $userName != 'CORTIZ') {
+                        if (($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) && $userName != 'CONSULTOR') {
 
 
                             echo '                       
@@ -265,7 +265,7 @@
                         ';
 
 
-                            if ($userName != 'CORTIZ') {
+                            if ($userName != 'CONSULTOR') {
                             echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI CE</a>
@@ -307,7 +307,7 @@
                         }
                 */
                         //Toma Fisica Total
-                        if (($userAdmin == 1 || $userAdmin == 3) && $userName != 'CORTIZ') {
+                        if (($userAdmin == 1 || $userAdmin == 3) && $userName != 'CONSULTOR') {
                             echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti ti-check-box"></i>Toma Fisica Total</a>
@@ -320,7 +320,7 @@
                             </ul>
                         </li>
                     ';
-                        } else if ($userAdmin == 4 && $userName != 'CORTIZ') {
+                        } else if ($userAdmin == 4 && $userName != 'CONSULTOR') {
                             echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
@@ -331,7 +331,7 @@
                             </ul>
                         </li>';
                         
-                        if ($userName != 'CORTIZ') {
+                        if ($userName != 'CONSULTOR') {
                         echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti ti-check-box"></i>Toma Fisica Total</a>
@@ -348,8 +348,8 @@
                         }
                     }
 
-                    // Menú específico para CORTIZ
-                    if ($userName == 'CORTIZ') {
+                    // Menú específico  
+                    if ($userName == 'CONSULTOR') {
                         echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 

@@ -678,7 +678,7 @@ try {
                             <div class="card border-0 shadow-sm mb-4">
                                 <div class="card-header bg-success text-white">
                                     <h6 class="mb-0">
-                                        <i class="fa fa-chart-line mr-2"></i>VENTAS
+                                        <i class="fa fa-line-chart mr-2"></i>VENTAS
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -723,7 +723,7 @@ try {
                             <div class="card border-0 shadow-sm mb-4">
                                 <div class="card-header bg-info text-white">
                                     <h6 class="mb-0">
-                                        <i class="fa fa-boxes mr-2"></i>STOCK
+                                        <i class="fa fa-cubes mr-2"></i>STOCK
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -753,7 +753,7 @@ try {
                             <div class="card border-0 shadow-sm">
                                 <div class="card-header bg-warning text-dark">
                                     <h6 class="mb-0">
-                                        <i class="fa fa-dollar-sign mr-2"></i>PRECIOS
+                                        <i class="fa fa-usd mr-2"></i>PRECIOS
                                     </h6>
                                 </div>
                                 <div class="card-body">

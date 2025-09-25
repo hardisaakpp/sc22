@@ -235,8 +235,7 @@ include_once "header.php";
     <?php
   }  ?>
 
-  <!-- Card específica para CORTIZ, independiente del perfil de usuario -->
-  <?php if ($userName == 'CORTIZ' && $userAdmin != 2) { ?>
+  <?php if ($userName == 'CONSULTOR' && $userAdmin != 2) { ?>
     <div class="container">
       <div class="card">
         <div class="box">

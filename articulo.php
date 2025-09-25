@@ -39,7 +39,7 @@ try {
                                 <i class="fa fa-cube"></i>
                             </div>
                             <h4 class="card-title mb-0 font-weight-light">Gestión de Artículos</h4>
-                            <small class="opacity-75">Registra nuevos productos en el sistema</small>
+                            <small class="opacity-75">Verificar productos en el sistema</small>
                         </div>
                     </div>
 
@@ -197,6 +197,12 @@ try {
             color: #28a745 !important;
         }
 
+        /* Reducir tamaño de fuente del texto de ayuda */
+        .form-text.text-muted {
+            font-size: 0.75rem !important;
+            color: #b8b8b8 !important;
+        }
+
         .custom-select {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
             background-position: right 0.75rem center;
@@ -265,6 +271,18 @@ try {
                 padding: 2rem !important;
             }
             
+            /* Centrar el subtítulo en pantallas pequeñas */
+            .card-header .text-center {
+                text-align: center !important;
+            }
+            
+            .card-header .text-center small.opacity-75 {
+                text-align: center !important;
+                display: block !important;
+                width: 100% !important;
+                margin: 0 auto !important;
+            }
+            
             /* Ajustes específicos para el dropdown de almacén en móviles */
             .custom-select {
                 font-size: 15px !important;
@@ -298,6 +316,18 @@ try {
             /* Para pantallas extra pequeñas */
             .card-body {
                 padding: 1.5rem !important;
+            }
+            
+            /* Centrar el subtítulo en pantallas extra pequeñas */
+            .card-header .text-center {
+                text-align: center !important;
+            }
+            
+            .card-header .text-center small.opacity-75 {
+                text-align: center !important;
+                display: block !important;
+                width: 100% !important;
+                margin: 0 auto !important;
             }
             
             .custom-select {
@@ -367,33 +397,14 @@ try {
 
     <!-- JavaScript para validación -->
     <script>
-        // Validación de formulario
+        // Validación de formulario - interceptar el submit y ejecutar mostrarModal
         document.getElementById('articuloForm').addEventListener('submit', function(event) {
-            var almacen = document.getElementById('almacen').value;
-            var articulo = document.getElementById('articulo').value.trim();
-
-            var valid = true;
-
-            // Validar almacén
-            if (!almacen) {
-                document.getElementById('almacen').classList.add('is-invalid');
-                valid = false;
-            } else {
-                document.getElementById('almacen').classList.remove('is-invalid');
-            }
-
-            // Validar artículo
-            if (!articulo) {
-                document.getElementById('articulo').classList.add('is-invalid');
-                alert('Por favor ingresa el código del artículo o el codigo de barras');
-            } else {
-                document.getElementById('articulo').classList.remove('is-invalid');
-            }
-
-            if (!valid) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+            // Prevenir el comportamiento por defecto del submit
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Ejecutar la misma funcionalidad que el botón "Mostrar"
+            mostrarModal();
         });
 
         // Animación de entrada (verificar si jQuery está disponible)
@@ -414,6 +425,9 @@ try {
             
             // Mejorar la experiencia del dropdown en móviles
             setupMobileDropdown();
+            
+            // Configurar listener para la tecla Enter en los campos del formulario
+            setupEnterKeyListener();
         });
 
         // Función para mejorar el dropdown en dispositivos móviles
@@ -447,6 +461,32 @@ try {
                 
                 selectElement.addEventListener('blur', function() {
                     this.classList.remove('dropdown-active');
+                });
+            }
+        }
+
+        // Función para configurar el listener de la tecla Enter
+        function setupEnterKeyListener() {
+            var almacenSelect = document.getElementById('almacen');
+            var articuloInput = document.getElementById('articulo');
+            
+            // Agregar listener para Enter en el campo de artículo
+            if (articuloInput) {
+                articuloInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter' || event.keyCode === 13) {
+                        event.preventDefault();
+                        mostrarModal();
+                    }
+                });
+            }
+            
+            // Agregar listener para Enter en el select de almacén
+            if (almacenSelect) {
+                almacenSelect.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter' || event.keyCode === 13) {
+                        event.preventDefault();
+                        mostrarModal();
+                    }
                 });
             }
         }

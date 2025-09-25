@@ -213,7 +213,7 @@ try {
             min-height: 40px;
             display: flex;
             align-items: center;
-            font-size: 15px !important;
+            font-size: 12px !important;
         }
         
         .custom-select option:hover,
@@ -270,7 +270,7 @@ try {
                 font-size: 15px !important;
                 padding: 0.75rem 2.25rem 0.75rem 0.75rem;
                 max-width: 100%;
-                min-height: 44px;
+                min-height: 50px;
                 line-height: 1.5;
             }
             
@@ -280,12 +280,12 @@ try {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 max-width: 100%;
-                padding: 10px 15px;
-                min-height: 36px;
+                padding: 12px 15px;
+                min-height: 42px;
                 line-height: 1.5;
                 display: flex;
                 align-items: center;
-                font-size: 15px !important;
+                font-size: 12px !important;
             }
             
             /* Ajustar el contenedor del formulario */
@@ -303,14 +303,14 @@ try {
             .custom-select {
                 font-size: 15px !important;
                 padding: 0.75rem 2rem 0.75rem 0.75rem;
-                min-height: 42px;
+                min-height: 48px;
                 line-height: 1.4;
             }
             
             .custom-select option {
-                font-size: 15px !important;
-                padding: 8px 12px;
-                min-height: 32px;
+                font-size: 12px !important;
+                padding: 10px 12px;
+                min-height: 38px;
                 line-height: 1.4;
                 display: flex;
                 align-items: center;

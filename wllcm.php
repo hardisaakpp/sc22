@@ -1,14 +1,15 @@
 <?php
-    include_once "header.php";
+include_once "header.php";
 ?>
 <div class="content">
-<!---------------------------------------------->
-<!----------------- Content -------------------->
-<!---------------------------------------------->
-<h1 ALIGN="center" class="display-6">Bienvenido</h1>
+  <!---------------------------------------------->
+  <!----------------- Content -------------------->
+  <!---------------------------------------------->
+  <h1 ALIGN="center" class="display-6">Bienvenido</h1>
 
-<style>
+  <style>
     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap");
+
     * {
       margin: 0;
       padding: 0;
@@ -22,7 +23,7 @@
       align-items: center;
       flex-wrap: wrap;
       min-height: 100vh;
-      
+
     }
 
     body .container {
@@ -128,114 +129,126 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
       transition: 0.5s;
     }
+
     body .container .card .box .content a:hover {
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
       background: #fff;
       color: #000;
     }
+  </style>
 
-</style>
+  <?php
+  if ($userAdmin == 2) // si es TIENDA
+  {
 
-<?php
-if($userAdmin==2) // si es TIENDA
-{
-        
-        $sentencia = $db->query("exec sp_getStockTotalXAlm ". $_SESSION['idU'] ." " );
-        $quser = $sentencia->fetchAll(PDO::FETCH_OBJ);
+    $sentencia = $db->query("exec sp_getStockTotalXAlm " . $_SESSION['idU'] . " ");
+    $quser = $sentencia->fetchAll(PDO::FETCH_OBJ);
 
-        if (count($quser) > 0) {
-            $sentencia2 = $db->query("exec sp_getStockTotalXAlm ". $_SESSION['idU'] ." " );
-            $TEMP1 = $sentencia2->fetchObject();
-            $xpuntaje1 = $TEMP1->Inventario;
-            $xtransit = $TEMP1->WhsCode;
-        } else {
-            $xpuntaje1 = 0;
-            $xtransit = '.';
-        }
+    if (count($quser) > 0) {
+      $sentencia2 = $db->query("exec sp_getStockTotalXAlm " . $_SESSION['idU'] . " ");
+      $TEMP1 = $sentencia2->fetchObject();
+      $xpuntaje1 = $TEMP1->Inventario;
+      $xtransit = $TEMP1->WhsCode;
+    } else {
+      $xpuntaje1 = 0;
+      $xtransit = '.';
+    }
 
-        $sentencia4 = $db->query("exec sp_getStockTransitorio ". $_SESSION['idU'] ." " );
-        $qtrans = $sentencia4->fetchAll(PDO::FETCH_OBJ);
+    $sentencia4 = $db->query("exec sp_getStockTransitorio " . $_SESSION['idU'] . " ");
+    $qtrans = $sentencia4->fetchAll(PDO::FETCH_OBJ);
 
 
-        
-    ?>
+
+  ?>
 
 
     <div class="row">
 
 
-    <div class="container">
-    <?php if ($xpuntaje1>0) {  ?>
-      <div class="card">
-        <div class="box">
-          <div class="content">
-            <h2>🚛</h2>
-            <div class="col-md-6" style="text-align: center; display: flex; justify-content: center;">
-                    <img src="images/dash_icon.jpg" class="img-fluid rounded-start" alt="...">
-                    </div>
-            <h3>
-                
-            Transitoria <?php echo $xtransit; ?></h3>
-            <p>
-            <?php foreach($qtrans as $mascota){ 
-                        if ($mascota->ANTIGUEDAD=='RETRASADO') {?>
-
-
-
-                            <h5 class="card-title" style=" color: red;">
-                                <?php echo $mascota->OpenQty; ?> u. pendientes mayor a 48horas
-                            </h5>
-
-
-                            <?php  }else {?>
-                                
-                                <h5 class="card-title" style=" color: green;">
-                                <?php echo $xpuntaje1; ?> unidades recientes
-                            </h5>
-
-
-                            <?php }?>
-                        
-                    <?php } ?>
-                    <small class="text-muted">Actualizado desde SAP B1</small>
-            </p>
-            
-          </div>
-        </div>
-      </div>
-<?php }else {   ?> 
-    <div class="card">
-    <div class="box">
-      <div class="content">
-        <h2>📦</h2>
-        <div class="col-md-6" style="text-align: center; display: flex; justify-content: center;">
-                <img src="images/dash_icon.jpg" class="img-fluid rounded-start" alt="...">
+      <div class="container">
+        <?php if ($xpuntaje1 > 0) {  ?>
+          <div class="card">
+            <div class="box">
+              <div class="content">
+                <h2>🚛</h2>
+                <div class="col-md-6" style="text-align: center; display: flex; justify-content: center;">
+                  <img src="images/dash_icon.jpg" class="img-fluid rounded-start" alt="...">
                 </div>
-        <h3>
-            
-         Transitoria <?php echo $xtransit; ?></h3>
-        <p>
-        <h5 class="card-title">
-                <?php echo $xpuntaje1; ?> unidades pendientes
-            </h5>
-            <p class="card-text">Transitoria limpia. Buen trabajo. 👍</p>
+                <h3>
+
+                  Transitoria <?php echo $xtransit; ?></h3>
+                <p>
+                  <?php foreach ($qtrans as $mascota) {
+                    if ($mascota->ANTIGUEDAD == 'RETRASADO') { ?>
+
+
+
+                <h5 class="card-title" style=" color: red;">
+                  <?php echo $mascota->OpenQty; ?> u. pendientes mayor a 48horas
+                </h5>
+
+
+              <?php  } else { ?>
+
+                <h5 class="card-title" style=" color: green;">
+                  <?php echo $xpuntaje1; ?> unidades recientes
+                </h5>
+
+
+              <?php } ?>
+
+            <?php } ?>
+            <small class="text-muted">Actualizado desde SAP B1</small>
+            </p>
+
+              </div>
+            </div>
+          </div>
+        <?php } else {   ?>
+          <div class="card">
+            <div class="box">
+              <div class="content">
+                <h2>📦</h2>
+                <div class="col-md-6" style="text-align: center; display: flex; justify-content: center;">
+                  <img src="images/dash_icon.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <h3>
+
+                  Transitoria <?php echo $xtransit; ?></h3>
+                <p>
+                <h5 class="card-title">
+                  <?php echo $xpuntaje1; ?> unidades pendientes
+                </h5>
+                <p class="card-text">Transitoria limpia. Buen trabajo. 👍</p>
                 <small class="text-muted">Actualizado desde SAP B1</small>
-        </p>
-        
+                </p>
+
+              </div>
+            </div>
+          </div>
+        <?php
+        }
+
+        ?>
+        <?php if($userName == 'RL-PSC') { ?>
+          <div class="card">
+            <div class="box">
+              <div class="content">
+                <h2>📝</h2>
+                <h3>Artículo</h3>
+                <p>Revisa tus productos.</p>
+                <a href="articulo.php">Iniciar</a>
+              </div>
+            </div>
+          </div>
+          <?php } ?>
       </div>
+
+    <?php
+  }  ?>
+
+    <!---------------------------------------------->
+    <!--------------Fin Content -------------------->
+    <!---------------------------------------------->
     </div>
-  </div>
-<?php
-}
-
-?>
-    </div>
-
-    <?php    
-}  ?>
-
-<!---------------------------------------------->
-<!--------------Fin Content -------------------->
-<!---------------------------------------------->
-</div>
-<?php    include_once "footer.php"; ?>
+    <?php include_once "footer.php"; ?>

@@ -311,7 +311,7 @@ html, body {
 
     /* Mover el user-menu dropdown hacia la derecha en pantallas pequeñas */
     .user-area .user-menu.dropdown-menu.show {
-        right: -40px !important; /* Mover 20px hacia la derecha */
+        right: -40px !important;
     }
 }
 

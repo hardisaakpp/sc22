@@ -1,13 +1,13 @@
 <!doctype html>
- <html class="no-js" lang=""> 
+<html class="no-js" lang="">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>StoreControl|22</title>
-    <link rel="icon" type="image/png" href="images/favicon.png"/>
+    <link rel="icon" type="image/png" href="images/favicon.png" />
     <meta name="description" content="StoreControl22">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
@@ -19,18 +19,18 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 </head>
+
 <body>
 
-<?php
+    <?php
     session_start();
-    if(strlen($_SESSION['username'])==0)
-    {
+    if (strlen($_SESSION['username']) == 0) {
         header('location:index.php');
     }
-    
+
     include_once "php/bd_StoreControl.php";
     include_once "php/bd_Biometricos.php";
-    
+
     date_default_timezone_set('America/Bogota');
 
     $userName = $_SESSION['username'];
@@ -39,75 +39,81 @@
     $whsInvs = $_SESSION["whsInvs"];
     //$whsTurem = $_SESSION["whsTurem"];
     $whsBodega = $_SESSION["whsBodeg"];
-    $whsCica= $_SESSION["whsCica"];  
-?>
+    $whsCica = $_SESSION["whsCica"];
+    ?>
 
-<style>
- .loader-page {
-    position: fixed;
-    z-index: 25000;
-    background: rgb(255, 255, 255);
-    left: 0px;
-    top: 0px;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition:all .3s ease;
-  }
-  .loader-page::before {
-    content: "";
-    position: absolute;
-    border: 2px solid rgb(50, 150, 176);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    box-sizing: border-box;
-    border-left: 2px solid rgba(50, 150, 176,0);
-    border-top: 2px solid rgba(50, 150, 176,0);
-    animation: rotarload 1s linear infinite;
-    transform: rotate(0deg);
-  }
-  @keyframes rotarload {
-      0%   {transform: rotate(0deg)}
-      100% {transform: rotate(360deg)}
-  }
-  .loader-page::after {
-    content: "";
-    position: absolute;
-    border: 2px solid rgba(50, 150, 176,.5);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    box-sizing: border-box;
-    border-left: 2px solid rgba(50, 150, 176, 0);
-    border-top: 2px solid rgba(50, 150, 176, 0);
-    animation: rotarload 1s ease-out infinite;
-    transform: rotate(0deg);
-  }
- 
+    <style>
+        .loader-page {
+            position: fixed;
+            z-index: 25000;
+            background: rgb(255, 255, 255);
+            left: 0px;
+            top: 0px;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s ease;
+        }
 
-</style>
- 
+        .loader-page::before {
+            content: "";
+            position: absolute;
+            border: 2px solid rgb(50, 150, 176);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-sizing: border-box;
+            border-left: 2px solid rgba(50, 150, 176, 0);
+            border-top: 2px solid rgba(50, 150, 176, 0);
+            animation: rotarload 1s linear infinite;
+            transform: rotate(0deg);
+        }
+
+        @keyframes rotarload {
+            0% {
+                transform: rotate(0deg)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .loader-page::after {
+            content: "";
+            position: absolute;
+            border: 2px solid rgba(50, 150, 176, .5);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-sizing: border-box;
+            border-left: 2px solid rgba(50, 150, 176, 0);
+            border-top: 2px solid rgba(50, 150, 176, 0);
+            animation: rotarload 1s ease-out infinite;
+            transform: rotate(0deg);
+        }
+    </style>
+
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default w-100">
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-               
-                 <!--//Home-->
+
+                    <!--//Home-->
                     <li>
                         <a href="wllcm.php"><i class="menu-icon fa fa-home"></i>Inicio </a>
                     </li>
 
-                
-                    <?php 
+
+                    <?php
 
 
-    //CONFIGURACION SOLO SOPORTETI-->
-        if ($userAdmin==1  && $userName=='SOPORTETI') {   
-            echo '
+                    //CONFIGURACION SOLO SOPORTETI-->
+                    if ($userAdmin == 1  && $userName == 'SOPORTETI') {
+                        echo '
             <li class="menu-item-has-children dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
             <ul class="sub-menu children dropdown-menu">     
@@ -117,12 +123,11 @@
 
 
             </li>';
+                    } else {
 
-        }  else  {     
-
-//recepcion transferencias tiendas
-                    if ($userAdmin==2 || $userName == 'RL-PSC' || $userName == 'OUT-LLG') {   
-                        echo '                       
+                        //recepcion transferencias tiendas
+                        if ($userAdmin == 2) {
+                            echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Recepción</a>
                                 <ul class="sub-menu children dropdown-menu">     
@@ -138,9 +143,8 @@
                         ';
                         }
 
-
-        //HORARIOS-->
-                      /*  if ($userAdmin==1) { // ADMIN   
+                        //HORARIOS-->
+                        /*  if ($userAdmin==1) { // ADMIN   
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Horarios</a>
@@ -163,9 +167,9 @@
                             </li>
                             ';
                         } */
-                       
-        //CONFIGURACION-->
-                    if ($userAdmin==1) {   
+
+                        //CONFIGURACION-->
+                        if ($userAdmin == 1) {
                             echo '
                             <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Configuración</a>
@@ -177,15 +181,14 @@
                                         <li><i class="fa fa-refresh"></i><a href="confMerg.php">Actualiza SAP->SC </a></li>
                             </ul>
                             </li>';
-            
-                        }  
- 
-        //Reportes
+                        }
 
-                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
-                        
-                        
-                        echo '                       
+                        //Reportes
+
+                        if ($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) {
+
+
+                            echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
                                     <i class="menu-icon fa fa-list-alt"></i>Reportes
@@ -199,8 +202,8 @@
                         ';
                         }
 
-            //Bodegas 2.0                
-                    /*    if ($userAdmin==1 ) {   
+                        //Bodegas 2.0                
+                        /*    if ($userAdmin==1 ) {   
                         
                         
                         echo '                       
@@ -219,8 +222,8 @@
                         ';
                         }*/
 
-            //MIGRACION       
-                    /*    if ($userAdmin==1 ) {   
+                        //MIGRACION       
+                        /*    if ($userAdmin==1 ) {   
                         
                         
                         echo '                       
@@ -238,11 +241,11 @@
                             </li>
                         ';
                         }*/
-            //CEDI                
-                        if ($userAdmin==1 || $userAdmin==3 || $userAdmin==5) {   
-                        
-                        
-                        echo '                       
+                        //CEDI                
+                        if ($userAdmin == 1 || $userAdmin == 3 || $userAdmin == 5) {
+
+
+                            echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI</a>
                                 <ul class="sub-menu children dropdown-menu">     
@@ -261,8 +264,8 @@
                             </li>
                         ';
 
-                        
-                        echo '                       
+
+                            echo '                       
                             <li class="menu-item-has-children dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>CEDI CE</a>
                                 <ul class="sub-menu children dropdown-menu">     
@@ -281,8 +284,8 @@
                             </li>
                         ';
                         }
-        //CEDI 2.0                
-              /*          if ($userAdmin==1 ) {   
+                        //CEDI 2.0                
+                        /*          if ($userAdmin==1 ) {   
                         
                         
                         echo '                       
@@ -301,9 +304,9 @@
                         ';
                         }
                 */
-        //Toma Fisica Total
-            if ($userAdmin==1 || $userAdmin==3) { 
-                echo '
+                        //Toma Fisica Total
+                        if ($userAdmin == 1 || $userAdmin == 3) {
+                            echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti ti-check-box"></i>Toma Fisica Total</a>
                             <ul class="sub-menu children dropdown-menu">     
@@ -315,8 +318,8 @@
                             </ul>
                         </li>
                     ';
-            }else if ($userAdmin==4) {   
-                echo '
+                        } else if ($userAdmin == 4) {
+                            echo '
                         <li class="menu-item-has-children dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-truck"></i>Bodegas</a>
                             <ul class="sub-menu children dropdown-menu">     
@@ -337,15 +340,15 @@
                             </ul>
                         </li>
                     ';
-            }  
-    } 
-            ?>
+                        }
+                    }
+                    ?>
 
-                 
+
                 </ul>
             </div>
         </nav>
-    
+
     </aside>
     <div id="right-panel" class="right-panel">
 
@@ -361,10 +364,10 @@
             <div class="top-right">
                 <div class="header-menu">
                     <div class="header-left" style="margin: auto;">
-                    Usuario: 
-                <?php
-                    echo $userName . " [ G" . $userAdmin."-ID". $userId .  "]"; 
-                ?>  
+                        Usuario:
+                        <?php
+                        echo $userName . " [ G" . $userAdmin . "-ID" . $userId .  "]";
+                        ?>
                     </div>
 
                     <div class="user-area dropdown float-right">
@@ -374,14 +377,14 @@
 
                         <div class="user-menu dropdown-menu">
                             <a class="nav-link" href="perfil.php"><i class="fa fa-user"></i>Mi perfil</a>
-                            <a class="nav-link" href="psswrd.php"><i class="fa fa-key"></i>Cambiar clave</a>   
+                            <a class="nav-link" href="psswrd.php"><i class="fa fa-key"></i>Cambiar clave</a>
                             <a class="nav-link" href="php/logout.php"><i class="fa fa-power-off"></i>Cerrar Sesión</a>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-   
-        <!-- .content -->   
+
+        <!-- .content -->
         <div class="loader-page"></div>
         <div class="mobile-overlay" onclick="closeMobileMenu()"></div>

@@ -14,7 +14,7 @@ $almacen = trim($_POST['almacen']);
 $articulo = trim($_POST['articulo']);
 
 try {
-    // Consulta para buscar el artículo por ItemCode o CodeBars
+    // Consulta principal para buscar el artículo por ItemCode o CodeBars
     $sql = "SELECT TOP 1
                 ItemCode, 
                 ItemName,
@@ -47,6 +47,32 @@ try {
     $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($resultado) {
+        // Consulta adicional para obtener información de precios
+        $sqlPrecios = "SELECT TOP 1
+                        [ItemCode],
+                        [WhsCode],
+                        [CodeBars],
+                        [AvgPrice],
+                        [Price]
+                    FROM [TEMPORALES].[transicion].[tbl_modelo_abastecimiento_tiendas_desarrollo]
+                    WHERE (ItemCode = ? OR CodeBars = ?) 
+                    AND WhsCode = ?";
+        
+        $stmtPrecios = $dbdev->prepare($sqlPrecios);
+        $stmtPrecios->execute([$articulo, $articulo, $almacen]);
+        
+        $precios = $stmtPrecios->fetch(PDO::FETCH_ASSOC);
+        
+        // Combinar los resultados
+        if ($precios) {
+            $resultado['AvgPrice'] = $precios['AvgPrice'];
+            $resultado['Price'] = $precios['Price'];
+        } else {
+            // Si no se encuentran precios, agregar valores por defecto
+            $resultado['AvgPrice'] = null;
+            $resultado['Price'] = null;
+        }
+        
         echo json_encode([
             'success' => true,
             'articulo' => $resultado

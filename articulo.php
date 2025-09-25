@@ -38,7 +38,7 @@ try {
                             <div class="display-4 mb-2">
                                 <i class="fa fa-cube"></i>
                             </div>
-                            <h4 class="card-title mb-0 font-weight-light">Gestión de Artículos</h4>
+                            <h4 class="card-title mb-0 font-weight-light">Información de Artículos</h4>
                             <small class="opacity-75">Verificar productos en el sistema</small>
                         </div>
                     </div>
@@ -720,7 +720,7 @@ try {
                             </div>
                             
                             <!-- STOCK -->
-                            <div class="card border-0 shadow-sm">
+                            <div class="card border-0 shadow-sm mb-4">
                                 <div class="card-header bg-info text-white">
                                     <h6 class="mb-0">
                                         <i class="fa fa-boxes mr-2"></i>STOCK
@@ -745,6 +745,26 @@ try {
                                     <div class="row mb-2">
                                         <div class="col-sm-4"><strong>Almacén:</strong></div>
                                         <div class="col-sm-8">${art.WhsCode || almacen} - ${art.WhsName || almacenTexto}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- PRECIOS -->
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0">
+                                        <i class="fa fa-dollar-sign mr-2"></i>PRECIOS
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Precio:</strong></div>
+                                        <div class="col-sm-8">$${art.AvgPrice ? parseFloat(art.AvgPrice).toLocaleString('es-CL', {minimumFractionDigits: 0, maximumFractionDigits: 2}) : 'N/A'}</div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4"><strong>Costo:</strong></div>
+                                        <div class="col-sm-8">$${art.Price ? parseFloat(art.Price).toLocaleString('es-CL', {minimumFractionDigits: 0, maximumFractionDigits: 2}) : 'N/A'}</div>
                                     </div>
                                 </div>
                             </div>

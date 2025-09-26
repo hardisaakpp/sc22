@@ -1,12 +1,13 @@
 <?php
 include_once "header.php";
-
+include_once "php/bd_desarrollo.php";
 // Inicializar variables
 $almacenes = array();
 
 // Consulta para obtener los almacenes usando PDO (consistente con el resto del proyecto)
 try {
-    $sqlAlmacenes = "SELECT [cod_almacen], [nombre] FROM [STORECONTROL].[dbo].[Almacen] WHERE fk_emp='MT' AND hit_cod_local > 0 ORDER BY [nombre]";
+    $sqlAlmacenes = "SELECT DISTINCT WhsCode as cod_almacen, [WhsName] as nombre FROM [TEMPORALES].[transicion].[tbl_modelo_abastecimiento_tiendas_desarrollo] order by [WhsName]";
+    
 
     // Verificar conexión a la base de datos (usando $db de header.php)
     if (!isset($db) || !$db) {
@@ -14,7 +15,7 @@ try {
     }
 
     // Ejecutar la consulta usando PDO
-    $stmtAlmacenes = $db->prepare($sqlAlmacenes);
+    $stmtAlmacenes = $dbdev->prepare($sqlAlmacenes);
     $stmtAlmacenes->execute();
 
     // Obtener los resultados
